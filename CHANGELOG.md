@@ -6,6 +6,31 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-21
+
+### Added
+- **Phase 2 : Exposition Universelle : FastAPI (Swagger) & FastMCP**
+  - Routeur REST sécurisé dans `src/openlux/api/main.py` :
+    - Whitelist stricte validant `{dataset}` contre les fichiers Parquet Gold existants et rejetant systématiquement toute injection SQL ou path traversal (HTTP 404).
+    - Requêtes paramétrées `?` avec DuckDB in-memory (`:memory:`) pour une isolation sans verrou de lecture/écriture.
+    - Filtrage géospatial par distance sphérique WGS84 (`ST_Distance_Spheroid`) via l'extension DuckDB `spatial`.
+    - Enveloppe standard `_meta` conforme au contrat Section 5.3 (traçabilité MLOps, SLA, `is_stale`, licence SPDX, `known_limitations`).
+    - Téléchargement direct Parquet ZSTD (`GET /v1/exports/{dataset}.parquet`).
+    - Streaming CSV et GeoJSON `FeatureCollection` à la volée depuis DuckDB (`GET /v1/exports/{dataset}.csv`, `.geojson`) sans duplication de fichier sur disque.
+    - Endpoints de statut global (`GET /v1/status`) et catalogue dynamique (`GET /v1/datasets`).
+    - Documentation interactive OpenAPI 3.1 automatique (`GET /docs` et `GET /redoc`).
+  - Serveur FastMCP pour agents IA dans `src/openlux/mcp/server.py` :
+    - Outil `get_platform_health(domain)` : observabilité et Trust Scores par flux/domaine.
+    - Outil `get_luxembourg_day_context(date, commune)` : consolidation journalière météo, jours fériés et trafic autoroutier.
+    - Outil `search_luxembourg_events_and_works(...)` : recherche croisée textuelle et spatiale sur perturbations et chantiers.
+    - Outil `query_dataset(dataset, commune, limit)` : accès direct structuré et sécurisé aux tables Gold autorisées.
+  - Commandes CLI dans `src/openlux/cli.py` :
+    - `openlux serve [--host] [--port]` pour démarrer l'API Uvicorn en lecture seule sur les Parquet Gold.
+    - `openlux mcp` pour démarrer le serveur FastMCP en mode standard stdio.
+  - Fonctions utilitaires Gold dans `src/openlux/core/gold.py` (`get_gold_table_path`, `get_gold_metadata`, `query_gold_table`).
+  - Suite de tests 100 % offline dans `tests/test_api_contracts.py` (contrats `_meta`, rejet d'injections SQL, streaming CSV/GeoJSON, documentation Swagger et 4 outils FastMCP).
+
+
 ## [0.2.0] - 2026-11-21
 
 ### Added

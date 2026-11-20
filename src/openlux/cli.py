@@ -127,6 +127,22 @@ def rebuild_pipeline() -> int:
     return 0
 
 
+def serve_api(host: str = "127.0.0.1", port: int = 8000) -> int:
+    """Démarre l'API FastAPI (uvicorn) en lecture seule sur data/gold/*.parquet."""
+    import uvicorn
+
+    uvicorn.run("openlux.api.main:app", host=host, port=port, reload=False)
+    return 0
+
+
+def run_mcp_server() -> int:
+    """Démarre le serveur FastMCP en mode stdio."""
+    from openlux.mcp.server import mcp
+
+    mcp.run()
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """Point d'entrée principal de la CLI OpenLux."""
     parser = argparse.ArgumentParser(description="OpenLux Hub CLI")
@@ -142,6 +158,12 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("status", help="Affiche l'état des sources et regénère STATUS.md")
     subparsers.add_parser("compact", help="Compacte les archives Bronze")
 
+    serve_parser = subparsers.add_parser("serve", help="Démarre l'API FastAPI (uvicorn)")
+    serve_parser.add_argument("--host", default="127.0.0.1", help="Hôte d'écoute")
+    serve_parser.add_argument("--port", type=int, default=8000, help="Port d'écoute")
+
+    subparsers.add_parser("mcp", help="Démarre le serveur FastMCP (stdio)")
+
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
     if not args.command:
         parser.print_help()
@@ -152,6 +174,10 @@ def main(argv: list[str] | None = None) -> int:
         return run_pipeline(srcs, args.due)
     if args.command == "rebuild":
         return rebuild_pipeline()
+    if args.command == "serve":
+        return serve_api(args.host, args.port)
+    if args.command == "mcp":
+        return run_mcp_server()
     if args.command == "status":
         db_path = Path("data/openlux.duckdb")
         con = duckdb.connect(str(db_path)) if db_path.exists() else duckdb.connect()

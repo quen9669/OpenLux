@@ -27,12 +27,38 @@ git clone https://github.com/quen9669/OpenLux.git
 cd OpenLux
 uv sync
 
-# 2. Exécuter la suite de tests 100 % hors-ligne
+# 2. Exécuter la suite de tests 100 % hors-ligne (25 tests)
 uv run pytest
 
 # 3. Lancer la CLI unifiée
 uv run openlux --help
+
+# 4. Lancer l'API REST FastAPI (Swagger interactif sur http://127.0.0.1:8000/docs)
+uv run openlux serve
+
+# 5. Lancer le serveur FastMCP pour agents IA (Claude Desktop, Antigravity, Cursor)
+uv run openlux mcp
 ```
+
+---
+
+## 🌐 Exposition Multi-Canaux
+
+### API REST FastAPI (`openlux serve`)
+- `GET /v1/status` : Santé globale, Trust Scores (0-100) et horodatages SLA.
+- `GET /v1/datasets` : Catalogue dynamique des Data Marts Gold (descriptions, licences, schémas).
+- `GET /v1/data/{dataset}` : Requête sécurisée avec paramètres liés `?` (commune, date_from, date_to, lat, lon, radius_km, limit, offset) et enveloppe standard `_meta`.
+- `GET /v1/exports/{dataset}.parquet` : Téléchargement direct du fichier Parquet ZSTD officiel.
+- `GET /v1/exports/{dataset}.csv` : Streaming CSV à la volée depuis DuckDB in-memory (zéro duplication disque).
+- `GET /v1/exports/{dataset}.geojson` : Streaming GeoJSON FeatureCollection à la volée.
+- `GET /docs` & `/redoc` : Documentation OpenAPI interactive auto-générée.
+
+### Serveur FastMCP (`openlux mcp`)
+Connectez vos agents IA directement au serveur MCP standardisé :
+1. `get_platform_health(domain)` : Observabilité, fraîcheur et Trust Scores des flux.
+2. `get_luxembourg_day_context(date, commune)` : Contexte journalier croisé (météo, jours fériés, trafic autoroutier).
+3. `search_luxembourg_events_and_works(...)` : Recherche croisée textuelle et géospatiale sur les chantiers et perturbations autoroutières.
+4. `query_dataset(dataset, commune, limit)` : Requête directe et sécurisée sur n'importe quel Data Mart Gold.
 
 ---
 

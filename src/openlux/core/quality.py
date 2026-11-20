@@ -169,7 +169,7 @@ def get_latest_source_health(con: duckdb.DuckDBPyConnection) -> dict[str, dict[s
     """Récupère l'état de santé le plus récent pour chaque source connue."""
     rows = con.execute("""
         SELECT source_id, run_outcome, trust_score, row_count,
-               last_checked_utc, last_changed_utc, error_message
+               last_checked_utc, last_changed_utc, error_message, run_id, pipeline_git_sha
         FROM (
             SELECT *, ROW_NUMBER() OVER(PARTITION BY source_id ORDER BY recorded_at_utc DESC) as rn
             FROM obs_runs
@@ -183,6 +183,8 @@ def get_latest_source_health(con: duckdb.DuckDBPyConnection) -> dict[str, dict[s
             "last_checked_utc": row[4],
             "last_changed_utc": row[5],
             "error_message": row[6],
+            "run_id": row[7] if len(row) > 7 and row[7] else "default",
+            "pipeline_git_sha": row[8] if len(row) > 8 and row[8] else "git_v1",
         }
         for row in rows
     }
