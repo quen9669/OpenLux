@@ -1,0 +1,77 @@
+# OpenLux Hub - Registre Unique des Sources (config/sources.toml)
+# Règle d'or : 1 entrée [[sources]] = 1 flux HTTP atomique (primaire + backup optionnel).
+
+[[sources]]
+id = "meteo_lux_obs"
+domain = "weather"
+description = "Observations et prévisions météo officielles au Luxembourg"
+semantic_summary = "Températures, précipitations et vent relevés au Grand-Duché (Findel et stations nationales)."
+known_limitations = "Couverture concentrée sur les stations principales ; microclimats locaux (vallée de la Moselle, Oesling) lissés."
+adapter = "http_json"
+cadence_minutes = 30
+sla_minutes = 90
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://metapi.ana.lu/api/v1/metdata/weather"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+# auth_env_var = "METEOLUX_API_KEY"
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117&longitude=6.1319&current=temperature_2m,precipitation,wind_speed_10m"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["timestamp", "temperature"]
+
+[[sources]]
+id = "traffic_cita_datex2"
+domain = "traffic_cita"
+description = "Événements de trafic autoroutier et perturbations CITA au Luxembourg"
+semantic_summary = "Bouchons, accidents, chantiers urgents et fermetures de voies sur le réseau autoroutier luxembourgeois."
+known_limitations = "Couvre uniquement les autoroutes gérées par le CITA (A1, A3, A4, A6, A7, A13, B40), sans les voiries communales."
+adapter = "http_custom"
+parser = "cita_datex2"
+cadence_minutes = 15
+sla_minutes = 30
+retention_days = 30
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://www.cita.lu/datex2/datex2.xml"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.quality]
+min_rows = 0
+required_fields = ["event_id", "road_name"]
+
+[[sources]]
+id = "holidays_lu"
+domain = "holidays_vacations"
+description = "Jours fériés légaux et vacances scolaires au Grand-Duché de Luxembourg"
+semantic_summary = "Calendrier officiel des jours fériés légaux et des vacances scolaires du Grand-Duché de Luxembourg."
+known_limitations = "Calendrier officiel luxembourgeois fixé par la loi et le Ministère de l'Éducation nationale."
+adapter = "http_csv"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/jours-feries-luxembourg.csv"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.quality]
+min_rows = 10
+required_fields = ["date", "name"]

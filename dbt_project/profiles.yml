@@ -1,0 +1,8 @@
+openlux:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('OPENLUX_DUCKDB_PATH', 'data/openlux.duckdb') }}"
+      extensions:
+        - spatial
