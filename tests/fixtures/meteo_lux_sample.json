@@ -1,0 +1,44 @@
+[
+  {
+    "station_id": "LU_FINDEL_01",
+    "station_name": "Luxembourg-Findel",
+    "timestamp": "2026-11-20T22:00:00Z",
+    "temperature": 7.4,
+    "humidity": 84.0,
+    "pressure_hpa": 1018.5,
+    "wind_speed_kmh": 12.0,
+    "precipitation_mm": 0.0,
+    "condition": "Cloudy",
+    "lat": 49.6233,
+    "lon": 6.2044,
+    "commune_lau": "Sandweiler"
+  },
+  {
+    "station_id": "LU_CLEMENCY_02",
+    "station_name": "Clemency",
+    "timestamp": "2026-11-20T22:00:00Z",
+    "temperature": 6.8,
+    "humidity": 88.0,
+    "pressure_hpa": 1019.0,
+    "wind_speed_kmh": 9.5,
+    "precipitation_mm": 0.2,
+    "condition": "Light Rain",
+    "lat": 49.5967,
+    "lon": 5.8753,
+    "commune_lau": "Kaerjeng"
+  },
+  {
+    "station_id": "LU_REMICH_03",
+    "station_name": "Remich",
+    "timestamp": "2026-11-20T22:00:00Z",
+    "temperature": 8.1,
+    "humidity": 80.0,
+    "pressure_hpa": 1018.2,
+    "wind_speed_kmh": 11.0,
+    "precipitation_mm": 0.0,
+    "condition": "Partly Cloudy",
+    "lat": 49.5447,
+    "lon": 6.3683,
+    "commune_lau": "Remich"
+  }
+]

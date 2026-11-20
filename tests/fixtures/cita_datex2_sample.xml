@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<d2LogicalModel xmlns="http://datex2.eu/schema/2/2_0">
+  <payloadPublication>
+    <publicationTime>2026-11-20T22:30:00Z</publicationTime>
+    <publicationCreator>
+      <country>lu</country>
+      <nationalIdentifier>CITA</nationalIdentifier>
+    </publicationCreator>
+    <situation id="CITA_SIT_2026_01">
+      <situationVersionTime>2026-11-20T22:15:00Z</situationVersionTime>
+      <situationRecord id="REC_2026_01" xsi:type="AbnormalTraffic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <situationRecordCreationTime>2026-11-20T22:15:00Z</situationRecordCreationTime>
+        <situationRecordVersionTime>2026-11-20T22:15:00Z</situationRecordVersionTime>
+        <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+        <validity>
+          <validityStatus>active</validityStatus>
+        </validity>
+        <abnormalTrafficType>stationaryTraffic</abnormalTrafficType>
+        <groupOfLocations xsi:type="PointLocation">
+          <pointByCoordinates>
+            <pointCoordinates>
+              <latitude>49.6385</latitude>
+              <longitude>6.2155</longitude>
+            </pointCoordinates>
+          </pointByCoordinates>
+          <supplementaryPositionalDescription>
+            <roadInformation>
+              <roadName>A1</roadName>
+              <roadDestination>Trèves</roadDestination>
+            </roadInformation>
+          </supplementaryPositionalDescription>
+        </groupOfLocations>
+        <generalPublicComment>
+          <comment>
+            <values>
+              <value lang="fr">Bouchon de 3 km suite à un incident technique.</value>
+            </values>
+          </comment>
+        </generalPublicComment>
+      </situationRecord>
+    </situation>
+    <situation id="CITA_SIT_2026_02">
+      <situationVersionTime>2026-11-20T22:20:00Z</situationVersionTime>
+      <situationRecord id="REC_2026_02" xsi:type="MaintenanceWorks" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <situationRecordCreationTime>2026-11-20T22:20:00Z</situationRecordCreationTime>
+        <situationRecordVersionTime>2026-11-20T22:20:00Z</situationRecordVersionTime>
+        <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+        <validity>
+          <validityStatus>active</validityStatus>
+        </validity>
+        <roadMaintenanceType>roadMarkingWork</roadMaintenanceType>
+        <groupOfLocations xsi:type="PointLocation">
+          <pointByCoordinates>
+            <pointCoordinates>
+              <latitude>49.5280</latitude>
+              <longitude>6.1120</longitude>
+            </pointCoordinates>
+          </pointByCoordinates>
+          <supplementaryPositionalDescription>
+            <roadInformation>
+              <roadName>A3</roadName>
+              <roadDestination>Metz</roadDestination>
+            </roadInformation>
+          </supplementaryPositionalDescription>
+        </groupOfLocations>
+        <generalPublicComment>
+          <comment>
+            <values>
+              <value lang="fr">Travaux de marquage nocturne voie de droite.</value>
+            </values>
+          </comment>
+        </generalPublicComment>
+      </situationRecord>
+    </situation>
+  </payloadPublication>
+</d2LogicalModel>

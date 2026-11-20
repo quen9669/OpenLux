@@ -20,23 +20,38 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 ### 2.1 `gold_weather_observations`
 - **Domaine** : `weather`
 - **Grain** : 1 ligne par station météorologique et par relevé.
+- **Fichier** : `data/gold/gold_weather_observations.parquet` (ZSTD)
 - **Sources** : `meteo_lux_obs` (MeteoLux, backup Open-Meteo).
-- **Champs principaux** : `station_name`, `temperature_c`, `humidity_pct`, `precipitation_mm`, `wind_speed_kmh`.
+- **Schéma exact** :
+  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `temperature` (`DOUBLE`), `humidity` (`DOUBLE`), `pressure_hpa` (`DOUBLE`)
+  - `wind_speed_kmh` (`DOUBLE`), `precipitation_mm` (`DOUBLE`), `weather_condition` (`VARCHAR`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
 - **Limites connues** : Mesures concentrées sur les stations officielles principales (Findel, etc.) ; microclimats locaux non captés.
 
 ### 2.2 `gold_traffic_events`
 - **Domaine** : `traffic_cita`
-- **Grain** : 1 ligne par événement de circulation routière (accident, bouchon, fermeture).
-- **Sources** : `traffic_cita_datex2` (CITA DATEX II XML).
-- **Champs principaux** : `event_id`, `road_name`, `direction`, `event_type`, `delay_minutes`, `latitude`, `longitude`.
+- **Grain** : 1 ligne par événement de circulation routière (accident, bouchon, chantier).
+- **Fichier** : `data/gold/gold_traffic_events.parquet` (ZSTD)
+- **Sources** : `traffic_cita_datex2` (CITA DATEX II XML via `cita_datex2`).
+- **Schéma exact** :
+  - `event_id` (`VARCHAR`), `road_name` (`VARCHAR`), `situation_type` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `traffic_comment` (`VARCHAR`), `source_id` (`VARCHAR`)
 - **Limites connues** : Couvre exclusivement le réseau autoroutier national exploité par CITA (A1, A3, A4, A6, A7, A13, B40).
 
-### 2.3 `gold_holidays_calendar`
+### 2.3 `gold_holidays`
 - **Domaine** : `holidays_vacations`
-- **Grain** : 1 ligne par jour férié officiel ou période de vacances scolaires.
+- **Grain** : 1 ligne par date de jour férié officiel ou vacances scolaires.
+- **Fichier** : `data/gold/gold_holidays.parquet` (ZSTD)
 - **Sources** : `holidays_lu` (`data.public.lu`).
-- **Champs principaux** : `date`, `name_fr`, `name_de`, `name_lb`, `name_en`, `is_official_holiday`, `is_school_vacation`.
-- **Limites connues** : Valable pour le calendrier légal du Grand-Duché de Luxembourg.
+- **Schéma exact** :
+  - `holiday_date` (`DATE`), `observed_at_utc` (`TIMESTAMP`)
+  - `holiday_name_fr` (`VARCHAR`), `holiday_name_de` (`VARCHAR`), `holiday_name_lb` (`VARCHAR`)
+  - `is_legal_holiday` (`BOOLEAN`), `is_school_vacation` (`BOOLEAN`)
+  - `commune_lau` (`VARCHAR`), `lat` (`DOUBLE`), `lon` (`DOUBLE`), `source_id` (`VARCHAR`)
+- **Limites connues** : Valable pour le calendrier légal officiel du Grand-Duché de Luxembourg.
 
 ---
 

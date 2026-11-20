@@ -113,3 +113,26 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
   "data": []
 }
 ```
+
+---
+
+## 5. Modules Cœur Implémentés (Phase 1 — Vertical Slice)
+
+| Module | Rôle & Responsabilité Unique | Lignes |
+| :--- | :--- | :---: |
+| `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 79 |
+| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 66 |
+| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2` DATEX II) | 53 |
+| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze) | 196 |
+| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 188 |
+| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 113 |
+| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()` des Parquet ZSTD | 57 |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `run --due`, `rebuild`, `status`) | 159 |
+| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **779** |
+
+### 5.1 Modèles SQL dbt Opérationnels
+- **Staging** : `stg_meteo_lux_obs` (JSON), `stg_traffic_cita` (JSON parsé), `stg_holidays_lu` (CSV).
+- **Silver** : `silver_weather_observations`, `silver_traffic_events`, `silver_holidays`.
+- **Gold** : `gold_weather_observations`, `gold_traffic_events`, `gold_holidays`.
+- **Test d'intégrité RGPD** : `assert_no_pii_in_gold.sql` (scannant toutes les tables Gold).
+

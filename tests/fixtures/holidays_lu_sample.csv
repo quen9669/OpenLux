@@ -1,0 +1,12 @@
+date,name,name_de,name_lb,is_legal_holiday,is_school_vacation
+2026-01-01,Nouvel An,Neujahr,Neijoerschdag,true,false
+2026-04-06,Lundi de Pâques,Ostermontag,Ouschterméindeg,true,false
+2026-05-01,Fête du Travail,Tag der Arbeit,Dag vun der Aarbecht,true,false
+2026-05-09,Journée de l'Europe,Europatag,Europadag,true,false
+2026-05-14,Ascension,Christi Himmelfahrt,Christi Himmelfaart,true,false
+2026-05-25,Lundi de Pentecôte,Pfingstmontag,Päischtméindeg,true,false
+2026-06-23,Fête Nationale,Nationalfeiertag,Nationalfeierdag,true,false
+2026-08-15,Assomption,Mariä Himmelfahrt,Mariä Himmelfaart,true,false
+2026-11-01,Toussaint,Allerheiligen,Allerhellgen,true,false
+2026-12-25,Premier jour de Noël,Erster Weihnachtstag,Chrëschtdag,true,false
+2026-12-26,Deuxième jour de Noël,Zweiter Weihnachtstag,Stiefesdag,true,false
