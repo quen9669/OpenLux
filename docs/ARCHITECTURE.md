@@ -1,4 +1,4 @@
-# OpenLux Hub — Architecture Technique (v1.1)
+# OpenLux Hub — Architecture Technique (v1.2)
 
 > Ce document vivant décrit l'état actuel et l'architecture cible d'OpenLux Hub.
 > Il est mis à jour à chaque évolution de module, ajout de flux ou modification de schéma.
@@ -56,7 +56,7 @@ flowchart LR
 
 ### 2.1 Couche Bronze (Immuable & Rejouable)
 - **Format** : Fichiers bruts compressés GZIP (`.json.gz`, `.csv.gz`).
-- **Chemin** : `data/bronze/{source_id}/YYYY/MM/DD/{source_id}_{timestamp_utc}_{hash8}.[json|csv].gz`.
+- **Chemin** : `data/bronze/{source_id}/YYYY/MM/DD/{source_id}_{timestamp_utc}_{hash8}.[json|csv].gz` et miroir `latest.[json|csv].gz`.
 - **Garantie** : Sanitized Zero-PII et Factual-Only appliqués en amont de l'écriture. Les payloads inchangés (`UNCHANGED`) ne créent pas de nouveau fichier physique.
 - **Rejeu** : `uv run openlux rebuild` permet de reconstruire l'intégralité des couches Silver et Gold sans aucun accès internet.
 
@@ -116,37 +116,35 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 5. Modules Cœur Implémentés (Phase 2 — Exposition Universelle)
+## 5. Modules Cœur Implémentés (Phase 3 — Vague 3A en place)
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
-| `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 60 |
-| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 55 |
-| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2` DATEX II) | 47 |
-| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze) | 170 |
-| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 168 |
-| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 97 |
-| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 175 |
-| `src/openlux/api/main.py` | API REST FastAPI : Swagger, whitelist, DuckDB in-memory, stream CSV/GeoJSON | 184 |
-| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 152 |
-| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `serve`, `mcp`) | 161 |
-| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 277** |
+| `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 79 |
+| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 66 |
+| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2` DATEX II) | 53 |
+| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze) | 196 |
+| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 190 |
+| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 113 |
+| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 198 |
+| `src/openlux/api/main.py` | API REST FastAPI : Swagger, whitelist, DuckDB in-memory, stream CSV/GeoJSON | 193 |
+| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 168 |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `serve`, `mcp`) | 194 |
+| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 460** |
 
 ---
 
-## 6. Canaux d'Exposition (Détails)
+## 6. Domaines et Data Marts Actifs (10 Sources, 10 Tables Gold)
 
-### 6.1 API REST FastAPI (`openlux serve`)
-- `GET /v1/status` : Santé globale, Trust Scores et horodatages récents.
-- `GET /v1/datasets` : Catalogue dynamique (descriptions, limites, licence, colonnes, volume).
-- `GET /v1/data/{dataset}` : Filtrage paramétré `?` (commune, date_from, date_to, lat, lon, radius_km, limit, offset) et bloc `_meta`. Rejet 404 strict des injections SQL et traversals.
-- `GET /v1/exports/{dataset}.parquet` : Téléchargement direct du fichier Parquet ZSTD officiel.
-- `GET /v1/exports/{dataset}.csv` : Streaming à la volée depuis DuckDB in-memory (zéro duplication disque).
-- `GET /v1/exports/{dataset}.geojson` : Streaming GeoJSON `FeatureCollection` à la volée.
-- `GET /docs` & `/redoc` : Documentation OpenAPI 3.1 auto-générée.
-
-### 6.2 Serveur FastMCP (`openlux mcp`)
-- `get_platform_health(domain: str | None)` : État de fraîcheur et anomalies par source/domaine.
-- `get_luxembourg_day_context(date: str, commune: str)` : Vue journalière croisée (météo, jours fériés, trafic autoroutier).
-- `search_luxembourg_events_and_works(...)` : Recherche textuelle et géospatiale croisée (chantiers, perturbations autoroutières).
-- `query_dataset(dataset: str, commune: str | None, limit: int)` : Accès direct structuré et sécurisé aux tables Gold autorisées.
+| # | Domaine | Source ID | Table Gold Produite | Format & Moteur |
+| :-: | :--- | :--- | :--- | :--- |
+| **1** | `weather` | `meteo_lux_obs` | `gold_weather_observations.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **2** | `traffic_cita` | `traffic_cita_datex2` | `gold_traffic_events.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **3** | `holidays_vacations` | `holidays_lu` | `gold_holidays.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **4** | `air_quality` (3A) | `air_quality_lu` | `gold_air_quality.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **5** | `water_levels` (3A) | `water_levels_lu` | `gold_water_levels.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **6** | `economy_fuel` (3A) | `fuel_prices_lu` | `gold_fuel_prices.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **7** | `economy_fuel` (3A) | `statec_inflation` | `gold_statec_inflation.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **8** | `energy_climate` (3A) | `electricity_spot_delu` | `gold_electricity_spot.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **9** | `energy_climate` (3A) | `radioactivity_lu` | `gold_radioactivity.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **10** | `energy_climate` (3A) | `bathing_water_lu` | `gold_bathing_water.parquet` | Parquet ZSTD (dbt DuckDB) |

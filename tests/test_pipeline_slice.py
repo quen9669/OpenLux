@@ -1,4 +1,4 @@
-"""Test d'intégration vertical complet (Vertical Slice) des 3 sources pilotes en mode offline."""
+"""Test d'intégration vertical complet (Vertical Slice) des sources en mode offline."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from openlux.core.quality import (
 
 def _mock_handler(request: httpx.Request) -> httpx.Response:
     url_str = str(request.url)
-    if "metdata/weather" in url_str or "open-meteo" in url_str:
+    if "metdata/weather" in url_str or "open-meteo.com/v1/forecast" in url_str:
         raw = Path("tests/fixtures/meteo_lux_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "datex2" in url_str:
@@ -32,15 +32,43 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "jours-feries" in url_str:
         raw = Path("tests/fixtures/holidays_lu_sample.csv").read_bytes()
         return httpx.Response(200, content=raw)
+    if "qualite-de-lair" in url_str or "air-quality" in url_str:
+        raw = Path("tests/fixtures/air_quality_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "niveaux-eau" in url_str or "inondations" in url_str:
+        raw = Path("tests/fixtures/water_levels_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "prix-carburants" in url_str or "energy-prices" in url_str:
+        raw = Path("tests/fixtures/fuel_prices_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "statec-inflation" in url_str or "prc_hicp_midx" in url_str:
+        raw = Path("tests/fixtures/statec_inflation_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "electricity-spot" in url_str or "energy-charts" in url_str:
+        raw = Path("tests/fixtures/electricity_spot_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "surveillance-radiologique" in url_str or "remap" in url_str:
+        raw = Path("tests/fixtures/radioactivity_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "eaux-de-baignade" in url_str or "bathing_water" in url_str:
+        raw = Path("tests/fixtures/bathing_water_sample.csv").read_bytes()
+        return httpx.Response(200, content=raw)
     return httpx.Response(404, text="Not Found")
 
 
 def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
-    # 1. Chargement des sources pilotes officielles
+    # 1. Chargement des sources configurées
     sources = load_sources_config()
     assert "meteo_lux_obs" in sources
     assert "traffic_cita_datex2" in sources
     assert "holidays_lu" in sources
+    assert "air_quality_lu" in sources
+    assert "water_levels_lu" in sources
+    assert "fuel_prices_lu" in sources
+    assert "statec_inflation" in sources
+    assert "electricity_spot_delu" in sources
+    assert "radioactivity_lu" in sources
+    assert "bathing_water_lu" in sources
 
     mock_client = httpx.Client(transport=httpx.MockTransport(_mock_handler))
     db_path = Path("data/openlux.duckdb")
@@ -48,9 +76,8 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     con = duckdb.connect(str(db_path))
     init_obs_runs_table(con)
 
-    # 2. Collecte des 3 sources pilotes
-    for sid in ["meteo_lux_obs", "traffic_cita_datex2", "holidays_lu"]:
-        src = sources[sid]
+    # 2. Collecte de toutes les sources
+    for sid, src in sources.items():
         res = collect_source(src, client=mock_client)
         assert res.status in ("SUCCESS", "ATTENTION")
         assert res.row_count > 0
@@ -83,15 +110,24 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
 
     # 4. Export atomique Parquet Gold
     exported = export_gold_parquets()
-    assert len(exported) >= 3
-    assert "gold_weather_observations" in exported
-    assert "gold_traffic_events" in exported
-    assert "gold_holidays" in exported
+    expected_tables = [
+        "gold_weather_observations",
+        "gold_traffic_events",
+        "gold_holidays",
+        "gold_air_quality",
+        "gold_water_levels",
+        "gold_fuel_prices",
+        "gold_statec_inflation",
+        "gold_electricity_spot",
+        "gold_radioactivity",
+        "gold_bathing_water",
+    ]
+    for tbl in expected_tables:
+        assert tbl in exported
 
     gold_files = list_gold_datasets()
-    assert "gold_weather_observations" in gold_files
-    assert "gold_traffic_events" in gold_files
-    assert "gold_holidays" in gold_files
+    for tbl in expected_tables:
+        assert tbl in gold_files
 
     # Vérification que .tmp est bien vidé (atomicité)
     tmp_gold = Path("data/gold/.tmp")
@@ -102,17 +138,37 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     count_weather = con_gold.execute(
         "SELECT count(*) FROM 'data/gold/gold_weather_observations.parquet'"
     ).fetchone()[0]
-    count_traffic = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_traffic_events.parquet'"
+    count_air = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_air_quality.parquet'"
     ).fetchone()[0]
-    count_holidays = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_holidays.parquet'"
+    count_water = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_water_levels.parquet'"
+    ).fetchone()[0]
+    count_fuel = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_fuel_prices.parquet'"
+    ).fetchone()[0]
+    count_inflation = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_statec_inflation.parquet'"
+    ).fetchone()[0]
+    count_elec = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_electricity_spot.parquet'"
+    ).fetchone()[0]
+    count_rad = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_radioactivity.parquet'"
+    ).fetchone()[0]
+    count_bath = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_bathing_water.parquet'"
     ).fetchone()[0]
     con_gold.close()
 
     assert count_weather >= 3
-    assert count_traffic >= 2
-    assert count_holidays >= 10
+    assert count_air >= 4
+    assert count_water >= 4
+    assert count_fuel >= 4
+    assert count_inflation >= 3
+    assert count_elec >= 4
+    assert count_rad >= 4
+    assert count_bath >= 4
 
     # 5. Test de la commande rebuild 100 % hors-ligne
     rebuild_rc = rebuild_pipeline()
@@ -124,7 +180,6 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     con_final.close()
 
     status_content = Path("STATUS.md").read_text(encoding="utf-8")
-    assert "meteo_lux_obs" in status_content
-    assert "traffic_cita_datex2" in status_content
-    assert "holidays_lu" in status_content
+    for sid in sources:
+        assert sid in status_content
     assert "🟢 `GOOD`" in status_content

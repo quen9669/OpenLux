@@ -1,0 +1,50 @@
+[
+  {
+    "station_id": "LU_BONNEVOIE_01",
+    "station_name": "Luxembourg-Bonnevoie",
+    "commune_lau": "Luxembourg",
+    "lat": 49.6015,
+    "lon": 6.1388,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "pollutant": "PM10",
+    "value": 18.5,
+    "unit": "ug/m3",
+    "aqi_index": "GOOD"
+  },
+  {
+    "station_id": "LU_BONNEVOIE_01",
+    "station_name": "Luxembourg-Bonnevoie",
+    "commune_lau": "Luxembourg",
+    "lat": 49.6015,
+    "lon": 6.1388,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "pollutant": "NO2",
+    "value": 24.2,
+    "unit": "ug/m3",
+    "aqi_index": "GOOD"
+  },
+  {
+    "station_id": "LU_ESCH_02",
+    "station_name": "Esch-sur-Alzette",
+    "commune_lau": "Esch-sur-Alzette",
+    "lat": 49.4958,
+    "lon": 5.9806,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "pollutant": "PM2.5",
+    "value": 11.0,
+    "unit": "ug/m3",
+    "aqi_index": "GOOD"
+  },
+  {
+    "station_id": "LU_BEIDWEILER_03",
+    "station_name": "Beidweiler",
+    "commune_lau": "Junglinster",
+    "lat": 49.7214,
+    "lon": 6.3056,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "pollutant": "O3",
+    "value": 45.0,
+    "unit": "ug/m3",
+    "aqi_index": "GOOD"
+  }
+]

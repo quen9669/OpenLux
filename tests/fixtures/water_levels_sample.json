@@ -1,0 +1,50 @@
+[
+  {
+    "station_id": "ST_PFAFFENTHAL_01",
+    "station_name": "Pfaffenthal",
+    "river_name": "Alzette",
+    "commune_lau": "Luxembourg",
+    "lat": 49.6152,
+    "lon": 6.1331,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "water_level_cm": 145.0,
+    "discharge_m3s": 14.8,
+    "alert_level": "NORMAL"
+  },
+  {
+    "station_id": "ST_WASSERBILLIG_02",
+    "station_name": "Wasserbillig",
+    "river_name": "Sûre",
+    "commune_lau": "Mertert",
+    "lat": 49.7142,
+    "lon": 6.5028,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "water_level_cm": 210.5,
+    "discharge_m3s": 58.2,
+    "alert_level": "NORMAL"
+  },
+  {
+    "station_id": "ST_MERSCH_03",
+    "station_name": "Mersch",
+    "river_name": "Alzette",
+    "commune_lau": "Mersch",
+    "lat": 49.7489,
+    "lon": 6.1061,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "water_level_cm": 180.2,
+    "discharge_m3s": 22.4,
+    "alert_level": "NORMAL"
+  },
+  {
+    "station_id": "ST_STADTBREIMUS_04",
+    "station_name": "Stadtbredimus",
+    "river_name": "Moselle",
+    "commune_lau": "Stadtbredimus",
+    "lat": 49.5628,
+    "lon": 6.3653,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "water_level_cm": 320.0,
+    "discharge_m3s": 112.0,
+    "alert_level": "PRE_ALERT"
+  }
+]

@@ -111,17 +111,8 @@ def get_data(
     # POURQUOI : Validation stricte contre la whitelist Gold pour prévenir l'injection SQL.
     if not (path := get_gold_table_path(dataset)):
         raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé ou inconnu.")
-    con, _, rows, total = query_gold_table(
-        path,
-        commune,
-        date_from,
-        date_to,
-        lat,
-        lon,
-        radius_km,
-        max(1, min(limit, 1000)),
-        max(0, offset),
-    )
+    p = (path, commune, date_from, date_to, lat, lon, radius_km)
+    con, _, rows, total = query_gold_table(*p, max(1, min(limit, 1000)), max(0, offset))
     con.close()
     meta = get_gold_metadata(path, row_count=len(rows))
     meta["total_matched"] = total
@@ -155,10 +146,8 @@ def _stream_export(path: Path, is_geojson: bool):
                 writer.writerow([x.isoformat() if hasattr(x, "isoformat") else x for x in r])
             yield buf.getvalue()
     else:
-        lat_i, lon_i = (
-            (cols.index("lat") if "lat" in cols else -1),
-            (cols.index("lon") if "lon" in cols else -1),
-        )
+        lat_i = cols.index("lat") if "lat" in cols else -1
+        lon_i = cols.index("lon") if "lon" in cols else -1
         yield '{"type": "FeatureCollection", "features": [\n'
         first = True
         while chunk := cur.fetchmany(500):

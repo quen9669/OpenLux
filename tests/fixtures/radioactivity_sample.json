@@ -1,0 +1,42 @@
+[
+  {
+    "station_id": "RAD_FINDEL_01",
+    "station_name": "Luxembourg-Findel",
+    "commune_lau": "Sandweiler",
+    "lat": 49.6233,
+    "lon": 6.2044,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "dose_rate_nsvh": 84.0,
+    "status": "NORMAL"
+  },
+  {
+    "station_id": "RAD_CLERVAUX_02",
+    "station_name": "Clervaux",
+    "commune_lau": "Clervaux",
+    "lat": 50.0544,
+    "lon": 6.0294,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "dose_rate_nsvh": 92.5,
+    "status": "NORMAL"
+  },
+  {
+    "station_id": "RAD_ESCH_03",
+    "station_name": "Esch-sur-Alzette",
+    "commune_lau": "Esch-sur-Alzette",
+    "lat": 49.4958,
+    "lon": 5.9806,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "dose_rate_nsvh": 88.2,
+    "status": "NORMAL"
+  },
+  {
+    "station_id": "RAD_REMICH_04",
+    "station_name": "Remich",
+    "commune_lau": "Remich",
+    "lat": 49.5447,
+    "lon": 6.3683,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "dose_rate_nsvh": 81.0,
+    "status": "NORMAL"
+  }
+]

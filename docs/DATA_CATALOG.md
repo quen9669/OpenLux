@@ -15,7 +15,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 
 ---
 
-## 2. Tables Initiales (Phases 1 et 2)
+## 2. Data Marts Actifs
 
 ### 2.1 `gold_weather_observations`
 - **Domaine** : `weather`
@@ -53,11 +53,94 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
   - `commune_lau` (`VARCHAR`), `lat` (`DOUBLE`), `lon` (`DOUBLE`), `source_id` (`VARCHAR`)
 - **Limites connues** : Valable pour le calendrier légal officiel du Grand-Duché de Luxembourg.
 
+### 2.4 `gold_air_quality` (Vague 3A)
+- **Domaine** : `air_quality`
+- **Grain** : 1 ligne par station, par polluant mesuré et par relevé.
+- **Fichier** : `data/gold/gold_air_quality.parquet` (ZSTD)
+- **Sources** : `air_quality_lu` (Administration de l'Environnement, backup Open-Meteo Air Quality).
+- **Schéma exact** :
+  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `pollutant` (`VARCHAR`), `pollutant_value` (`DOUBLE`), `unit` (`VARCHAR`), `aqi_index` (`VARCHAR`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Limites connues** : Données issues des stations automatiques avant validation définitive annuelle.
+
+### 2.5 `gold_water_levels` (Vague 3A)
+- **Domaine** : `water_levels`
+- **Grain** : 1 ligne par station hydrologique et par relevé.
+- **Fichier** : `data/gold/gold_water_levels.parquet` (ZSTD)
+- **Sources** : `water_levels_lu` (Administration de la Gestion de l'Eau).
+- **Schéma exact** :
+  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`), `river_name` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `water_level_cm` (`DOUBLE`), `discharge_m3s` (`DOUBLE`), `alert_level` (`VARCHAR`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Limites connues** : Mesures automatiques en direct soumises aux crues subites.
+
+### 2.6 `gold_fuel_prices` (Vague 3A)
+- **Domaine** : `economy_fuel`
+- **Grain** : 1 ligne par type de carburant routier et par mise à jour officielle.
+- **Fichier** : `data/gold/gold_fuel_prices.parquet` (ZSTD)
+- **Sources** : `fuel_prices_lu` (Ministère de l'Économie).
+- **Schéma exact** :
+  - `fuel_type` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `price_eur_per_litre` (`DOUBLE`), `price_change_eur` (`DOUBLE`)
+  - `source_id` (`VARCHAR`)
+- **Limites connues** : Prix maxima légaux autorisés au Luxembourg ; les stations peuvent appliquer des rabais.
+
+### 2.7 `gold_statec_inflation` (Vague 3A)
+- **Domaine** : `economy_fuel`
+- **Grain** : 1 ligne par mois de référence.
+- **Fichier** : `data/gold/gold_statec_inflation.parquet` (ZSTD)
+- **Sources** : `statec_inflation` (STATEC, backup Eurostat).
+- **Schéma exact** :
+  - `reference_month` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `ipcn_index` (`DOUBLE`), `inflation_annual_rate` (`DOUBLE`), `wage_index_quote` (`DOUBLE`)
+  - `source_id` (`VARCHAR`)
+- **Limites connues** : Publication mensuelle officielle le premier mercredi suivant la fin du mois.
+
+### 2.8 `gold_electricity_spot` (Vague 3A)
+- **Domaine** : `energy_climate`
+- **Grain** : 1 ligne par heure d'échéance Day-Ahead.
+- **Fichier** : `data/gold/gold_electricity_spot.parquet` (ZSTD)
+- **Sources** : `electricity_spot_delu` (ENTSO-E / EPEX SPOT DE-LU).
+- **Schéma exact** :
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `price_eur_per_mwh` (`DOUBLE`), `bidding_zone` (`VARCHAR`)
+  - `source_id` (`VARCHAR`)
+- **Limites connues** : Prix spot de gros conjointe Allemagne-Luxembourg hors réseau et taxes.
+
+### 2.9 `gold_radioactivity` (Vague 3A)
+- **Domaine** : `energy_climate`
+- **Grain** : 1 ligne par sonde de télémesure nationale et par relevé.
+- **Fichier** : `data/gold/gold_radioactivity.parquet` (ZSTD)
+- **Sources** : `radioactivity_lu` (Division de la Radioprotection).
+- **Schéma exact** :
+  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `dose_rate_nsvh` (`DOUBLE`), `radiological_status` (`VARCHAR`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Limites connues** : Mesure en nSv/h ; légères hausses naturelles lors des épisodes de pluie (radon).
+
+### 2.10 `gold_bathing_water` (Vague 3A)
+- **Domaine** : `energy_climate`
+- **Grain** : 1 ligne par site officiel de baignade et par contrôle sanitaire.
+- **Fichier** : `data/gold/gold_bathing_water.parquet` (ZSTD)
+- **Sources** : `bathing_water_lu` (Administration de la Gestion de l'Eau).
+- **Schéma exact** :
+  - `site_id` (`VARCHAR`), `site_name` (`VARCHAR`), `water_body` (`VARCHAR`)
+  - `observed_at_utc` (`TIMESTAMP`)
+  - `quality_class` (`VARCHAR`), `cyanobacteria_bloom` (`VARCHAR`)
+  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Limites connues** : Prélèvements réalisés bimensuellement pendant la saison estivale (mai - septembre).
+
 ---
 
-## 3. Vue Consolidée Multimodale (Phase 3)
+## 3. Vue Consolidée Multimodale
 
-### 3.1 `gold_luxembourg_daily_context`
+### 3.1 `gold_luxembourg_daily_context` (Consolidation finale Phase 3)
 - **Grain** : `date × commune_lau` (100 communes luxembourgeoises).
-- **Contenu** : Agrégation quotidienne des 8 signaux critiques : météo moyenne/extrêmes, indice qualité de l'air, état du trafic autoroutier, chantiers actifs, préavis de grèves, vigilances crues/météo, jours fériés et événements d'envergure.
+- **Contenu** : Agrégation quotidienne des 8 signaux critiques (météo, qualité de l'air, état du trafic autoroutier/frontalier, chantiers, grèves, crues, jours fériés et événements majeurs).
 - **Usage IA privilégié** : Fournit le contexte complet d'une journée au Luxembourg pour les agents conversationnels et modèles prédictifs.

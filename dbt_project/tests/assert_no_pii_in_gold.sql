@@ -28,5 +28,41 @@ WITH pii_checks AS (
     FROM {{ ref('gold_holidays') }}
     WHERE regexp_matches(holiday_name_fr, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
        OR regexp_matches(holiday_name_fr, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_air_quality' AS table_name,
+        station_name AS sampled_text
+    FROM {{ ref('gold_air_quality') }}
+    WHERE regexp_matches(station_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(station_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_water_levels' AS table_name,
+        station_name AS sampled_text
+    FROM {{ ref('gold_water_levels') }}
+    WHERE regexp_matches(station_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(station_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_radioactivity' AS table_name,
+        station_name AS sampled_text
+    FROM {{ ref('gold_radioactivity') }}
+    WHERE regexp_matches(station_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(station_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_bathing_water' AS table_name,
+        site_name AS sampled_text
+    FROM {{ ref('gold_bathing_water') }}
+    WHERE regexp_matches(site_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(site_name, '(?:\+352|00352)\s?[0-9]{4,}')
 )
 SELECT * FROM pii_checks

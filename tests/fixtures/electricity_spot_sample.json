@@ -1,0 +1,22 @@
+[
+  {
+    "observed_at": "2026-11-20T20:00:00Z",
+    "price_eur_per_mwh": 82.5,
+    "bidding_zone": "DE-LU"
+  },
+  {
+    "observed_at": "2026-11-20T21:00:00Z",
+    "price_eur_per_mwh": 76.1,
+    "bidding_zone": "DE-LU"
+  },
+  {
+    "observed_at": "2026-11-20T22:00:00Z",
+    "price_eur_per_mwh": 68.4,
+    "bidding_zone": "DE-LU"
+  },
+  {
+    "observed_at": "2026-11-20T23:00:00Z",
+    "price_eur_per_mwh": 61.2,
+    "bidding_zone": "DE-LU"
+  }
+]

@@ -1,0 +1,5 @@
+site_id,site_name,water_body,inspection_date,quality_class,cyanobacteria_bloom,lat,lon,commune_name
+BATH_ROMWEIS_01,Lac Haute-Sûre - Rommwiss,Lac de la Haute-Sûre,2026-08-15,EXCELLENT,NO,49.9022,5.8821,Lac de la Haute-Sûre
+BATH_INNSEN_02,Lac Haute-Sûre - Insenborn,Lac de la Haute-Sûre,2026-08-15,EXCELLENT,NO,49.8911,5.8644,Esch-sur-Sûre
+BATH_REMERSCH_03,Remerschen - Baggerweier,Baggerweier Remerschen,2026-08-15,GOOD,NO,49.5028,6.3611,Schengen
+BATH_WEISWAMP_04,Lac de Weiswampach,Lac de Weiswampach,2026-08-15,EXCELLENT,NO,50.1367,6.0711,Weiswampach

@@ -6,6 +6,27 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-21
+
+### Added
+- **Phase 3 : Passage à l'Échelle — Vague 3A (Environnement & Énergie)**
+  - Intégration déclarative 100 % config-driven de 7 nouvelles sources atomiques dans `config/sources.toml` :
+    - `air_quality_lu` (`air_quality`) : Qualité de l'air en temps réel (NO2, O3, PM10, PM2.5, AQI) de l'Administration de l'Environnement.
+    - `water_levels_lu` (`water_levels`) : Niveaux d'eau, débits et alertes crues de l'Administration de la Gestion de l'Eau.
+    - `fuel_prices_lu` (`economy_fuel`) : Prix maxima officiels des carburants routiers du Ministère de l'Économie.
+    - `statec_inflation` (`economy_fuel`) : Indices IPCN et inflation mensuelle STATEC.
+    - `electricity_spot_delu` (`energy_climate`) : Prix spot Day-Ahead électricité zone conjointe DE-LU.
+    - `radioactivity_lu` (`energy_climate`) : Surveillance radiologique et taux de dose gamma ambiant de la Radioprotection.
+    - `bathing_water_lu` (`energy_climate`) : Analyses bactériologiques et qualité sanitaire des eaux de baignade officielles.
+  - Modèles de transformation dbt complets (staging, silver, gold) pour chaque source :
+    - 7 modèles Staging (`stg_air_quality`, `stg_water_levels`, `stg_fuel_prices`, `stg_statec_inflation`, `stg_electricity_spot`, `stg_radioactivity`, `stg_bathing_water`).
+    - 7 modèles Silver normalisant les horodatages UTC et projetant les communes sur le référentiel officiel `ref_communes_lu`.
+    - 7 Data Marts Gold Parquet ZSTD (`gold_air_quality`, `gold_water_levels`, `gold_fuel_prices`, `gold_statec_inflation`, `gold_electricity_spot`, `gold_radioactivity`, `gold_bathing_water`).
+  - Extension du test d'intégrité RGPD `assert_no_pii_in_gold.sql` pour couvrir les colonnes texte des nouvelles tables Gold.
+  - 7 nouveaux jeux de fixtures offline anonymisés dans `tests/fixtures/` pour des tests 100 % déterministes.
+  - Mise à jour de la suite d'intégration offline `tests/test_pipeline_slice.py` validant la collecte, le stockage Bronze, les transformations dbt et l'export Parquet de l'ensemble des 10 sources actives.
+  - Synchronisation de `STATUS.md`, `docs/ARCHITECTURE.md` (v1.2), `docs/DATA_CATALOG.md` et `docs/DECISIONS_LOG.md`.
+
 ## [0.3.0] - 2026-11-21
 
 ### Added

@@ -75,3 +75,193 @@ headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)"
 [sources.quality]
 min_rows = 10
 required_fields = ["date", "name"]
+
+[[sources]]
+id = "air_quality_lu"
+domain = "air_quality"
+description = "Mesures de la qualité de l'air en temps réel au Luxembourg"
+semantic_summary = "Concentrations de polluants atmosphériques (NO2, O3, PM10, PM2.5) relevées par les stations officielles de l'Administration de l'Environnement."
+known_limitations = "Données brutes issues des stations automatiques du réseau national avant validation annuelle définitive."
+adapter = "http_json"
+cadence_minutes = 60
+sla_minutes = 120
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/qualite-de-lair-temps-reel.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117&longitude=6.1319&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["station_id", "pollutant", "value"]
+
+[[sources]]
+id = "water_levels_lu"
+domain = "water_levels"
+description = "Niveaux d'eau, débits et alertes crues des rivières du Luxembourg"
+semantic_summary = "Hauteurs d'eau et débits instantanés sur l'Alzette, la Moselle, la Sûre et affluents par l'Administration de la Gestion de l'Eau."
+known_limitations = "Mesures automatiques en direct soumises aux crues subites ; les débits extrêmes peuvent faire l'objet de recalibrations ultérieures."
+adapter = "http_json"
+cadence_minutes = 30
+sla_minutes = 90
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/niveaux-eau-inondations.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://inondations.lu/api/v1/water-levels"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["station_name", "water_level_cm"]
+
+[[sources]]
+id = "fuel_prices_lu"
+domain = "economy_fuel"
+description = "Prix maxima officiels des carburants routiers au Luxembourg"
+semantic_summary = "Prix plafonds fixés par l'État pour le Sans Plomb 95, 98, Diesel et GPL en stations-service au Grand-Duché."
+known_limitations = "Prix maxima légaux de vente au détail fixés par le Ministère de l'Économie ; les stations peuvent vendre à un prix inférieur mais jamais supérieur."
+adapter = "http_json"
+cadence_minutes = 360
+sla_minutes = 2160
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/prix-carburants-luxembourg.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.energy-prices.eu/v1/luxembourg/fuel"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["fuel_type", "price_eur_per_litre"]
+
+[[sources]]
+id = "statec_inflation"
+domain = "economy_fuel"
+description = "Indices des prix à la consommation (IPCN) et inflation STATEC"
+semantic_summary = "Évolution de l'indice des prix à la consommation national et cote d'application de l'échelle mobile des salaires."
+known_limitations = "Séries mensuelles publiées par le STATEC le premier mercredi suivant la fin du mois de référence."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 2880
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/statec-inflation-ipcn.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?geo=LU"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["reference_month", "ipcn_index"]
+
+[[sources]]
+id = "electricity_spot_delu"
+domain = "energy_climate"
+description = "Prix spot Day-Ahead de l'électricité sur la zone conjointe DE-LU"
+semantic_summary = "Prix horaire du marché de gros de l'électricité (Day-Ahead en EUR/MWh) pour la zone conjointe Allemagne-Luxembourg."
+known_limitations = "Prix de gros du marché spot Day-Ahead (EPEX SPOT) ; n'inclut pas les taxes, tarifs réseaux et marges des fournisseurs."
+adapter = "http_json"
+cadence_minutes = 60
+sla_minutes = 180
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/electricity-spot-delu.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.energy-charts.info/price?bzn=DE-LU"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["observed_at", "price_eur_per_mwh"]
+
+[[sources]]
+id = "radioactivity_lu"
+domain = "energy_climate"
+description = "Surveillance radiologique et taux de dose gamma ambiant au Luxembourg"
+semantic_summary = "Mesures du débit de dose gamma ambiant en continu issues du réseau national de télémesure de la Radioprotection."
+known_limitations = "Taux de dose ambiant instantané mesuré en nSv/h ; de légères élévations temporaires sont d'origine naturelle (lessivage du radon lors des pluies)."
+adapter = "http_json"
+cadence_minutes = 60
+sla_minutes = 180
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/surveillance-radiologique-luxembourg.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://remap.jrc.ec.europa.eu/api/v1/measurements?country=LU"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["station_name", "dose_rate_nsvh"]
+
+[[sources]]
+id = "bathing_water_lu"
+domain = "energy_climate"
+description = "Qualité des eaux de baignade des sites officiels au Luxembourg"
+semantic_summary = "Résultats des analyses bactériologiques et classement sanitaire officiel des plans d'eau autorisés à la baignade au Grand-Duché."
+known_limitations = "Analyses bimensuelles durant la saison balnéaire officielle (1er mai - 30 septembre) sur les sites balisés."
+adapter = "http_csv"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/eaux-de-baignade-luxembourg.csv"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_csv"
+url = "https://eau.geoportail.lu/wfs/bathing_water.csv"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["site_name", "quality_class"]
+
