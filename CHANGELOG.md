@@ -6,6 +6,27 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+### Added
+- **API Officielle Echo.lu & Événements Culturels (`gold_culture_events`)** :
+  - Intégration de l'endpoint OpenAPI `https://api.echo.lu/v1/experiences` avec token optionnel `ECHO_API_KEY` et backup open data public.
+  - Enrichissement avec colonnes tarifaires : `price_eur`, `price_text`, `is_free`.
+  - Liens officiels HTTPS vérifiés sans 404.
+- **Analyse Marché Immobilier & Détection d'Opportunités (`gold_housing`)** :
+  - Nouveau référentiel `dbt_project/seeds/ref_housing_market_deals.csv` couvrant les quartiers emblématiques (Belair, Kirchberg, Limpertsberg, Gasperich, Belval, Differdange, Strassen...).
+  - Calcul automatique du prix au m² (`price_eur_m2`), moyenne de quartier (`quartier_avg_price_m2`), scoring de décote (`deal_opportunity_score`) et drapeau d'opportunité (`is_good_deal`).
+- **Maillage Météorologique Cantonal (`gold_weather_observations`)** :
+  - Extension systématique aux 12 cantons du Luxembourg avec horodatages récents.
+- **Tarification Stationnement & Mobilité (`gold_mobility_parkings`)** :
+  - Intégration des colonnes `hourly_rate_eur`, `tariff_details` et `is_free_pr` (Glacis, Knuedler, Monterey, P+R Bouillon gratuit 24h, Chargy).
+- **Contrôle d'Intégrité & Déduplication (`scripts/verify_no_duplicates.py`)** :
+  - Script automatisé validant l'unicité stricte et l'absence totale de doublons sur les 22 Data Marts Gold du catalogue.
+
+### Changed
+- **Épuration de `gold_holidays`** :
+  - Suppression des colonnes non pertinentes `commune_lau`, `lat`, `lon` qui polluaient la table avec des NULLs.
+- **Traçabilité Imputation Électricité (`gold_electricity_spot`)** :
+  - Ajout des colonnes d'audit `data_origin` (`REEL`/`IMPUTE`) et `is_imputed` (`false`/`true`).
+
 ## [0.8.0] - 2026-11-21
 
 ### Added

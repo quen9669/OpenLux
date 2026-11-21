@@ -12,8 +12,5 @@ SELECT
     is_legal_holiday,
     is_customary_tradition,
     is_school_vacation,
-    NULL::VARCHAR AS commune_lau,
-    NULL::DOUBLE AS lat,
-    NULL::DOUBLE AS lon,
     source_id
 FROM {{ ref('silver_holidays') }}

@@ -754,12 +754,12 @@ required_fields = ["item_id", "name"]
 [[sources]]
 id = "culture_echo_lu"
 domain = "concerts_culture"
-description = "Agenda culturel et sorties nationales Echo.lu (événements factuels)"
-semantic_summary = "Concerts, expositions, spectacles et festivals recensés sur la plateforme culturelle nationale luxembourgeoise."
-known_limitations = "Extraction factuelle stricte schema.org/Event sans texte éditorial pour conformité droit d'auteur."
-adapter = "http_jsonld"
-cadence_minutes = 1440
-sla_minutes = 4320
+description = "Agenda culturel et sorties nationales Echo.lu (API officielle & OpenAPI)"
+semantic_summary = "Concerts, expositions, spectacles et festivals recensés sur la plateforme culturelle nationale luxembourgeoise via son API REST."
+known_limitations = "Extraction factuelle via OpenAPI /v1/experiences (utilise token API si configuré)."
+adapter = "http_json"
+cadence_minutes = 720
+sla_minutes = 1440
 retention_days = 90
 license_spdx = "FACTUAL-ONLY"
 commercial_use_safe = true
@@ -767,12 +767,13 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://echo.lu/fr/agenda"
+url = "https://api.echo.lu/v1/experiences"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+auth_env_var = "ECHO_API_KEY"
 
 [sources.backup]
-adapter = "http_jsonld"
-url = "https://culture.lu/fr/agenda"
+adapter = "http_json"
+url = "https://data.public.lu/fr/datasets/r/culture-echo-lu.json"
 
 [sources.quality]
 min_rows = 1

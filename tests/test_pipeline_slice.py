@@ -86,11 +86,11 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "noise-zones" in url_str or "strategic_noise_maps" in url_str:
         raw = Path("tests/fixtures/noise_zones_lu_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "roadworks-cita" in url_str or "roadworks" in url_str:
-        raw = Path("tests/fixtures/roadworks_cita_sample.json").read_bytes()
-        return httpx.Response(200, content=raw)
     if "roadworks-vdl" in url_str or "vdl.lu/v1/travaux" in url_str:
         raw = Path("tests/fixtures/roadworks_vdl_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "roadworks-cita" in url_str or "cita.lu" in url_str or "roadworks" in url_str:
+        raw = Path("tests/fixtures/roadworks_cita_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "housing-observatoire" in url_str or "observatoire_prix" in url_str:
         raw = Path("tests/fixtures/housing_observatoire_sample.csv").read_bytes()
@@ -107,8 +107,8 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "centres-recyclage" in url_str or "recycling_centers" in url_str:
         raw = Path("tests/fixtures/recycling_centers_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "echo.lu" in url_str or "culture.lu" in url_str:
-        raw = Path("tests/fixtures/culture_echo_lu_sample.html").read_bytes()
+    if "echo.lu" in url_str or "culture.lu" in url_str or "culture-echo-lu" in url_str:
+        raw = Path("tests/fixtures/culture_echo_lu_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "culture-venues" in url_str or "rockhal" in url_str:
         raw = Path("tests/fixtures/culture_venues_sample.html").read_bytes()

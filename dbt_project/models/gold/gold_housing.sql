@@ -1,15 +1,26 @@
--- Gold: Data Mart final de l'immobilier et de la construction au Luxembourg
+-- Gold: Data Mart final de l'immobilier, prix au m² et détection de bonnes affaires
 SELECT
     record_id,
     record_type,
     property_type,
+    market_segment,
     reference_period,
     observed_at_utc,
+    price_eur,
+    surface_m2,
     price_eur_m2,
+    quartier_avg_price_m2,
+    deal_opportunity_score,
+    is_good_deal,
+    bedrooms_count,
+    energy_class,
+    listing_url,
     units_count,
+    neighborhood_or_quartier,
+    commune_lau,
+    commune_name,
+    canton,
     lat,
     lon,
-    commune_lau,
-    canton,
     source_id
 FROM {{ ref('silver_housing') }}

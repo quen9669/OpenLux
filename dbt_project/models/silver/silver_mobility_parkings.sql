@@ -18,6 +18,24 @@ SELECT
     u.total_capacity,
     u.opening_hours,
     CASE
+        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%') THEN 0.00
+        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Knuedler%' OR u.facility_name LIKE '%Monterey%') THEN 2.80
+        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Théâtre%' OR u.facility_name LIKE '%Glacis%') THEN 2.00
+        WHEN u.facility_type = 'PARKING' THEN 2.50
+        WHEN u.facility_type = 'BIKE_SHARING' THEN 0.00
+        ELSE NULL
+    END AS hourly_rate_eur,
+    CASE
+        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%') THEN 'P+R gratuit 24h'
+        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Knuedler%' OR u.facility_name LIKE '%Monterey%') THEN '2.80 €/h (1ère-2ème h), puis 3.20 €/h'
+        WHEN u.facility_type = 'PARKING' AND u.facility_name LIKE '%Glacis%' THEN '1.00 €/h (8h-18h), gratuit nuit/WE'
+        WHEN u.facility_type = 'PARKING' THEN '2.50 €/h tarif standard'
+        WHEN u.facility_type = 'BIKE_SHARING' THEN 'Gratuit < 30min avec abonnement'
+        WHEN u.facility_type = 'EV_CHARGING' THEN '0.35 €/kWh AC 22kW'
+        ELSE 'Tarif non applicable'
+    END AS tariff_details,
+    (u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%')) AS is_free_pr,
+    CASE
         WHEN u.total_capacity > 0 THEN ROUND((u.total_capacity - u.available_capacity) * 100.0 / u.total_capacity, 1)
         ELSE NULL
     END AS occupancy_rate,
