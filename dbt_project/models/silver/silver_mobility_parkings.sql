@@ -16,6 +16,7 @@ SELECT
     TRY_CAST(u.raw_observed_at AS TIMESTAMP) AS observed_at_utc,
     u.available_capacity,
     u.total_capacity,
+    u.opening_hours,
     CASE
         WHEN u.total_capacity > 0 THEN ROUND((u.total_capacity - u.available_capacity) * 100.0 / u.total_capacity, 1)
         ELSE NULL

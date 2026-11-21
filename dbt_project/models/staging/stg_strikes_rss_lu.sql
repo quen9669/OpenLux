@@ -9,5 +9,7 @@ SELECT
     raw_source.published_at::VARCHAR AS raw_published_at,
     raw_source.source_url::VARCHAR AS source_url,
     raw_source.sector::VARCHAR AS sector,
+    COALESCE(raw_source.country_code::VARCHAR, 'LU') AS country_code,
+    COALESCE(raw_source.country_name::VARCHAR, 'Luxembourg') AS country_name,
     'strikes_rss_lu' AS source_id
 FROM raw_source

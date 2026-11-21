@@ -12,10 +12,10 @@ from typing import Any
 _EMAIL_REGEX = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 
 # POURQUOI : Détection ciblée des téléphones luxembourgeois (+352, 00352) et internationaux
-# formatés avec séparateurs pour éviter de confondre des codes postaux, années ou timestamps.
+# formatés avec séparateurs, en excluant explicitement les dates ISO et formats de calendrier.
 _PHONE_REGEX = re.compile(
     r"(?:(?:\+|00)352[\s.-]?[2-9]\d{1,4}(?:[\s.-]?\d{2,5}){1,4})"
-    r"|(?:\b[2-9]\d{1,3}(?:[\s.-]\d{2,4}){2,3}\b)"
+    r"|(?!(?:\d{4}-\d{2}|\d{2}[.-]\d{2}[.-]\d{4}))(?:\b[2-9]\d{1,3}(?:[\s.-]\d{2,4}){2,3}\b)"
     r"|(?:(?:\+|00)(?:33|49|32)[\s.-]?[1-9](?:[\s.-]?\d{2}){4})"
 )
 

@@ -10,6 +10,8 @@ SELECT
     s.title,
     TRY_CAST(s.raw_published_at AS TIMESTAMP) AS published_at_utc,
     s.sector,
+    s.country_code,
+    s.country_name,
     s.source_url,
     'LU0201' AS commune_lau,
     c.canton,

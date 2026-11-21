@@ -4,6 +4,8 @@ SELECT
     title,
     published_at_utc,
     sector,
+    country_code,
+    country_name,
     source_url,
     commune_lau,
     canton,

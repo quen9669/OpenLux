@@ -25,5 +25,12 @@
       <guid>STRIKE_2026_FP_03</guid>
       <description>Une manifestation est annoncée place Guillaume II par les délégations du secteur public.</description>
     </item>
+    <item>
+      <title>Grève SNCF : trafic perturbé sur la ligne TER Metz-Thionville-Luxembourg</title>
+      <link>https://news.openlux.lu/articles/greve-sncf-ter-lorraine</link>
+      <pubDate>Thu, 20 Nov 2026 16:00:00 +0100</pubDate>
+      <guid>STRIKE_2026_SNCF_04</guid>
+      <description>Un mot d'ordre de grève national à la SNCF affectera les liaisons frontalières vers le Luxembourg.</description>
+    </item>
   </channel>
 </rss>

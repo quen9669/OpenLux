@@ -33,20 +33,10 @@ def init_obs_runs_table(con: duckdb.DuckDBPyConnection) -> None:
     # POURQUOI : Traçabilité MLOps conforme aux contrats API (_meta) et monitoring zéro-infra.
     con.execute("""
         CREATE TABLE IF NOT EXISTS obs_runs (
-            run_id VARCHAR,
-            source_id VARCHAR,
-            pipeline_git_sha VARCHAR,
-            run_outcome VARCHAR,
-            last_checked_utc VARCHAR,
-            last_changed_utc VARCHAR,
-            trust_score DOUBLE,
-            score_freshness DOUBLE,
-            score_completeness DOUBLE,
-            score_validity DOUBLE,
-            score_source DOUBLE,
-            row_count BIGINT,
-            sha256 VARCHAR,
-            error_message VARCHAR,
+            run_id VARCHAR, source_id VARCHAR, pipeline_git_sha VARCHAR, run_outcome VARCHAR,
+            last_checked_utc VARCHAR, last_changed_utc VARCHAR, trust_score DOUBLE,
+            score_freshness DOUBLE, score_completeness DOUBLE, score_validity DOUBLE,
+            score_source DOUBLE, row_count BIGINT, sha256 VARCHAR, error_message VARCHAR,
             recorded_at_utc VARCHAR
         )
     """)

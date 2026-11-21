@@ -7,6 +7,7 @@ SELECT
     available_capacity,
     total_capacity,
     occupancy_rate,
+    opening_hours,
     lat,
     lon,
     commune_lau,

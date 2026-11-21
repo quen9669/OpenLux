@@ -17,6 +17,19 @@ def test_sanitize_text_redacts_emails_and_lux_phones() -> None:
     assert "+352 247 88888" not in cleaned
 
 
+def test_sanitize_text_preserves_dates_and_timestamps() -> None:
+    dates_sample = (
+        "Férié le 2026-01-01 et relevé à 2026-11-20T22:00:00Z "
+        "pour la période 2026-10 et contrôle du 20.11.2026."
+    )
+    cleaned = sanitize_text(dates_sample)
+    assert "2026-01-01" in cleaned
+    assert "2026-11-20T22:00:00Z" in cleaned
+    assert "2026-10" in cleaned
+    assert "20.11.2026" in cleaned
+    assert "[REDACTED_PHONE]" not in cleaned
+
+
 def test_sanitize_value_preserves_json_keys_and_types() -> None:
     data = {
         "email": "agent@police.etat.lu",

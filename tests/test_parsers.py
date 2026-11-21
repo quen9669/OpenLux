@@ -48,18 +48,28 @@ def test_strikes_rss_filters_and_extracts() -> None:
     raw = fixture_path.read_bytes()
 
     records = strikes_rss(raw)
-    assert len(records) == 2  # Le 2e article (inauguration) doit être ignoré
+    assert len(records) == 3  # Le 2e article (inauguration) doit être ignoré
 
     rec1 = records[0]
     assert rec1["strike_id"] == "STRIKE_2026_RGTR_01"
     assert "grève" in rec1["title"].lower()
     assert rec1["sector"] == "TRANSPORT"
+    assert rec1["country_code"] == "LU"
+    assert rec1["country_name"] == "Luxembourg"
     assert "news.openlux.lu" in rec1["source_url"]
 
     rec2 = records[1]
     assert rec2["strike_id"] == "STRIKE_2026_FP_03"
     assert "manifestation" in rec2["title"].lower()
     assert rec2["sector"] == "PUBLIC"
+    assert rec2["country_code"] == "LU"
+    assert rec2["country_name"] == "Luxembourg"
+
+    rec3 = records[2]
+    assert rec3["strike_id"] == "STRIKE_2026_SNCF_04"
+    assert rec3["sector"] == "TRANSPORT"
+    assert rec3["country_code"] == "FR"
+    assert rec3["country_name"] == "France"
 
 
 def test_strikes_rss_empty() -> None:

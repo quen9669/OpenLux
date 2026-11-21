@@ -50,7 +50,10 @@ def get_platform_health(domain: str | None = None) -> dict[str, Any]:
     """État de fraîcheur, Trust Score et anomalies par source ou domaine au Luxembourg."""
     sources = load_sources_config()
     db = Path("data/openlux.duckdb")
-    con = duckdb.connect(str(db), read_only=True) if db.exists() else None
+    try:
+        con = duckdb.connect(str(db), read_only=True) if db.exists() else None
+    except duckdb.IOException:
+        con = None
     health = get_latest_source_health(con) if con else {}
     if con:
         con.close()

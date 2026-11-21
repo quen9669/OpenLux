@@ -41,22 +41,19 @@ def generate_status_markdown(
         "| :--- | :--- | :---: | :---: | :---: | :---: | :--- | :--- | :--- |",
     ]
 
-    for source_id, src in sources.items():
-        info = health_map.get(source_id, {})
-        status = info.get("status", "NOT_TESTED")
-        icon = _get_status_icon(status)
-        score = (
-            f"{info['trust_score']:.1f}"
-            if "trust_score" in info and status != "NOT_TESTED"
-            else "-"
+    for sid, src in sources.items():
+        info = health_map.get(sid, {})
+        st = info.get("status", "NOT_TESTED")
+        sc = f"{info['trust_score']:.1f}" if "trust_score" in info and st != "NOT_TESTED" else "-"
+        act = info.get("source_used", "primary" if st == "GOOD" else "-")
+        r, c, m = (
+            str(info.get("row_count", "-")),
+            info.get("last_checked_utc", "-"),
+            info.get("last_changed_utc", "-"),
         )
-        active = info.get("source_used", "primary" if status == "GOOD" else "-")
-        rows = str(info.get("row_count", "-"))
-        chk = info.get("last_checked_utc", "-")
-        mut = info.get("last_changed_utc", "-")
         lines.append(
-            f"| *{src.domain}* | `{source_id}` | {icon} | {score} | {active} | {rows} | "
-            f"{chk} | {mut} | `{src.license_spdx}` |"
+            f"| *{src.domain}* | `{sid}` | {_get_status_icon(st)} | {sc} | {act} | {r} | "
+            f"{c} | {m} | `{src.license_spdx}` |"
         )
 
     lines.extend(
