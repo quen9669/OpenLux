@@ -6,7 +6,28 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
-## [0.7.0] - 2026-11-21
+## [0.8.0] - 2026-11-21
+
+### Added
+- **Phase 4 : Finalisation Open Source & Publication data.public.lu**
+  - **Module de Publication & Métadonnées Standardisées (`src/openlux/publish/opendata_lu.py`)** :
+    - Génération automatique du manifeste Frictionless Data Package (`data/gold/datapackage.json`) avec typage JSON Table Schema, sommes de contrôle SHA-256 et licences SPDX pour les 22 tables Gold.
+    - Génération du profil DCAT-AP-LU 2.0 (`data/gold/dcat_ap_lu.json`) pour l'indexation sur le portail open data officiel luxembourgeois `data.public.lu`.
+    - Référencement explicite des formats et standards sectoriels européens : NeTEx (CEN/TS 16614), SIRI (CEN/TS 15531), GTFS / GTFS-RT, DATEX II (CEN/TS 16157), et GeoJSON / WGS84 (EPSG:4326).
+    - Commande CLI `openlux publish --dry-run` validant la complétude et l'intégrité sans modification externe.
+    - Commande CLI `openlux compact` pour le compactage mensuel Parquet des snapshots historiques Bronze.
+  - **Notebooks Pédagogiques & Documentation (`notebooks/`)** :
+    - `01_quickstart_api_csv.ipynb` : Guide d'accès rapide (DuckDB in-memory local, API REST FastAPI, streaming CSV, FastMCP pour agents IA).
+    - `02_analyse_contexte_lu.ipynb` : Analyse croisée territoriale (`gold_luxembourg_daily_context`), audits de qualité instantanés (`data_quality_grade`, `data_completeness_pct`), géolocalisation des grèves transfrontalières et mobilité 24/7.
+    - `docs/CONTRIBUTING.md` : Guide d'intégration d'une source en 15 minutes sans code Python via `config/sources.toml`.
+  - **CI/CD & Documentation Automatique** :
+    - Extension du workflow `.github/workflows/ci.yml` avec validation `openlux publish --dry-run` et `dbt test`.
+    - Workflow `.github/workflows/docs.yml` pour le déploiement automatique de `dbt docs` sur GitHub Pages.
+  - **Audit Final & Respect des Garde-Fous** :
+    - Budget de code Python strict $< 1\,500$ lignes respecté (**1 468 lignes** au total, fichier max 176 lignes $\le 200$).
+    - 7 dépendances runtime verrouillées sans aucun ajout (`httpx`, `pydantic`, `duckdb`, `dbt-duckdb`, `beautifulsoup4`, `fastapi`, `fastmcp`).
+    - 33 tests unitaires et d'intégration 100 % hors-ligne passants.
+
 
 ### Added
 - **Phase 3 : Passage à l'Échelle — Vague 3D (Culture, Vie Locale, Santé & Grèves) & Consolidation Gold**

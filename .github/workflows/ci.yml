@@ -31,5 +31,10 @@ jobs:
       - name: Run offline tests (pytest)
         run: uv run pytest
 
-      - name: Validate dbt configuration
-        run: uv run dbt parse --project-dir dbt_project --profiles-dir dbt_project
+      - name: Validate dbt configuration and models
+        run: |
+          uv run dbt parse --project-dir dbt_project --profiles-dir dbt_project
+          uv run dbt test --project-dir dbt_project --profiles-dir dbt_project
+
+      - name: Validate Open Data publication & metadata dry-run
+        run: uv run openlux publish --dry-run

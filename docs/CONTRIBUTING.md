@@ -55,11 +55,23 @@ Dans 90 % des cas, ajouter une nouvelle source nécessite uniquement :
 
 ---
 
-## 3. Commandes de Validation Avant Toute Pull Request
+## 3. Normes et Formats Sectoriels Recommandés
+
+Lors de l'intégration et de la publication sur `data.public.lu`, veillez à renseigner ou respecter les standards sectoriels appropriés :
+- **Transports en commun & Horaires** : NeTEx (CEN/TS 16614), SIRI (CEN/TS 15531), GTFS / GTFS-RT.
+- **Trafic autoroutier & Événements routiers** : DATEX II (CEN/TS 16157).
+- **Géolocalisation & Cartographie** : Coordonnées WGS84 (EPSG:4326) avec colonnes standardisées `latitude` et `longitude` (GeoJSON).
+- **Catalogue & Indexation** : DCAT-AP-LU 2.0 (`data/gold/dcat_ap_lu.json`) et Frictionless Data Package (`data/gold/datapackage.json`).
+
+---
+
+## 4. Commandes de Validation Avant Toute Pull Request
 
 ```bash
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest
 cd dbt_project && uv run dbt test --profiles-dir .
+uv run openlux publish --dry-run
+uv run openlux compact
 ```

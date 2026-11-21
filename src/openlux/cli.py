@@ -157,6 +157,9 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("rebuild", help="Rejoue le pipeline hors-ligne depuis Bronze")
     subparsers.add_parser("status", help="Affiche l'état des sources et regénère STATUS.md")
     subparsers.add_parser("compact", help="Compacte les archives Bronze")
+    pub = subparsers.add_parser("publish", help="Valide et publie sur data.public.lu")
+    pub.add_argument("--dry-run", action="store_true", default=True, help="Mode simulation")
+    pub.add_argument("--live", dest="dry_run", action="store_false", help="Publication réelle")
 
     serve_parser = subparsers.add_parser("serve", help="Démarre l'API FastAPI (uvicorn)")
     serve_parser.add_argument("--host", default="127.0.0.1", help="Hôte d'écoute")
@@ -178,6 +181,19 @@ def main(argv: list[str] | None = None) -> int:
         return serve_api(args.host, args.port)
     if args.command == "mcp":
         return run_mcp_server()
+    if args.command == "compact":
+        from openlux.publish.opendata_lu import compact_bronze_archives
+
+        count = compact_bronze_archives(Path("data/bronze"))
+        print(f"Compactage terminé : {count} archives traitées.")
+        return 0
+    if args.command == "publish":
+        from openlux.publish.opendata_lu import publish_to_data_public_lu
+
+        res = publish_to_data_public_lu(dry_run=args.dry_run)
+        st, cnt = res["status"], res["resources_count"]
+        print(f"Publication data.public.lu ({st}) : {cnt} tables validées.")
+        return 0
     if args.command == "status":
         db_path = Path("data/openlux.duckdb")
         con = duckdb.connect(str(db_path)) if db_path.exists() else duckdb.connect()

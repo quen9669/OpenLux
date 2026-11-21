@@ -116,7 +116,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 5. Modules Cœur Implémentés (Phase 3 — Échelle Complète : 20 Domaines)
+## 5. Modules Cœur Implémentés (Phase 4 — Finalisation Open Source & Publication)
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
@@ -127,10 +127,11 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 158 |
 | `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 94 |
 | `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 175 |
+| `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 158 |
 | `src/openlux/api/main.py` | API REST FastAPI : Swagger, whitelist, DuckDB in-memory, stream CSV/GeoJSON | 176 |
 | `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 155 |
-| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `serve`, `mcp`) | 161 |
-| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 295** |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 175 |
+| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 468** |
 
 ---
 
@@ -159,3 +160,19 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **19** | `health_pollen_alerts` (3D) | `pollen_lu`, `aed_defib_lu`, `lu_alert` | `gold_health_alerts.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **20** | `civic_life` (3D) | `petitions_chd`, `unemployment_adem` | `gold_civic_life.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **-** | **Consolidation Globale** | *Les 8 signaux quotidiens unifiés sur 100 communes* | `gold_luxembourg_daily_context.parquet` | Parquet ZSTD (dbt DuckDB) |
+
+---
+
+## 7. Standards Open Data & Publication (data.public.lu)
+
+OpenLux garantit la conformité stricte avec les standards nationaux et européens pour la publication open data :
+- **Frictionless Data Package (`data/gold/datapackage.json`)** : Schéma normalisé de toutes les ressources Gold avec typage JSON Table Schema, sommes de contrôle SHA-256, licences SPDX et métadonnées d'interopérabilité.
+- **Profil DCAT-AP-LU 2.0 (`data/gold/dcat_ap_lu.json`)** : Schéma d'échange conforme pour le portail national luxembourgeois `data.public.lu` (CKAN API).
+- **Standards Sectoriels Reconnus** :
+  - **Transports & Lignes** : NeTEx (CEN/TS 16614), SIRI (CEN/TS 15531), GTFS / GTFS-RT.
+  - **Trafic & Événements Routiers** : DATEX II (CEN/TS 16157).
+  - **Cartographie & SIG** : GeoJSON / WGS84 (EPSG:4326).
+  - **Analytique & Tabulaire** : Parquet compressé en ZSTD.
+- **Commandes Dédiées** :
+  - `uv run openlux publish --dry-run` : Validation et génération des manifestes de métadonnées sans modification externe.
+  - `uv run openlux compact` : Compactage mensuel Parquet des snapshots Bronze historiques.

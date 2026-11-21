@@ -27,18 +27,40 @@ git clone https://github.com/quen9669/OpenLux.git
 cd OpenLux
 uv sync
 
-# 2. Exécuter la suite de tests 100 % hors-ligne (25 tests)
+# 2. Exécuter la suite de tests 100 % hors-ligne (33 tests)
 uv run pytest
 
 # 3. Lancer la CLI unifiée
 uv run openlux --help
 
-# 4. Lancer l'API REST FastAPI (Swagger interactif sur http://127.0.0.1:8000/docs)
+# 4. Valider la publication Open Data et les métadonnées (DCAT-AP-LU, Data Package)
+uv run openlux publish --dry-run
+
+# 5. Lancer l'API REST FastAPI (Swagger interactif sur http://127.0.0.1:8000/docs)
 uv run openlux serve
 
-# 5. Lancer le serveur FastMCP pour agents IA (Claude Desktop, Antigravity, Cursor)
+# 6. Lancer le serveur FastMCP pour agents IA (Claude Desktop, Antigravity, Cursor)
 uv run openlux mcp
 ```
+
+---
+
+## 📊 Standards Open Data & Formats Européens
+
+OpenLux intègre nativement les standards de référence attendus par `data.public.lu` et les directives européennes :
+- **Catalogue & Profils** : `datapackage.json` (Frictionless Data Package) et `dcat_ap_lu.json` (DCAT-AP-LU 2.0).
+- **Transports & Lignes** : **NeTEx** (CEN/TS 16614), **SIRI** (CEN/TS 15531) et **GTFS / GTFS-RT**.
+- **Trafic & Voirie** : **DATEX II** (CEN/TS 16157).
+- **Géolocalisation** : Coordonnées WGS84 (EPSG:4326) et GeoJSON standardisé.
+- **Analytique & Performance** : Fichiers Parquet compressés en ZSTD (zéro CSV statique sur disque).
+
+---
+
+## 📓 Notebooks Pédagogiques
+
+Retrouvez des guides interactifs prêts à l'emploi dans [`notebooks/`](notebooks/) :
+- [`01_quickstart_api_csv.ipynb`](notebooks/01_quickstart_api_csv.ipynb) : Prise en main rapide, requêtes DuckDB in-memory sans serveur, API REST et streaming CSV.
+- [`02_analyse_contexte_lu.ipynb`](notebooks/02_analyse_contexte_lu.ipynb) : Analyse territoriale consolidée, suivi de qualité en 1 clic (`data_quality_grade`, `data_completeness_pct`), géolocalisation des grèves frontalières et parcs de mobilité 24/7.
 
 ---
 
