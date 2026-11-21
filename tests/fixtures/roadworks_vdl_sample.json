@@ -1,0 +1,14 @@
+[
+  {
+    "work_id": "RW_VDL_HAMILIUS_01",
+    "road_name": "Boulevard Royal",
+    "start_date": "2026-11-10T00:00:00Z",
+    "end_date": "2026-11-25T00:00:00Z",
+    "impact_level": "DETOUR",
+    "title": "Pose de réseaux souterrains",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.612,
+    "lon": 6.1265,
+    "commune_name": "Luxembourg"
+  }
+]

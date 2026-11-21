@@ -129,6 +129,30 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Schéma exact** : `record_id`, `record_type`, `callsign_or_zone`, `observed_at_utc`, `altitude_m_or_dba`, `status`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Vols ADS-B captés par OpenSky dans la bounding box Luxembourg ; courbes d'isophonie réglementaires révisées périodiquement.
 
+### 2.15 `gold_roadworks` (Vague 3C)
+- **Domaine** : `roadworks`
+- **Grain** : 1 ligne par chantier ou perturbation programmée sur le réseau autoroutier et voiries communales VDL.
+- **Fichier** : `data/gold/gold_roadworks.parquet` (ZSTD)
+- **Sources** : `roadworks_cita`, `roadworks_vdl`.
+- **Schéma exact** : `work_id`, `authority`, `road_name`, `start_date`, `end_date`, `impact_level`, `title`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Couvre les autoroutes CITA et le réseau municipal de la Ville de Luxembourg ; calendrier sous réserve d'aléas météo.
+
+### 2.16 `gold_housing` (Vague 3C)
+- **Domaine** : `housing_construction`
+- **Grain** : 1 ligne par commune, type de bien, période de référence et indicateur (prix m² ou autorisations de bâtir).
+- **Fichier** : `data/gold/gold_housing.parquet` (ZSTD)
+- **Sources** : `housing_observatoire`, `housing_statec`.
+- **Schéma exact** : `record_id`, `record_type`, `property_type`, `reference_period`, `metric_value`, `count_value`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Prix médians et transactions de l'Observatoire de l'Habitat basés sur les actes notariés enregistrés ; autorisations de bâtir trimestrielles STATEC.
+
+### 2.17 `gold_daily_life` (Vague 3C)
+- **Domaine** : `daily_life_sport`
+- **Grain** : 1 ligne par aménagement ou équipement du quotidien (pistes cyclables nationales, ouvertures dominicales VDL, parcs de recyclage).
+- **Fichier** : `data/gold/gold_daily_life.parquet` (ZSTD)
+- **Sources** : `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers`.
+- **Schéma exact** : `item_id`, `category`, `name`, `status_or_schedule`, `details`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Pistes cyclables gérées par les Ponts & Chaussées ; horaires des centres de recyclage et commerces sous réserve d'actualisation municipale.
+
 ---
 
 ## 3. Vue Consolidée Multimodale

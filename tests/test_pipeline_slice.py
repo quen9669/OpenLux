@@ -86,13 +86,34 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "noise-zones" in url_str or "strategic_noise_maps" in url_str:
         raw = Path("tests/fixtures/noise_zones_lu_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
+    if "roadworks-cita" in url_str or "roadworks" in url_str:
+        raw = Path("tests/fixtures/roadworks_cita_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "roadworks-vdl" in url_str or "vdl.lu/v1/travaux" in url_str:
+        raw = Path("tests/fixtures/roadworks_vdl_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "housing-observatoire" in url_str or "observatoire_prix" in url_str:
+        raw = Path("tests/fixtures/housing_observatoire_sample.csv").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "housing-statec" in url_str or "data/permits" in url_str:
+        raw = Path("tests/fixtures/housing_statec_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "pistes-cyclables" in url_str or "pistes_cyclables" in url_str:
+        raw = Path("tests/fixtures/bike_lanes_lu_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "ouvertures-dominicales" in url_str or "open-sundays" in url_str:
+        raw = Path("tests/fixtures/open_sundays_vdl_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "centres-recyclage" in url_str or "recycling_centers" in url_str:
+        raw = Path("tests/fixtures/recycling_centers_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
     return httpx.Response(404, text="Not Found")
 
 
 def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     # 1. Chargement des sources configurées
     sources = load_sources_config()
-    assert len(sources) >= 21
+    assert len(sources) >= 28
 
     mock_client = httpx.Client(transport=httpx.MockTransport(_mock_handler))
     db_path = Path("data/openlux.duckdb")
@@ -149,6 +170,9 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         "gold_public_transit",
         "gold_mobility_parkings",
         "gold_aviation_noise",
+        "gold_roadworks",
+        "gold_housing",
+        "gold_daily_life",
     ]
     for tbl in expected_tables:
         assert tbl in exported
@@ -166,25 +190,21 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     count_weather = con_gold.execute(
         "SELECT count(*) FROM 'data/gold/gold_weather_observations.parquet'"
     ).fetchone()[0]
-    count_crossborder = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_crossborder_traffic.parquet'"
+    count_roadworks = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_roadworks.parquet'"
     ).fetchone()[0]
-    count_transit = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_public_transit.parquet'"
+    count_housing = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_housing.parquet'"
     ).fetchone()[0]
-    count_mobility = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_mobility_parkings.parquet'"
-    ).fetchone()[0]
-    count_aviation = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_aviation_noise.parquet'"
+    count_daily = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_daily_life.parquet'"
     ).fetchone()[0]
     con_gold.close()
 
     assert count_weather >= 3
-    assert count_crossborder >= 6
-    assert count_transit >= 5
-    assert count_mobility >= 9
-    assert count_aviation >= 4
+    assert count_roadworks >= 3
+    assert count_housing >= 6
+    assert count_daily >= 5
 
     # 5. Test de la commande rebuild 100 % hors-ligne
     rebuild_rc = rebuild_pipeline()

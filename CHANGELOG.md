@@ -6,7 +6,26 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
-## [0.5.0] - 2026-11-21
+## [0.6.0] - 2026-11-21
+
+### Added
+- **Phase 3 : Passage à l'Échelle — Vague 3C (Territoire, Travaux & Quotidien)**
+  - Intégration déclarative 100 % config-driven de 7 nouvelles sources atomiques dans `config/sources.toml` (total 28 sources) :
+    - `roadworks_cita` (`roadworks`) : Chantiers, réductions de voies et réfections sur le réseau autoroutier national CITA.
+    - `roadworks_vdl` (`roadworks`) : Travaux sur les voiries municipales et perturbations de circulation en Ville de Luxembourg.
+    - `housing_observatoire` (`housing_construction`) : Prix de vente médians et transactions m² de l'Observatoire de l'Habitat.
+    - `housing_statec` (`housing_construction`) : Autorisations de bâtir et logements autorisés par commune (STATEC).
+    - `bike_lanes_lu` (`daily_life_sport`) : Réseau national des pistes cyclables (Ponts & Chaussées).
+    - `open_sundays_vdl` (`daily_life_sport`) : Calendrier officiel des ouvertures dominicales des commerces en Ville de Luxembourg.
+    - `recycling_centers` (`daily_life_sport`) : Parcs de recyclage, déchèteries et horaires d'ouverture au Grand-Duché.
+  - Modèles de transformation dbt complets (staging, silver, gold) unifiant les flux :
+    - 7 modèles Staging (`stg_roadworks_cita`, `stg_roadworks_vdl`, `stg_housing_observatoire`, `stg_housing_statec`, `stg_bike_lanes_lu`, `stg_open_sundays_vdl`, `stg_recycling_centers`).
+    - 3 modèles Silver unifiant les flux par domaine (`silver_roadworks`, `silver_housing`, `silver_daily_life`).
+    - 3 Data Marts Gold Parquet ZSTD (`gold_roadworks`, `gold_housing`, `gold_daily_life`).
+  - Extension du test d'intégrité RGPD `assert_no_pii_in_gold.sql` sur les colonnes textuelles des 3 nouveaux Data Marts.
+  - 7 nouveaux jeux d'échantillons offline anonymisés dans `tests/fixtures/` pour des tests 100 % déterministes.
+  - Validation complète de la chaîne de bout en bout (28 sources collectées, 17 tables Gold produites et testées avec succès).
+  - Synchronisation documentaire complète : `docs/ARCHITECTURE.md` (v1.4), `docs/DATA_CATALOG.md`, `docs/DECISIONS_LOG.md` et `STATUS.md`.
 
 ### Added
 - **Phase 3 : Passage à l'Échelle — Vague 3B (Mobilité & Frontières)**

@@ -562,4 +562,194 @@ url = "https://env.geoportail.lu/wfs/strategic_noise_maps"
 min_rows = 1
 required_fields = ["zone_id", "noise_level_dba"]
 
+[[sources]]
+id = "roadworks_cita"
+domain = "roadworks"
+description = "Chantiers et travaux sur le réseau autoroutier national CITA"
+semantic_summary = "Zones de travaux programmés, réfections de chaussée et fermetures de voies sur les autoroutes du Grand-Duché."
+known_limitations = "Travaux planifiés et urgents sur les autoroutes gérées par le CITA."
+adapter = "http_json"
+cadence_minutes = 60
+sla_minutes = 2160
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/roadworks-cita.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://www.cita.lu/api/v1/roadworks"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["work_id", "road_name"]
+
+[[sources]]
+id = "roadworks_vdl"
+domain = "roadworks"
+description = "Chantiers de voirie et travaux communaux en Ville de Luxembourg"
+semantic_summary = "Travaux sur les voiries municipales, déviations de circulation et réaménagements urbains de la capitale."
+known_limitations = "Couvre exclusivement le territoire de la Ville de Luxembourg (VDL)."
+adapter = "http_json"
+cadence_minutes = 60
+sla_minutes = 2160
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/roadworks-vdl.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.vdl.lu/v1/travaux"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["work_id", "road_name"]
+
+[[sources]]
+id = "housing_observatoire"
+domain = "housing_construction"
+description = "Prix de vente et loyers des logements par commune (Observatoire de l'Habitat)"
+semantic_summary = "Statistiques trimestrielles des prix moyens au m² des appartements et maisons au Luxembourg."
+known_limitations = "Données trimestrielles basées sur les actes notariés enregistrés par l'Administration de l'Enregistrement."
+adapter = "http_csv"
+cadence_minutes = 1440
+sla_minutes = 144000
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/housing-observatoire-prix.csv"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_csv"
+url = "https://logement.geoportail.lu/wfs/observatoire_prix.csv"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["commune_name", "price_eur_m2"]
+
+[[sources]]
+id = "housing_statec"
+domain = "housing_construction"
+description = "Autorisations de bâtir et permis de construire résidentiels STATEC"
+semantic_summary = "Nombre de logements autorisés et permis de construire accordés par commune et par an."
+known_limitations = "Séries annuelles et trimestrielles collectées par le STATEC auprès des 100 administrations communales."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 144000
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/housing-statec-permits.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://statistiques.public.lu/stat/api/v1/data/permits"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["record_id", "units_authorized"]
+
+[[sources]]
+id = "bike_lanes_lu"
+domain = "daily_life_sport"
+description = "Réseau national des pistes cyclables (PC1 à PC32) au Luxembourg"
+semantic_summary = "Tracés, statut opérationnel et caractéristiques des pistes cyclables nationales gérées par les Ponts et Chaussées."
+known_limitations = "Réseau cyclable national officiel ; exclut les pistes purement locales non balisées."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/pistes-cyclables-nationales.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://tourisme.geoportail.lu/wfs/pistes_cyclables"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["item_id", "name"]
+
+[[sources]]
+id = "open_sundays_vdl"
+domain = "daily_life_sport"
+description = "Ouvertures dominicales et nocturnes des commerces en Ville de Luxembourg"
+semantic_summary = "Calendrier officiel des dimanches et jours fériés où les commerces de la capitale sont autorisés à ouvrir."
+known_limitations = "Valable uniquement pour les commerces situés sur le territoire de la Ville de Luxembourg."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/ouvertures-dominicales-vdl.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://cityshopping.lu/api/v1/open-sundays"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["item_id", "name"]
+
+[[sources]]
+id = "recycling_centers"
+domain = "daily_life_sport"
+description = "Parcs de recyclage et déchetteries nationales au Luxembourg"
+semantic_summary = "Emplacement, horaires d'ouverture et types de déchets acceptés dans les centres de recyclage intercommunaux (SIDEC, SIDEST, SIGRE, STEP)."
+known_limitations = "Accès généralement réservé aux résidents des communes membres du syndicat concerné."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/centres-recyclage-luxembourg.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://dechets.geoportail.lu/wfs/recycling_centers"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["item_id", "name"]
+
+
 

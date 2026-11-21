@@ -1,0 +1,26 @@
+[
+  {
+    "work_id": "RW_A1_001",
+    "road_name": "A1",
+    "start_date": "2026-11-15T00:00:00Z",
+    "end_date": "2026-11-30T00:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Réfection de chaussée échangeur Senningerberg",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.645,
+    "lon": 6.225,
+    "commune_name": "Niederanven"
+  },
+  {
+    "work_id": "RW_A3_002",
+    "road_name": "A3",
+    "start_date": "2026-11-01T00:00:00Z",
+    "end_date": "2026-12-15T00:00:00Z",
+    "impact_level": "SPEED_LIMIT",
+    "title": "Élargissement à 2x3 voies vers Dudelange",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.52,
+    "lon": 6.13,
+    "commune_name": "Bettembourg"
+  }
+]

@@ -1,4 +1,4 @@
-# OpenLux Hub — Architecture Technique (v1.3)
+# OpenLux Hub — Architecture Technique (v1.4)
 
 > Ce document vivant décrit l'état actuel et l'architecture cible d'OpenLux Hub.
 > Il est mis à jour à chaque évolution de module, ajout de flux ou modification de schéma.
@@ -116,7 +116,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 5. Modules Cœur Implémentés (Phase 3 — Vagues 3A & 3B en place)
+## 5. Modules Cœur Implémentés (Phase 3 — Vagues 3A, 3B & 3C en place)
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
@@ -134,7 +134,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 6. Domaines et Data Marts Actifs (21 Sources, 14 Tables Gold)
+## 6. Domaines et Data Marts Actifs (28 Sources, 17 Tables Gold)
 
 | # | Domaine | Sources Atomiques Incluses | Table Gold Produite | Format & Moteur |
 | :-: | :--- | :--- | :--- | :--- |
@@ -152,3 +152,6 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **12** | `public_transit` (3B) | `transit_mobiliteit`, `transit_avl_rt` | `gold_public_transit.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **13** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **14** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **15** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **16** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec` | `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **17** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |

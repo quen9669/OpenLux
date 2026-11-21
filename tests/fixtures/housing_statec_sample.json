@@ -1,0 +1,24 @@
+[
+  {
+    "record_id": "PERM_2026_01",
+    "commune_name": "Luxembourg",
+    "property_type": "RESIDENTIAL_BUILDING",
+    "reference_period": "2026",
+    "permits_count": 85,
+    "units_authorized": 520,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.61,
+    "lon": 6.13
+  },
+  {
+    "record_id": "PERM_2026_02",
+    "commune_name": "Hesperange",
+    "property_type": "RESIDENTIAL_BUILDING",
+    "reference_period": "2026",
+    "permits_count": 32,
+    "units_authorized": 140,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.57,
+    "lon": 6.15
+  }
+]

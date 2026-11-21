@@ -104,5 +104,34 @@ WITH pii_checks AS (
     FROM {{ ref('gold_aviation_noise') }}
     WHERE regexp_matches(callsign_or_zone, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
        OR regexp_matches(callsign_or_zone, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_roadworks' AS table_name,
+        title AS sampled_text
+    FROM {{ ref('gold_roadworks') }}
+    WHERE title IS NOT NULL AND (
+        regexp_matches(title, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(title, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
+
+    UNION ALL
+
+    SELECT
+        'gold_housing' AS table_name,
+        property_type AS sampled_text
+    FROM {{ ref('gold_housing') }}
+    WHERE regexp_matches(property_type, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(property_type, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_daily_life' AS table_name,
+        name AS sampled_text
+    FROM {{ ref('gold_daily_life') }}
+    WHERE regexp_matches(name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(name, '(?:\+352|00352)\s?[0-9]{4,}')
 )
 SELECT * FROM pii_checks

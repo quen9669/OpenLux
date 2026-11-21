@@ -1,0 +1,24 @@
+[
+  {
+    "item_id": "RC_ROUTE_ARLON_01",
+    "name": "Centre de Recyclage Ville de Luxembourg",
+    "category": "RECYCLING_CENTER",
+    "schedule": "Lun-Ven 07h00-19h30, Sam 08h30-18h00",
+    "details": "Collecte encombrants, déchets dangereux, DEEE, carton",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.615,
+    "lon": 6.105,
+    "commune_name": "Luxembourg"
+  },
+  {
+    "item_id": "RC_SIDEC_MERSCH_02",
+    "name": "Parc de Recyclage SIDEC Mersch",
+    "category": "RECYCLING_CENTER",
+    "schedule": "Mar-Ven 09h00-17h00, Sam 09h00-16h00",
+    "details": "Syndicat intercommunal SIDEC",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.75,
+    "lon": 6.11,
+    "commune_name": "Mersch"
+  }
+]
