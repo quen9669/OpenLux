@@ -751,5 +751,332 @@ url = "https://dechets.geoportail.lu/wfs/recycling_centers"
 min_rows = 1
 required_fields = ["item_id", "name"]
 
+[[sources]]
+id = "culture_echo_lu"
+domain = "concerts_culture"
+description = "Agenda culturel et sorties nationales Echo.lu (événements factuels)"
+semantic_summary = "Concerts, expositions, spectacles et festivals recensés sur la plateforme culturelle nationale luxembourgeoise."
+known_limitations = "Extraction factuelle stricte schema.org/Event sans texte éditorial pour conformité droit d'auteur."
+adapter = "http_jsonld"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://echo.lu/fr/agenda"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_jsonld"
+url = "https://culture.lu/fr/agenda"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["title", "start_date"]
+
+[[sources]]
+id = "culture_venues_jsonld"
+domain = "concerts_culture"
+description = "Programmation officielle des grandes salles culturelles (Rockhal, Philharmonie...)"
+semantic_summary = "Dates, horaires, catégories et salles des représentations artistiques et concerts en direct."
+known_limitations = "Données limitées aux métadonnées factuelles structurées des établissements partenaires."
+adapter = "http_jsonld"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/culture-venues-luxembourg.html"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_jsonld"
+url = "https://rockhal.lu/agenda"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["title", "start_date"]
+
+[[sources]]
+id = "events_vdl"
+domain = "local_events_markets"
+description = "Agenda officiel et marchés hebdomadaires de la Ville de Luxembourg"
+semantic_summary = "Événements municipaux, marchés du Glacis, Winterlights et fêtes de la Ville de Luxembourg."
+known_limitations = "Concerne exclusivement les manifestations organisées ou autorisées sur le domaine public de la VDL."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/events-vdl.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.vdl.lu/v1/events"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["event_id", "title"]
+
+[[sources]]
+id = "events_visitlu"
+domain = "local_events_markets"
+description = "Manifestations touristiques et fêtes traditionnelles Visit Luxembourg"
+semantic_summary = "Événements touristiques majeurs, kermesses, braderies et fêtes traditionnelles à travers tout le Grand-Duché."
+known_limitations = "Extraction factuelle schema.org/Event du portail national de promotion touristique."
+adapter = "http_jsonld"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://visitluxembourg.com/fr/agenda"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_jsonld"
+url = "https://data.public.lu/fr/datasets/r/events-visitlu.html"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["title", "start_date"]
+
+[[sources]]
+id = "venues_luxexpo"
+domain = "major_venues"
+description = "Salons, foires et congrès au parc des expositions Luxexpo The Box"
+semantic_summary = "Calendrier officiel des salons internationaux, foires commerciales et expositions au Kirchberg."
+known_limitations = "Événements accueillis au parc des expositions Luxexpo The Box."
+adapter = "http_jsonld"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://thebox.lu/agenda"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_jsonld"
+url = "https://data.public.lu/fr/datasets/r/luxexpo-events.html"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["title", "start_date"]
+
+[[sources]]
+id = "venues_stade_coque"
+domain = "major_venues"
+description = "Rencontres sportives et compétitions au Stade de Luxembourg et à la Coque"
+semantic_summary = "Matchs officiels de football/rugby au Stade de Luxembourg et compétitions au Centre National Sportif d'Coque."
+known_limitations = "Manifestations sportives de grande envergure avec affluence significative."
+adapter = "http_jsonld"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://stadedeluxembourg.lu/agenda"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_jsonld"
+url = "https://coque.lu/agenda"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["title", "start_date"]
+
+[[sources]]
+id = "strikes_rss_lu"
+domain = "strikes_disruptions"
+description = "Avis de grèves, débrayages et manifestations syndicales au Luxembourg"
+semantic_summary = "Détection et extraction des préavis de grèves dans les transports publics et services essentiels via flux d'actualités."
+known_limitations = "Filtrage strict sur mots-clés grève/streik sans reproduction d'articles journalistiques complets."
+adapter = "http_custom"
+parser = "strikes_rss"
+cadence_minutes = 60
+sla_minutes = 240
+retention_days = 90
+license_spdx = "FACTUAL-ONLY"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://news.openlux.lu/rss/alerts.xml"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_custom"
+parser = "strikes_rss"
+url = "https://news.google.com/rss/search?q=greve+OR+streik+luxembourg&hl=fr&gl=LU&ceid=LU:fr"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["strike_id", "title"]
+
+[[sources]]
+id = "pollen_lu"
+domain = "health_pollen_alerts"
+description = "Concentrations polliniques et indices de risque allergique au Luxembourg"
+semantic_summary = "Niveaux d'émission et grains de pollen par mètre cube pour les essences allergisantes (bouleau, graminées, etc.)."
+known_limitations = "Relevés de la station aérobiologique nationale de Luxembourg-Ville représentatifs du bassin central."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 2160
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/pollen-luxembourg.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://air.open-meteo.com/v1/air-quality?latitude=49.61&longitude=6.13&current=birch_pollen,alder_pollen"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["specie", "risk_level"]
+
+[[sources]]
+id = "aed_defib_lu"
+domain = "health_pollen_alerts"
+description = "Recensement national des défibrillateurs automatisés externes (AED)"
+semantic_summary = "Localisation, accessibilité 24/7 et coordonnées des bornes de défibrillation d'urgence au Grand-Duché."
+known_limitations = "Recensement officiel du Corps grand-ducal d'incendie et de secours (CGDIS)."
+adapter = "http_csv"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/defibrillateurs-aed-luxembourg.csv"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_csv"
+url = "https://sante.geoportail.lu/wfs/defibrillateurs.csv"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["aed_id", "location_name"]
+
+[[sources]]
+id = "lu_alert"
+domain = "health_pollen_alerts"
+description = "Alertes gouvernementales d'urgence à la population LU-Alert"
+semantic_summary = "Messages officiels d'alerte et consignes de sécurité émis par le Ministère de l'Intérieur."
+known_limitations = "Alertes actives uniquement lors de situations d'urgence grave ou d'exercices nationaux."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 60
+retention_days = 90
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/lu-alert-active.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.lualert.lu/v1/alerts/active"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["alert_id", "headline"]
+
+[[sources]]
+id = "petitions_chd"
+domain = "civic_life"
+description = "Pétitions publiques auprès de la Chambre des Députés (seuil 4 500 signatures)"
+semantic_summary = "Suivi des pétitions citoyennes en cours de signature et détection du dépassement du seuil de débat public."
+known_limitations = "Pétitions recevables ouvertes à la signature sur petitiounen.chd.lu."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 180
+license_spdx = "Public-LU"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/petitions-publiques-chd.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.chd.lu/v1/petitions"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["petition_id", "title"]
+
+[[sources]]
+id = "unemployment_adem"
+domain = "civic_life"
+description = "Statistiques mensuelles de l'emploi et demandeurs d'emploi ADEM"
+semantic_summary = "Nombre de demandeurs d'emploi résidents et taux de chômage par commune et classe d'âge."
+known_limitations = "Publication mensuelle officielle de l'Agence pour le développement de l'emploi (ADEM)."
+adapter = "http_csv"
+cadence_minutes = 1440
+sla_minutes = 50400
+retention_days = 730
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/adem-chomage-communes.csv"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_csv"
+url = "https://statistiques.public.lu/api/adem/chomage.csv"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["reference_month", "jobseekers_count"]
+
+
 
 

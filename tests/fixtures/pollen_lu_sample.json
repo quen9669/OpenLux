@@ -1,0 +1,18 @@
+[
+  {
+    "specie": "Bouleau (Betula)",
+    "risk_level": "LOW",
+    "grains_m3": 5,
+    "observed_at": "2026-11-20T08:00:00Z",
+    "station_name": "Luxembourg-Ville",
+    "commune_name": "Luxembourg"
+  },
+  {
+    "specie": "Graminées (Poaceae)",
+    "risk_level": "MODERATE",
+    "grains_m3": 18,
+    "observed_at": "2026-11-20T08:00:00Z",
+    "station_name": "Luxembourg-Ville",
+    "commune_name": "Luxembourg"
+  }
+]

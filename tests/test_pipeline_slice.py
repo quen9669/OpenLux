@@ -107,13 +107,49 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "centres-recyclage" in url_str or "recycling_centers" in url_str:
         raw = Path("tests/fixtures/recycling_centers_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
+    if "echo.lu" in url_str or "culture.lu" in url_str:
+        raw = Path("tests/fixtures/culture_echo_lu_sample.html").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "culture-venues" in url_str or "rockhal" in url_str:
+        raw = Path("tests/fixtures/culture_venues_sample.html").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "events-vdl" in url_str or "vdl.lu/v1/events" in url_str:
+        raw = Path("tests/fixtures/events_vdl_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "visitluxembourg" in url_str or "events-visitlu" in url_str:
+        raw = Path("tests/fixtures/events_visitlu_sample.html").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "thebox.lu" in url_str or "luxexpo" in url_str:
+        raw = Path("tests/fixtures/venues_luxexpo_sample.html").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "stadedeluxembourg" in url_str or "coque" in url_str:
+        raw = Path("tests/fixtures/venues_stade_coque_sample.html").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "rss/alerts" in url_str or "greve+OR+streik" in url_str:
+        raw = Path("tests/fixtures/strikes_rss_sample.xml").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "pollen" in url_str or "birch_pollen" in url_str:
+        raw = Path("tests/fixtures/pollen_lu_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "defibrillateurs" in url_str or "aed" in url_str:
+        raw = Path("tests/fixtures/aed_defib_lu_sample.csv").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "lu-alert" in url_str or "lualert" in url_str:
+        raw = Path("tests/fixtures/lu_alert_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "petitions" in url_str or "chd.lu" in url_str:
+        raw = Path("tests/fixtures/petitions_chd_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "adem" in url_str or "chomage" in url_str:
+        raw = Path("tests/fixtures/unemployment_adem_sample.csv").read_bytes()
+        return httpx.Response(200, content=raw)
     return httpx.Response(404, text="Not Found")
 
 
 def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     # 1. Chargement des sources configurées
     sources = load_sources_config()
-    assert len(sources) >= 28
+    assert len(sources) >= 40
 
     mock_client = httpx.Client(transport=httpx.MockTransport(_mock_handler))
     db_path = Path("data/openlux.duckdb")
@@ -173,6 +209,11 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         "gold_roadworks",
         "gold_housing",
         "gold_daily_life",
+        "gold_culture_events",
+        "gold_strikes_disruptions",
+        "gold_health_alerts",
+        "gold_civic_life",
+        "gold_luxembourg_daily_context",
     ]
     for tbl in expected_tables:
         assert tbl in exported
@@ -199,12 +240,24 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     count_daily = con_gold.execute(
         "SELECT count(*) FROM 'data/gold/gold_daily_life.parquet'"
     ).fetchone()[0]
+    count_events = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_culture_events.parquet'"
+    ).fetchone()[0]
+    count_strikes = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_strikes_disruptions.parquet'"
+    ).fetchone()[0]
+    count_daily_context = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_luxembourg_daily_context.parquet'"
+    ).fetchone()[0]
     con_gold.close()
 
     assert count_weather >= 3
     assert count_roadworks >= 3
     assert count_housing >= 6
     assert count_daily >= 5
+    assert count_events >= 4
+    assert count_strikes >= 2
+    assert count_daily_context >= 1
 
     # 5. Test de la commande rebuild 100 % hors-ligne
     rebuild_rc = rebuild_pipeline()

@@ -1,0 +1,4 @@
+aed_id,location_name,street,postal_code,commune_name,lat,lon,access_hours
+AED_LUX_01,Gare Centrale Hall Principal,Place de la Gare,1616,Luxembourg,49.6001,6.1338,24/7
+AED_ESCH_02,Hôtel de Ville Esch,Place de l'Hôtel de Ville,4010,Esch-sur-Alzette,49.4958,5.9806,Heures de bureau
+AED_DUD_03,Centre Culturel opderschmelz,Rue du Centenaire,3475,Dudelange,49.4795,6.0825,Pendant les spectacles

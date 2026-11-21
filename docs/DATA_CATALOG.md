@@ -153,11 +153,45 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Schéma exact** : `item_id`, `category`, `name`, `status_or_schedule`, `details`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Pistes cyclables gérées par les Ponts & Chaussées ; horaires des centres de recyclage et commerces sous réserve d'actualisation municipale.
 
+### 2.18 `gold_culture_events` (Vague 3D)
+- **Domaine** : `concerts_culture`, `local_events_markets`, `major_venues`
+- **Grain** : 1 ligne par manifestation culturelle ou sortie unique (dédoublonnée par titre et date de début).
+- **Fichier** : `data/gold/gold_culture_events.parquet` (ZSTD)
+- **Sources** : `culture_echo_lu`, `culture_venues_jsonld`, `events_vdl`, `events_visitlu`, `venues_luxexpo`, `venues_stade_coque`.
+- **Schéma exact** : `title`, `start_date`, `end_date`, `venue`, `category`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
+- **Limites connues** : Extraction factuelle stricte schema.org/Event sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
+
+### 2.19 `gold_strikes_disruptions` (Vague 3D)
+- **Domaine** : `strikes_disruptions`
+- **Grain** : 1 ligne par préavis ou alerte de grève / manifestation sociale.
+- **Fichier** : `data/gold/gold_strikes_disruptions.parquet` (ZSTD)
+- **Sources** : `strikes_rss_lu`.
+- **Schéma exact** : `strike_id`, `title`, `published_at_utc`, `sector`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
+- **Limites connues** : Filtrage algorithmique pur sur flux d'actualités via mots-clés grève/streik ; niveau d'impact effectif sujet à l'évolution des négociations.
+
+### 2.20 `gold_health_alerts` (Vague 3D)
+- **Domaine** : `health_pollen_alerts`
+- **Grain** : 1 ligne par relevé d'allergène, borne de défibrillation d'urgence ou message LU-Alert.
+- **Fichier** : `data/gold/gold_health_alerts.parquet` (ZSTD)
+- **Sources** : `pollen_lu`, `aed_defib_lu`, `lu_alert`.
+- **Schéma exact** : `record_id`, `record_type`, `headline_or_name`, `status_or_severity`, `metric_value`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Concentrations polliniques issues de la station aérobiologique centrale ; messages LU-Alert actifs uniquement en situation d'urgence ou test officiel.
+
+### 2.21 `gold_civic_life` (Vague 3D)
+- **Domaine** : `civic_life`
+- **Grain** : 1 ligne par pétition publique citoyenne ou statistique mensuelle communale de l'emploi ADEM.
+- **Fichier** : `data/gold/gold_civic_life.parquet` (ZSTD)
+- **Sources** : `petitions_chd`, `unemployment_adem`.
+- **Schéma exact** : `record_id`, `record_type`, `title_or_indicator`, `signatures_count`, `rate_value`, `status`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Pétitions issues du portail de la Chambre des Députés ; statistiques de l'emploi publiées mensuellement par l'ADEM.
+
 ---
 
 ## 3. Vue Consolidée Multimodale
 
-### 3.1 `gold_luxembourg_daily_context` (Consolidation finale Phase 3)
-- **Grain** : `date × commune_lau` (100 communes luxembourgeoises).
-- **Contenu** : Agrégation quotidienne des 8 signaux critiques (météo, qualité de l'air, état du trafic autoroutier/frontalier, chantiers, grèves, crues, jours fériés et événements majeurs).
-- **Usage IA privilégié** : Fournit le contexte complet d'une journée au Luxembourg pour les agents conversationnels et modèles prédictifs.
+### 3.1 `gold_luxembourg_daily_context` (Consolidation globale Phase 3)
+- **Grain** : `context_date × commune_lau` (100 communes luxembourgeoises).
+- **Fichier** : `data/gold/gold_luxembourg_daily_context.parquet` (ZSTD)
+- **Sources consolidées** : Jointure des 8 signaux quotidiens (`gold_weather_observations`, `gold_air_quality`, `gold_holidays`, `gold_traffic_events`, `gold_crossborder_traffic`, `gold_roadworks`, `gold_strikes_disruptions`, `gold_water_levels`, `gold_culture_events`).
+- **Schéma exact** : `context_date`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `avg_temperature_c`, `total_precipitation_mm`, `max_wind_speed_kmh`, `max_aqi_index`, `is_legal_holiday`, `is_school_vacation`, `traffic_events_count`, `active_roadworks_count`, `strikes_count`, `max_water_alert_status`, `major_events_count`, `source_id`.
+- **Usage IA privilégié** : Fournit le contexte spatio-temporel complet d'une journée au Luxembourg pour les agents conversationnels, assistants de vie locale et modèles d'analyse multimodaux.

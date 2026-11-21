@@ -1,0 +1,22 @@
+[
+  {
+    "event_id": "EVT_VDL_NOEL_01",
+    "title": "Marché de Noël - Winterlights",
+    "start_date": "2026-11-20T11:00:00Z",
+    "end_date": "2026-12-24T22:00:00Z",
+    "venue": "Place d'Armes",
+    "city": "Luxembourg",
+    "category": "Market",
+    "source_url": "https://vdl.lu/fr/agenda/winterlights-2026"
+  },
+  {
+    "event_id": "EVT_VDL_GLACIS_02",
+    "title": "Glacismaart - Marché mensuel du Glacis",
+    "start_date": "2026-11-22T08:00:00Z",
+    "end_date": "2026-11-22T14:00:00Z",
+    "venue": "Champ du Glacis",
+    "city": "Luxembourg",
+    "category": "Market",
+    "source_url": "https://vdl.lu/fr/agenda/glacismaart-nov-2026"
+  }
+]

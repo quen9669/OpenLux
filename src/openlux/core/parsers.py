@@ -48,6 +48,39 @@ def cita_datex2(raw: bytes) -> list[dict]:
     return records
 
 
+def strikes_rss(raw: bytes) -> list[dict]:
+    """Parse et filtre les avis de grèves et manifestations depuis un flux RSS (<= 30 lignes)."""
+    # POURQUOI : Filtrage pur sans I/O sur mots-clés grève/streik
+    # garantissant le respect de Zero-PII et Factual-Only.
+    keywords = {"grève", "greve", "streik", "strike", "manifestation", "débrayage", "protest"}
+    records: list[dict] = []
+    if not raw.strip():
+        return records
+    root = ET.fromstring(raw)
+    for item in root.iter("item"):
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        pub_date = (item.findtext("pubDate") or "").strip()
+        guid = (item.findtext("guid") or link or title).strip()
+        desc = (item.findtext("description") or "").lower()
+        full_text = f"{title.lower()} {desc}"
+        if any(kw in full_text for kw in keywords):
+            is_transport = any(
+                w in full_text for w in ["cfl", "bus", "tram", "train", "vol", "findel"]
+            )
+            records.append(
+                {
+                    "strike_id": guid,
+                    "title": title[:140],
+                    "published_at": pub_date,
+                    "source_url": link,
+                    "sector": "TRANSPORT" if is_transport else "PUBLIC",
+                }
+            )
+    return records
+
+
 PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
     "cita_datex2": cita_datex2,
+    "strikes_rss": strikes_rss,
 }

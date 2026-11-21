@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from openlux.core.parsers import PARSERS, cita_datex2
+from openlux.core.parsers import PARSERS, cita_datex2, strikes_rss
 
 
 def test_cita_datex2_parses_sample_xml() -> None:
@@ -40,3 +40,28 @@ def test_cita_datex2_empty_or_malformed() -> None:
 def test_parsers_registry_contains_cita_datex2() -> None:
     assert "cita_datex2" in PARSERS
     assert callable(PARSERS["cita_datex2"])
+
+
+def test_strikes_rss_filters_and_extracts() -> None:
+    fixture_path = Path("tests/fixtures/strikes_rss_sample.xml")
+    assert fixture_path.exists()
+    raw = fixture_path.read_bytes()
+
+    records = strikes_rss(raw)
+    assert len(records) == 2  # Le 2e article (inauguration) doit être ignoré
+
+    rec1 = records[0]
+    assert rec1["strike_id"] == "STRIKE_2026_RGTR_01"
+    assert "grève" in rec1["title"].lower()
+    assert rec1["sector"] == "TRANSPORT"
+    assert "news.openlux.lu" in rec1["source_url"]
+
+    rec2 = records[1]
+    assert rec2["strike_id"] == "STRIKE_2026_FP_03"
+    assert "manifestation" in rec2["title"].lower()
+    assert rec2["sector"] == "PUBLIC"
+
+
+def test_strikes_rss_empty() -> None:
+    assert strikes_rss(b"") == []
+    assert strikes_rss(b"   ") == []

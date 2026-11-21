@@ -1,4 +1,4 @@
-# OpenLux Hub — Architecture Technique (v1.4)
+# OpenLux Hub — Architecture Technique (v1.5)
 
 > Ce document vivant décrit l'état actuel et l'architecture cible d'OpenLux Hub.
 > Il est mis à jour à chaque évolution de module, ajout de flux ou modification de schéma.
@@ -116,13 +116,13 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 5. Modules Cœur Implémentés (Phase 3 — Vagues 3A, 3B & 3C en place)
+## 5. Modules Cœur Implémentés (Phase 3 — Échelle Complète : 20 Domaines)
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
 | `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 79 |
 | `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 66 |
-| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2` DATEX II) | 53 |
+| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2`, `strikes_rss`) | 86 |
 | `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze) | 196 |
 | `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 190 |
 | `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 113 |
@@ -130,11 +130,11 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | `src/openlux/api/main.py` | API REST FastAPI : Swagger, whitelist, DuckDB in-memory, stream CSV/GeoJSON | 193 |
 | `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 168 |
 | `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `serve`, `mcp`) | 194 |
-| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 460** |
+| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 493** |
 
 ---
 
-## 6. Domaines et Data Marts Actifs (28 Sources, 17 Tables Gold)
+## 6. Domaines et Data Marts Actifs (40 Sources, 20 Domaines, 22 Tables Gold)
 
 | # | Domaine | Sources Atomiques Incluses | Table Gold Produite | Format & Moteur |
 | :-: | :--- | :--- | :--- | :--- |
@@ -143,15 +143,19 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **3** | `holidays_vacations` | `holidays_lu` | `gold_holidays.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **4** | `air_quality` (3A) | `air_quality_lu` | `gold_air_quality.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **5** | `water_levels` (3A) | `water_levels_lu` | `gold_water_levels.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **6** | `economy_fuel` (3A) | `fuel_prices_lu` | `gold_fuel_prices.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **7** | `economy_fuel` (3A) | `statec_inflation` | `gold_statec_inflation.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **8** | `energy_climate` (3A) | `electricity_spot_delu` | `gold_electricity_spot.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **9** | `energy_climate` (3A) | `radioactivity_lu` | `gold_radioactivity.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **10** | `energy_climate` (3A) | `bathing_water_lu` | `gold_bathing_water.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **11** | `crossborder_traffic` (3B) | `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder` | `gold_crossborder_traffic.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **12** | `public_transit` (3B) | `transit_mobiliteit`, `transit_avl_rt` | `gold_public_transit.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **13** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **14** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **15** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **16** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec` | `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **17** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **6** | `economy_fuel` (3A) | `fuel_prices_lu`, `statec_inflation` | `gold_fuel_prices.parquet`, `gold_statec_inflation.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **7** | `energy_climate` (3A) | `electricity_spot_delu`, `radioactivity_lu`, `bathing_water_lu` | `gold_electricity_spot.parquet`, `gold_radioactivity.parquet`, `gold_bathing_water.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **8** | `crossborder_traffic` (3B) | `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder` | `gold_crossborder_traffic.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **9** | `public_transit` (3B) | `transit_mobiliteit`, `transit_avl_rt` | `gold_public_transit.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **10** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **11** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **12** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **13** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec` | `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **14** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **15** | `concerts_culture` (3D) | `culture_echo_lu`, `culture_venues_jsonld` | `gold_culture_events.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **16** | `local_events_markets` (3D) | `events_vdl`, `events_visitlu` | *(inclus dans `gold_culture_events.parquet`)* | Parquet ZSTD (dbt DuckDB) |
+| **17** | `major_venues` (3D) | `venues_luxexpo`, `venues_stade_coque` | *(inclus dans `gold_culture_events.parquet`)* | Parquet ZSTD (dbt DuckDB) |
+| **18** | `strikes_disruptions` (3D) | `strikes_rss_lu` | `gold_strikes_disruptions.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **19** | `health_pollen_alerts` (3D) | `pollen_lu`, `aed_defib_lu`, `lu_alert` | `gold_health_alerts.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **20** | `civic_life` (3D) | `petitions_chd`, `unemployment_adem` | `gold_civic_life.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **-** | **Consolidation Globale** | *Les 8 signaux quotidiens unifiés sur 100 communes* | `gold_luxembourg_daily_context.parquet` | Parquet ZSTD (dbt DuckDB) |

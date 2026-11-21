@@ -6,7 +6,31 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
-## [0.6.0] - 2026-11-21
+## [0.7.0] - 2026-11-21
+
+### Added
+- **Phase 3 : Passage à l'Échelle — Vague 3D (Culture, Vie Locale, Santé & Grèves) & Consolidation Gold**
+  - Couverture complète des 20 domaines fonctionnels du manifeste d'ingénierie (40 sources atomiques configurées dans `config/sources.toml`) :
+    - `culture_echo_lu` (`concerts_culture`) : Sorties culturelles, expositions et spectacles (Echo.lu).
+    - `culture_venues_jsonld` (`concerts_culture`) : Programmation officielle des grandes salles (Rockhal, Philharmonie...).
+    - `events_vdl` (`local_events_markets`) : Agenda municipal, marchés hebdomadaires et fêtes de la Ville de Luxembourg.
+    - `events_visitlu` (`local_events_markets`) : Manifestations touristiques et fêtes traditionnelles Visit Luxembourg.
+    - `venues_luxexpo` (`major_venues`) : Salons, foires internationales et congrès Luxexpo The Box.
+    - `venues_stade_coque` (`major_venues`) : Rencontres sportives au Stade de Luxembourg et compétitions à d'Coque.
+    - `strikes_rss_lu` (`strikes_disruptions`) : Avis de grèves, débrayages et manifestations syndicales via parser pur `strikes_rss`.
+    - `pollen_lu` (`health_pollen_alerts`) : Concentrations polliniques et indices de risque allergique nationaux.
+    - `aed_defib_lu` (`health_pollen_alerts`) : Recensement national des défibrillateurs externes automatisés (CGDIS).
+    - `lu_alert` (`health_pollen_alerts`) : Messages d'urgence et alertes à la population LU-Alert.
+    - `petitions_chd` (`civic_life`) : Pétitions citoyennes déposées à la Chambre des Députés et suivi du seuil de 4 500 signatures.
+    - `unemployment_adem` (`civic_life`) : Statistiques mensuelles des demandeurs d'emploi et taux de chômage communal ADEM.
+  - Implémentation du parser pur $\le 30$ lignes `strikes_rss` dans `src/openlux/core/parsers.py` (filtrage par mots-clés sans I/O).
+  - 12 modèles de Staging, 4 modèles Silver et 4 Data Marts Gold dédiés (`gold_culture_events`, `gold_strikes_disruptions`, `gold_health_alerts`, `gold_civic_life`).
+  - **Data Mart Consolidé Multimodal (`gold_luxembourg_daily_context.parquet`)** :
+    - Vue d'ensemble sur le grain universel `date × commune_lau` (100 communes) croisant les 8 signaux quotidiens (météo, air, fériés, trafic, chantiers, grèves, crues, événements majeurs).
+  - Extension du test d'intégrité RGPD `assert_no_pii_in_gold.sql` sur tous les champs textuels des nouveaux Data Marts Gold (zéro fuite PII).
+  - 12 nouveaux jeux d'échantillons offline anonymisés dans `tests/fixtures/` garantissant des tests 100 % reproductibles.
+  - Test d'intégration de bout en bout validant la collecte des 40 sources et la génération des 22 tables Gold Parquet ZSTD.
+  - Synchronisation documentaire complète : `docs/ARCHITECTURE.md` (v1.5), `docs/DATA_CATALOG.md`, `docs/DECISIONS_LOG.md` et `STATUS.md`.
 
 ### Added
 - **Phase 3 : Passage à l'Échelle — Vague 3C (Territoire, Travaux & Quotidien)**

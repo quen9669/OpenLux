@@ -133,5 +133,41 @@ WITH pii_checks AS (
     FROM {{ ref('gold_daily_life') }}
     WHERE regexp_matches(name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
        OR regexp_matches(name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_culture_events' AS table_name,
+        title AS sampled_text
+    FROM {{ ref('gold_culture_events') }}
+    WHERE regexp_matches(title, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(title, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_strikes_disruptions' AS table_name,
+        title AS sampled_text
+    FROM {{ ref('gold_strikes_disruptions') }}
+    WHERE regexp_matches(title, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(title, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_health_alerts' AS table_name,
+        headline_or_name AS sampled_text
+    FROM {{ ref('gold_health_alerts') }}
+    WHERE regexp_matches(headline_or_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(headline_or_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_civic_life' AS table_name,
+        title_or_indicator AS sampled_text
+    FROM {{ ref('gold_civic_life') }}
+    WHERE regexp_matches(title_or_indicator, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(title_or_indicator, '(?:\+352|00352)\s?[0-9]{4,}')
 )
 SELECT * FROM pii_checks
