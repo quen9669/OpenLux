@@ -27,13 +27,14 @@ from openlux.core.quality import (
 )
 
 
-def _run_dbt_command(command: str) -> bool:
+def _run_dbt_command(command: str, *args: str) -> bool:
     """Exécute une sous-commande dbt (seed, run, test) depuis la racine du projet."""
     cmd = [
         sys.executable,
         "-m",
         "dbt.cli.main",
         command,
+        *args,
         "--project-dir",
         "dbt_project",
         "--profiles-dir",
@@ -97,7 +98,7 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
         send_alert_if_needed(sid, metrics.status, [prev.get("status", "GOOD")])
 
     # Exécution des modèles dbt et bascule Parquet Gold atomique
-    _run_dbt_command("seed")
+    _run_dbt_command("seed", "--full-refresh")
     _run_dbt_command("run")
     _run_dbt_command("test")
     con.close()
@@ -114,7 +115,7 @@ def rebuild_pipeline() -> int:
     # POURQUOI : Rejeu déterministe complet sans aucun appel HTTP externe.
     sources = load_sources_config()
     db_path = Path("data/openlux.duckdb")
-    _run_dbt_command("seed")
+    _run_dbt_command("seed", "--full-refresh")
     _run_dbt_command("run")
     _run_dbt_command("test")
     export_gold_parquets()

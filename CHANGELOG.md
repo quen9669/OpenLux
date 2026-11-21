@@ -11,9 +11,11 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
   - Intégration de l'endpoint OpenAPI `https://api.echo.lu/v1/experiences` avec token optionnel `ECHO_API_KEY` et backup open data public.
   - Enrichissement avec colonnes tarifaires : `price_eur`, `price_text`, `is_free`.
   - Liens officiels HTTPS vérifiés sans 404.
-- **Analyse Marché Immobilier & Détection d'Opportunités (`gold_housing`)** :
-  - Nouveau référentiel `dbt_project/seeds/ref_housing_market_deals.csv` couvrant les quartiers emblématiques (Belair, Kirchberg, Limpertsberg, Gasperich, Belval, Differdange, Strassen...).
-  - Calcul automatique du prix au m² (`price_eur_m2`), moyenne de quartier (`quartier_avg_price_m2`), scoring de décote (`deal_opportunity_score`) et drapeau d'opportunité (`is_good_deal`).
+- **Neutralité Totale & Exhaustivité Immobilière (`gold_housing`)** :
+  - Suppression de tout jugement de valeur ou score subjectif (`deal_opportunity_score`, `is_good_deal`, `quartier_avg_price_m2`).
+  - Restructuration autour de 29 attributs factuels bruts : prix, surface, prix au m², typologie (`APARTMENT`, `HOUSE`), pièces, chambres, salles de bain, présence de balcon, terrasse, jardin, ascenseur, parking/garage, étage, année de construction, classes énergétiques (DPE/isolation), description technique, adresse/rue exacte, code postal, quartier, commune, canton, coordonnées GPS et URL d'annonce.
+- **Script d'Orchestration & Déploiement en Production (`scripts/deploy_production.py`)** :
+  - Orchestration de bout en bout : vérification des sources, collecte live, `dbt seed --full-refresh`, `dbt run`, `dbt test`, export Parquet ZSTD, audit anti-doublons et publication des métadonnées open data.
 - **Maillage Météorologique Cantonal (`gold_weather_observations`)** :
   - Extension systématique aux 12 cantons du Luxembourg avec horodatages récents.
 - **Tarification Stationnement & Mobilité (`gold_mobility_parkings`)** :

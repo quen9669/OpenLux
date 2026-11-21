@@ -120,10 +120,15 @@ WITH pii_checks AS (
 
     SELECT
         'gold_housing' AS table_name,
-        property_type AS sampled_text
+        COALESCE(description, property_type) AS sampled_text
     FROM {{ ref('gold_housing') }}
-    WHERE regexp_matches(property_type, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
-       OR regexp_matches(property_type, '(?:\+352|00352)\s?[0-9]{4,}')
+    WHERE (description IS NOT NULL AND (
+        regexp_matches(description, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(description, '(?:\+352|00352)\s?[0-9]{4,}')
+    )) OR (
+        regexp_matches(property_type, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(property_type, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
 
     UNION ALL
 
