@@ -1,0 +1,32 @@
+[
+  {
+    "facility_id": "PK_GLACIS",
+    "facility_name": "Parking Glacis",
+    "available_spaces": 420,
+    "total_capacity": 1200,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.618,
+    "lon": 6.1255,
+    "commune_name": "Luxembourg"
+  },
+  {
+    "facility_id": "PK_KIRCHBERG_PR",
+    "facility_name": "P+R Kirchberg",
+    "available_spaces": 180,
+    "total_capacity": 600,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.635,
+    "lon": 6.17,
+    "commune_name": "Luxembourg"
+  },
+  {
+    "facility_id": "PK_BOUILLON_PR",
+    "facility_name": "P+R Bouillon",
+    "available_spaces": 850,
+    "total_capacity": 2400,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.598,
+    "lon": 6.108,
+    "commune_name": "Luxembourg"
+  }
+]

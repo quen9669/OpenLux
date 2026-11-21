@@ -1,0 +1,32 @@
+[
+  {
+    "facility_id": "CHG_SANDWEILER_01",
+    "facility_name": "Chargy Sandweiler Gare",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.62,
+    "lon": 6.21,
+    "commune_name": "Sandweiler"
+  },
+  {
+    "facility_id": "CHG_ESCH_02",
+    "facility_name": "Chargy Belval Université",
+    "available_points": 4,
+    "total_points": 6,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.5,
+    "lon": 5.95,
+    "commune_name": "Esch-sur-Alzette"
+  },
+  {
+    "facility_id": "CHG_MERTERT_03",
+    "facility_name": "SuperChargy Wasserbillig",
+    "available_points": 1,
+    "total_points": 2,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.7142,
+    "lon": 6.5028,
+    "commune_name": "Mertert"
+  }
+]

@@ -1,4 +1,4 @@
-# OpenLux Hub — Architecture Technique (v1.2)
+# OpenLux Hub — Architecture Technique (v1.3)
 
 > Ce document vivant décrit l'état actuel et l'architecture cible d'OpenLux Hub.
 > Il est mis à jour à chaque évolution de module, ajout de flux ou modification de schéma.
@@ -95,20 +95,20 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 ```json
 {
   "_meta": {
-    "dataset": "gold_weather_observations",
+    "dataset": "gold_crossborder_traffic",
     "trust_score": 100.0,
     "status": "GOOD",
     "is_stale": false,
     "last_checked_utc": "2026-11-20T22:00:00Z",
     "last_changed_utc": "2026-11-20T21:00:00Z",
     "source_used": "primary",
-    "source_url": "https://metapi.ana.lu/api/v1/metdata/weather",
-    "license_spdx": "CC0-1.0",
+    "source_url": "https://data.public.lu/fr/datasets/r/traffic-fr-a31.json",
+    "license_spdx": "Open-EU",
     "commercial_use_safe": true,
-    "known_limitations": "Couverture concentrée sur les stations principales...",
+    "known_limitations": "Données DIR Est / Bison Futé indicatives...",
     "run_id": "uuid-v4",
     "pipeline_git_sha": "git_v1",
-    "row_count": 42
+    "row_count": 6
   },
   "data": []
 }
@@ -116,7 +116,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 5. Modules Cœur Implémentés (Phase 3 — Vague 3A en place)
+## 5. Modules Cœur Implémentés (Phase 3 — Vagues 3A & 3B en place)
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
@@ -134,9 +134,9 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 ---
 
-## 6. Domaines et Data Marts Actifs (10 Sources, 10 Tables Gold)
+## 6. Domaines et Data Marts Actifs (21 Sources, 14 Tables Gold)
 
-| # | Domaine | Source ID | Table Gold Produite | Format & Moteur |
+| # | Domaine | Sources Atomiques Incluses | Table Gold Produite | Format & Moteur |
 | :-: | :--- | :--- | :--- | :--- |
 | **1** | `weather` | `meteo_lux_obs` | `gold_weather_observations.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **2** | `traffic_cita` | `traffic_cita_datex2` | `gold_traffic_events.parquet` | Parquet ZSTD (dbt DuckDB) |
@@ -148,3 +148,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **8** | `energy_climate` (3A) | `electricity_spot_delu` | `gold_electricity_spot.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **9** | `energy_climate` (3A) | `radioactivity_lu` | `gold_radioactivity.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **10** | `energy_climate` (3A) | `bathing_water_lu` | `gold_bathing_water.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **11** | `crossborder_traffic` (3B) | `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder` | `gold_crossborder_traffic.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **12** | `public_transit` (3B) | `transit_mobiliteit`, `transit_avl_rt` | `gold_public_transit.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **13** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **14** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |

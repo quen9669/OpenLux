@@ -64,5 +64,45 @@ WITH pii_checks AS (
     FROM {{ ref('gold_bathing_water') }}
     WHERE regexp_matches(site_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
        OR regexp_matches(site_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_crossborder_traffic' AS table_name,
+        comment AS sampled_text
+    FROM {{ ref('gold_crossborder_traffic') }}
+    WHERE comment IS NOT NULL AND (
+        regexp_matches(comment, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(comment, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
+
+    UNION ALL
+
+    SELECT
+        'gold_public_transit' AS table_name,
+        message AS sampled_text
+    FROM {{ ref('gold_public_transit') }}
+    WHERE message IS NOT NULL AND (
+        regexp_matches(message, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(message, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
+
+    UNION ALL
+
+    SELECT
+        'gold_mobility_parkings' AS table_name,
+        facility_name AS sampled_text
+    FROM {{ ref('gold_mobility_parkings') }}
+    WHERE regexp_matches(facility_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(facility_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_aviation_noise' AS table_name,
+        callsign_or_zone AS sampled_text
+    FROM {{ ref('gold_aviation_noise') }}
+    WHERE regexp_matches(callsign_or_zone, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(callsign_or_zone, '(?:\+352|00352)\s?[0-9]{4,}')
 )
 SELECT * FROM pii_checks

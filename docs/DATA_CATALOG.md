@@ -22,12 +22,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par station météorologique et par relevé.
 - **Fichier** : `data/gold/gold_weather_observations.parquet` (ZSTD)
 - **Sources** : `meteo_lux_obs` (MeteoLux, backup Open-Meteo).
-- **Schéma exact** :
-  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `temperature` (`DOUBLE`), `humidity` (`DOUBLE`), `pressure_hpa` (`DOUBLE`)
-  - `wind_speed_kmh` (`DOUBLE`), `precipitation_mm` (`DOUBLE`), `weather_condition` (`VARCHAR`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `temperature`, `humidity`, `pressure_hpa`, `wind_speed_kmh`, `precipitation_mm`, `weather_condition`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Mesures concentrées sur les stations officielles principales (Findel, etc.) ; microclimats locaux non captés.
 
 ### 2.2 `gold_traffic_events`
@@ -35,10 +30,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par événement de circulation routière (accident, bouchon, chantier).
 - **Fichier** : `data/gold/gold_traffic_events.parquet` (ZSTD)
 - **Sources** : `traffic_cita_datex2` (CITA DATEX II XML via `cita_datex2`).
-- **Schéma exact** :
-  - `event_id` (`VARCHAR`), `road_name` (`VARCHAR`), `situation_type` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `traffic_comment` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `event_id`, `road_name`, `situation_type`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `traffic_comment`, `source_id`.
 - **Limites connues** : Couvre exclusivement le réseau autoroutier national exploité par CITA (A1, A3, A4, A6, A7, A13, B40).
 
 ### 2.3 `gold_holidays`
@@ -46,11 +38,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par date de jour férié officiel ou vacances scolaires.
 - **Fichier** : `data/gold/gold_holidays.parquet` (ZSTD)
 - **Sources** : `holidays_lu` (`data.public.lu`).
-- **Schéma exact** :
-  - `holiday_date` (`DATE`), `observed_at_utc` (`TIMESTAMP`)
-  - `holiday_name_fr` (`VARCHAR`), `holiday_name_de` (`VARCHAR`), `holiday_name_lb` (`VARCHAR`)
-  - `is_legal_holiday` (`BOOLEAN`), `is_school_vacation` (`BOOLEAN`)
-  - `commune_lau` (`VARCHAR`), `lat` (`DOUBLE`), `lon` (`DOUBLE`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `holiday_date`, `observed_at_utc`, `holiday_name_fr`, `holiday_name_de`, `holiday_name_lb`, `is_legal_holiday`, `is_school_vacation`, `commune_lau`, `lat`, `lon`, `source_id`.
 - **Limites connues** : Valable pour le calendrier légal officiel du Grand-Duché de Luxembourg.
 
 ### 2.4 `gold_air_quality` (Vague 3A)
@@ -58,11 +46,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par station, par polluant mesuré et par relevé.
 - **Fichier** : `data/gold/gold_air_quality.parquet` (ZSTD)
 - **Sources** : `air_quality_lu` (Administration de l'Environnement, backup Open-Meteo Air Quality).
-- **Schéma exact** :
-  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `pollutant` (`VARCHAR`), `pollutant_value` (`DOUBLE`), `unit` (`VARCHAR`), `aqi_index` (`VARCHAR`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `pollutant`, `pollutant_value`, `unit`, `aqi_index`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Données issues des stations automatiques avant validation définitive annuelle.
 
 ### 2.5 `gold_water_levels` (Vague 3A)
@@ -70,11 +54,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par station hydrologique et par relevé.
 - **Fichier** : `data/gold/gold_water_levels.parquet` (ZSTD)
 - **Sources** : `water_levels_lu` (Administration de la Gestion de l'Eau).
-- **Schéma exact** :
-  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`), `river_name` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `water_level_cm` (`DOUBLE`), `discharge_m3s` (`DOUBLE`), `alert_level` (`VARCHAR`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `station_id`, `station_name`, `river_name`, `observed_at_utc`, `water_level_cm`, `discharge_m3s`, `alert_level`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Mesures automatiques en direct soumises aux crues subites.
 
 ### 2.6 `gold_fuel_prices` (Vague 3A)
@@ -82,11 +62,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par type de carburant routier et par mise à jour officielle.
 - **Fichier** : `data/gold/gold_fuel_prices.parquet` (ZSTD)
 - **Sources** : `fuel_prices_lu` (Ministère de l'Économie).
-- **Schéma exact** :
-  - `fuel_type` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `price_eur_per_litre` (`DOUBLE`), `price_change_eur` (`DOUBLE`)
-  - `source_id` (`VARCHAR`)
+- **Schéma exact** : `fuel_type`, `observed_at_utc`, `price_eur_per_litre`, `price_change_eur`, `source_id`.
 - **Limites connues** : Prix maxima légaux autorisés au Luxembourg ; les stations peuvent appliquer des rabais.
 
 ### 2.7 `gold_statec_inflation` (Vague 3A)
@@ -94,11 +70,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par mois de référence.
 - **Fichier** : `data/gold/gold_statec_inflation.parquet` (ZSTD)
 - **Sources** : `statec_inflation` (STATEC, backup Eurostat).
-- **Schéma exact** :
-  - `reference_month` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `ipcn_index` (`DOUBLE`), `inflation_annual_rate` (`DOUBLE`), `wage_index_quote` (`DOUBLE`)
-  - `source_id` (`VARCHAR`)
+- **Schéma exact** : `reference_month`, `observed_at_utc`, `ipcn_index`, `inflation_annual_rate`, `wage_index_quote`, `source_id`.
 - **Limites connues** : Publication mensuelle officielle le premier mercredi suivant la fin du mois.
 
 ### 2.8 `gold_electricity_spot` (Vague 3A)
@@ -106,10 +78,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par heure d'échéance Day-Ahead.
 - **Fichier** : `data/gold/gold_electricity_spot.parquet` (ZSTD)
 - **Sources** : `electricity_spot_delu` (ENTSO-E / EPEX SPOT DE-LU).
-- **Schéma exact** :
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `price_eur_per_mwh` (`DOUBLE`), `bidding_zone` (`VARCHAR`)
-  - `source_id` (`VARCHAR`)
+- **Schéma exact** : `observed_at_utc`, `price_eur_per_mwh`, `bidding_zone`, `source_id`.
 - **Limites connues** : Prix spot de gros conjointe Allemagne-Luxembourg hors réseau et taxes.
 
 ### 2.9 `gold_radioactivity` (Vague 3A)
@@ -117,11 +86,7 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par sonde de télémesure nationale et par relevé.
 - **Fichier** : `data/gold/gold_radioactivity.parquet` (ZSTD)
 - **Sources** : `radioactivity_lu` (Division de la Radioprotection).
-- **Schéma exact** :
-  - `station_id` (`VARCHAR`), `station_name` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `dose_rate_nsvh` (`DOUBLE`), `radiological_status` (`VARCHAR`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `dose_rate_nsvh`, `radiological_status`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Mesure en nSv/h ; légères hausses naturelles lors des épisodes de pluie (radon).
 
 ### 2.10 `gold_bathing_water` (Vague 3A)
@@ -129,12 +94,40 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par site officiel de baignade et par contrôle sanitaire.
 - **Fichier** : `data/gold/gold_bathing_water.parquet` (ZSTD)
 - **Sources** : `bathing_water_lu` (Administration de la Gestion de l'Eau).
-- **Schéma exact** :
-  - `site_id` (`VARCHAR`), `site_name` (`VARCHAR`), `water_body` (`VARCHAR`)
-  - `observed_at_utc` (`TIMESTAMP`)
-  - `quality_class` (`VARCHAR`), `cyanobacteria_bloom` (`VARCHAR`)
-  - `lat` (`DOUBLE`), `lon` (`DOUBLE`), `commune_lau` (`VARCHAR`), `canton` (`VARCHAR`), `source_id` (`VARCHAR`)
+- **Schéma exact** : `site_id`, `site_name`, `water_body`, `observed_at_utc`, `quality_class`, `cyanobacteria_bloom`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Prélèvements réalisés bimensuellement pendant la saison estivale (mai - septembre).
+
+### 2.11 `gold_crossborder_traffic` (Vague 3B)
+- **Domaine** : `crossborder_traffic`
+- **Grain** : 1 ligne par événement ou corridor frontalier (A31, A64, E411, lignes TER/CFL).
+- **Fichier** : `data/gold/gold_crossborder_traffic.parquet` (ZSTD)
+- **Sources** : `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder`.
+- **Schéma exact** : `event_id`, `corridor`, `transport_mode`, `observed_at_utc`, `delay_minutes`, `status`, `comment`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Temps de parcours et retards indicatifs fournis par les gestionnaires d'infrastructures voisins (DIR Est, Autobahn GmbH, SPW, SNCF).
+
+### 2.12 `gold_public_transit` (Vague 3B)
+- **Domaine** : `public_transit`
+- **Grain** : 1 ligne par ligne de transport, réseau et état de service.
+- **Fichier** : `data/gold/gold_public_transit.parquet` (ZSTD)
+- **Sources** : `transit_mobiliteit`, `transit_avl_rt`.
+- **Schéma exact** : `line_id`, `network`, `observed_at_utc`, `delay_seconds`, `disruption_level`, `message`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Couvre le réseau national Mobiliteit.lu (CFL, Tram, RGTR) et les autobus municipaux AVL.
+
+### 2.13 `gold_mobility_parkings` (Vague 3B)
+- **Domaine** : `mobility_parkings`
+- **Grain** : 1 ligne par équipement de mobilité (station Vel'oH, parking public, P+R, borne Chargy).
+- **Fichier** : `data/gold/gold_mobility_parkings.parquet` (ZSTD)
+- **Sources** : `veloh_stations`, `parkings_vdl`, `chargy_stations`.
+- **Schéma exact** : `facility_id`, `facility_type`, `facility_name`, `observed_at_utc`, `available_capacity`, `total_capacity`, `occupancy_rate`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Taux d'occupation en temps réel ; ne comprend pas le stationnement payant résidentiel en voirie.
+
+### 2.14 `gold_aviation_noise` (Vague 3B)
+- **Domaine** : `aviation_noise`
+- **Grain** : 1 ligne par mouvement aérien Findel (vols en approche/décollage) ou contour de bruit réglementaire.
+- **Fichier** : `data/gold/gold_aviation_noise.parquet` (ZSTD)
+- **Sources** : `aviation_opensky_lu`, `noise_zones_lu`.
+- **Schéma exact** : `record_id`, `record_type`, `callsign_or_zone`, `observed_at_utc`, `altitude_m_or_dba`, `status`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
+- **Limites connues** : Vols ADS-B captés par OpenSky dans la bounding box Luxembourg ; courbes d'isophonie réglementaires révisées périodiquement.
 
 ---
 

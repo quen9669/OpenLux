@@ -265,3 +265,301 @@ url = "https://eau.geoportail.lu/wfs/bathing_water.csv"
 min_rows = 1
 required_fields = ["site_name", "quality_class"]
 
+[[sources]]
+id = "traffic_fr_bisonfute"
+domain = "crossborder_traffic"
+description = "Trafic et perturbations sur l'axe autoroutier A31 (France vers Luxembourg)"
+semantic_summary = "Temps de parcours, ralentissements et bouchons sur l'A31 entre Metz, Thionville et la frontière luxembourgeoise."
+known_limitations = "Données issues des capteurs DIR Est et Bison Futé ; temps de parcours indicatifs."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 45
+retention_days = 30
+license_spdx = "Open-EU"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/traffic-fr-a31.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.bison-fute.gouv.fr/v1/traffic/a31"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["event_id", "status"]
+
+[[sources]]
+id = "traffic_de_autobahn"
+domain = "crossborder_traffic"
+description = "Trafic et chantiers sur l'axe autoroutier A64 (Allemagne vers Luxembourg)"
+semantic_summary = "État du trafic, travaux et ralentissements sur l'A64 / B52 entre Trèves et Wasserbillig."
+known_limitations = "Flux fédéral Autobahn GmbH couvrant le réseau autoroutier allemand d'accès au Grand-Duché."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 45
+retention_days = 30
+license_spdx = "Open-EU"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/traffic-de-a64.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://verkehr.autobahn.de/o/vms/browse/station/A64"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["event_id", "status"]
+
+[[sources]]
+id = "traffic_be_trafiroutes"
+domain = "crossborder_traffic"
+description = "Trafic et encombrements sur l'axe autoroutier E411 (Belgique vers Luxembourg)"
+semantic_summary = "Conditions de circulation sur l'E411 entre Arlon, Sterpenich et Steinfort."
+known_limitations = "Flux SPW Mobilité Trafiroutes axé sur la province de Luxembourg (Belgique)."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 45
+retention_days = 30
+license_spdx = "Open-EU"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/traffic-be-e411.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://trafiroutes.wallonie.be/api/v1/traffic/e411"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["event_id", "status"]
+
+[[sources]]
+id = "rail_crossborder"
+domain = "crossborder_traffic"
+description = "Circulation et retards des trains transfrontaliers vers Luxembourg"
+semantic_summary = "Suivi des lignes ferroviaires transfrontalières TER Fluo (Nancy-Metz-LU), CFL ligne 50 (Arlon-LU) et Athus."
+known_limitations = "Données consolidées issues des API SNCF Réseau, SNCB et CFL."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 45
+retention_days = 30
+license_spdx = "Open-EU"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/rail-crossborder.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.sncf.com/v1/coverage/sncf/lines/crossborder-lu"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["event_id", "status"]
+
+[[sources]]
+id = "transit_mobiliteit"
+domain = "public_transit"
+description = "État du réseau de transport en commun national (Mobiliteit.lu)"
+semantic_summary = "Perturbations, retards et avis de travaux sur les réseaux CFL, Tram, RGTR et TICE."
+known_limitations = "Flux temps réel national opéré par l'Administration des Transports Publics."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 15
+retention_days = 30
+license_spdx = "CC-BY-4.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/mobiliteit-transit-live.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.mobiliteit.lu/v1/disruptions"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["line_id", "disruption_level"]
+
+[[sources]]
+id = "transit_avl_rt"
+domain = "public_transit"
+description = "Temps réel et retards des autobus de la Ville de Luxembourg (AVL)"
+semantic_summary = "Horaires temps réel et déviations des lignes de bus municipales de la capitale luxembourgeoise."
+known_limitations = "Couvre exclusivement le réseau des autobus municipaux de la Ville de Luxembourg (lignes 1 à 33)."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 15
+retention_days = 30
+license_spdx = "CC-BY-4.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/avl-bus-rt.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.vdl.lu/v1/avl/realtime"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["line_id", "network"]
+
+[[sources]]
+id = "veloh_stations"
+domain = "mobility_parkings"
+description = "Disponibilité temps réel des vélos en libre-service Vel'oH"
+semantic_summary = "Nombre de vélos disponibles et places libres par station sur le réseau Vel'oH de la capitale et communes voisines."
+known_limitations = "Couvre le territoire de la Ville de Luxembourg et les 7 communes périphériques conventionnées."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 30
+retention_days = 30
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/veloh-live-stations.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.jcdecaux.com/vls/v1/stations?contract=luxembourg"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["facility_id", "available_bikes"]
+
+[[sources]]
+id = "parkings_vdl"
+domain = "mobility_parkings"
+description = "Occupation temps réel des parkings publics VDL et P+R"
+semantic_summary = "Places libres en temps réel dans les parkings couverts de la Ville de Luxembourg et les parcs relais P+R."
+known_limitations = "Ne couvre pas le stationnement payant en voirie résidentielle."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 30
+retention_days = 30
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/parkings-vdl-live.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.vdl.lu/v1/parkings/occupancy"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["facility_id", "available_spaces"]
+
+[[sources]]
+id = "chargy_stations"
+domain = "mobility_parkings"
+description = "Disponibilité et état des bornes de recharge électrique Chargy"
+semantic_summary = "Emplacement et disponibilité des points de recharge pour véhicules électriques du réseau public Chargy et SuperChargy."
+known_limitations = "Réseau national public luxembourgeois (Creos, Sudstroum et communes partenaires)."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 30
+retention_days = 30
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/chargy-live-stations.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://api.chargy.lu/v1/stations/status"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["facility_id", "available_points"]
+
+[[sources]]
+id = "aviation_opensky_lu"
+domain = "aviation_noise"
+description = "Mouvements aériens en direct dans l'espace aérien de Luxembourg (Findel LUX)"
+semantic_summary = "Position, altitude et trajectoire des avions en approche et au décollage de l'aéroport du Findel (bbox Luxembourg)."
+known_limitations = "Couverture des transpondeurs ADS-B captés par le réseau OpenSky Network dans la boîte géographique du Luxembourg."
+adapter = "http_json"
+cadence_minutes = 15
+sla_minutes = 45
+retention_days = 30
+license_spdx = "Open"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = true
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/aviation-opensky-lux.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://opensky-network.org/api/states/all?lamin=49.4&lomin=5.7&lamax=50.2&lomax=6.6"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["icao24", "status"]
+
+[[sources]]
+id = "noise_zones_lu"
+domain = "aviation_noise"
+description = "Zones de bruit stratégiques et couloirs d'exposition aéroportuaire au Luxembourg"
+semantic_summary = "Cartographie stratégique du bruit (courbes d'isophonie Lden en dBA) autour du Findel et des infrastructures de transport."
+known_limitations = "Cartographie réglementaire de l'Administration de l'Environnement révisée périodiquement."
+adapter = "http_json"
+cadence_minutes = 1440
+sla_minutes = 4320
+retention_days = 365
+license_spdx = "CC0-1.0"
+commercial_use_safe = true
+publish_opendata_lu = true
+factual_only = false
+
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/noise-zones-luxembourg.json"
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://env.geoportail.lu/wfs/strategic_noise_maps"
+
+[sources.quality]
+min_rows = 1
+required_fields = ["zone_id", "noise_level_dba"]
+
+

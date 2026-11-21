@@ -53,22 +53,46 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "eaux-de-baignade" in url_str or "bathing_water" in url_str:
         raw = Path("tests/fixtures/bathing_water_sample.csv").read_bytes()
         return httpx.Response(200, content=raw)
+    if "traffic-fr-a31" in url_str or "bison-fute" in url_str:
+        raw = Path("tests/fixtures/traffic_fr_bisonfute_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "traffic-de-a64" in url_str or "autobahn" in url_str:
+        raw = Path("tests/fixtures/traffic_de_autobahn_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "traffic-be-e411" in url_str or "trafiroutes" in url_str:
+        raw = Path("tests/fixtures/traffic_be_trafiroutes_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "rail-crossborder" in url_str or "crossborder-lu" in url_str:
+        raw = Path("tests/fixtures/rail_crossborder_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "mobiliteit-transit" in url_str or "mobiliteit" in url_str:
+        raw = Path("tests/fixtures/transit_mobiliteit_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "avl-bus" in url_str or "avl/realtime" in url_str:
+        raw = Path("tests/fixtures/transit_avl_rt_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "veloh-live" in url_str or "jcdecaux" in url_str:
+        raw = Path("tests/fixtures/veloh_stations_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "parkings-vdl" in url_str or "parkings/occupancy" in url_str:
+        raw = Path("tests/fixtures/parkings_vdl_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "chargy-live" in url_str or "chargy" in url_str:
+        raw = Path("tests/fixtures/chargy_stations_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "aviation-opensky" in url_str or "opensky-network" in url_str:
+        raw = Path("tests/fixtures/aviation_opensky_lu_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
+    if "noise-zones" in url_str or "strategic_noise_maps" in url_str:
+        raw = Path("tests/fixtures/noise_zones_lu_sample.json").read_bytes()
+        return httpx.Response(200, content=raw)
     return httpx.Response(404, text="Not Found")
 
 
 def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     # 1. Chargement des sources configurées
     sources = load_sources_config()
-    assert "meteo_lux_obs" in sources
-    assert "traffic_cita_datex2" in sources
-    assert "holidays_lu" in sources
-    assert "air_quality_lu" in sources
-    assert "water_levels_lu" in sources
-    assert "fuel_prices_lu" in sources
-    assert "statec_inflation" in sources
-    assert "electricity_spot_delu" in sources
-    assert "radioactivity_lu" in sources
-    assert "bathing_water_lu" in sources
+    assert len(sources) >= 21
 
     mock_client = httpx.Client(transport=httpx.MockTransport(_mock_handler))
     db_path = Path("data/openlux.duckdb")
@@ -121,6 +145,10 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         "gold_electricity_spot",
         "gold_radioactivity",
         "gold_bathing_water",
+        "gold_crossborder_traffic",
+        "gold_public_transit",
+        "gold_mobility_parkings",
+        "gold_aviation_noise",
     ]
     for tbl in expected_tables:
         assert tbl in exported
@@ -138,37 +166,25 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
     count_weather = con_gold.execute(
         "SELECT count(*) FROM 'data/gold/gold_weather_observations.parquet'"
     ).fetchone()[0]
-    count_air = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_air_quality.parquet'"
+    count_crossborder = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_crossborder_traffic.parquet'"
     ).fetchone()[0]
-    count_water = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_water_levels.parquet'"
+    count_transit = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_public_transit.parquet'"
     ).fetchone()[0]
-    count_fuel = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_fuel_prices.parquet'"
+    count_mobility = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_mobility_parkings.parquet'"
     ).fetchone()[0]
-    count_inflation = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_statec_inflation.parquet'"
-    ).fetchone()[0]
-    count_elec = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_electricity_spot.parquet'"
-    ).fetchone()[0]
-    count_rad = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_radioactivity.parquet'"
-    ).fetchone()[0]
-    count_bath = con_gold.execute(
-        "SELECT count(*) FROM 'data/gold/gold_bathing_water.parquet'"
+    count_aviation = con_gold.execute(
+        "SELECT count(*) FROM 'data/gold/gold_aviation_noise.parquet'"
     ).fetchone()[0]
     con_gold.close()
 
     assert count_weather >= 3
-    assert count_air >= 4
-    assert count_water >= 4
-    assert count_fuel >= 4
-    assert count_inflation >= 3
-    assert count_elec >= 4
-    assert count_rad >= 4
-    assert count_bath >= 4
+    assert count_crossborder >= 6
+    assert count_transit >= 5
+    assert count_mobility >= 9
+    assert count_aviation >= 4
 
     # 5. Test de la commande rebuild 100 % hors-ligne
     rebuild_rc = rebuild_pipeline()

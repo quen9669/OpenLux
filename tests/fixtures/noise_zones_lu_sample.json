@@ -1,0 +1,22 @@
+[
+  {
+    "zone_id": "NOISE_FINDEL_LDE_65",
+    "zone_name": "Couloir Aérien Findel Lden 65 dBA",
+    "noise_level_dba": 65.0,
+    "noise_indicator": "Lden",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.625,
+    "lon": 6.21,
+    "commune_name": "Sandweiler"
+  },
+  {
+    "zone_id": "NOISE_FINDEL_LDE_55",
+    "zone_name": "Couloir Aérien Findel Lden 55 dBA",
+    "noise_level_dba": 55.0,
+    "noise_indicator": "Lden",
+    "observed_at": "2026-11-20T22:00:00Z",
+    "lat": 49.635,
+    "lon": 6.24,
+    "commune_name": "Niederanven"
+  }
+]

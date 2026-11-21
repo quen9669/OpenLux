@@ -6,6 +6,31 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-21
+
+### Added
+- **Phase 3 : Passage à l'Échelle — Vague 3B (Mobilité & Frontières)**
+  - Intégration déclarative 100 % config-driven de 11 nouvelles sources atomiques dans `config/sources.toml` :
+    - `traffic_fr_bisonfute` (`crossborder_traffic`) : Trafic et bouchons sur l'A31 (France vers Luxembourg) via DIR Est / Bison Futé.
+    - `traffic_de_autobahn` (`crossborder_traffic`) : Trafic et ralentissements sur l'A64 (Allemagne vers Luxembourg) via Autobahn GmbH.
+    - `traffic_be_trafiroutes` (`crossborder_traffic`) : Trafic et encombrements sur l'E411 (Belgique vers Luxembourg) via Trafiroutes.
+    - `rail_crossborder` (`crossborder_traffic`) : Suivi des trains transfrontaliers TER Fluo, CFL L50 et SNCB.
+    - `transit_mobiliteit` (`public_transit`) : État du réseau national de transport public (Mobiliteit.lu / CFL / Tram / RGTR).
+    - `transit_avl_rt` (`public_transit`) : Temps réel et retards des autobus municipaux de la Ville de Luxembourg (AVL).
+    - `veloh_stations` (`mobility_parkings`) : Disponibilité en direct des vélos et bornes Vel'oH de la capitale et périphérie.
+    - `parkings_vdl` (`mobility_parkings`) : Places libres en temps réel dans les parkings couverts et parcs relais P+R VDL.
+    - `chargy_stations` (`mobility_parkings`) : Disponibilité et état des bornes de recharge pour véhicules électriques Chargy.
+    - `aviation_opensky_lu` (`aviation_noise`) : Suivi des vols en approche et décollage de l'aéroport Findel (LUX) via OpenSky.
+    - `noise_zones_lu` (`aviation_noise`) : Zones de bruit stratégiques et courbes d'exposition sonore aéroportuaire Lden.
+  - Modèles de transformation dbt complets (staging, silver, gold) unifiant les flux par domaine :
+    - 11 modèles Staging (`stg_traffic_fr_bisonfute`, `stg_traffic_de_autobahn`, `stg_traffic_be_trafiroutes`, `stg_rail_crossborder`, `stg_transit_mobiliteit`, `stg_transit_avl_rt`, `stg_veloh_stations`, `stg_parkings_vdl`, `stg_chargy_stations`, `stg_aviation_opensky_lu`, `stg_noise_zones_lu`).
+    - 4 modèles Silver unifiant les flux avec standardisation spatiotemporelle et calculs d'occupation (`silver_crossborder_traffic`, `silver_public_transit`, `silver_mobility_parkings`, `silver_aviation_noise`).
+    - 4 Data Marts Gold Parquet ZSTD (`gold_crossborder_traffic`, `gold_public_transit`, `gold_mobility_parkings`, `gold_aviation_noise`).
+  - Extension du test d'intégrité RGPD `assert_no_pii_in_gold.sql` sur les colonnes textuelles des 4 nouveaux Data Marts.
+  - 11 nouveaux jeux d'échantillons offline anonymisés dans `tests/fixtures/` pour des tests 100 % déterministes.
+  - Mise à jour de `tests/test_pipeline_slice.py` validant la collecte et la transformation des 21 sources et 14 tables Gold.
+  - Synchronisation de `STATUS.md`, `docs/ARCHITECTURE.md` (v1.3), `docs/DATA_CATALOG.md` et `docs/DECISIONS_LOG.md`.
+
 ## [0.4.0] - 2026-11-21
 
 ### Added

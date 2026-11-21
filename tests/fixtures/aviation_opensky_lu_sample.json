@@ -1,0 +1,26 @@
+[
+  {
+    "icao24": "4d0221",
+    "callsign": "LGL123",
+    "origin_country": "Luxembourg",
+    "baro_altitude_m": 520.0,
+    "velocity_ms": 72.5,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "status": "APPROACH",
+    "lat": 49.63,
+    "lon": 6.22,
+    "commune_name": "Sandweiler"
+  },
+  {
+    "icao24": "4d0334",
+    "callsign": "CLX789",
+    "origin_country": "Luxembourg",
+    "baro_altitude_m": 850.0,
+    "velocity_ms": 110.0,
+    "observed_at": "2026-11-20T22:00:00Z",
+    "status": "CLIMB",
+    "lat": 49.65,
+    "lon": 6.28,
+    "commune_name": "Niederanven"
+  }
+]
