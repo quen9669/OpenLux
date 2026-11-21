@@ -13,8 +13,6 @@ from pydantic import BaseModel, Field
 
 
 class EndpointConfig(BaseModel):
-    """Configuration d'un point d'accès HTTP (primaire ou secours)."""
-
     url: str
     headers: dict[str, str] = Field(default_factory=dict)
     auth_env_var: str | None = None
@@ -22,15 +20,11 @@ class EndpointConfig(BaseModel):
 
 
 class QualityConfig(BaseModel):
-    """Seuils de tolérance et champs obligatoires pour le calcul du Trust Score."""
-
     min_rows: int = 0
     required_fields: list[str] = Field(default_factory=list)
 
 
 class SourceConfig(BaseModel):
-    """Déclaration atomique d'une source de données (flux HTTP unitaire)."""
-
     id: str
     domain: str
     description: str
@@ -51,28 +45,15 @@ class SourceConfig(BaseModel):
 
 
 def load_sources_config(path: str | Path = "config/sources.toml") -> dict[str, SourceConfig]:
-    """Charge et valide toutes les sources définies dans le fichier TOML.
-
-    # POURQUOI : Utilisation de tomllib natif (Python 3.12+) pour respecter le verrouillage
-    # à 7 dépendances runtime sans ajouter de parseur TOML/YAML tiers.
-    """
-    toml_path = Path(path)
-    if not toml_path.exists():
-        raise FileNotFoundError(f"Fichier de configuration introuvable : {toml_path}")
-
-    with toml_path.open("rb") as f:
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f"Config introuvable : {p}")
+    with p.open("rb") as f:
         data: dict[str, Any] = tomllib.load(f)
-
-    raw_sources = data.get("sources", [])
-    sources_map: dict[str, SourceConfig] = {}
-    for raw in raw_sources:
-        src = SourceConfig.model_validate(raw)
-        sources_map[src.id] = src
-    return sources_map
+    return {src.id: src for r in data.get("sources", []) if (src := SourceConfig.model_validate(r))}
 
 
 def get_source_config(source_id: str, path: str | Path = "config/sources.toml") -> SourceConfig:
-    """Récupère la configuration d'une source spécifique par son identifiant unique."""
     sources = load_sources_config(path)
     if source_id not in sources:
         raise KeyError(f"Source inconnue dans {path} : '{source_id}'")

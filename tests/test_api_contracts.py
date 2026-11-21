@@ -22,6 +22,21 @@ def client() -> TestClient:
     return TestClient(app)
 
 
+def test_web_portal_serving(client: TestClient) -> None:
+    """Vérifie que la racine '/' sert le portail web V1 et que '/v2/' sert la version V2."""
+    res = client.get("/")
+    assert res.status_code == 200
+    assert "OpenLux Hub" in res.text
+    assert client.get("/css/style.css").status_code == 200
+    assert client.get("/js/app.js").status_code == 200
+
+    res_v2 = client.get("/v2/", follow_redirects=True)
+    assert res_v2.status_code == 200
+    assert "V2 GOUV" in res_v2.text
+    assert client.get("/v2/css/style.css").status_code == 200
+    assert client.get("/v2/js/app.js").status_code == 200
+
+
 def test_api_status(client: TestClient) -> None:
     """Vérifie que /v1/status expose la santé globale et le statut des sources."""
     res = client.get("/v1/status")

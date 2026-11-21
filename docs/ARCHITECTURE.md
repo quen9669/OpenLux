@@ -176,3 +176,15 @@ OpenLux garantit la conformité stricte avec les standards nationaux et europée
 - **Commandes Dédiées** :
   - `uv run openlux publish --dry-run` : Validation et génération des manifestes de métadonnées sans modification externe.
   - `uv run openlux compact` : Compactage mensuel Parquet des snapshots Bronze historiques.
+
+---
+
+## 8. Portail Web Officiel & Interface Utilisateur (SPA Native)
+
+Le portail web officiel d'OpenLux Hub fournit une interface réactive épurée, futuriste et souveraine :
+- **Architecture Minimaliste** : Single Page Application (SPA) native sans framework lourd (`web/index.html`, `web/css/style.css`, `web/js/app.js`). Servie directement par FastAPI via Starlette `StaticFiles` à la racine `/`.
+- **Zéro Dépendance Runtime NPM** : Fonctionne 100 % hors-ligne sans build Node.js complexe.
+- **Intégration API & Fallback Déterministe** : Interroge dynamiquement `/v1/datasets`, `/v1/status` et `/v1/data/{dataset}`. Si l'API n'est pas encore démarrée, bascule sans erreur sur un mock riche des 22 Data Marts.
+- **Observabilité & Accès Multimodal** : Visualisation du Trust Score MLOps, schéma des colonnes, streaming CSV à la volée, téléchargement Parquet ZSTD d'origine, snippets DuckDB SQL in-memory et commandes FastMCP IA en 1 clic.
+- **Studio Design System Figma** : Onglet dédié intégrant la validation granulaire de la charte graphique (palette WCAG AAA, typographie Inter / JetBrains Mono, matrice des 5 états des boutons, badges de santé pulsants).
+

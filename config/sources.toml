@@ -46,8 +46,12 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://www.cita.lu/datex2/datex2.xml"
+url = "https://www.cita.lu/info_trafic/datex/situationrecord"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+
+[sources.backup]
+adapter = "http_json"
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query?where=1%3D1&outFields=*&f=json"
 
 [sources.quality]
 min_rows = 0
@@ -470,12 +474,12 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/parkings-vdl-live.json"
+url = "https://feed.vdl.lu/circulation/parking/feed.json"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_json"
-url = "https://api.vdl.lu/v1/parkings/occupancy"
+url = "https://maps.vdl.lu/arcgis/rest/services/OPENDATA/GEOJSON/FeatureServer/5/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
 
 [sources.quality]
 min_rows = 1
@@ -578,12 +582,12 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/roadworks-cita.json"
+url = "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_json"
-url = "https://www.cita.lu/api/v1/roadworks"
+url = "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml"
 
 [sources.quality]
 min_rows = 1
@@ -605,12 +609,12 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/roadworks-vdl.json"
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query?where=1%3D1&outFields=*&f=json"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_json"
-url = "https://api.vdl.lu/v1/travaux"
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query?where=1%3D1&outFields=*&f=json"
 
 [sources.quality]
 min_rows = 1
@@ -632,12 +636,12 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/housing-observatoire-prix.csv"
+url = "https://download.data.public.lu/resources/prix-annonces-des-logements-par-commune/20260326-095804/vente-appartement-2010-2025.xlsx"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_csv"
-url = "https://logement.geoportail.lu/wfs/observatoire_prix.csv"
+url = "https://download.data.public.lu/resources/prix-annonces-des-logements-par-commune/20260326-095818/vente-maison-2010-2025.xlsx"
 
 [sources.quality]
 min_rows = 1
@@ -659,7 +663,7 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/housing-statec-permits.json"
+url = "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all?dimensionAtObservation=AllDimensions"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
@@ -767,13 +771,13 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://api.echo.lu/v1/experiences"
+url = "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact?x-algolia-application-id=PY7G9MVXE2&x-algolia-api-key=55301c0ef2e535ae29e6b6d697f4882d&query=&hitsPerPage=1000"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-auth_env_var = "ECHO_API_KEY"
 
 [sources.backup]
 adapter = "http_json"
-url = "https://data.public.lu/fr/datasets/r/culture-echo-lu.json"
+url = "https://api.echo.lu/v1/allExperiences"
+auth_env_var = "ECHO_API_KEY"
 
 [sources.quality]
 min_rows = 1

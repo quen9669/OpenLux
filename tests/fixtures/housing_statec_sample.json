@@ -1,24 +1,46 @@
 [
   {
-    "record_id": "PERM_2026_01",
+    "record_id": "STATEC_VDL_APARTMENT_2025",
+    "canton_code": "VDL",
     "commune_name": "Luxembourg",
-    "property_type": "RESIDENTIAL_BUILDING",
-    "reference_period": "2026",
-    "permits_count": 85,
-    "units_authorized": 520,
-    "observed_at": "2026-11-20T22:00:00Z",
-    "lat": 49.61,
-    "lon": 6.13
+    "canton_name": "Luxembourg",
+    "property_type": "APARTMENT",
+    "reference_period": "2025",
+    "permits_count": 42,
+    "units_authorized": 890,
+    "observed_at": "2026-11-21T00:00:00Z"
   },
   {
-    "record_id": "PERM_2026_02",
-    "commune_name": "Hesperange",
-    "property_type": "RESIDENTIAL_BUILDING",
-    "reference_period": "2026",
-    "permits_count": 32,
-    "units_authorized": 140,
-    "observed_at": "2026-11-20T22:00:00Z",
-    "lat": 49.57,
-    "lon": 6.15
+    "record_id": "STATEC_ESC_HOUSE_2025",
+    "canton_code": "ESC",
+    "commune_name": "Esch-sur-Alzette",
+    "canton_name": "Esch-sur-Alzette",
+    "property_type": "HOUSE",
+    "reference_period": "2025",
+    "permits_count": 88,
+    "units_authorized": 95,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_CPL_TOTAL_RESIDENTIAL_2025",
+    "canton_code": "CPL",
+    "commune_name": "Capellen",
+    "canton_name": "Capellen",
+    "property_type": "TOTAL_RESIDENTIAL",
+    "reference_period": "2025",
+    "permits_count": 65,
+    "units_authorized": 310,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_DIE_APARTMENT_2025",
+    "canton_code": "DIE",
+    "commune_name": "Diekirch",
+    "canton_name": "Diekirch",
+    "property_type": "APARTMENT",
+    "reference_period": "2025",
+    "permits_count": 18,
+    "units_authorized": 142,
+    "observed_at": "2026-11-21T00:00:00Z"
   }
 ]

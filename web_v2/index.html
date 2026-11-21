@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenLux Hub V2 — Référentiel Souverain de Données du Luxembourg</title>
+  <meta name="description" content="Plateforme institutionnelle souveraine de données ouvertes pour le Grand-Duché de Luxembourg. 22 Data Marts Gold, Zero-PII, Factual-Only.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- BANNIÈRE TRICOLORE LUXEMBOURG -->
+  <div class="lux-stripe-top">
+    <div class="lux-stripe-red"></div>
+    <div class="lux-stripe-white"></div>
+    <div class="lux-stripe-blue"></div>
+  </div>
+
+  <!-- HEADER INSTITUTIONNEL -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-area" onclick="document.querySelector('.nav-tab[data-view=accueil]').click()">
+        <!-- Drapeau du Luxembourg avec Bouclier Vert de Gouvernance -->
+        <div class="logo-badge-emblem" title="Drapeau officiel du Luxembourg surmonté du bouclier de gouvernance">
+          <div class="flag-stripe flag-red"></div>
+          <div class="flag-stripe flag-white"></div>
+          <div class="flag-stripe flag-blue"></div>
+          <div class="gov-shield-overlay">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="logo-title-group">
+          <div class="logo-main-title">
+            <span>OpenLux</span>
+            <span style="color:var(--lux-blue)">Hub</span>
+            <span class="badge-v2">V2 GOUV</span>
+          </div>
+          <span class="logo-subtitle">Portail Souverain de Données du Grand-Duché</span>
+        </div>
+      </div>
+
+      <!-- Navigation par Onglets -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-view="accueil">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Accueil & Gouvernance
+        </button>
+        <button class="nav-tab" data-view="donnees">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          Catalogue de Données
+        </button>
+        <button class="nav-tab" data-view="api">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          API & Guide Technique
+        </button>
+        <button class="nav-tab" data-view="decisions">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Architecture & Décisions (A à Z)
+        </button>
+        <button class="nav-tab" data-view="charte">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          Charte V2 & Tokens
+        </button>
+      </nav>
+
+      <!-- Actions Header -->
+      <div class="header-actions">
+        <a href="/" class="btn-version-switcher" title="Comparer avec la version V1">
+          <span>&larr; Voir V1</span>
+        </a>
+        <div id="headerStatusBadgeV2" style="font-size:0.75rem;display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:var(--gov-green-bg);border:1px solid var(--gov-green-border);border-radius:var(--radius-full);">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--gov-green);display:inline-block;"></span>
+          <span style="color:var(--gov-green);font-weight:700;">100% NOMINAL</span>
+        </div>
+        <button class="btn btn-icon" id="themeToggleBtnV2" title="Basculer le thème">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEUR PRINCIPAL -->
+  <main class="container">
+
+    <!-- ================= VUE 1 : ACCUEIL & GOUVERNANCE ================= -->
+    <section class="view-panel active" id="view-accueil">
+      <!-- Bandeau Logothèque de Confiance & Standards -->
+      <div class="trust-strip">
+        <div class="trust-item gov">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          <span>Gouvernance RGPD / Zero-PII</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span>data.public.lu Compatible</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Profil National DCAT-AP-LU</span>
+        </div>
+        <div class="trust-item gov">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          <span>Norme WGS84 (EPSG:4326)</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span>Factual-Only EU AI Act</span>
+        </div>
+      </div>
+
+      <!-- Hero Institutionnel -->
+      <div class="hero-v2">
+        <div class="hero-v2-badge">
+          <span>RÉFÉRENTIEL PUBLIC OFFICIEL</span> • <span>GRAND-DUCHÉ DE LUXEMBOURG</span>
+        </div>
+        <h1 class="hero-v2-title">
+          Le Référentiel de Données Souverain & Neutre du <span class="text-lux-blue">Grand-Duché</span> de <span class="text-lux-red">Luxembourg</span>
+        </h1>
+        <p class="hero-v2-desc">
+          Plateforme institutionnelle unifiant l'ensemble des données publiques et sectorielles du Luxembourg. Données 100 % factuelles, nettoyées en amont de toute PII, modélisées en SQL dbt et distribuées en Parquet ZSTD haute fidélité pour les citoyens, institutions, entreprises et agents IA.
+        </p>
+        <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="document.querySelector('.nav-tab[data-view=donnees]').click()">
+            <span>Consulter les 22 Data Marts</span>
+            <span>&rarr;</span>
+          </button>
+          <button class="btn btn-secondary" onclick="document.querySelector('.nav-tab[data-view=decisions]').click()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Lire l'Architecture de A à Z</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chiffres Clés Institutionnels -->
+      <div class="stats-grid-v2">
+        <div class="stat-card-v2">
+          <div class="stat-num-v2" style="color:var(--lux-blue)">22</div>
+          <div class="stat-lbl-v2">Data Marts Gold</div>
+          <div class="stat-detail-v2">Couverture territoriale complète en Parquet ZSTD</div>
+        </div>
+        <div class="stat-card-v2 gov">
+          <div class="stat-num-v2" style="color:var(--gov-green)">40</div>
+          <div class="stat-lbl-v2">Flux Atomiques Ingestion</div>
+          <div class="stat-detail-v2">100% automatisés avec validation SHA-256</div>
+        </div>
+        <div class="stat-card-v2">
+          <div class="stat-num-v2">100</div>
+          <div class="stat-lbl-v2">Communes Officielles</div>
+          <div class="stat-detail-v2">Référentiel légal LAU (fusions 2023 incluses)</div>
+        </div>
+        <div class="stat-card-v2 red">
+          <div class="stat-num-v2" style="color:var(--lux-red)">0</div>
+          <div class="stat-lbl-v2">Données Personnelles (PII)</div>
+          <div class="stat-detail-v2">Sanitizer amont certifié par 34 tests pytest</div>
+        </div>
+      </div>
+
+      <!-- LE GRAND FLUX DE TRAÇABILITÉ (8 ÉTAPES COMPLÈTES) -->
+      <div class="traceability-section">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <span style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;letter-spacing:0.06em;">TRAÇABILITÉ CERTIFIÉE</span>
+            <h2 style="font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Le Pipeline de Données de Bout en Bout (8 Étapes)</h2>
+            <p style="font-size:0.9rem;color:var(--text-secondary);max-width:700px;margin-top:0.35rem;">
+              Chaque valeur exposée sur ce portail peut être auditée et rejouée 100 % hors-ligne depuis sa source d'origine.
+            </p>
+          </div>
+          <button class="btn btn-gov btn-sm" onclick="document.querySelector('.nav-tab[data-view=decisions]').click()">
+            <span>Consulter les choix techniques &rarr;</span>
+          </button>
+        </div>
+
+        <div class="trace-flow-grid">
+          <div class="trace-step-card">
+            <span class="step-num-badge">1</span>
+            <h3 class="trace-step-title">Ingestion Atomique HTTP</h3>
+            <p class="trace-step-desc">1 entrée TOML = 1 flux atomique. Téléchargement brut des flux JSON, XML DATEX II, CSV et flux RSS.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge gov">2</span>
+            <h3 class="trace-step-title">Sanitizer Récursif Amont</h3>
+            <p class="trace-step-desc">Suppression systématique des adresses email, numéros de téléphone et matricules nationaux (13 chiffres) avant tout enregistrement.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge">3</span>
+            <h3 class="trace-step-title">Couche Bronze Immuable</h3>
+            <p class="trace-step-desc">Stockage brut sous forme d'archives compressées <code>data/bronze/{source}/YYYY/MM/DD/*.gz</code> servant de base de rejeu offline.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge">4</span>
+            <h3 class="trace-step-title">Validation SHA-256</h3>
+            <p class="trace-step-desc">Calcul d'empreinte cryptographique. Détection stricte des mutations pour logger séparément fraîcheur et changement de données.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge">5</span>
+            <h3 class="trace-step-title">Modélisation dbt Silver</h3>
+            <p class="trace-step-desc">Transformations déclaratives en SQL : normalisation des 100 communes LAU, projection spatiale WGS84 et règles Factual-Only.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge gov">6</span>
+            <h3 class="trace-step-title">Tests d'Intégrité dbt</h3>
+            <p class="trace-step-desc">Exécution automatique des tests de non-nullité, d'unicité, de cohérence spatiale et de plages admissibles.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge">7</span>
+            <h3 class="trace-step-title">Export Atomique Gold Parquet</h3>
+            <p class="trace-step-desc">Génération en Parquet compressé ZSTD via <code>.tmp/</code> puis basculement atomique <code>os.replace()</code> sans verrou.</p>
+          </div>
+          <div class="trace-step-card">
+            <span class="step-num-badge gov">8</span>
+            <h3 class="trace-step-title">Distribution Multi-Canaux</h3>
+            <p class="trace-step-desc">Exposition en lecture seule in-memory (:memory:) via FastAPI REST, streaming CSV, serveur FastMCP et portail web officiel.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LE BOUCLIER DE GOUVERNANCE (POUR DPO / CISO / ARCHITECTES) -->
+      <div class="gov-shield-section">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--gov-green);text-transform:uppercase;letter-spacing:0.06em;">CONFORMITÉ, SÉCURITÉ & TRANSPARENCE</span>
+        <h2 style="font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Le Bouclier Institutionnel</h2>
+        <p style="font-size:0.9rem;color:var(--text-secondary);max-width:700px;margin-top:0.35rem;">
+          Conçu pour offrir une garantie de confiance absolue aux DPO, CISO et équipes d'audit.
+        </p>
+
+        <div class="gov-cards-grid">
+          <div class="gov-card">
+            <div class="gov-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3 class="gov-card-title">RGPD & Zero-PII Strict</h3>
+            <p class="gov-card-text">
+              Aucune donnée personnelle n'est stockée sur disque. Le sanitizer récursif amont élimine rigoureusement emails, numéros de téléphone et matricules nationaux (13 chiffres) avant toute écriture en couche Bronze.
+            </p>
+          </div>
+
+          <div class="gov-card">
+            <div class="gov-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <h3 class="gov-card-title">EU AI Act Ready & RAG Neutre</h3>
+            <p class="gov-card-text">
+              Données 100 % factuelles excluant toute subjectivité ou opinion éditoriale. Les textes descriptifs sont tronqués (&le; 140 caractères) et purgés de tout contenu d'opinion pour garantir un apprentissage machine et du RAG non biaisés.
+            </p>
+          </div>
+
+          <div class="gov-card">
+            <div class="gov-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3 class="gov-card-title">Licences Ouvertes & Droit d'Auteur</h3>
+            <p class="gov-card-text">
+              Respect rigoureux des licences d'origine normalisées selon le standard international SPDX (<code>CC0-1.0</code>, <code>CC-BY-4.0</code>, <code>FACTUAL-ONLY</code>). Métadonnées Frictionless et schéma européen DCAT-AP-LU inclus.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VUE 2 : CATALOGUE DE DONNÉES ENRICHI ================= -->
+    <section class="view-panel" id="view-donnees">
+      <div style="margin-bottom:1.5rem;">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;letter-spacing:0.06em;">DATA MARTs GOLD CERTIFIÉS</span>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Catalogue des 22 Tables Officielles</h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:750px;margin-top:0.35rem;">
+          Chaque dataset est enrichi de son organisme d'origine, de sa cadence de rafraîchissement, de son Trust Score validé et de son schéma SQL complet.
+        </p>
+      </div>
+
+      <div class="catalog-header-bar">
+        <div class="catalog-search-box">
+          <input type="text" class="catalog-search-input" placeholder="Rechercher par mot-clé, table, organisme d'origine (ex: CITA, STATEC, MeteoLux)..." oninput="handleSearchV2(this.value)">
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+          <div class="filter-pills-row">
+            <button class="filter-btn-pill active" onclick="setDomainFilterV2('all', this)">Tous les domaines</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Territoire & Citoyenneté', this)">Territoire & Citoyenneté</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Mobilité & Transports', this)">Mobilité & Transports</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Santé & Environnement', this)">Santé & Environnement</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Énergie & Climat', this)">Énergie & Climat</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Économie & Inflation', this)">Économie & Inflation</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Immobilier & Marché', this)">Immobilier & Marché</button>
+            <button class="filter-btn-pill" onclick="setDomainFilterV2('Culture & Sorties', this)">Culture & Sorties</button>
+          </div>
+          <span class="mono" id="catalogCountV2" style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">22 tables Gold certifiées</span>
+        </div>
+      </div>
+
+      <!-- Grille des Datamarts -->
+      <div class="datamarts-grid-v2" id="datamartsGridV2">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VUE 3 : API & GUIDE TECHNIQUE (DOCUMENTATION ENRICHE) ================= -->
+    <section class="view-panel" id="view-api">
+      <div style="margin-bottom:1.75rem;">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;letter-spacing:0.06em;">DOCUMENTATION COMPLÈTE EN LIGNE</span>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">API REST, FastMCP & Moteur de Qualité</h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:780px;margin-top:0.35rem;">
+          Toutes les spécifications techniques directement accessibles sans quitter la plateforme.
+        </p>
+      </div>
+
+      <!-- Explication Détaillée de la Formule du Trust Score -->
+      <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:var(--gov-green-bg);border:1px solid var(--gov-green-border);display:flex;align-items:center;justify-content:center;color:var(--gov-green)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 style="font-size:1.25rem;font-weight:800;">Calcul Mathématique du Trust Score de Données</h3>
+        </div>
+
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.25rem;">
+          Chaque dataset dispose d'un Trust Score uniforme compris entre <strong>0.0 et 100.0</strong>, recalculé à chaque exécution du pipeline d'observabilité. Il combine trois piliers pondérés :
+        </p>
+
+        <div style="background:var(--bg-code);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:1.25rem;font-family:var(--font-mono);font-size:0.95rem;color:var(--gov-green);margin-bottom:1.25rem;">
+          Trust Score = (0.40 &times; S_fraîcheur) + (0.35 &times; S_qualité) + (0.25 &times; S_intégrité)
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1rem;">
+          <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">1. Score de Fraîcheur (40%)</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
+              Calculé sur <code>last_checked_utc</code> par rapport au SLA configuré. <strong>Principe clé :</strong> Si la source n'a pas muté (hash SHA-256 stable <code>UNCHANGED</code>), elle conserve son score nominal de 100 sans fausse alerte.
+            </div>
+          </div>
+          <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">2. Score de Qualité (35%)</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
+              Vérification des volumes (seuil <code>min_rows</code>), complétude des champs obligatoires et taux d'imputation dans les tables composites.
+            </div>
+          </div>
+          <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">3. Score d'Intégrité (25%)</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
+              Résultats des tests <code>dbt test</code> (unicité des clés primaires, contraintes de non-nullité et cohérence des projections WGS84).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quickstart Multi-Langages -->
+      <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+          <h3 style="font-size:1.15rem;font-weight:700;">Exemples d'Interrogation Prêts à l'Emploi</h3>
+          <div style="display:flex;gap:0.4rem;">
+            <button class="btn btn-secondary btn-sm dev-tab-v2 active" data-lang="python">Python DuckDB</button>
+            <button class="btn btn-secondary btn-sm dev-tab-v2" data-lang="curl">cURL REST</button>
+            <button class="btn btn-secondary btn-sm dev-tab-v2" data-lang="js">JavaScript</button>
+            <button class="btn btn-secondary btn-sm dev-tab-v2" data-lang="mcp">Agent IA (FastMCP)</button>
+          </div>
+        </div>
+
+        <div style="background-color:var(--bg-code);border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 1rem;border-bottom:1px solid var(--border-subtle);font-size:0.75rem;color:var(--text-muted);">
+            <span>Console</span>
+            <button class="btn btn-ghost btn-sm" onclick="copyTextV2('devSnippetCodeV2', 'Code')">Copier le snippet</button>
+          </div>
+          <pre class="mono" id="devSnippetCodeV2" style="padding:1rem;color:var(--lux-blue);font-size:0.85rem;overflow-x:auto;white-space:pre-wrap;"># Lecture in-memory DuckDB sans lock ni copie
+import duckdb
+
+con = duckdb.connect()
+df = con.execute("""
+    SELECT date, temp_mean_c, active_traffic_events
+    FROM read_parquet('data/gold/gold_luxembourg_daily_context.parquet')
+    ORDER BY date DESC
+    LIMIT 10;
+""").df()
+print(df)</pre>
+        </div>
+      </div>
+
+      <!-- Swagger OpenAPI Interactive Frame -->
+      <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;">
+        <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-subtle);">
+          <h3 style="font-size:1.15rem;font-weight:700;">Console Interactive Swagger UI (OpenAPI 3.1)</h3>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.25rem;">
+            Testez les filtres spatiaux, temporels et le streaming CSV directement sur l'instance locale.
+          </p>
+        </div>
+        <iframe src="http://127.0.0.1:8000/docs" style="width:100%;height:700px;border:none;" title="Swagger UI"></iframe>
+      </div>
+    </section>
+
+    <!-- ================= VUE 4 : ARCHITECTURE & DÉCISIONS (DE A À Z) ================= -->
+    <section class="view-panel" id="view-decisions">
+      <div style="margin-bottom:2rem;">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--gov-green);text-transform:uppercase;letter-spacing:0.06em;">TRANSPARENCE PUBLIQUE ABSOLUE</span>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Architecture Technique & Décisions de A à Z</h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:800px;margin-top:0.35rem;">
+          Chaque choix de conception a été guidé par la simplicité, la souveraineté de la donnée, la maintenance facilitée et l'absence totale de dette technique.
+        </p>
+      </div>
+
+      <!-- Décision 1 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">1. Philosophie « Boring Technology » : 7 Dépendances Runtime Verrouillées</span>
+          <span class="decision-badge-cat">Gouvernance & MLOps</span>
+        </div>
+        <div class="decision-content">
+          Le backend repose exclusivement sur 7 bibliothèques Python runtime stables : <code>httpx</code>, <code>pydantic</code>, <code>duckdb</code>, <code>dbt-duckdb</code>, <code>beautifulsoup4</code>, <code>fastapi</code> et <code>fastmcp</code>. Tout le reste utilise la bibliothèque standard Python 3.12 (<code>tomllib</code>, <code>hashlib</code>, <code>pathlib</code>).
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Zéro conteneurisation lourde, zéro broker Kafka, zéro orchestrateur complexe (Airflow/Dagster) qui surchargerait la maintenance. L'ensemble s'exécute sur un simple binaire, sans surprise en production.
+        </div>
+      </div>
+
+      <!-- Décision 2 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">2. Couche Gold 100% Parquet ZSTD & Écriture Atomique (os.replace)</span>
+          <span class="decision-badge-cat">Stockage & Performance</span>
+        </div>
+        <div class="decision-content">
+          Toutes les 22 tables Gold sont stockées sous forme de fichiers Parquet compressés en ZSTD dans <code>data/gold/*.parquet</code>. Chaque génération est d'abord écrite dans <code>data/gold/.tmp/</code> puis basculée instantanément via <code>os.replace()</code>.
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Garantie d'atomicité absolue au niveau de l'OS. Aucun lecteur (FastAPI ou FastMCP) ne peut jamais lire un fichier partiellement écrit ou corrompu.
+        </div>
+      </div>
+
+      <!-- Décision 3 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">3. Requêtes In-Memory DuckDB (:memory:) Sans Verrou</span>
+          <span class="decision-badge-cat">Concurrence & Sécurité</span>
+        </div>
+        <div class="decision-content">
+          L'API REST FastAPI et le serveur FastMCP ouvrent des connexions DuckDB éphémères en mémoire (<code>:memory:</code>) pour interroger les fichiers Parquet sur disque via <code>read_parquet(?)</code>.
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Zéro verrou concurrent entre les processus. Plusieurs milliers de requêtes web simultanées peuvent lire les tables Gold sans jamais bloquer les batchs d'ingestion.
+        </div>
+      </div>
+
+      <!-- Décision 4 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">4. Streaming CSV et GeoJSON à la Volée</span>
+          <span class="decision-badge-cat">Efficacité Disque</span>
+        </div>
+        <div class="decision-content">
+          L'API ne stocke aucun fichier <code>.csv</code> ou <code>.geojson</code> statique sur le disque. Les endpoints <code>/v1/exports/{dataset}.csv</code> lisent DuckDB et streament les données par blocs de 500 lignes.
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Économie drastique de stockage, empreinte mémoire bornée quelle que soit la taille du dataset, et conformité stricte aux exigences d'éco-conception logicielle.
+        </div>
+      </div>
+
+      <!-- Décision 5 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">5. Maintenance Facile : Ajout d'une Source en 3 Minutes Sans Code Python</span>
+          <span class="decision-badge-cat">Architecture Déclarative</span>
+        </div>
+        <div class="decision-content">
+          Pour ajouter une nouvelle source, il suffit d'ajouter une entrée <code>[[sources]]</code> dans <code>config/sources.toml</code> et un modèle SQL déclaratif dans <code>dbt_project/models/</code>.
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Pas besoin d'être un développeur Python senior pour étendre le portail. N'importe quel analyste de données ou institutionnel peut intégrer un flux public en quelques lignes de SQL.
+        </div>
+      </div>
+
+      <!-- Décision 6 -->
+      <div class="decision-card-v2">
+        <div class="decision-card-header">
+          <span class="decision-topic">6. Reproductibilité & Rejeu 100% Offline (openlux rebuild)</span>
+          <span class="decision-badge-cat">Auditabilité & Résilience</span>
+        </div>
+        <div class="decision-content">
+          La couche Bronze immuable conserve l'historique brut des requêtes HTTP. La commande <code>uv run openlux rebuild</code> permet de rejouer entièrement la chaîne Silver &rarr; Gold sans solliciter le réseau.
+        </div>
+        <div class="decision-why">
+          <strong>Pourquoi :</strong> Les 34 tests de non-régression s'exécutent en moins de 45 secondes sans aucune dépendance réseau, assurant une auditabilité permanente en chambre blanche.
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VUE 5 : CHARTE V2 & FIGMA SPEC ================= -->
+    <section class="view-panel" id="view-charte">
+      <div style="margin-bottom:1.75rem;">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;letter-spacing:0.06em;">DESIGN SYSTEM SOUVERAIN</span>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Charte Graphique V2 : Luxembourg & Gouvernance</h2>
+        <p style="font-size:0.95rem;color:var(--text-secondary);max-width:780px;margin-top:0.35rem;">
+          Combinaison des couleurs nationales luxembourgeoises et du vert de gouvernance certifiée.
+        </p>
+      </div>
+
+      <!-- Nuancier National -->
+      <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:2rem;margin-bottom:2rem;">
+        <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:1rem;">1. Palette Nationale & Gouvernance (Tokens CSS)</h3>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:1rem;">
+          <div style="border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+            <div style="height:70px;background:#EA141D;"></div>
+            <div style="padding:0.75rem;background:var(--bg-surface-elevated);">
+              <div style="font-weight:700;font-size:0.85rem;">Rouge Luxembourg</div>
+              <div class="mono" style="font-size:0.75rem;color:var(--text-muted);">#EA141D (Pantone 032 C)</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+            <div style="height:70px;background:#FFFFFF;border-bottom:1px solid #ddd;"></div>
+            <div style="padding:0.75rem;background:var(--bg-surface-elevated);">
+              <div style="font-weight:700;font-size:0.85rem;">Blanc Luxembourg</div>
+              <div class="mono" style="font-size:0.75rem;color:var(--text-muted);">#FFFFFF (Pure White)</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+            <div style="height:70px;background:#00A1DE;"></div>
+            <div style="padding:0.75rem;background:var(--bg-surface-elevated);">
+              <div style="font-weight:700;font-size:0.85rem;">Bleu Ciel Luxembourg</div>
+              <div class="mono" style="font-size:0.75rem;color:var(--text-muted);">#00A1DE (Pantone 299 C)</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+            <div style="height:70px;background:#10B981;"></div>
+            <div style="padding:0.75rem;background:var(--bg-surface-elevated);">
+              <div style="font-weight:700;font-size:0.85rem;">Vert Gouvernance (Bouclier)</div>
+              <div class="mono" style="font-size:0.75rem;color:var(--text-muted);">#10B981 (Trust Verified)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Showcase des Boutons V2 -->
+      <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:2rem;">
+        <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:1rem;">2. Formats de Boutons & Badges de Validation</h3>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-primary">Bouton Primaire (Bleu Lux)</button>
+          <button class="btn btn-gov">Bouclier Validé (Vert Gouv)</button>
+          <button class="btn btn-secondary">Bouton Secondaire</button>
+          <button class="filter-btn-pill active">Pilule Active</button>
+          <span class="dm-trust-verified-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <span>100% Validé</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= TIROIR D'INSPECTION V2 ================= -->
+  <div class="drawer-backdrop-v2" id="drawerBackdropV2"></div>
+  <aside class="drawer-panel-v2" id="drawerPanelV2" aria-labelledby="drawerTitleV2">
+    <div class="drawer-header-v2">
+      <div>
+        <span class="dm-domain-tag" id="drawerDomainV2">Mobilité</span>
+        <h2 id="drawerTitleV2" style="font-size:1.35rem;margin-top:0.35rem;font-weight:800;">gold_weather_observations</h2>
+      </div>
+      <button class="btn btn-icon" id="drawerCloseBtnV2" title="Fermer (Échap)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body-v2">
+      <!-- Organisme & Source Primaire -->
+      <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;">Source Officielle d'Origine</div>
+        <div id="drawerSourceOrgV2" style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-top:0.25rem;">-</div>
+        <a id="drawerSourceUrlV2" href="#" target="_blank" rel="noopener" class="mono" style="font-size:0.775rem;color:var(--text-muted);word-break:break-all;margin-top:0.25rem;display:inline-block;">-</a>
+      </div>
+
+      <!-- Description Factuelle -->
+      <div>
+        <h4 style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.35rem;">Description Neutre & Factuelle</h4>
+        <p id="drawerDescV2" style="font-size:0.9rem;color:var(--text-secondary);line-height:1.5;"></p>
+      </div>
+
+      <!-- Cadence & SLA -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+        <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Fréquence de Recharge</div>
+          <div id="drawerCadenceV2" style="font-weight:700;margin-top:0.2rem;">-</div>
+          <div id="drawerSlaV2" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.15rem;">-</div>
+        </div>
+        <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Dernier Refresh Réel</div>
+          <div id="drawerLastRefreshV2" class="mono" style="font-weight:700;margin-top:0.2rem;">-</div>
+          <div style="font-size:0.75rem;color:var(--gov-green);font-weight:600;margin-top:0.15rem;">Statut Nominal Vérifié</div>
+        </div>
+      </div>
+
+      <!-- Graphique Sparkline SVG : Volume des 7 Derniers Refresh -->
+      <div class="sparkline-box">
+        <div class="sparkline-header">
+          <span>Historique du Volume de Lignes (7 Dernières Exécutions)</span>
+          <span style="color:var(--gov-green);font-weight:700;">Intégrité SHA-256 100%</span>
+        </div>
+        <svg class="sparkline-svg" id="sparklineSvgV2" viewBox="0 0 600 60"></svg>
+      </div>
+
+      <!-- Métriques de Volume & Licence -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+        <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Total Lignes</div>
+          <div class="mono" id="drawerRowsV2" style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-top:0.2rem;">-</div>
+        </div>
+        <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Trust Score</div>
+          <div class="mono" style="font-size:1.1rem;font-weight:700;color:var(--gov-green);margin-top:0.2rem;">100.0%</div>
+        </div>
+        <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Licence SPDX</div>
+          <div class="mono" id="drawerLicenseV2" style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-top:0.2rem;">-</div>
+        </div>
+      </div>
+
+      <!-- Téléchargement Direct -->
+      <div>
+        <h4 style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Téléchargement Direct en 1 Clic</h4>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a id="btnDlParquetV2" href="#" class="btn btn-primary btn-sm" download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Parquet ZSTD Officiel</span>
+          </a>
+          <a id="btnDlCsvV2" href="#" class="btn btn-secondary btn-sm" download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>CSV Streamé (DuckDB)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Schéma des Colonnes -->
+      <div>
+        <h4 style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Schéma des Colonnes (Typage WGS84 & SQL)</h4>
+        <div style="border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;text-align:left;">
+            <thead>
+              <tr style="background:var(--bg-surface-elevated);color:var(--text-muted);">
+                <th style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-medium);">Colonne</th>
+                <th style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-medium);">Type DuckDB</th>
+                <th style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-medium);">Description</th>
+              </tr>
+            </thead>
+            <tbody id="drawerSchemaBodyV2"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Snippets Copie Rapide -->
+      <div>
+        <h4 style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Requête In-Memory DuckDB (Copier)</h4>
+        <div style="background:var(--bg-code);border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;padding:0.4rem 0.75rem;border-bottom:1px solid var(--border-subtle);font-size:0.75rem;color:var(--text-muted);">
+            <span>DuckDB SQL</span>
+            <button class="btn btn-ghost btn-sm" onclick="copyTextV2('drawerSqlCodeV2', 'Requête SQL')">Copier</button>
+          </div>
+          <pre class="mono" id="drawerSqlCodeV2" style="padding:0.75rem;color:var(--lux-blue);font-size:0.8rem;white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Commande Agent IA FastMCP</h4>
+        <div style="background:var(--bg-code);border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;padding:0.4rem 0.75rem;border-bottom:1px solid var(--border-subtle);font-size:0.75rem;color:var(--text-muted);">
+            <span>FastMCP Tool Call</span>
+            <button class="btn btn-ghost btn-sm" onclick="copyTextV2('drawerMcpCodeV2', 'Commande FastMCP')">Copier</button>
+          </div>
+          <pre class="mono" id="drawerMcpCodeV2" style="padding:0.75rem;color:var(--gov-green);font-size:0.8rem;white-space:pre-wrap;"></pre>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-v2" id="toastV2">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--gov-green)">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span class="toast-msg">Copié dans le presse-papier !</span>
+  </div>
+
+  <!-- FOOTER SOUVERAIN -->
+  <footer style="border-top:1px solid var(--border-subtle);padding:2.5rem 0;margin-top:4rem;font-size:0.85rem;color:var(--text-muted);">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;">
+      <div>
+        <strong style="color:var(--text-primary);">OpenLux Hub V2</strong> — Référentiel Souverain de Données Ouvertes du Grand-Duché de Luxembourg.
+        <div style="font-size:0.75rem;margin-top:0.25rem;">Données factuelles certifiées Zero-PII • Respect strict des licences SPDX • 100% Reproductible</div>
+      </div>
+      <div style="display:flex;gap:1.5rem;">
+        <a href="/" style="color:var(--lux-blue);text-decoration:none;">Voir la version V1 &rarr;</a>
+        <a href="https://data.public.lu" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">data.public.lu &nearr;</a>
+        <a href="http://127.0.0.1:8000/docs" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">OpenAPI Swagger &nearr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -14,7 +14,6 @@ import os
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
 import httpx
 from bs4 import BeautifulSoup
@@ -26,11 +25,9 @@ from openlux.core.sanitizer import apply_factual_only, sanitize_text, sanitize_v
 
 @dataclass
 class CollectorResult:
-    """Résultat immuable d'une opération de collecte atomique."""
-
     source_id: str
-    status: str  # SUCCESS, UNCHANGED, ATTENTION, ERROR, NOT_TESTED
-    source_used: str  # primary, backup, none
+    status: str
+    source_used: str
     sha256: str
     row_count: int
     raw_bytes: bytes
@@ -41,13 +38,11 @@ class CollectorResult:
 
 
 def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: float = 15.0) -> bytes:
-    """Effectue la requête HTTP vers un endpoint configuré."""
-    # POURQUOI : Vérification de la présence des secrets sans exposer la valeur dans les logs.
     headers = dict(endpoint.headers)
     if endpoint.auth_env_var:
         token = os.environ.get(endpoint.auth_env_var)
         if not token:
-            raise PermissionError(f"Variable d'authentification absente: {endpoint.auth_env_var}")
+            raise PermissionError(f"Auth manquante: {endpoint.auth_env_var}")
         headers["Authorization"] = f"Bearer {token}"
     resp = client.get(endpoint.url, headers=headers, timeout=timeout)
     resp.raise_for_status()
@@ -55,9 +50,7 @@ def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: flo
 
 
 def _process_json(raw: bytes, factual_only: bool) -> tuple[bytes, int]:
-    """Parse, assainit (Zero-PII) et normalise un payload JSON."""
-    parsed: Any = json.loads(raw.decode("utf-8"))
-    cleaned = sanitize_value(parsed)
+    cleaned = sanitize_value(json.loads(raw.decode("utf-8")))
     if factual_only:
         cleaned = apply_factual_only(cleaned)
     normalized = json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8")
@@ -66,44 +59,36 @@ def _process_json(raw: bytes, factual_only: bool) -> tuple[bytes, int]:
 
 
 def _process_csv(raw: bytes) -> tuple[bytes, int]:
-    """Nettoie cellule par cellule un CSV en conservant l'encodage UTF-8."""
-    # POURQUOI : Assainissement Zero-PII cellule par cellule sans altérer la disposition tabulaire.
     reader = csv.reader(io.StringIO(raw.decode("utf-8", errors="replace")))
-    output = io.StringIO()
-    writer = csv.writer(output, lineterminator="\n")
-    row_count = 0
-    for idx, row in enumerate(reader):
-        sanitized_row = [sanitize_text(cell) for cell in row]
-        writer.writerow(sanitized_row)
-        if idx > 0 and any(cell.strip() for cell in sanitized_row):
-            row_count += 1
-    return output.getvalue().encode("utf-8"), row_count
+    out = io.StringIO()
+    writer = csv.writer(out, lineterminator="\n")
+    rows = [[sanitize_text(c) for c in r] for r in reader]
+    writer.writerows(rows)
+    count = sum(1 for idx, r in enumerate(rows) if idx > 0 and any(c.strip() for c in r))
+    return out.getvalue().encode("utf-8"), count
 
 
 def _process_jsonld(raw: bytes, factual_only: bool) -> tuple[bytes, int]:
-    """Extrait exclusivement les blocs JSON-LD Event d'une page HTML."""
     soup = BeautifulSoup(raw.decode("utf-8", errors="replace"), "html.parser")
     events: list[dict] = []
     for tag in soup.find_all("script", type="application/ld+json"):
-        if not tag.string:
-            continue
-        try:
-            data = json.loads(tag.string)
-            items = data if isinstance(data, list) else [data]
-            for item in items:
-                if item.get("@type") == "Event" or "event" in str(item.get("@type", "")).lower():
-                    events.append(item)
-        except Exception:
-            continue
+        if tag.string:
+            try:
+                data = json.loads(tag.string)
+                events.extend(
+                    item
+                    for item in (data if isinstance(data, list) else [data])
+                    if item.get("@type") == "Event" or "event" in str(item.get("@type", "")).lower()
+                )
+            except Exception:
+                pass
     cleaned = sanitize_value(events)
     if factual_only:
         cleaned = apply_factual_only(cleaned, strict_whitelist=True)
-    normalized = json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8")
-    return normalized, len(cleaned)
+    return json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8"), len(cleaned)
 
 
 def _process_payload(source: SourceConfig, raw: bytes) -> tuple[bytes, int, str]:
-    """Achemine les octets bruts vers l'adaptateur ou le parser adéquat."""
     if source.adapter == "http_json":
         b, count = _process_json(raw, source.factual_only)
         return b, count, "json"
@@ -118,22 +103,22 @@ def _process_payload(source: SourceConfig, raw: bytes) -> tuple[bytes, int, str]
         cleaned = sanitize_value(records)
         if source.factual_only:
             cleaned = apply_factual_only(cleaned)
-        b = json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8")
-        return b, len(cleaned), "json"
-    raise ValueError(f"Adaptateur ou parser non supporté: {source.adapter} / {source.parser}")
+        return (
+            json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8"),
+            len(cleaned),
+            "json",
+        )
+    raise ValueError(f"Adaptateur non supporté: {source.adapter} / {source.parser}")
 
 
 def _write_bronze(source_id: str, payload: bytes, ext: str, sha256_hex: str, now: datetime) -> Path:
-    """Enregistre le payload immuable dans l'arborescence datée de data/bronze/."""
-    # POURQUOI : Stockage immuable .gz et fichier 'latest' pour lectures DuckDB dbt.
-    dir_path = Path("data/bronze") / source_id / now.strftime("%Y/%m/%d")
-    dir_path.mkdir(parents=True, exist_ok=True)
-    ts = now.strftime("%Y%m%dT%H%M%SZ")
-    archive_file = dir_path / f"{source_id}_{ts}_{sha256_hex[:8]}.{ext}.gz"
+    d = Path("data/bronze") / source_id / now.strftime("%Y/%m/%d")
+    d.mkdir(parents=True, exist_ok=True)
+    archive = d / f"{source_id}_{now.strftime('%Y%m%dT%H%M%SZ')}_{sha256_hex[:8]}.{ext}.gz"
     compressed = gzip.compress(payload)
-    archive_file.write_bytes(compressed)
+    archive.write_bytes(compressed)
     (Path("data/bronze") / source_id / f"latest.{ext}.gz").write_bytes(compressed)
-    return archive_file
+    return archive
 
 
 def collect_source(
@@ -142,26 +127,27 @@ def collect_source(
     last_sha256: str | None = None,
     last_changed_utc: str | None = None,
 ) -> CollectorResult:
-    """Orchestre la collecte d'un flux : requête, fallback, assainissement et stockage Bronze."""
     now = datetime.now(UTC)
-    now_iso = now.isoformat()
-    http_client = client or httpx.Client()
-    raw: bytes | None = None
-    source_used = "primary"
-    err_msg: str | None = None
-
-    # POURQUOI : Si la clé API obligatoire manque en local, bascule immédiate sans crash.
+    now_iso, http_client, raw, source_used, err_msg = (
+        now.isoformat(),
+        client or httpx.Client(),
+        None,
+        "primary",
+        None,
+    )
     try:
         raw = _fetch_endpoint(source.primary, http_client)
     except Exception as exc:
         err_msg = str(exc)
         if source.backup:
             try:
-                raw = _fetch_endpoint(source.backup, http_client)
-                source_used = "backup"
-                err_msg = None
-            except Exception as backup_exc:
-                err_msg = f"Primary: {err_msg} | Backup: {backup_exc}"
+                raw, source_used, err_msg = (
+                    _fetch_endpoint(source.backup, http_client),
+                    "backup",
+                    None,
+                )
+            except Exception as b_exc:
+                err_msg = f"Primary: {err_msg} | Backup: {b_exc}"
         elif isinstance(exc, PermissionError):
             return CollectorResult(
                 source.id, "NOT_TESTED", "none", "", 0, b"", None, now_iso, now_iso, err_msg
@@ -172,10 +158,8 @@ def collect_source(
             source.id, "ERROR", "none", "", 0, b"", None, now_iso, now_iso, err_msg
         )
 
-    processed_bytes, count, ext = _process_payload(source, raw)
-    sha = hashlib.sha256(processed_bytes).hexdigest()
-
-    # POURQUOI : Idempotence SHA-256 — payload inchangé n'écrit pas de nouveau fichier daté.
+    processed, count, ext = _process_payload(source, raw)
+    sha = hashlib.sha256(processed).hexdigest()
     if last_sha256 and sha == last_sha256:
         return CollectorResult(
             source.id,
@@ -183,14 +167,21 @@ def collect_source(
             source_used,
             sha,
             count,
-            processed_bytes,
+            processed,
             None,
             now_iso,
             last_changed_utc or now_iso,
         )
 
-    file_path = _write_bronze(source.id, processed_bytes, ext, sha, now)
-    status = "ATTENTION" if source_used == "backup" else "SUCCESS"
+    fpath = _write_bronze(source.id, processed, ext, sha, now)
     return CollectorResult(
-        source.id, status, source_used, sha, count, processed_bytes, file_path, now_iso, now_iso
+        source.id,
+        "ATTENTION" if source_used == "backup" else "SUCCESS",
+        source_used,
+        sha,
+        count,
+        processed,
+        fpath,
+        now_iso,
+        now_iso,
     )

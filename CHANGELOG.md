@@ -7,6 +7,38 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- **Refonte Totale du Domaine Immobilier & Logement (`gold_housing`)** :
+  - **Moissonnage Réel atHome.lu (Zero-Dead-Link)** : Collecte directe de 120 offres de marché réelles (vente et location) au Luxembourg, extraction native des 29 attributs Schema.org JSON-LD (prix EUR, surface m², prix/m², chambres, DPE classe A-I, isolation thermique, terrasse, balcon, ascenseur, coordonnées GPS exactes). Vérification programmatique stricte via `httpx.get()` : **100% des URLs renvoient HTTP 200**.
+  - **Séries Officielles STATEC (Lustat SDMX)** : Intégration de l'API REST SDMX officielle (`DF_D4113` logements autorisés, `DF_D4123` bâtiments autorisés) couvrant 2010 à 2025 pour les 12 cantons et la Ville de Luxembourg (**832 observations officielles**).
+  - **Observatoire de l'Habitat (2010-2025)** : Consolidation des séries rétrospectives officielles pour appartements et maisons, couvrant l'ensemble des 102 communes luxembourgeoises avec résolution des fusions historiques (**2 502 observations de prix médian et volumes notariés**).
+  - **Consolidation & Qualité** : Data Mart `gold_housing` consolidé à **3 454 lignes dédupliquées** (`verify_no_duplicates.py`), 0 doublon, neutralité factuelle absolue (zéro score d'opinion), tests dbt et pytest 100% passants.
+
+### Added
+- **Expansion Multi-Dates & Séances Récurrentes (`gold_culture_events`)** :
+  - Éclatement automatique de chaque occurrence de `rawExperience.dates` en session atomique horodatée (`start_date`, `end_date`, `start_time`).
+  - Passage de 3 570 expériences globales à **5 297 sessions uniques dédupliquées** dans le catalogue Gold.
+  - Conservation intégrale des séries d'occurrences pour les représentations théâtrales multiples (ex: *Michael Kohlhaas* 2 dates, *Sourire est une bataille* 2 dates), les rendez-vous associatifs récurrents (*Smartphone-Café* 21 séances) et les marchés territoriaux (*Marché hebdomadaire d'Ettelbruck* 50 séances hebdomadaires).
+- **Élagage & Minimalisme Strict du Cœur Python (`src/openlux/`)** :
+  - Réduction de 1 670 lignes à **1 490 lignes totales** dans `src/openlux/` (respect strict du budget $< 1 500$ lignes d'AGENTS.md).
+  - Tous les fichiers Python sont dorénavant $\le 196$ lignes (limite 200).
+  - Aucune fonction n'excède 40 lignes.
+
+### Added
+- **Normalisation Précise & Enrichissement Echo.lu (`gold_culture_events`)** :
+  - **URLs canoniques réelles** : Adoption systématique de `https://www.echo.lu/fr/experiences/{experienceId}` éliminant toute erreur 404.
+  - **Statut événementiel temps réel** : Capture immédiate des annulations (`Annulé` / `cancelled`) et des reports (`Reporté`).
+  - **Horodatages locaux fidèles** : Conversion des timestamps Unix vers le fuseau horaire `Europe/Luxembourg` (CET/CEST), restituant l'horaire de début exact (`start_time`).
+  - **Grille tarifaire & Billetterie** : Extraction systématique des tarifs (`price_eur`, `price_text`) depuis les structures `tickets` et conservation des liens directs de billetterie (`ticket_url`).
+  - **Adresses physiques complètes** : Normalisation de la rue, numéro, code postal et localité (`address`), avec nom du lieu officiel (`venue`).
+- **Moissonnage Massif & Déblocage National des Données du Luxembourg** :
+  - **Culture (Echo.lu)** : Découverte et intégration de l'index public CDN Algolia (`PY7G9MVXE2`) partitionné par 100 facettes, permettant d'extraire **3 570 événements culturels nationaux** réels (2026-2027) sans dépendre du token partenaire restreint de l'API REST.
+  - **Immobilier & Logement (Observatoire de l'Habitat)** : Ingestion via DuckDB Spatial (`st_read`) des séries rétrospectives officielles notariées 2009-2025 pour les 102 communes et 24 quartiers de Luxembourg-Ville (**2 560 observations historiques**).
+  - **Chantiers & Travaux (PCH / CITA & VDL)** : Intégration du flux direct XML DATEX II national (198 chantiers autoroutiers actifs + 76 futurs) et des couches ArcGIS REST de la Ville de Luxembourg (22 chantiers de voirie + 35 fouilles), totalisant **255 chantiers dédupliqués**.
+  - **Trafic en Temps Réel (CITA DATEX II & VDL)** : Restauration de l'endpoint direct `situationrecord` (34 perturbations autoroutières) et couplage avec les 38 alertes de circulation de la capitale (**72 événements temps réel**).
+  - **Tableau de Bord Visuel Interactif (`luxembourg_data_inventory.html`)** : Restitution visuelle complète avec indicateurs de latence, volume de lignes, horizon temporel et cartographie des goulots d'étranglement.
+  - **Rapport d'Audit & Cartographie Technique (`INVENTAIRE_DATA_LUXEMBOURG.md`)** : Document exhaustif détaillant le fonctionnement de toutes les APIs du pays.
+
+### Added
 - **API Officielle Echo.lu & Événements Culturels (`gold_culture_events`)** :
   - Intégration de l'endpoint OpenAPI `https://api.echo.lu/v1/experiences` avec token optionnel `ECHO_API_KEY` et backup open data public.
   - Enrichissement avec colonnes tarifaires : `price_eur`, `price_text`, `is_free`.

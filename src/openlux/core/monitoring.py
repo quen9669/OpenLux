@@ -13,16 +13,12 @@ import httpx
 
 from openlux.config import SourceConfig
 
-
-def _get_status_icon(status: str) -> str:
-    """Renvoie la pastille de couleur correspondant à l'état de santé."""
-    icons = {
-        "GOOD": "🟢 `GOOD`",
-        "ATTENTION": "🟡 `ATTENTION`",
-        "ERROR": "🔴 `ERROR`",
-        "NOT_TESTED": "⚪ `NOT_TESTED`",
-    }
-    return icons.get(status, f"`{status}`")
+ICONS = {
+    "GOOD": "🟢 `GOOD`",
+    "ATTENTION": "🟡 `ATTENTION`",
+    "ERROR": "🔴 `ERROR`",
+    "NOT_TESTED": "⚪ `NOT_TESTED`",
+}
 
 
 def generate_status_markdown(
@@ -30,17 +26,14 @@ def generate_status_markdown(
     health_map: dict[str, dict[str, Any]],
     output_path: Path | str = "STATUS.md",
 ) -> str:
-    """Génère le fichier STATUS.md récapitulant la santé en temps réel des flux."""
-    lines = [
-        "# État de Santé des Sources OpenLux Hub",
-        "",
-        "> Ce fichier est mis à jour à chaque exécution du pipeline (`openlux run`).",
-        "",
+    hdr = (
+        "# État de Santé des Sources OpenLux Hub\n\n"
+        "> Ce fichier est mis à jour à chaque exécution du pipeline (`openlux run`).\n\n"
         "| Domaine | Source ID | État | Trust Score | Source Active | Lignes | "
-        "Dernier contrôle (UTC) | Dernière mutation (UTC) | Licence |",
-        "| :--- | :--- | :---: | :---: | :---: | :---: | :--- | :--- | :--- |",
-    ]
-
+        "Dernier contrôle (UTC) | Dernière mutation (UTC) | Licence |\n"
+        "| :--- | :--- | :---: | :---: | :---: | :---: | :--- | :--- | :--- |\n"
+    )
+    rows = []
     for sid, src in sources.items():
         info = health_map.get(sid, {})
         st = info.get("status", "NOT_TESTED")
@@ -51,24 +44,15 @@ def generate_status_markdown(
             info.get("last_checked_utc", "-"),
             info.get("last_changed_utc", "-"),
         )
-        lines.append(
-            f"| *{src.domain}* | `{sid}` | {_get_status_icon(st)} | {sc} | {act} | {r} | "
-            f"{c} | {m} | `{src.license_spdx}` |"
+        ico, lic = ICONS.get(st, f"`{st}`"), src.license_spdx
+        rows.append(
+            f"| *{src.domain}* | `{sid}` | {ico} | {sc} | {act} | {r} | {c} | {m} | `{lic}` |"
         )
-
-    lines.extend(
-        [
-            "",
-            "*Légende des états :*",
-            "- 🟢 `GOOD` (85-100) : Nominal.",
-            "- 🟡 `ATTENTION` (60-84) : Alerte mineure, source de secours active ou retard SLA.",
-            "- 🔴 `ERROR` (<60) : Erreur critique, pipeline bloqué ou schéma invalide.",
-            "- ⚪ `NOT_TESTED` : En intégration ou clé API absente en local.",
-            "",
-        ]
+    legend = (
+        "\n\n*Légende :* 🟢 `GOOD` (85-100) | 🟡 `ATTENTION` (60-84) | "
+        "🔴 `ERROR` (<60) | ⚪ `NOT_TESTED`\n"
     )
-
-    content = "\n".join(lines)
+    content = hdr + "\n".join(rows) + legend
     Path(output_path).write_text(content, encoding="utf-8")
     return content
 
@@ -80,31 +64,23 @@ def send_alert_if_needed(
     webhook_url: str | None = None,
     client: httpx.Client | None = None,
 ) -> bool:
-    """Envoie une notification webhook anti-spam (transition ERROR ou 3x ATTENTION)."""
-    # POURQUOI : Anti-spam strict : alerte uniquement sur rupture ou dégradation prolongée.
-    target_url = webhook_url or os.environ.get("OPENLUX_ALERT_WEBHOOK_URL")
-    if not target_url:
+    target = webhook_url or os.environ.get("OPENLUX_ALERT_WEBHOOK_URL")
+    if not target:
         return False
-
-    should_alert = False
-    reason = ""
-    prev_status = recent_history[-1] if recent_history else "GOOD"
-
-    if current_status == "ERROR" and prev_status != "ERROR":
-        should_alert = True
-        reason = f"Alerte critique : la source '{source_id}' est passée en ERROR."
-    elif current_status == "ATTENTION":
-        consecutive_att = sum(1 for s in recent_history[-2:] if s == "ATTENTION") + 1
-        if consecutive_att >= 3:
-            should_alert = True
-            reason = f"Alerte dégradation : la source '{source_id}' en ATTENTION depuis 3 cycles."
-
-    if should_alert:
-        payload = {"source_id": source_id, "status": current_status, "reason": reason}
-        http_client = client or httpx.Client()
+    prev = recent_history[-1] if recent_history else "GOOD"
+    alert = (current_status == "ERROR" and prev != "ERROR") or (
+        current_status == "ATTENTION"
+        and sum(1 for s in recent_history[-2:] if s == "ATTENTION") + 1 >= 3
+    )
+    if alert:
         try:
-            http_client.post(target_url, json=payload, timeout=5.0)
+            msg = f"Statut {current_status} pour {source_id}"
+            (client or httpx.Client()).post(
+                target,
+                json={"source_id": source_id, "status": current_status, "reason": msg},
+                timeout=5.0,
+            )
             return True
         except Exception:
-            return False
+            pass
     return False

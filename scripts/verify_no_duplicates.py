@@ -12,7 +12,7 @@ PRIMARY_KEYS: dict[str, str] = {
     "gold_bathing_water": "site_id, observed_at_utc",
     "gold_civic_life": "record_id",
     "gold_crossborder_traffic": "event_id, observed_at_utc",
-    "gold_culture_events": "LOWER(TRIM(title)), CAST(start_date AS DATE)",
+    "gold_culture_events": "LOWER(TRIM(title)), start_date",
     "gold_daily_life": "item_id",
     "gold_electricity_spot": "observed_at_utc, bidding_zone",
     "gold_fuel_prices": "fuel_type, observed_at_utc",

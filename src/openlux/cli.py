@@ -1,4 +1,4 @@
-"""Rôle : Interface CLI unifiée d'OpenLux Hub (run, rebuild, status, compact).
+"""Rôle : Interface CLI unifiée d'OpenLux Hub (run, rebuild, status, compact, serve, mcp).
 Entrées/Sorties : Reçoit les commandes terminal et orchestre collecte, dbt et qualité.
 Hors-scope : N'héberge pas le serveur HTTP persistant (délégué à api/main.py).
 """
@@ -27,55 +27,50 @@ from openlux.core.quality import (
 )
 
 
-def _run_dbt_command(command: str, *args: str) -> bool:
-    """Exécute une sous-commande dbt (seed, run, test) depuis la racine du projet."""
-    cmd = [
+def _run_dbt_command(cmd: str, *args: str) -> bool:
+    full = [
         sys.executable,
         "-m",
         "dbt.cli.main",
-        command,
+        cmd,
         *args,
         "--project-dir",
         "dbt_project",
         "--profiles-dir",
         "dbt_project",
     ]
-    res = subprocess.run(cmd, check=False)
-    return res.returncode == 0
+    return subprocess.run(full, check=False).returncode == 0
 
 
-def _is_due(source: SourceConfig, last_checked_iso: str | None) -> bool:
-    """Vérifie si la source a dépassé sa cadence d'exécution."""
-    if not last_checked_iso:
+_dbt = _run_dbt_command
+
+
+def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
+    if not last_iso:
         return True
     try:
-        dt = datetime.fromisoformat(last_checked_iso)
-        age = (datetime.now(UTC) - dt).total_seconds() / 60.0
-        return age >= float(source.cadence_minutes)
+        return (
+            (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
+        ) >= float(source.cadence_minutes)
     except Exception:
         return True
 
 
 def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False) -> int:
-    """Exécute la collecte, la transformation SQL dbt, les scores et le monitoring."""
-    sources = load_sources_config()
-    db_path = Path("data/openlux.duckdb")
-    db_path.parent.mkdir(parents=True, exist_ok=True)
-    con = duckdb.connect(str(db_path))
+    sources, db_p = load_sources_config(), Path("data/openlux.duckdb")
+    db_p.parent.mkdir(parents=True, exist_ok=True)
+    con = duckdb.connect(str(db_p))
     init_obs_runs_table(con)
-    latest_health = get_latest_source_health(con)
-
-    # Filtrage des sources ciblées
+    health, r_id = get_latest_source_health(con), str(uuid.uuid4())
     selected = {
-        sid: src
-        for sid, src in sources.items()
-        if (not sources_filter or sid in sources_filter)
-        and (not due_only or _is_due(src, latest_health.get(sid, {}).get("last_checked_utc")))
+        s: c
+        for s, c in sources.items()
+        if (not sources_filter or s in sources_filter)
+        and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
     }
-    run_id = str(uuid.uuid4())
 
     for sid, src in selected.items():
-        prev = latest_health.get(sid, {})
+        prev = health.get(sid, {})
         res = collect_source(
             src, last_sha256=prev.get("sha256"), last_changed_utc=prev.get("last_changed_utc")
         )
@@ -85,7 +80,7 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
         )
         record_run(
             con,
-            run_id,
+            r_id,
             sid,
             "git_v1",
             metrics,
@@ -97,113 +92,84 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
         )
         send_alert_if_needed(sid, metrics.status, [prev.get("status", "GOOD")])
 
-    # Exécution des modèles dbt et bascule Parquet Gold atomique
-    _run_dbt_command("seed", "--full-refresh")
-    _run_dbt_command("run")
-    _run_dbt_command("test")
+    _dbt("seed", "--full-refresh")
+    _dbt("run")
+    _dbt("test")
     con.close()
     export_gold_parquets()
-
-    con_read = duckdb.connect(str(db_path), read_only=True)
-    generate_status_markdown(sources, get_latest_source_health(con_read))
-    con_read.close()
+    con_r = duckdb.connect(str(db_p), read_only=True)
+    generate_status_markdown(sources, get_latest_source_health(con_r))
+    con_r.close()
     return 0
 
 
 def rebuild_pipeline() -> int:
-    """Rejoue 100 % hors-ligne les transformations dbt et la génération Gold depuis Bronze."""
-    # POURQUOI : Rejeu déterministe complet sans aucun appel HTTP externe.
-    sources = load_sources_config()
-    db_path = Path("data/openlux.duckdb")
-    _run_dbt_command("seed", "--full-refresh")
-    _run_dbt_command("run")
-    _run_dbt_command("test")
+    _dbt("seed", "--full-refresh")
+    _dbt("run")
+    _dbt("test")
     export_gold_parquets()
-
-    con = duckdb.connect(str(db_path))
+    db_p = Path("data/openlux.duckdb")
+    con = duckdb.connect(str(db_p))
     init_obs_runs_table(con)
-    generate_status_markdown(sources, get_latest_source_health(con))
+    generate_status_markdown(load_sources_config(), get_latest_source_health(con))
     con.close()
     print("Reconstruction hors-ligne Silver -> Gold terminée.")
     return 0
 
 
-def serve_api(host: str = "127.0.0.1", port: int = 8000) -> int:
-    """Démarre l'API FastAPI (uvicorn) en lecture seule sur data/gold/*.parquet."""
-    import uvicorn
-
-    uvicorn.run("openlux.api.main:app", host=host, port=port, reload=False)
-    return 0
-
-
-def run_mcp_server() -> int:
-    """Démarre le serveur FastMCP en mode stdio."""
-    from openlux.mcp.server import mcp
-
-    mcp.run()
-    return 0
-
-
 def main(argv: list[str] | None = None) -> int:
-    """Point d'entrée principal de la CLI OpenLux."""
     parser = argparse.ArgumentParser(description="OpenLux Hub CLI")
-    subparsers = parser.add_subparsers(dest="command")
+    sub = parser.add_subparsers(dest="cmd")
+    r_p = sub.add_parser("run")
+    r_p.add_argument("--sources")
+    r_p.add_argument("--due", action="store_true")
+    for c in ["rebuild", "status", "compact", "mcp"]:
+        sub.add_parser(c)
+    pub = sub.add_parser("publish")
+    pub.add_argument("--dry-run", action="store_true", default=True)
+    pub.add_argument("--live", dest="dry_run", action="store_false")
+    srv = sub.add_parser("serve", aliases=["api"])
+    srv.add_argument("--host", default="127.0.0.1")
+    srv.add_argument("--port", type=int, default=8000)
 
-    run_parser = subparsers.add_parser("run", help="Exécute la collecte et le pipeline")
-    run_parser.add_argument("--sources", help="Liste de sources séparées par virgule")
-    run_parser.add_argument(
-        "--due", action="store_true", help="Exécute uniquement les sources dues"
-    )
-
-    subparsers.add_parser("rebuild", help="Rejoue le pipeline hors-ligne depuis Bronze")
-    subparsers.add_parser("status", help="Affiche l'état des sources et regénère STATUS.md")
-    subparsers.add_parser("compact", help="Compacte les archives Bronze")
-    pub = subparsers.add_parser("publish", help="Valide et publie sur data.public.lu")
-    pub.add_argument("--dry-run", action="store_true", default=True, help="Mode simulation")
-    pub.add_argument("--live", dest="dry_run", action="store_false", help="Publication réelle")
-
-    serve_parser = subparsers.add_parser("serve", help="Démarre l'API FastAPI (uvicorn)")
-    serve_parser.add_argument("--host", default="127.0.0.1", help="Hôte d'écoute")
-    serve_parser.add_argument("--port", type=int, default=8000, help="Port d'écoute")
-
-    subparsers.add_parser("mcp", help="Démarre le serveur FastMCP (stdio)")
-
-    args = parser.parse_args(argv if argv is not None else sys.argv[1:])
-    if not args.command:
+    a = parser.parse_args(argv if argv is not None else sys.argv[1:])
+    if not a.cmd:
         parser.print_help()
         return 0
-
-    if args.command == "run":
-        srcs = [s.strip() for s in args.sources.split(",")] if args.sources else None
-        return run_pipeline(srcs, args.due)
-    if args.command == "rebuild":
+    if a.cmd == "run":
+        return run_pipeline([s.strip() for s in a.sources.split(",")] if a.sources else None, a.due)
+    if a.cmd == "rebuild":
         return rebuild_pipeline()
-    if args.command == "serve":
-        return serve_api(args.host, args.port)
-    if args.command == "mcp":
-        return run_mcp_server()
-    if args.command == "compact":
+    if a.cmd in ("serve", "api"):
+        import uvicorn
+
+        uvicorn.run("openlux.api.main:app", host=a.host, port=a.port)
+        return 0
+    if a.cmd == "mcp":
+        from openlux.mcp.server import mcp
+
+        mcp.run()
+        return 0
+    if a.cmd == "compact":
         from openlux.publish.opendata_lu import compact_bronze_archives
 
-        count = compact_bronze_archives(Path("data/bronze"))
-        print(f"Compactage terminé : {count} archives traitées.")
+        cnt = compact_bronze_archives(Path("data/bronze"))
+        print(f"Compactage terminé : {cnt} archives traitées.")
         return 0
-    if args.command == "publish":
+    if a.cmd == "publish":
         from openlux.publish.opendata_lu import publish_to_data_public_lu
 
-        res = publish_to_data_public_lu(dry_run=args.dry_run)
-        st, cnt = res["status"], res["resources_count"]
-        print(f"Publication data.public.lu ({st}) : {cnt} tables validées.")
+        st = publish_to_data_public_lu(dry_run=a.dry_run)["status"]
+        print(f"Publication data.public.lu ({st}).")
         return 0
-    if args.command == "status":
-        db_path = Path("data/openlux.duckdb")
-        con = duckdb.connect(str(db_path)) if db_path.exists() else duckdb.connect()
+    if a.cmd == "status":
+        db_p = Path("data/openlux.duckdb")
+        con = duckdb.connect(str(db_p)) if db_p.exists() else duckdb.connect()
         init_obs_runs_table(con)
         generate_status_markdown(load_sources_config(), get_latest_source_health(con))
         con.close()
         print(Path("STATUS.md").read_text(encoding="utf-8"))
         return 0
-    print(f"Commande '{args.command}' non active dans la phase actuelle.")
     return 0
 
 

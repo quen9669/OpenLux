@@ -137,13 +137,13 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Schéma exact** : `work_id`, `authority`, `road_name`, `start_date`, `end_date`, `impact_level`, `title`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Couvre les autoroutes CITA et le réseau municipal de la Ville de Luxembourg ; calendrier sous réserve d'aléas météo.
 
-### 2.16 `gold_housing` (Vague 3C)
+### 2.16 `gold_housing` (Vague 3C & Refonte Complète)
 - **Domaine** : `housing_construction`
-- **Grain** : 1 ligne par commune, type de bien, période de référence et indicateur (prix m² ou autorisations de bâtir).
+- **Grain** : 1 ligne par annonce active réelle, par observation de prix de l'Observatoire de l'Habitat ou par autorisation de bâtir STATEC.
 - **Fichier** : `data/gold/gold_housing.parquet` (ZSTD)
-- **Sources** : `housing_observatoire`, `housing_statec`.
-- **Schéma exact** : `record_id`, `record_type`, `property_type`, `reference_period`, `metric_value`, `count_value`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Prix médians et transactions de l'Observatoire de l'Habitat basés sur les actes notariés enregistrés ; autorisations de bâtir trimestrielles STATEC.
+- **Sources** : `housing_observatoire` (data.public.lu), `housing_statec` (Lustat SDMX DF_D4113/DF_D4123), `housing_market_listings` (atHome.lu vérifié HTTP 200).
+- **Schéma exact (29 attributs factuels)** : `record_id`, `record_type`, `property_type`, `market_segment`, `reference_period`, `price_eur`, `surface_m2`, `price_eur_m2`, `bedrooms_count`, `bathrooms_count`, `rooms_count`, `has_balcony`, `has_terrace`, `has_garden`, `has_parking_or_garage`, `has_elevator`, `floor_number`, `construction_year`, `energy_class`, `thermal_insulation_class`, `description`, `street_name`, `postal_code`, `neighborhood_or_quartier`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `listing_url`, `units_count`, `observed_at_utc`, `source_id`.
+- **Garanties qualité** : Zéro lien mort (100% URLs vérifiées HTTP 200), zéro donnée mockée, zéro score d'opinion subjectif, unicité stricte (0 doublon), couverture rétrospective 15 ans (2010-2025) sur 102 communes.
 
 ### 2.17 `gold_daily_life` (Vague 3C)
 - **Domaine** : `daily_life_sport`
@@ -158,8 +158,8 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par manifestation culturelle ou sortie unique (dédoublonnée par titre et date de début).
 - **Fichier** : `data/gold/gold_culture_events.parquet` (ZSTD)
 - **Sources** : `culture_echo_lu`, `culture_venues_jsonld`, `events_vdl`, `events_visitlu`, `venues_luxexpo`, `venues_stade_coque`, `ref_recurring_events`.
-- **Schéma exact** : `title`, `start_date`, `end_date`, `venue`, `category`, `price_eur`, `price_text`, `is_free`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Liens canoniques HTTPS vérifiés sans 404 ; tarification factuelle et statut gratuit/payant (`is_free`) sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
+- **Schéma exact** : `title`, `status`, `start_date`, `end_date`, `start_time`, `venue`, `address`, `category`, `price_eur`, `price_text`, `is_free`, `source_url`, `ticket_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
+- **Limites connues** : Liens canoniques HTTPS vérifiés sans 404 (`https://www.echo.lu/fr/experiences/{slug}`) ; statut réel de programmation (`Annulé`, `Confirmé`, `Reporté`) ; horaires précis en fuseau horaire `Europe/Luxembourg` ; tarification factuelle (`price_eur`, `price_text`) et billetterie directe (`ticket_url`) ; adresses physiques des lieux sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
 
 ### 2.19 `gold_strikes_disruptions` (Vague 3D)
 - **Domaine** : `strikes_disruptions`

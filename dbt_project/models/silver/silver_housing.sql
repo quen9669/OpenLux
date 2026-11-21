@@ -1,5 +1,10 @@
 -- Silver: Consolidation factuelle des annonces de marché, statistiques de prix et autorisations de bâtir
-WITH obs AS (
+WITH obs_raw AS (
+    SELECT *
+    FROM {{ ref('stg_housing_observatoire') }}
+    WHERE raw_commune_name != 'Moyenne nationale'
+),
+obs AS (
     SELECT
         raw_commune_name || '_' || property_type || '_' || reference_period AS record_id,
         'STATISTIC_OBSERVATOIRE' AS record_type,
@@ -30,9 +35,27 @@ WITH obs AS (
         NULL::TIMESTAMP AS observed_at_utc,
         NULL::DOUBLE AS lat,
         NULL::DOUBLE AS lon,
-        raw_commune_name,
+        CASE
+            WHEN raw_commune_name IN ('Bascharage', 'Clémency', 'Kaerjeng') THEN 'Käerjeng'
+            WHEN raw_commune_name IN ('Boevange-sur-Attert', 'Tuntange') THEN 'Helperknapp'
+            WHEN raw_commune_name IN ('Bous', 'Waldbredimus') THEN 'Bous-Waldbredimus'
+            WHEN raw_commune_name IN ('Burmerange', 'Wellenstein') THEN 'Schengen'
+            WHEN raw_commune_name IN ('Ermsdorf', 'Medernach') THEN 'Vallée de l''Ernz'
+            WHEN raw_commune_name = 'Eschweiler' THEN 'Wiltz'
+            WHEN raw_commune_name IN ('Grosbous', 'Wahl', 'Grosbus-Wal', 'Grosbous-Wal') THEN 'Groussbus-Wal'
+            WHEN raw_commune_name IN ('Heiderscheid', 'Neunhausen') THEN 'Esch-sur-Sûre'
+            WHEN raw_commune_name IN ('Heinerscheid', 'Munshausen') THEN 'Clervaux'
+            WHEN raw_commune_name IN ('Hobscheid', 'Septfontaines') THEN 'Habscht'
+            WHEN raw_commune_name IN ('Hoscheid', 'Hosingen') THEN 'Parc Hosingen'
+            WHEN raw_commune_name IN ('Mompach', 'Rosport') THEN 'Rosport-Mompach'
+            WHEN raw_commune_name = 'Petange' THEN 'Pétange'
+            WHEN raw_commune_name = 'Erpeldange' THEN 'Erpeldange-sur-Sûre'
+            WHEN raw_commune_name = 'Luxembourg-Ville' THEN 'Luxembourg'
+            ELSE raw_commune_name
+        END AS raw_commune_name,
+        NULL::VARCHAR AS canton_override,
         source_id
-    FROM {{ ref('stg_housing_observatoire') }}
+    FROM obs_raw
 ),
 statec AS (
     SELECT
@@ -56,16 +79,17 @@ statec AS (
         NULL::INTEGER AS construction_year,
         NULL::VARCHAR AS energy_class,
         NULL::VARCHAR AS thermal_insulation_class,
-        'Statistique des autorisations de bâtir délivrées par la commune'::VARCHAR AS description,
+        'Statistique des autorisations de bâtir délivrées (STATEC)'::VARCHAR AS description,
         NULL::VARCHAR AS street_name,
         NULL::VARCHAR AS postal_code,
-        'Commune-Wide'::VARCHAR AS neighborhood_or_quartier,
+        canton_name AS neighborhood_or_quartier,
         NULL::VARCHAR AS listing_url,
         units_authorized AS units_count,
         TRY_CAST(raw_observed_at AS TIMESTAMP) AS observed_at_utc,
-        lat,
-        lon,
+        NULL::DOUBLE AS lat,
+        NULL::DOUBLE AS lon,
         raw_commune_name,
+        canton_name AS canton_override,
         source_id
     FROM {{ ref('stg_housing_statec') }}
 ),
@@ -101,6 +125,7 @@ market_listings AS (
         lat,
         lon,
         commune_name AS raw_commune_name,
+        canton AS canton_override,
         source_id
     FROM {{ ref('ref_housing_market_deals') }}
 ),
@@ -142,7 +167,7 @@ SELECT
     u.neighborhood_or_quartier,
     COALESCE(c.code_lau, u.raw_commune_name) AS commune_lau,
     COALESCE(c.commune_name, u.raw_commune_name) AS commune_name,
-    c.canton,
+    COALESCE(c.canton, u.canton_override, 'Luxembourg') AS canton,
     COALESCE(u.lat, c.lat) AS lat,
     COALESCE(u.lon, c.lon) AS lon,
     u.listing_url,

@@ -17,107 +17,78 @@ from openlux.core.quality import get_latest_source_health
 
 
 def export_gold_parquets(
-    duckdb_path: Path | str = "data/openlux.duckdb",
-    gold_dir: Path | str = "data/gold",
+    duckdb_path: Path | str = "data/openlux.duckdb", gold_dir: Path | str = "data/gold"
 ) -> list[str]:
     """Exporte atomiquement chaque table Gold en Parquet ZSTD via la zone temporaire .tmp."""
-    # POURQUOI : Garantie d'atomicité absolue via os.replace() selon les règles AGENTS.md.
-    db_file = Path(duckdb_path)
-    if not db_file.exists():
+    if not Path(duckdb_path).exists():
         return []
-
-    target_dir = Path(gold_dir)
-    tmp_dir = target_dir / ".tmp"
-    tmp_dir.mkdir(parents=True, exist_ok=True)
-
-    con = duckdb.connect(str(db_file), read_only=True)
+    target, tmp = Path(gold_dir), Path(gold_dir) / ".tmp"
+    tmp.mkdir(parents=True, exist_ok=True)
+    con = duckdb.connect(str(duckdb_path), read_only=True)
     try:
-        tables = [
-            row[0]
-            for row in con.execute("""
-                SELECT table_name FROM information_schema.tables
-                WHERE table_name LIKE 'gold_%' AND table_schema = 'main'
-            """).fetchall()
-        ]
-        exported: list[str] = []
+        sql = (
+            "SELECT table_name FROM information_schema.tables "
+            "WHERE table_name LIKE 'gold_%' AND table_schema = 'main'"
+        )
+        tables = [r[0] for r in con.execute(sql).fetchall()]
         for tbl in tables:
-            tmp_path = tmp_dir / f"{tbl}.parquet"
-            final_path = target_dir / f"{tbl}.parquet"
-            con.execute(f"COPY {tbl} TO '{tmp_path.as_posix()}' (FORMAT PARQUET, CODEC 'ZSTD')")
-            if final_path.exists():
-                final_path.unlink()
-            os.replace(tmp_path, final_path)
-            exported.append(tbl)
-        return exported
+            t_path, f_path = tmp / f"{tbl}.parquet", target / f"{tbl}.parquet"
+            con.execute(f"COPY {tbl} TO '{t_path.as_posix()}' (FORMAT PARQUET, CODEC 'ZSTD')")
+            if f_path.exists():
+                f_path.unlink()
+            os.replace(t_path, f_path)
+        return tables
     finally:
         con.close()
 
 
 def list_gold_datasets(gold_dir: Path | str = "data/gold") -> list[str]:
-    """Renvoie la liste des tables Gold disponibles sur disque en format Parquet."""
-    directory = Path(gold_dir)
-    return [p.stem for p in directory.glob("gold_*.parquet")] if directory.exists() else []
+    d = Path(gold_dir)
+    return [p.stem for p in d.glob("gold_*.parquet")] if d.exists() else []
 
 
 def get_gold_table_path(dataset: str, gold_dir: Path | str = "data/gold") -> Path | None:
-    """Résout et valide strictement un dataset contre la whitelist des tables Gold existantes."""
-    # POURQUOI : Défense en profondeur contre injection SQL et path traversal.
-    gdir = Path(gold_dir)
-    if not gdir.exists() or any(c in dataset for c in ("/", "\\", ";", "'", '"', "..")):
+    d = Path(gold_dir)
+    if not d.exists() or any(c in dataset for c in ("/", "\\", ";", "'", '"', "..")):
         return None
-    valid = {p.stem.lower(): p for p in gdir.glob("gold_*.parquet")}
+    valid = {p.stem.lower(): p for p in d.glob("gold_*.parquet")}
     norm = dataset.strip().lower()
-    if norm in valid:
-        return valid[norm]
-    if f"gold_{norm}" in valid:
-        return valid[f"gold_{norm}"]
-    for stem, path in valid.items():
-        if norm in stem:
-            return path
-    return None
+    return (
+        valid.get(norm)
+        or valid.get(f"gold_{norm}")
+        or next((p for s, p in valid.items() if norm in s), None)
+    )
 
 
 def get_gold_metadata(
-    parquet_path: Path,
-    row_count: int,
-    duckdb_path: Path | str = "data/openlux.duckdb",
+    parquet_path: Path, row_count: int, duckdb_path: Path | str = "data/openlux.duckdb"
 ) -> dict[str, Any]:
-    """Construit l'enveloppe standard _meta (traçabilité MLOps, SLA et licence)."""
-    # POURQUOI : Respect strict du contrat 5.3 pour l'API et les outils FastMCP.
-    con_mem = duckdb.connect(":memory:")
-    path_s = parquet_path.as_posix()
-    cols = [
-        c[0] for c in con_mem.execute("DESCRIBE SELECT * FROM read_parquet(?)", [path_s]).fetchall()
-    ]
-    sid = None
-    if "source_id" in cols:
-        res = con_mem.execute(
-            "SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [path_s]
-        ).fetchall()
-        sid = res[0][0] if res and res[0][0] else None
-    con_mem.close()
-
-    sources = load_sources_config()
-    src = sources.get(sid) if sid else None
+    con, p_s = duckdb.connect(":memory:"), parquet_path.as_posix()
+    cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()]
+    sid = (
+        con.execute("SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p_s]).fetchone()
+        if "source_id" in cols
+        else None
+    )
+    con.close()
+    sid = sid[0] if sid and sid[0] else None
+    src = load_sources_config().get(sid) if sid else None
     health: dict[str, Any] = {}
-    db_file = Path(duckdb_path)
-    if db_file.exists():
+    if Path(duckdb_path).exists():
         try:
-            c = duckdb.connect(str(db_file), read_only=True)
-            health = get_latest_source_health(c).get(sid or "", {})
-            c.close()
+            with duckdb.connect(str(duckdb_path), read_only=True) as c:
+                health = get_latest_source_health(c).get(sid or "", {})
         except Exception:
             pass
 
     last_chk = health.get("last_checked_utc") or datetime.now(UTC).isoformat()
-    status = health.get("status", "GOOD")
-    is_stale = False
+    status, is_stale = health.get("status", "GOOD"), False
     if last_chk and src:
         try:
             age = (datetime.now(UTC) - datetime.fromisoformat(last_chk)).total_seconds() / 60.0
             is_stale = (age > float(src.sla_minutes)) or (status == "ERROR")
         except Exception:
-            is_stale = False
+            pass
 
     return {
         "dataset": parquet_path.stem,
@@ -148,34 +119,23 @@ def query_gold_table(
     limit: int | None = 100,
     offset: int = 0,
 ) -> tuple[duckdb.DuckDBPyConnection, list[str], list[dict[str, Any]], int]:
-    """Exécute une requête paramétrée sécurisée (?) avec DuckDB in-memory et spatial."""
-    con = duckdb.connect(":memory:")
+    con, p_s = duckdb.connect(":memory:"), parquet_path.as_posix()
     try:
         con.execute("LOAD spatial;")
     except Exception:
         pass
-    path_s = parquet_path.as_posix()
-    cols = [
-        c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [path_s]).fetchall()
-    ]
-    clauses: list[str] = []
-    params: list[Any] = [path_s]
+    cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()]
+    clauses, params = [], [p_s]
 
     if commune and "commune_lau" in cols:
         clauses.append("LOWER(commune_lau) LIKE LOWER(?)")
         params.append(f"%{commune}%")
-    if date_from:
-        dcol = "observed_at_utc" if "observed_at_utc" in cols else "holiday_date"
-        clauses.append(
-            f"{dcol} >= TRY_CAST(? AS TIMESTAMP)" if dcol == "observed_at_utc" else f"{dcol} >= ?"
-        )
-        params.append(date_from)
-    if date_to:
-        dcol = "observed_at_utc" if "observed_at_utc" in cols else "holiday_date"
-        clauses.append(
-            f"{dcol} <= TRY_CAST(? AS TIMESTAMP)" if dcol == "observed_at_utc" else f"{dcol} <= ?"
-        )
-        params.append(date_to)
+    for d, op in [(date_from, ">="), (date_to, "<=")]:
+        if d:
+            dcol = "observed_at_utc" if "observed_at_utc" in cols else "holiday_date"
+            cast = "TRY_CAST(? AS TIMESTAMP)" if dcol == "observed_at_utc" else "?"
+            clauses.append(f"{dcol} {op} {cast}")
+            params.append(d)
     if lat is not None and lon is not None and radius_km is not None and "lat" in cols:
         clauses.append(
             "lat IS NOT NULL AND lon IS NOT NULL AND "
@@ -183,10 +143,9 @@ def query_gold_table(
         )
         params.extend([float(lon), float(lat), float(radius_km) * 1000.0])
 
-    where_str = f" WHERE {' AND '.join(clauses)}" if clauses else ""
-    total = con.execute(f"SELECT count(*) FROM read_parquet(?){where_str}", params).fetchone()[0]
-
-    data_sql = f"SELECT * FROM read_parquet(?){where_str}"
+    where = f" WHERE {' AND '.join(clauses)}" if clauses else ""
+    total = con.execute(f"SELECT count(*) FROM read_parquet(?){where}", params).fetchone()[0]
+    data_sql = f"SELECT * FROM read_parquet(?){where}"
     data_params = list(params)
     if limit is not None:
         data_sql += " LIMIT ? OFFSET ?"

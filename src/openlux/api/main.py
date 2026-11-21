@@ -14,7 +14,8 @@ from typing import Any
 
 import duckdb
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse
+from starlette.staticfiles import StaticFiles
 
 from openlux.config import load_sources_config
 from openlux.core.gold import (
@@ -34,19 +35,21 @@ app = FastAPI(
 )
 
 
+def _get_path_or_404(dataset: str) -> Path:
+    if not (path := get_gold_table_path(dataset)):
+        raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé ou inconnu.")
+    return path
+
+
 @app.get("/v1/status")
 def get_status() -> dict[str, Any]:
-    """Retourne la santé globale et le statut de chaque source configurée."""
-    sources = load_sources_config()
-    db = Path("data/openlux.duckdb")
-    try:
-        con = duckdb.connect(str(db), read_only=True) if db.exists() else None
-    except duckdb.IOException:
-        con = None
-    health = get_latest_source_health(con) if con else {}
-    if con:
-        con.close()
-
+    sources, db, health = load_sources_config(), Path("data/openlux.duckdb"), {}
+    if db.exists():
+        try:
+            with duckdb.connect(str(db), read_only=True) as con:
+                health = get_latest_source_health(con)
+        except Exception:
+            pass
     items = [
         {
             "source_id": s,
@@ -59,40 +62,39 @@ def get_status() -> dict[str, Any]:
         }
         for s, src in sources.items()
     ]
-    st = [i["status"] for i in items]
+    st = {i["status"] for i in items}
     overall = "DEGRADED" if "ERROR" in st else ("ATTENTION" if "ATTENTION" in st else "HEALTHY")
     return {"status": overall, "checked_at_utc": datetime.now(UTC).isoformat(), "sources": items}
 
 
 @app.get("/v1/datasets")
 def list_datasets() -> dict[str, Any]:
-    """Catalogue dynamique des tables Gold disponibles."""
     sources, res = load_sources_config(), []
     for name in list_gold_datasets():
-        path = Path("data/gold") / f"{name}.parquet"
-        con, p = duckdb.connect(":memory:"), path.as_posix()
+        p = (Path("data/gold") / f"{name}.parquet").as_posix()
+        con = duckdb.connect(":memory:")
         cols = [
             {"name": c[0], "type": c[1]}
             for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p]).fetchall()
         ]
         cnt = con.execute("SELECT count(*) FROM read_parquet(?)", [p]).fetchone()[0]
         s_id = (
-            con.execute("SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p]).fetchall()
+            con.execute("SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p]).fetchone()
             if any(c["name"] == "source_id" for c in cols)
-            else []
+            else None
         )
         con.close()
-        src = sources.get(s_id[0][0]) if (s_id and s_id[0][0]) else None
+        src = sources.get(s_id[0]) if s_id else None
         res.append(
             {
                 "dataset": name,
-                "description": src.description if src else "",
-                "semantic_summary": src.semantic_summary if src else "",
-                "known_limitations": src.known_limitations if src else "",
-                "license_spdx": src.license_spdx if src else "CC0-1.0",
-                "commercial_use_safe": src.commercial_use_safe if src else True,
                 "row_count": cnt,
                 "columns": cols,
+                "description": getattr(src, "description", ""),
+                "semantic_summary": getattr(src, "semantic_summary", ""),
+                "known_limitations": getattr(src, "known_limitations", ""),
+                "license_spdx": getattr(src, "license_spdx", "CC0-1.0"),
+                "commercial_use_safe": getattr(src, "commercial_use_safe", True),
             }
         )
     return {"datasets": res}
@@ -110,30 +112,23 @@ def get_data(
     limit: int = 100,
     offset: int = 0,
 ) -> dict[str, Any]:
-    """Requête paramétrée sécurisée sur un dataset Gold avec filtrage et enveloppe _meta."""
-    # POURQUOI : Validation stricte contre la whitelist Gold pour prévenir l'injection SQL.
-    if not (path := get_gold_table_path(dataset)):
-        raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé ou inconnu.")
+    path = _get_path_or_404(dataset)
     p = (path, commune, date_from, date_to, lat, lon, radius_km)
     con, _, rows, total = query_gold_table(*p, max(1, min(limit, 1000)), max(0, offset))
     con.close()
-    meta = get_gold_metadata(path, row_count=len(rows))
-    meta["total_matched"] = total
-    return {"_meta": meta, "data": rows}
+    return {
+        "_meta": get_gold_metadata(path, row_count=len(rows)) | {"total_matched": total},
+        "data": rows,
+    }
 
 
 @app.get("/v1/exports/{dataset}.parquet")
 def export_parquet(dataset: str) -> FileResponse:
-    """Téléchargement direct du fichier Parquet ZSTD officiel."""
-    if not (path := get_gold_table_path(dataset)):
-        raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé.")
-    return FileResponse(
-        path, media_type="application/vnd.apache.parquet", filename=f"{path.stem}.parquet"
-    )
+    p = _get_path_or_404(dataset)
+    return FileResponse(p, media_type="application/vnd.apache.parquet", filename=p.name)
 
 
 def _stream_export(path: Path, is_geojson: bool):
-    # POURQUOI : Streaming à la volée depuis DuckDB in-memory sans copie disque.
     con, p = duckdb.connect(":memory:"), path.as_posix()
     cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p]).fetchall()]
     cur = con.execute("SELECT * FROM read_parquet(?)", [p])
@@ -149,17 +144,16 @@ def _stream_export(path: Path, is_geojson: bool):
                 writer.writerow([x.isoformat() if hasattr(x, "isoformat") else x for x in r])
             yield buf.getvalue()
     else:
-        lat_i = cols.index("lat") if "lat" in cols else -1
-        lon_i = cols.index("lon") if "lon" in cols else -1
+        lat_i, lon_i = (
+            cols.index("lat") if "lat" in cols else -1,
+            cols.index("lon") if "lon" in cols else -1,
+        )
         yield '{"type": "FeatureCollection", "features": [\n'
         first = True
         while chunk := cur.fetchmany(500):
             for r in chunk:
-                geom = (
-                    {"type": "Point", "coordinates": [r[lon_i], r[lat_i]]}
-                    if (lat_i >= 0 and lon_i >= 0 and r[lat_i] is not None and r[lon_i] is not None)
-                    else None
-                )
+                valid = lat_i >= 0 and lon_i >= 0 and r[lat_i] is not None and r[lon_i] is not None
+                geom = {"type": "Point", "coordinates": [r[lon_i], r[lat_i]]} if valid else None
                 props = {
                     cols[i]: (r[i].isoformat() if hasattr(r[i], "isoformat") else r[i])
                     for i in range(len(cols))
@@ -174,23 +168,23 @@ def _stream_export(path: Path, is_geojson: bool):
 
 @app.get("/v1/exports/{dataset}.csv")
 def export_csv(dataset: str) -> StreamingResponse:
-    """Export CSV streamé à la volée depuis DuckDB."""
-    if not (path := get_gold_table_path(dataset)):
-        raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé.")
-    return StreamingResponse(
-        _stream_export(path, False),
-        media_type="text/csv",
-        headers={"Content-Disposition": f'attachment; filename="{path.stem}.csv"'},
-    )
+    p = _get_path_or_404(dataset)
+    h = {"Content-Disposition": f'attachment; filename="{p.stem}.csv"'}
+    return StreamingResponse(_stream_export(p, False), media_type="text/csv", headers=h)
 
 
 @app.get("/v1/exports/{dataset}.geojson")
 def export_geojson(dataset: str) -> StreamingResponse:
-    """Export GeoJSON streamé à la volée depuis DuckDB."""
-    if not (path := get_gold_table_path(dataset)):
-        raise HTTPException(status_code=404, detail=f"Dataset '{dataset}' non autorisé.")
-    return StreamingResponse(
-        _stream_export(path, True),
-        media_type="application/geo+json",
-        headers={"Content-Disposition": f'attachment; filename="{path.stem}.geojson"'},
-    )
+    p = _get_path_or_404(dataset)
+    h = {"Content-Disposition": f'attachment; filename="{p.stem}.geojson"'}
+    return StreamingResponse(_stream_export(p, True), media_type="application/geo+json", headers=h)
+
+
+@app.get("/v2")
+def v2_portal() -> RedirectResponse:
+    return RedirectResponse(url="/v2/")
+
+
+for p, r, n in [("web_v2", "/v2", "web_v2"), ("web", "/", "web")]:
+    if Path(p).exists():
+        app.mount(r, StaticFiles(directory=p, html=True), name=n)

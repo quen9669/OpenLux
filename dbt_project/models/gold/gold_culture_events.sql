@@ -1,14 +1,18 @@
 -- Gold: Data Mart final des événements culturels, spectacles et salons
 SELECT
     title,
+    status,
     start_date,
     end_date,
+    start_time,
     venue,
+    address,
     category,
     price_eur,
     price_text,
     is_free,
     source_url,
+    ticket_url,
     commune_lau,
     canton,
     lat,

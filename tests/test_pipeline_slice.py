@@ -26,7 +26,7 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "metdata/weather" in url_str or "open-meteo.com/v1/forecast" in url_str:
         raw = Path("tests/fixtures/meteo_lux_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "datex2" in url_str:
+    if "situationrecord" in url_str or "datex2" in url_str:
         raw = Path("tests/fixtures/cita_datex2_sample.xml").read_bytes()
         return httpx.Response(200, content=raw)
     if "jours-feries" in url_str:
@@ -74,7 +74,12 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "veloh-live" in url_str or "jcdecaux" in url_str:
         raw = Path("tests/fixtures/veloh_stations_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "parkings-vdl" in url_str or "parkings/occupancy" in url_str:
+    if (
+        "parkings-vdl" in url_str
+        or "parkings/occupancy" in url_str
+        or "feed.vdl.lu" in url_str
+        or "GEOJSON/FeatureServer/5" in url_str
+    ):
         raw = Path("tests/fixtures/parkings_vdl_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "chargy-live" in url_str or "chargy" in url_str:
@@ -86,16 +91,39 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "noise-zones" in url_str or "strategic_noise_maps" in url_str:
         raw = Path("tests/fixtures/noise_zones_lu_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "roadworks-vdl" in url_str or "vdl.lu/v1/travaux" in url_str:
+    if "TRAFIC_INFO/FeatureServer/0" in url_str:
+        raw = (
+            b'[{"event_id": "VDL_TR_01", "road_name": "N3", '
+            b'"situation_type": "traffic", "start_time": "2026-11-21T10:00:00Z"}]'
+        )
+        return httpx.Response(200, content=raw)
+    if (
+        "roadworks-vdl" in url_str
+        or "vdl.lu/v1/travaux" in url_str
+        or "FeatureServer/1" in url_str
+        or "FeatureServer/5" in url_str
+    ):
         raw = Path("tests/fixtures/roadworks_vdl_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "roadworks-cita" in url_str or "cita.lu" in url_str or "roadworks" in url_str:
+    if "roadworks-cita" in url_str or "chantier" in url_str:
         raw = Path("tests/fixtures/roadworks_cita_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "housing-observatoire" in url_str or "observatoire_prix" in url_str:
+    if (
+        "housing-observatoire" in url_str
+        or "observatoire_prix" in url_str
+        or "observatoire-habitat" in url_str
+        or "vente-appartement" in url_str
+        or "vente-maison" in url_str
+        or "prix-annonces" in url_str
+    ):
         raw = Path("tests/fixtures/housing_observatoire_sample.csv").read_bytes()
         return httpx.Response(200, content=raw)
-    if "housing-statec" in url_str or "data/permits" in url_str:
+    if (
+        "housing-statec" in url_str
+        or "data/permits" in url_str
+        or "DF_D4113" in url_str
+        or "lustat.statec.lu" in url_str
+    ):
         raw = Path("tests/fixtures/housing_statec_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "pistes-cyclables" in url_str or "pistes_cyclables" in url_str:
@@ -107,7 +135,12 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "centres-recyclage" in url_str or "recycling_centers" in url_str:
         raw = Path("tests/fixtures/recycling_centers_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "echo.lu" in url_str or "culture.lu" in url_str or "culture-echo-lu" in url_str:
+    if (
+        "echo.lu" in url_str
+        or "culture.lu" in url_str
+        or "culture-echo-lu" in url_str
+        or "algolia" in url_str
+    ):
         raw = Path("tests/fixtures/culture_echo_lu_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if "culture-venues" in url_str or "rockhal" in url_str:
