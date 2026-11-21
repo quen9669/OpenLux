@@ -58,9 +58,9 @@ air_quality_national AS (
 holidays_daily AS (
     SELECT
         CAST(holiday_date AS DATE) AS context_date,
-        BOOL_OR(is_legal_holiday) AS is_legal_holiday,
+        BOOL_OR(is_legal_holiday AND country_code = 'LU') AS is_legal_holiday,
         BOOL_OR(is_school_vacation) AS is_school_vacation,
-        MAX(holiday_name_fr) AS holiday_name
+        MAX(CASE WHEN country_code = 'LU' THEN holiday_name_fr END) AS holiday_name
     FROM {{ ref('gold_holidays') }}
     GROUP BY 1
 ),

@@ -4,10 +4,13 @@
     "title": "Marché de Noël - Winterlights",
     "start_date": "2026-11-20T11:00:00Z",
     "end_date": "2026-12-24T22:00:00Z",
-    "venue": "Place d'Armes",
+    "venue": "Place d'Armes & Place de la Constitution",
     "city": "Luxembourg",
     "category": "Market",
-    "source_url": "https://vdl.lu/fr/agenda/winterlights-2026"
+    "price_eur": 0.0,
+    "price_text": "Entrée libre",
+    "is_free": true,
+    "source_url": "https://www.vdl.lu/fr/visiter/art-et-culture/fetes-et-traditions/winterlights"
   },
   {
     "event_id": "EVT_VDL_GLACIS_02",
@@ -17,6 +20,35 @@
     "venue": "Champ du Glacis",
     "city": "Luxembourg",
     "category": "Market",
-    "source_url": "https://vdl.lu/fr/agenda/glacismaart-nov-2026"
+    "price_eur": 0.0,
+    "price_text": "Entrée libre",
+    "is_free": true,
+    "source_url": "https://www.vdl.lu/fr/visiter/shopping/marches-et-brocantes"
+  },
+  {
+    "event_id": "EVT_VDL_CINE_03",
+    "title": "Cinémathèque de la Ville de Luxembourg",
+    "start_date": "2026-11-25T18:30:00Z",
+    "end_date": "2026-11-25T21:00:00Z",
+    "venue": "Cinémathèque Place du Théâtre",
+    "city": "Luxembourg",
+    "category": "Cinema",
+    "price_eur": 3.70,
+    "price_text": "3.70 €",
+    "is_free": false,
+    "source_url": "https://www.vdl.lu/fr/visiter/art-et-culture/cinema/la-cinematheque"
+  },
+  {
+    "event_id": "EVT_VDL_KNUEDLER_04",
+    "title": "Marché bi-hebdomadaire Place Guillaume II",
+    "start_date": "2026-11-28T07:30:00Z",
+    "end_date": "2026-11-28T13:30:00Z",
+    "venue": "Place Guillaume II",
+    "city": "Luxembourg",
+    "category": "Market",
+    "price_eur": 0.0,
+    "price_text": "Entrée libre",
+    "is_free": true,
+    "source_url": "https://www.vdl.lu/fr/visiter/shopping/marches-et-brocantes"
   }
 ]

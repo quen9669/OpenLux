@@ -21,7 +21,18 @@ _PHONE_REGEX = re.compile(
 
 _EDITORIAL_FIELDS = frozenset({"body", "description", "summary", "content"})
 _FACTUAL_WHITELIST = frozenset(
-    {"title", "start_date", "end_date", "venue", "city", "category", "source_url"}
+    {
+        "title",
+        "start_date",
+        "end_date",
+        "venue",
+        "city",
+        "category",
+        "source_url",
+        "price_eur",
+        "price_text",
+        "is_free",
+    }
 )
 
 

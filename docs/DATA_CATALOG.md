@@ -35,11 +35,11 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 
 ### 2.3 `gold_holidays`
 - **Domaine** : `holidays_vacations`
-- **Grain** : 1 ligne par date de jour férié officiel ou vacances scolaires.
+- **Grain** : 1 ligne par date de jour férié officiel ou tradition de la Grande Région (2025-2027).
 - **Fichier** : `data/gold/gold_holidays.parquet` (ZSTD)
-- **Sources** : `holidays_lu` (`data.public.lu`).
-- **Schéma exact** : `holiday_date`, `observed_at_utc`, `holiday_name_fr`, `holiday_name_de`, `holiday_name_lb`, `is_legal_holiday`, `is_school_vacation`, `commune_lau`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Valable pour le calendrier légal officiel du Grand-Duché de Luxembourg.
+- **Sources** : `holidays_lu` (`data.public.lu`), `ref_crossborder_holidays` (LU, FR, BE, DE, Lorraine).
+- **Schéma exact** : `holiday_date`, `observed_at_utc`, `country_code`, `country_name`, `region_code`, `holiday_name`, `holiday_name_fr`, `holiday_name_de`, `holiday_name_lb`, `is_legal_holiday`, `is_customary_tradition`, `is_school_vacation`, `commune_lau`, `lat`, `lon`, `source_id`.
+- **Limites connues** : Calendrier légal et fêtes coutumières (Saint-Nicolas en Lorraine, Vendredi Saint en Moselle et Sarre, Fête-Dieu, etc.).
 
 ### 2.4 `gold_air_quality` (Vague 3A)
 - **Domaine** : `air_quality`
@@ -78,8 +78,8 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Grain** : 1 ligne par heure d'échéance Day-Ahead.
 - **Fichier** : `data/gold/gold_electricity_spot.parquet` (ZSTD)
 - **Sources** : `electricity_spot_delu` (ENTSO-E / EPEX SPOT DE-LU).
-- **Schéma exact** : `observed_at_utc`, `price_eur_per_mwh`, `bidding_zone`, `source_id`.
-- **Limites connues** : Prix spot de gros conjointe Allemagne-Luxembourg hors réseau et taxes.
+- **Schéma exact** : `observed_at_utc`, `price_eur_per_mwh`, `bidding_zone`, `data_origin`, `is_imputed`, `source_id`.
+- **Limites connues** : Prix spot de gros conjointe Allemagne-Luxembourg ; `data_origin` indique si la donnée est physique réelle (`REEL`) ou interpolée (`IMPUTE`).
 
 ### 2.9 `gold_radioactivity` (Vague 3A)
 - **Domaine** : `energy_climate`
@@ -157,9 +157,9 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Domaine** : `concerts_culture`, `local_events_markets`, `major_venues`
 - **Grain** : 1 ligne par manifestation culturelle ou sortie unique (dédoublonnée par titre et date de début).
 - **Fichier** : `data/gold/gold_culture_events.parquet` (ZSTD)
-- **Sources** : `culture_echo_lu`, `culture_venues_jsonld`, `events_vdl`, `events_visitlu`, `venues_luxexpo`, `venues_stade_coque`.
-- **Schéma exact** : `title`, `start_date`, `end_date`, `venue`, `category`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Extraction factuelle stricte schema.org/Event sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
+- **Sources** : `culture_echo_lu`, `culture_venues_jsonld`, `events_vdl`, `events_visitlu`, `venues_luxexpo`, `venues_stade_coque`, `ref_recurring_events`.
+- **Schéma exact** : `title`, `start_date`, `end_date`, `venue`, `category`, `price_eur`, `price_text`, `is_free`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
+- **Limites connues** : Liens canoniques HTTPS vérifiés sans 404 ; tarification factuelle et statut gratuit/payant (`is_free`) sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
 
 ### 2.19 `gold_strikes_disruptions` (Vague 3D)
 - **Domaine** : `strikes_disruptions`
