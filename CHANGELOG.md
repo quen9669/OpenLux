@@ -6,12 +6,30 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+### Fixed
+- **Intégration API JCDecaux v3 & Référentiel Territorial Réel Vel'oH (`gold_mobility_veloh`)** :
+  - **Résolution Définitive de l'Anomalie "14 vélos disponibles"** : Remplacement de l'ancien catalogue statique sans données dynamiques par l'API officielle temps réel JCDecaux v3 (`/vls/v3/stations?contract=luxembourg&apiKey=...`). Le parc réel compte plus de 850 vélos disponibles (dont > 840 électriques) répartis sur 141 stations actives.
+  - **Collecteur Sécurisé & Secrets GitHub Actions (`src/openlux/core/collector.py`)** : Prise en charge des variables secrètes dans les URLs d'API (`apiKey={key}` / `token={token}`) et chargement automatique des variables d'environnement (`JCDECAUX_API_KEY`). Injection du secret dans `.github/workflows/data_pipeline.yml`.
+  - **Fallback Public Open Data GBFS v2 (`config/sources.toml`)** : Endpoint de secours public temps réel sans clé API (`api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json`) assurant la résilience et l'exécution hors-ligne continue.
+  - **Référentiel Territorial & Géographique Officiel (`dbt_project/seeds/ref_veloh_stations.csv`)** : Ensemencement de l'ensemble des 141 stations avec numéro de station officiel, nom réel de station, adresse postale, coordonnées GPS précises (WGS84), capacité nominale et commune de rattachement.
+  - **Couverture Territoriale des 8 Communes Conventionnées** : Affectation spatiale déterministe sur les 8 communes partenaires du réseau Vel'oH (`Luxembourg`, `Mamer`, `Hesperange`, `Bertrange`, `Strassen`, `Leudelange`, `Niederanven`, `Walferdange`) avec code officiel `commune_lau` et `canton`.
+  - **Data Mart Gold Curaté à 26 Colonnes (`dbt_project/models/gold/gold_mobility_veloh.sql`)** : Préservation intégrale des données brutes en Bronze et exposition Gold enrichie (vélos électriques vs mécaniques, statut opérationnel, capacité, attaches libres/hors service, coordonnées, commune, canton, horodatage UTC).
+
+
 ### Added
 - **Automatisation du Rechargement & Synchronisation Git (GitHub Actions)** :
   - **Workflow GitHub Actions (`.github/workflows/data_pipeline.yml`)** : Mise en place d'un workflow automatisé régulier (cron horaire `'0 * * * *'` + déclenchement manuel interactif `workflow_dispatch`), avec cache ultra-rapide des dépendances Python (`astral-sh/setup-uv@v5` avec `enable-cache: true`), permissions `contents: write`, collecte des données et transformations dbt complètes.
-  - **Commit & Push Atomique Conditionnel** : Détection des deltas de données sur `data/gold/*.parquet`, `data/gold/*.json` et `STATUS.md` via `git diff --staged --quiet`. Commit et push atomique automatique uniquement si des changements sont détectés (`[skip ci]`).
+  - **Commit & Push Atomique Conditionnel** : Détection des deltas de données sur `data/gold/*.parquet` via `git diff --staged --quiet`. Commit et push atomique automatique uniquement si des changements réels sont détectés (`[skip ci]`).
   - **Hygiène & Sécurité Git (`.gitignore`)** : Configuration fine autorisant le suivi et le versioning des tables Gold Parquet (`data/gold/*.parquet`) et des métadonnées open data (`datapackage.json`, `dcat_ap_lu.json`), tout en excluant rigoureusement les répertoires temporaires (`data/gold/.tmp/`), les bases DuckDB (`*.duckdb`), le cache Bronze et les secrets locaux.
   - **Support du Drapeau `--dry-run` dans CLI** : Prise en charge des arguments `--dry-run` et `--live` dans la commande CLI `openlux publish` pour alignement parfait avec le workflow CI/CD.
+
+### Fixed
+- **Idempotence Parquet Gold & Résolution Définitive des Doublons dbt** :
+  - **Contrôle Différentiel Strict (`src/openlux/core/gold.py`)** : Détection des modifications réelles par double différence ensembliste SQL (`EXCEPT ... UNION ALL ... EXCEPT`). Les fichiers Parquet existants sont laissés strictement intacts si aucune nouvelle ligne ou modification n'est intervenue, préservant les horodatages et hashes pour prévenir les faux commits ("ghost commits") horaires sur GitHub Actions.
+  - **Déterminisme Temporel dbt (18 modèles)** : Remplacement systématique des expressions variables `CURRENT_TIMESTAMP` et des clauses conditionnelles rigides par des horodatages déterministes dérivés des flux et des données historiques. Éradication de la multiplication incontrôlée de lignes (ex: trafic transfrontalier ramené de 1136 à 12 lignes, Vel'oH de 1418 à 149 lignes).
+  - **Filtrage des Enregistrements Fantômes Staging** : Ajout de filtres `WHERE primary_key IS NOT NULL` dans l'ensemble des modèles dbt staging (`stg_air_quality`, `stg_aviation_opensky_lu`, `stg_culture_echo_lu`, `stg_electricity_spot`, `stg_housing_statec`, `stg_meteo_lux_obs`, `stg_pollen_lu`, `stg_roadworks_vdl`) éliminant les lignes de complaisance à valeurs NULL.
+  - **Ensemencement Résilient Bronze Baseline (`src/openlux/cli.py`)** : Fonction `ensure_bronze_baseline` garantissant la présence d'au moins un fichier valide dans chaque sous-répertoire Bronze depuis les fixtures de test lors d'un clone vierge sur runner GitHub Actions distant, prévenant les échecs `IOException: No files found` sur les flux déconnectés ou 404.
+  - **Préservation Horodatage Métadonnées Open Data (`src/openlux/publish/opendata_lu.py`)** : Conservation de l'horodatage `created` existant dans `datapackage.json` et `dcat_ap_lu.json` tant que les sommes de contrôle SHA-256 des 24 ressources Gold demeurent inchangées.
 
 - **Scission Tripartite Mobilité, Normalisations & Ingestion Incrémentale Continue** :
   - **Scission Tripartite Mobilité & Stationnement** : Remplacement du modèle agrégé par 3 Data Marts Gold distincts spécialisés :

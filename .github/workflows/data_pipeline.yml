@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -41,6 +43,8 @@ jobs:
         run: uv sync --frozen
 
       - name: Execute OpenLux pipeline (collect, dbt transformations, gold export)
+        env:
+          JCDECAUX_API_KEY: ${{ secrets.JCDECAUX_API_KEY }}
         run: |
           if [ "${{ github.event.inputs.due_only }}" = "true" ]; then
             uv run openlux run --due
@@ -59,12 +63,13 @@ jobs:
           # Ajouter les artefacts de la couche Gold, métadonnées et statut
           git add data/gold/*.parquet data/gold/*.json STATUS.md
 
-          # Commit atomique uniquement si des changements sont détectés
-          if git diff --staged --quiet; then
-            echo "Aucune modification de données détectée. Rien à commiter."
+          # Commit atomique uniquement si des changements réels de données (Parquet Gold) sont détectés
+          if git diff --staged --quiet data/gold/*.parquet; then
+            echo "Aucune modification de données détectée dans la couche Gold. Rien à commiter."
+            git checkout -- STATUS.md data/gold/*.json 2>/dev/null || true
           else
-            echo "Modifications détectées. Création du commit atomique..."
+            echo "Modifications de données détectées. Création du commit atomique..."
             git commit -m "chore(data): auto-update gold datasets and status [skip ci]"
-            git pull --rebase origin main || true
+            git pull --rebase origin main
             git push origin main
           fi

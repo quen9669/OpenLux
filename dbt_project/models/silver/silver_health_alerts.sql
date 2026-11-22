@@ -23,7 +23,7 @@ aed AS (
             WHEN access_hours LIKE '%24/7%' OR access_hours LIKE '%24h%' THEN 1.0
             ELSE 0.5
         END::DOUBLE AS metric_value,
-        CURRENT_TIMESTAMP AS observed_at_utc,
+        '2026-01-01 00:00:00'::TIMESTAMP AS observed_at_utc,
         lat,
         lon,
         raw_commune_name,

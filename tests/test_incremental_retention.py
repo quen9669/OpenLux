@@ -22,12 +22,16 @@ def test_incremental_zero_deletion_and_new_rows_accumulation(tmp_path: Path) -> 
     with duckdb.connect(str(tmp_db)) as con:
         con.execute("""
             CREATE TABLE gold_mobility_veloh (
-                station_id VARCHAR, station_name VARCHAR, observed_at_utc TIMESTAMP,
-                available_bikes INTEGER, available_stands INTEGER,
+                station_id VARCHAR, station_number INTEGER,
+                station_name VARCHAR, address VARCHAR, observed_at_utc TIMESTAMP,
+                available_bikes INTEGER, available_electrical_bikes INTEGER,
+                available_mechanical_bikes INTEGER, available_stands INTEGER,
                 broken_or_disabled_stands INTEGER, total_capacity INTEGER,
-                occupancy_rate DOUBLE, is_installed BOOLEAN, is_renting BOOLEAN,
-                hourly_rate_eur DECIMAL(10,2), tariff_details VARCHAR,
-                opening_hours VARCHAR, lat DOUBLE, lon DOUBLE, commune_lau VARCHAR,
+                occupancy_rate DOUBLE, status VARCHAR, is_renting BOOLEAN,
+                is_connected BOOLEAN, is_installed BOOLEAN, has_banking BOOLEAN,
+                is_bonus BOOLEAN, hourly_rate_eur DECIMAL(10,2),
+                tariff_details VARCHAR, opening_hours VARCHAR,
+                lat DOUBLE, lon DOUBLE, commune_lau VARCHAR,
                 canton VARCHAR, source_id VARCHAR
             );
             CREATE TABLE gold_mobility_parkings (
@@ -43,9 +47,11 @@ def test_incremental_zero_deletion_and_new_rows_accumulation(tmp_path: Path) -> 
         # Injection du lot initial T0
         con.execute(f"""
             INSERT INTO gold_mobility_veloh VALUES
-            ('VELOH_01', 'Hamilius', '{t0}', 10, 5, 1, 16, 62.5, true, true, 0.00,
+            ('VELOH_01', 1, 'Hamilius', 'Avenue Monterey', '{t0}', 10, 10, 0, 5, 1, 16, 62.5,
+             'OPEN', true, true, true, false, false, 0.00,
              'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'veloh_stations'),
-            ('VELOH_02', 'Glacis', '{t0}', 8, 8, 2, 18, 44.4, true, true, 0.00,
+            ('VELOH_02', 2, 'Glacis', 'Place du Glacis', '{t0}', 8, 8, 0, 8, 2, 18, 44.4,
+             'OPEN', true, true, true, false, false, 0.00,
              'VDL', '24/7', 49.62, 6.12, 'LU0704', 'Luxembourg', 'veloh_stations');
 
             INSERT INTO gold_mobility_parkings VALUES
@@ -83,7 +89,8 @@ def test_incremental_zero_deletion_and_new_rows_accumulation(tmp_path: Path) -> 
     with duckdb.connect(str(tmp_db)) as con:
         con.execute(f"""
             INSERT INTO gold_mobility_veloh VALUES
-            ('VELOH_01', 'Hamilius', '{t1}', 12, 3, 1, 16, 75.0, true, true, 0.00,
+            ('VELOH_01', 1, 'Hamilius', 'Avenue Monterey', '{t1}', 12, 12, 0, 3, 1, 16, 75.0,
+             'OPEN', true, true, true, false, false, 0.00,
              'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'veloh_stations');
 
             INSERT INTO gold_mobility_parkings VALUES

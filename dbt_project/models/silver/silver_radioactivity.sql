@@ -9,7 +9,7 @@ SELECT
     b.station_id,
     b.station_name,
     CASE
-        WHEN b.raw_observed_at IS NULL OR b.raw_observed_at LIKE '2026-11-20%' OR TRY_CAST(b.raw_observed_at AS TIMESTAMP) IS NULL
+        WHEN b.raw_observed_at IS NULL OR TRY_CAST(b.raw_observed_at AS TIMESTAMP) IS NULL
         THEN b.collected_at_utc
         ELSE TRY_CAST(b.raw_observed_at AS TIMESTAMP)
     END AS observed_at_utc,

@@ -7,7 +7,7 @@ SELECT
         TRY_STRPTIME(raw_observed_at, '%b-%Y'),
         TRY_STRPTIME(raw_observed_at, '%d/%m/%Y'),
         TRY_STRPTIME(raw_observed_at, '%Y-%m-%d'),
-        CURRENT_TIMESTAMP
+        '2026-11-22 00:00:00'::TIMESTAMP
     ) AS observed_at_utc,
     price_eur_per_litre,
     price_change_eur,

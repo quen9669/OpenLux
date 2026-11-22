@@ -14,3 +14,4 @@ SELECT DISTINCT
     observed_at::VARCHAR AS raw_observed_at,
     'housing_statec' AS source_id
 FROM raw_source
+WHERE record_id IS NOT NULL

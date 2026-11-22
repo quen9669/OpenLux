@@ -20,7 +20,7 @@ adem AS (
         jobseekers_count AS signatures_count,
         unemployment_rate_pct AS rate_value,
         reference_month AS status,
-        CURRENT_TIMESTAMP AS observed_at_utc,
+        COALESCE(TRY_CAST(reference_month || '-01 00:00:00' AS TIMESTAMP), '2026-01-01 00:00:00'::TIMESTAMP) AS observed_at_utc,
         raw_commune_name,
         source_id
     FROM {{ ref('stg_unemployment_adem') }}

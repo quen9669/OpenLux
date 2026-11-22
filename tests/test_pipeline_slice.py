@@ -71,7 +71,7 @@ def _mock_handler(request: httpx.Request) -> httpx.Response:
     if "avl-bus" in url_str or "avl/realtime" in url_str:
         raw = Path("tests/fixtures/transit_avl_rt_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
-    if "veloh-live" in url_str or "jcdecaux" in url_str:
+    if "veloh-live" in url_str or "jcdecaux" in url_str or "cyclocity" in url_str:
         raw = Path("tests/fixtures/veloh_stations_sample.json").read_bytes()
         return httpx.Response(200, content=raw)
     if (
@@ -217,6 +217,10 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         )
 
     con.close()
+    del con
+    import gc
+
+    gc.collect()
 
     # 3. Exécution dbt (seed -> run -> test)
     for cmd in ["seed", "run", "test"]:

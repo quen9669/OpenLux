@@ -5,6 +5,7 @@ Hors-scope : Moissonnage automatique complexe ou synchronisation bidirectionnell
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -40,40 +41,49 @@ def _infer_type(duck_type: str) -> str:
     return "date" if "DATE" in t else ("datetime" if "TIME" in t else "string")
 
 
+def _inspect_parquet(con: duckdb.DuckDBPyConnection, p: Path) -> dict[str, Any]:
+    tbl = p.stem
+    cols = con.execute(f"DESCRIBE SELECT * FROM '{p.as_posix()}'").fetchall()
+    fields = [
+        {"name": c[0], "type": _infer_type(str(c[1])), "duckdb_type": str(c[1])} for c in cols
+    ]
+    stds = list(TABLE_STANDARDS.get(tbl, []))
+    if any(f["name"] in ("latitude", "longitude") for f in fields) and _GEO not in stds:
+        stds.append(_GEO)
+    count = con.execute(f"SELECT count(*) FROM '{p.as_posix()}'").fetchone()[0]
+    return {
+        "name": tbl,
+        "path": p.name,
+        "profile": "tabular-data-resource",
+        "format": "parquet",
+        "mediatype": "application/vnd.apache.parquet",
+        "compression": "zstd",
+        "row_count": count,
+        "sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
+        "standards_applied": stds,
+        "schema": {"fields": fields, "primaryKey": fields[0]["name"] if fields else None},
+    }
+
+
 def generate_datapackage(gold_dir: Path = Path("data/gold")) -> dict[str, Any]:
-    con, resources = duckdb.connect(), []
-    for p in sorted(gold_dir.glob("*.parquet")):
-        tbl = p.stem
-        cols_info = con.execute(f"DESCRIBE SELECT * FROM '{p.as_posix()}'").fetchall()
-        fields = [
-            {"name": c[0], "type": _infer_type(str(c[1])), "duckdb_type": str(c[1])}
-            for c in cols_info
-        ]
-        stds = list(TABLE_STANDARDS.get(tbl, []))
-        if any(f["name"] in ("latitude", "longitude") for f in fields) and _GEO not in stds:
-            stds.append(_GEO)
-        count = con.execute(f"SELECT count(*) FROM '{p.as_posix()}'").fetchone()[0]
-        resources.append(
-            {
-                "name": tbl,
-                "path": p.name,
-                "profile": "tabular-data-resource",
-                "format": "parquet",
-                "mediatype": "application/vnd.apache.parquet",
-                "compression": "zstd",
-                "row_count": count,
-                "sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
-                "standards_applied": stds,
-                "schema": {"fields": fields, "primaryKey": fields[0]["name"] if fields else None},
-            }
-        )
+    con = duckdb.connect()
+    resources = [_inspect_parquet(con, p) for p in sorted(gold_dir.glob("*.parquet"))]
     con.close()
+    created = datetime.now(UTC).isoformat()
+    dp_path = gold_dir / "datapackage.json"
+    if dp_path.exists():
+        with contextlib.suppress(Exception):
+            old = json.loads(dp_path.read_text(encoding="utf-8"))
+            old_shas = {r["name"]: r.get("sha256") for r in old.get("resources", [])}
+            new_shas = {r["name"]: r.get("sha256") for r in resources}
+            if old_shas == new_shas and "created" in old:
+                created = old["created"]
     return {
         "profile": "tabular-data-package",
         "name": "openlux-hub-gold",
         "title": "OpenLux Hub — Données Ouvertes Consolidées du Luxembourg",
         "homepage": "https://github.com/quen9669/OpenLux",
-        "created": datetime.now(UTC).isoformat(),
+        "created": created,
         "license": "CC0-1.0",
         "publisher": {"name": "OpenLux Initiative", "email": "contact@openlux.lu"},
         "spatial": {"country": "LU", "region": "Grande Région"},

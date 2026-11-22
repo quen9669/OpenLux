@@ -3,7 +3,7 @@
   "name": "openlux-hub-gold",
   "title": "OpenLux Hub — Données Ouvertes Consolidées du Luxembourg",
   "homepage": "https://github.com/quen9669/OpenLux",
-  "created": "2026-11-22T18:35:01.754640+00:00",
+  "created": "2026-11-22T19:34:00.193659+00:00",
   "license": "CC0-1.0",
   "publisher": {
     "name": "OpenLux Initiative",
@@ -22,7 +22,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 21,
-      "sha256": "58a3f5ad9f4c0e0a56eb17e36f38e6ffe6e30a1e1f1b2b1290fad9ea9c7b812f",
+      "sha256": "a07443301370716d52b6684660665809a257a2bff3873dde1f6743c7f5609c5c",
       "standards_applied": [
         "Air Quality Directive 2008/50/EC",
         "GeoJSON (EPSG:4326)"
@@ -100,8 +100,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 104,
-      "sha256": "955198e5358188b09b97cd8b54eb050ac938811072e5c5ab9e8b4d380ae5d4b1",
+      "row_count": 115,
+      "sha256": "b83abf5a8f82ae9cb1394f00c7054b5ce361617f247f9a0da32fc238e255334d",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -172,7 +172,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 12,
-      "sha256": "7dec4376b5817b25f651ef39f37bf74ef6f72a4abb52747ce7d3136218ac168f",
+      "sha256": "363974aedad05c00aba0998969919bd450976df48d0e3b300a5ab39298862146",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -243,7 +243,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 15,
-      "sha256": "4e1c33f0d99580d5a2967d79a30a36779a9cb565c5a2da2d4d903f4498ddcef9",
+      "sha256": "617b7fee658c0d872b995fa23c33cfce8f9757a309f9e279235ee31236118ed0",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -343,8 +343,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 114,
-      "sha256": "22d4e8f6763ee760baec073b2e774b82d279ace7115d04eca4c4f54789bcb2a9",
+      "row_count": 30,
+      "sha256": "caf2a174a66d83ed175463d7ffcc51ceade96fd2ccb984e85f2ac2a30a55cac7",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -419,8 +419,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 48,
-      "sha256": "bcb8bc64b6c180863b44734bf6c9987650f644558d0ad024740ad7c498507dbb",
+      "row_count": 12,
+      "sha256": "fb7cc1ccfb5fe5db03889fd16d3a8fc5cc7a0c3fe4c5309575fbfa9fa06f43b0",
       "standards_applied": [
         "DATEX II (CEN/TS 16157)",
         "Bison Futé / DIR Est"
@@ -498,8 +498,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 392,
-      "sha256": "feb83ce2b85d5779d429480fdb349c0169cc195c71f0557ae6fbf5b741a7cba9",
+      "row_count": 98,
+      "sha256": "59c3d7e73a6cff36a0c83c99a34d7f8d91e203a8ad4620654b6a3df0e27807f0",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -609,8 +609,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 120,
-      "sha256": "1969d80855bfb1c8b73479846209f5810c6502221e3f3fe37d40eaf99082f058",
+      "row_count": 30,
+      "sha256": "c500e5ce0caaf08dc1deb3336e748cc726e6a4ac980f62baac72fd6d5d5d288e",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -681,7 +681,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 100,
-      "sha256": "cda1bdb911606179b06f3e020e00af41075eb8b870864b9323393a91985e42ba",
+      "sha256": "b642693391440ea8c8225353066e33145f4855d065d274ad1d63d7eb8c7214e1",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -726,8 +726,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 82,
-      "sha256": "a4f8e3f96f4fb326e8ce788040d2fdc99cbe838991b095ed00e2a930220bd940",
+      "row_count": 152,
+      "sha256": "d7fba28d20294c4f779b863416424b25f52f95c28e12d6f7ba00fb3e9e8ddc75",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -767,8 +767,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 111,
-      "sha256": "15b4f6049b0d8846c82b6027c4e222f6307a511ccff1958d648a6c76648122dd",
+      "row_count": 33,
+      "sha256": "02116f4cc28c513a0223d4398a9358d9418bcc8af61c1a31d0c5ad06ee5ac58e",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -839,7 +839,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 144,
-      "sha256": "61671b85600fac043a8ab42ea1f85fb25746ced7ff54e33cafbad74ddd583556",
+      "sha256": "50acd0c1721deaf4e008183305fb5ac7075ee6b494e71a8690635352265872eb",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -919,8 +919,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1238,
-      "sha256": "ee9f8afcbcc7dc85e8d559a7a85a8c300830045d819b0292afe087b62318c801",
+      "row_count": 320,
+      "sha256": "4c54a8ddb96e334ad4150405320a79bbd9346b3c26af26fb82c57497002ea5b4",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1100,8 +1100,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1128,
-      "sha256": "bbfc87d95fa6426f2a5d40dde1e1a065ed14e159d3988bdb373c899cfee76803",
+      "row_count": 282,
+      "sha256": "5a299187bb7c7d2ed6213b549b4ac9b7692ca5a950b18a7c996de5cf174952f2",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1276,8 +1276,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 110,
-      "sha256": "a693d68423cddd163c35b479f13d67a6e5ecd3ccfcbfe8b65232a671d2ce51f4",
+      "row_count": 38,
+      "sha256": "a9dfd836b54432500d59e717bcb2802a8f18bfe6d0172d2b32cd7ae8cd6bc9cc",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1372,8 +1372,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1900,
-      "sha256": "65fd6982352ef01334d6350ff99bcb84ff6f0a8a0b1a52b09ab49948684d8692",
+      "row_count": 2229,
+      "sha256": "7f625e5de59fe2cab1cc584fb7e7097fd64497c6131ea5df0f194a9c7d03a29b",
       "standards_applied": [
         "Frictionless Data Package",
         "DCAT-AP-LU 2.0"
@@ -1501,8 +1501,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 554,
-      "sha256": "8929a85ac7f0ada9360179e3dfdec009ddd84d78e4ea7c84e66851e7b7a00c4b",
+      "row_count": 583,
+      "sha256": "05141707e1f14b1a1b2bcdbced0b114b709c9371937d6066c5cd218cedce5740",
       "standards_applied": [
         "DATEX II Parking Publication",
         "GeoJSON (EPSG:4326)"
@@ -1620,8 +1620,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1136,
-      "sha256": "5908c4972667342e75c20f1322f2fece051007c62ecf3e3d5dd1a236f540e92b",
+      "row_count": 4091,
+      "sha256": "6d4bda7eae77afa2ef97236c2abc0b2b30f53292ab3bc32db1d332987cc03e46",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1631,7 +1631,17 @@
             "duckdb_type": "VARCHAR"
           },
           {
+            "name": "station_number",
+            "type": "integer",
+            "duckdb_type": "INTEGER"
+          },
+          {
             "name": "station_name",
+            "type": "string",
+            "duckdb_type": "VARCHAR"
+          },
+          {
+            "name": "address",
             "type": "string",
             "duckdb_type": "VARCHAR"
           },
@@ -1642,6 +1652,16 @@
           },
           {
             "name": "available_bikes",
+            "type": "integer",
+            "duckdb_type": "INTEGER"
+          },
+          {
+            "name": "available_electrical_bikes",
+            "type": "integer",
+            "duckdb_type": "INTEGER"
+          },
+          {
+            "name": "available_mechanical_bikes",
             "type": "integer",
             "duckdb_type": "INTEGER"
           },
@@ -1666,12 +1686,32 @@
             "duckdb_type": "DOUBLE"
           },
           {
+            "name": "status",
+            "type": "string",
+            "duckdb_type": "VARCHAR"
+          },
+          {
+            "name": "is_renting",
+            "type": "boolean",
+            "duckdb_type": "BOOLEAN"
+          },
+          {
+            "name": "is_connected",
+            "type": "boolean",
+            "duckdb_type": "BOOLEAN"
+          },
+          {
             "name": "is_installed",
             "type": "boolean",
             "duckdb_type": "BOOLEAN"
           },
           {
-            "name": "is_renting",
+            "name": "has_banking",
+            "type": "boolean",
+            "duckdb_type": "BOOLEAN"
+          },
+          {
+            "name": "is_bonus",
             "type": "boolean",
             "duckdb_type": "BOOLEAN"
           },
@@ -1726,8 +1766,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 112,
-      "sha256": "21e69c1a9c94fc64697735fd4e1939583ad67bd18da4e56dec178f949f968d83",
+      "row_count": 28,
+      "sha256": "c6837243c4e3abec8fc52351b17ca053cf6b205bc009b8d7efdbf1e3bdf72284",
       "standards_applied": [
         "NeTEx (CEN/TS 16614)",
         "SIRI (CEN/TS 15531)",
@@ -1801,8 +1841,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 96,
-      "sha256": "a0c6a276c059612cdfb4c734a4574a52406e0f811f41198c5de73b75e91c5c1d",
+      "row_count": 24,
+      "sha256": "204a99dde73b8523145d926ed4d188f2dd644a9a40708e13a8c16d3d4e792ab2",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1868,7 +1908,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 542,
-      "sha256": "4119f374b1a0b3f4d21f4d262b5cfe92fb641ab4a157b01f1ae0410acdc60997",
+      "sha256": "4428bac18932d82850b0b6508d01d1794aa64561c1ed5a5d96dfcce37ef02001",
       "standards_applied": [
         "DATEX II Roadworks",
         "GeoJSON (EPSG:4326)"
@@ -1952,7 +1992,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 4,
-      "sha256": "786e569314f7a34bd1ac38d9a7495b523a0052a83584f75d4d680e55f54c6a6b",
+      "sha256": "07490ba5b07402e348fb51795f0b2bf1d107496b8db6f81bd9f12db32d1f67b7",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1998,7 +2038,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 55,
-      "sha256": "4406c91d4bc49df9e6d8b9f28902fd537f8f635330882bed6d5e6750f4b3f1a7",
+      "sha256": "ea8babb78908e4a2e76f4dd11a952c57f18f327ddbbafc7e5450a0abfb5a57d8",
       "standards_applied": [
         "RSS 2.0 / Dublin Core",
         "ISO 3166-1 alpha-2"
@@ -2056,8 +2096,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 92,
-      "sha256": "bcfa24eaabf81b102cacba812d262aa8f4d2bf826f2927ede90413ce4f48850c",
+      "row_count": 52,
+      "sha256": "1d19e7d293df209a61bba5c672ef763b667bdadf0479b66db0e73106eb510ac1",
       "standards_applied": [
         "DATEX II (CEN/TS 16157)",
         "GeoJSON (EPSG:4326)"
@@ -2125,8 +2165,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 96,
-      "sha256": "3df77a01c6125f4191b751bc498cf69ced6159bf85589870a75037fe69edc53a",
+      "row_count": 24,
+      "sha256": "16d3632dfe9c31fe1f68a5bb8558e14f77e63f89637242c32d9f75e2d512f9f4",
       "standards_applied": [
         "WISE (Water Information System for Europe)"
       ],
@@ -2204,7 +2244,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 34,
-      "sha256": "45683ef23b4fb7a6507c305c9916eaf3a70878c72d4c6cba33de269e8e76f9a2",
+      "sha256": "ad5713c0f14f688c9a4e8cc48173cdf7bbead25531ae8cfd66f7bad165aa4bfe",
       "standards_applied": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"

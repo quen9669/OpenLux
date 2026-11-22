@@ -17,3 +17,4 @@ SELECT DISTINCT
     raw_source.commune_name::VARCHAR AS raw_commune_name,
     'roadworks_vdl' AS source_id
 FROM raw_source
+WHERE raw_source.work_id IS NOT NULL

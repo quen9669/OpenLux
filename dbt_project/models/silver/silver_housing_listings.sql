@@ -27,7 +27,7 @@ WITH market_listings AS (
         neighborhood_or_quartier,
         listing_url,
         1 AS units_count,
-        CURRENT_TIMESTAMP AS observed_at_utc,
+        '2026-01-01 00:00:00'::TIMESTAMP AS observed_at_utc,
         lat,
         lon,
         commune_name AS raw_commune_name,

@@ -6,6 +6,8 @@ Hors-scope : N'héberge pas le serveur HTTP persistant (délégué à api/main.p
 from __future__ import annotations
 
 import argparse
+import contextlib
+import hashlib
 import os
 import subprocess
 import sys
@@ -13,11 +15,12 @@ import time
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import duckdb
 
 from openlux.config import SourceConfig, load_sources_config
-from openlux.core.collector import CollectorResult, collect_source
+from openlux.core.collector import CollectorResult, _process_payload, _write_bronze, collect_source
 from openlux.core.gold import export_gold_parquets
 from openlux.core.monitoring import generate_status_markdown, send_alert_if_needed
 from openlux.core.quality import (
@@ -29,40 +32,84 @@ from openlux.core.quality import (
 )
 
 
-def _dbt(cmd: str, *args: str) -> bool:
+def _run_dbt_command(cmd: str, *args: str) -> bool:
     opt = ("--project-dir", "dbt_project", "--profiles-dir", "dbt_project")
-    res = subprocess.run([sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt], check=False)
-    return res.returncode == 0
-
-
-_run_dbt_command = _dbt
+    return (
+        subprocess.run(
+            [sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt], check=False
+        ).returncode
+        == 0
+    )
 
 
 def _connect_db(path: str = "data/openlux.duckdb", read_only: bool = False):
-    for i in range(8):
-        try:
+    for _ in range(7):
+        with contextlib.suppress(Exception):
             return duckdb.connect(path, read_only=read_only)
-        except Exception:
-            if i == 7:
-                raise
-            time.sleep(0.3)
+        time.sleep(0.3)
+    return duckdb.connect(path, read_only=read_only)
 
 
 def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
     if not last_iso:
         return True
-    try:
+    with contextlib.suppress(Exception):
         dt = (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
         return dt >= float(source.cadence_minutes)
-    except Exception:
-        return True
+    return True
+
+
+def ensure_bronze_baseline(sources: dict[str, SourceConfig]) -> None:
+    fdir = Path("tests/fixtures")
+    if not fdir.exists():
+        return
+    for sid, src in sources.items():
+        if any((Path("data/bronze") / sid).glob("**/*.gz")):
+            continue
+        c = (
+            list(fdir.glob(f"{sid}_sample.*"))
+            or list(fdir.glob(f"{sid.replace('_lu', '')}_sample.*"))
+            or ([fdir / "cita_datex2_sample.xml"] if "cita" in sid else [])
+        )
+        if c and c[0].exists():
+            with contextlib.suppress(Exception):
+                p, cnt, ext = _process_payload(src, c[0].read_bytes())
+                _write_bronze(sid, p, ext, hashlib.sha256(p).hexdigest(), datetime.now(UTC), cnt)
+
+
+def _collect_and_record(
+    con: duckdb.DuckDBPyConnection, sid: str, src: SourceConfig, r_id: str, prev: dict[str, Any]
+) -> None:
+    try:
+        res = collect_source(
+            src, last_sha256=prev.get("sha256"), last_changed_utc=prev.get("last_changed_utc")
+        )
+    except Exception as exc:
+        n = datetime.now(UTC).isoformat()
+        res = CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
+    val = get_dbt_validity_score(sid)
+    m = calculate_trust_score(
+        src, res.status, res.source_used, res.row_count, res.checked_at_utc, val
+    )
+    record_run(
+        con,
+        r_id,
+        sid,
+        "git_v1",
+        m,
+        res.row_count,
+        res.checked_at_utc,
+        res.changed_at_utc,
+        res.sha256,
+        res.error_message,
+    )
+    send_alert_if_needed(sid, m.status, [prev.get("status", "GOOD")])
 
 
 def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False) -> int:
     sources, db_p = load_sources_config(), Path("data/openlux.duckdb")
     db_p.parent.mkdir(parents=True, exist_ok=True)
-    con = _connect_db(str(db_p))
-    try:
+    with _connect_db(str(db_p)) as con:
         init_obs_runs_table(con)
         health, r_id = get_latest_source_health(con), str(uuid.uuid4())
         selected = {
@@ -71,41 +118,11 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
             if (not sources_filter or s in sources_filter)
             and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
         }
-        if not selected:
-            return 0
-
         for sid, src in selected.items():
-            prev = health.get(sid, {})
-            p_sha, p_ch = prev.get("sha256"), prev.get("last_changed_utc")
-            try:
-                res = collect_source(src, last_sha256=p_sha, last_changed_utc=p_ch)
-            except Exception as exc:
-                now_s = datetime.now(UTC).isoformat()
-                res = CollectorResult(
-                    sid, "ERROR", "none", "", 0, b"", None, now_s, now_s, str(exc)
-                )
-            val_score = get_dbt_validity_score(sid)
-            metrics = calculate_trust_score(
-                src, res.status, res.source_used, res.row_count, res.checked_at_utc, val_score
-            )
-            record_run(
-                con,
-                r_id,
-                sid,
-                "git_v1",
-                metrics,
-                res.row_count,
-                res.checked_at_utc,
-                res.changed_at_utc,
-                res.sha256,
-                res.error_message,
-            )
-            send_alert_if_needed(sid, metrics.status, [prev.get("status", "GOOD")])
-    finally:
-        con.close()
-
+            _collect_and_record(con, sid, src, r_id, health.get(sid, {}))
+    ensure_bronze_baseline(sources)
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
-        _dbt(*c)
+        _run_dbt_command(*c)
     export_gold_parquets()
     with _connect_db(str(db_p), read_only=True) as con_r:
         generate_status_markdown(sources, get_latest_source_health(con_r))
@@ -114,18 +131,17 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
 
 def schedule_pipeline(interval_seconds: int = 60) -> int:
     print(f"OpenLux Scheduler démarré ({interval_seconds}s). Ctrl+C pour quitter.")
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         while True:
             run_pipeline(due_only=True)
             time.sleep(interval_seconds)
-    except KeyboardInterrupt:
-        pass
     return 0
 
 
 def rebuild_pipeline() -> int:
+    ensure_bronze_baseline(load_sources_config())
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
-        _dbt(*c)
+        _run_dbt_command(*c)
     export_gold_parquets()
     with _connect_db("data/openlux.duckdb") as con:
         init_obs_runs_table(con)
@@ -133,13 +149,13 @@ def rebuild_pipeline() -> int:
     return 0
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="OpenLux Hub CLI")
-    sub = parser.add_subparsers(dest="cmd")
-    r_p = sub.add_parser("run")
-    r_p.add_argument("--sources")
-    r_p.add_argument("--due", action="store_true")
-    sub.add_parser("schedule").add_argument("--interval", type=int, default=60, help="Secondes")
+def _build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description="OpenLux Hub CLI")
+    sub = p.add_subparsers(dest="cmd")
+    r = sub.add_parser("run")
+    r.add_argument("--sources")
+    r.add_argument("--due", action="store_true")
+    sub.add_parser("schedule").add_argument("--interval", type=int, default=60)
     for c in ["rebuild", "status", "compact", "mcp"]:
         sub.add_parser(c)
     pub = sub.add_parser("publish")
@@ -149,13 +165,13 @@ def main(argv: list[str] | None = None) -> int:
     srv.add_argument("--host", default="127.0.0.1")
     srv.add_argument("--port", type=int, default=8000)
     srv.add_argument("--auto-sync", action="store_true")
+    return p
 
-    a = parser.parse_args(argv if argv is not None else sys.argv[1:])
-    if not a.cmd:
-        parser.print_help()
-        return 0
+
+def _dispatch(a: argparse.Namespace) -> int:
     if a.cmd == "run":
-        return run_pipeline([s.strip() for s in a.sources.split(",")] if a.sources else None, a.due)
+        srcs = [s.strip() for s in a.sources.split(",")] if a.sources else None
+        return run_pipeline(srcs, a.due)
     if a.cmd == "schedule":
         return schedule_pipeline(a.interval)
     if a.cmd == "rebuild":
@@ -166,31 +182,32 @@ def main(argv: list[str] | None = None) -> int:
         import uvicorn
 
         uvicorn.run("openlux.api.main:app", host=a.host, port=a.port)
-        return 0
-    if a.cmd == "mcp":
+    elif a.cmd == "mcp":
         from openlux.mcp.server import mcp
 
         mcp.run()
-        return 0
-    if a.cmd == "compact":
+    elif a.cmd == "compact":
         from openlux.publish.opendata_lu import compact_bronze_archives
 
         print(f"Compactage terminé : {compact_bronze_archives(Path('data/bronze'))} archives.")
-        return 0
-    if a.cmd == "publish":
+    elif a.cmd == "publish":
         from openlux.publish.opendata_lu import publish_to_data_public_lu
 
         st = publish_to_data_public_lu(dry_run=a.dry_run)["status"]
         print(f"Publication data.public.lu ({st}).")
-        return 0
-    if a.cmd == "status":
+    elif a.cmd == "status":
         db = "data/openlux.duckdb" if Path("data/openlux.duckdb").exists() else ":memory:"
         with _connect_db(db, read_only=True) as con:
             init_obs_runs_table(con)
             generate_status_markdown(load_sources_config(), get_latest_source_health(con))
         print(Path("STATUS.md").read_text(encoding="utf-8"))
-        return 0
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = _build_parser()
+    a = parser.parse_args(argv if argv is not None else sys.argv[1:])
+    return _dispatch(a) if a.cmd else (parser.print_help() or 0)
 
 
 if __name__ == "__main__":

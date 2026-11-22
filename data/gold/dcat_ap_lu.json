@@ -17,7 +17,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 8032,
+      "byteSize": 9643,
       "conformsTo": [
         "Air Quality Directive 2008/50/EC",
         "GeoJSON (EPSG:4326)"
@@ -30,7 +30,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_aviation_noise.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 8864,
+      "byteSize": 17920,
       "conformsTo": []
     },
     {
@@ -40,7 +40,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_bathing_water.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 10202,
+      "byteSize": 2665,
       "conformsTo": []
     },
     {
@@ -50,7 +50,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_chargy_stations.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 15308,
+      "byteSize": 3691,
       "conformsTo": []
     },
     {
@@ -60,7 +60,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_civic_life.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 17756,
+      "byteSize": 13964,
       "conformsTo": []
     },
     {
@@ -70,7 +70,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_crossborder_traffic.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 16742,
+      "byteSize": 12814,
       "conformsTo": [
         "DATEX II (CEN/TS 16157)",
         "Bison Futé / DIR Est"
@@ -83,7 +83,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_culture_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 54308,
+      "byteSize": 25664,
       "conformsTo": []
     },
     {
@@ -93,7 +93,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_daily_life.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 21742,
+      "byteSize": 16355,
       "conformsTo": []
     },
     {
@@ -103,7 +103,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_electricity_spot.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 8213,
+      "byteSize": 1876,
       "conformsTo": []
     },
     {
@@ -113,7 +113,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_fuel_prices.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 6892,
+      "byteSize": 1648,
       "conformsTo": []
     },
     {
@@ -123,7 +123,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_health_alerts.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 12885,
+      "byteSize": 13143,
       "conformsTo": []
     },
     {
@@ -133,7 +133,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_holidays.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 21599,
+      "byteSize": 5280,
       "conformsTo": []
     },
     {
@@ -143,7 +143,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 106855,
+      "byteSize": 54721,
       "conformsTo": []
     },
     {
@@ -153,7 +153,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing_listings.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 88187,
+      "byteSize": 60547,
       "conformsTo": []
     },
     {
@@ -163,7 +163,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing_stats.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 24912,
+      "byteSize": 21142,
       "conformsTo": []
     },
     {
@@ -173,7 +173,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 57781,
+      "byteSize": 63303,
       "conformsTo": [
         "Frictionless Data Package",
         "DCAT-AP-LU 2.0"
@@ -186,7 +186,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 23621,
+      "byteSize": 11401,
       "conformsTo": [
         "DATEX II Parking Publication",
         "GeoJSON (EPSG:4326)"
@@ -199,7 +199,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 39792,
+      "byteSize": 142366,
       "conformsTo": []
     },
     {
@@ -209,7 +209,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_public_transit.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 15906,
+      "byteSize": 14413,
       "conformsTo": [
         "NeTEx (CEN/TS 16614)",
         "SIRI (CEN/TS 15531)",
@@ -223,7 +223,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_radioactivity.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 12577,
+      "byteSize": 12081,
       "conformsTo": []
     },
     {
@@ -233,7 +233,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_roadworks.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 42977,
+      "byteSize": 39916,
       "conformsTo": [
         "DATEX II Roadworks",
         "GeoJSON (EPSG:4326)"
@@ -246,7 +246,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_statec_inflation.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 3379,
+      "byteSize": 1126,
       "conformsTo": []
     },
     {
@@ -256,7 +256,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_disruptions.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 45203,
+      "byteSize": 23043,
       "conformsTo": [
         "RSS 2.0 / Dublin Core",
         "ISO 3166-1 alpha-2"
@@ -269,7 +269,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 13147,
+      "byteSize": 14341,
       "conformsTo": [
         "DATEX II (CEN/TS 16157)",
         "GeoJSON (EPSG:4326)"
@@ -282,7 +282,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_water_levels.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 16829,
+      "byteSize": 12562,
       "conformsTo": [
         "WISE (Water Information System for Europe)"
       ]
@@ -294,7 +294,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 10289,
+      "byteSize": 17667,
       "conformsTo": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"

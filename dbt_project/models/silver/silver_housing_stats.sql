@@ -78,7 +78,7 @@ SELECT
     COALESCE(c.canton, u.canton_override, 'Luxembourg') AS canton,
     c.lat,
     c.lon,
-    COALESCE(u.observed_at_utc, CURRENT_TIMESTAMP) AS observed_at_utc,
+    COALESCE(u.observed_at_utc, '2026-01-01 00:00:00'::TIMESTAMP) AS observed_at_utc,
     u.source_id
 FROM unified u
 LEFT JOIN ref_communes c

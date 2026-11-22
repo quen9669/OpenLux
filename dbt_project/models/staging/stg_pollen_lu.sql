@@ -12,3 +12,4 @@ SELECT DISTINCT
     raw_source.commune_name::VARCHAR AS raw_commune_name,
     'pollen_lu' AS source_id
 FROM raw_source
+WHERE raw_source.specie IS NOT NULL

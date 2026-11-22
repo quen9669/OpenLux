@@ -442,8 +442,8 @@ required_fields = ["line_id", "network"]
 id = "veloh_stations"
 domain = "mobility_parkings"
 description = "Disponibilité temps réel des vélos en libre-service Vel'oH"
-semantic_summary = "Nombre de vélos disponibles et places libres par station sur le réseau Vel'oH de la capitale et communes voisines."
-known_limitations = "Couvre le territoire de la Ville de Luxembourg et les 7 communes périphériques conventionnées."
+semantic_summary = "Nombre de vélos disponibles, places libres et statut temps réel par station sur le réseau Vel'oH de la capitale et des 7 communes périphériques conventionnées."
+known_limitations = "Couvre le territoire de la Ville de Luxembourg et les 7 communes périphériques (Bertrange, Hesperange, Leudelange, Mamer, Niederanven, Strassen, Walferdange)."
 adapter = "http_custom"
 parser = "veloh_stations_json"
 cadence_minutes = 15
@@ -455,13 +455,14 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://developer.jcdecaux.com/rest/vls/stations/Luxembourg.json"
+url = "https://api.jcdecaux.com/vls/v3/stations?contract=luxembourg&apiKey={key}"
+auth_env_var = "JCDECAUX_API_KEY"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_custom"
 parser = "veloh_stations_json"
-url = "https://maps.vdl.lu/arcgis/rest/services/OPENDATA/GEOJSON/FeatureServer/1/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
+url = "https://api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json"
 
 [sources.quality]
 min_rows = 1

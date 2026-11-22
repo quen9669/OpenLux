@@ -18,3 +18,4 @@ SELECT DISTINCT
     commune_lau::VARCHAR AS commune_lau,
     'meteo_lux_obs' AS source_id
 FROM raw_source
+WHERE station_id IS NOT NULL

@@ -15,7 +15,7 @@ SELECT
             REGEXP_EXTRACT(ch.raw_observed_at, '([0-9]{1,2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})'),
             '%d %b %Y %H:%M:%S'
         ),
-        CURRENT_TIMESTAMP
+        '2026-11-22 14:00:00'::TIMESTAMP
     ) AS observed_at_utc,
     ch.available_charging_points,
     ch.total_charging_points,

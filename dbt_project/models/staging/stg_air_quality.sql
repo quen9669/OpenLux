@@ -16,3 +16,4 @@ SELECT DISTINCT
     commune_lau::VARCHAR AS commune_lau,
     'air_quality_lu' AS source_id
 FROM raw_source
+WHERE station_id IS NOT NULL

@@ -13,7 +13,7 @@ SELECT
     b.road_name,
     b.situation_type,
     CASE
-        WHEN b.raw_start_time IS NULL OR b.raw_start_time LIKE '2026-11-20%' OR TRY_CAST(b.raw_start_time AS TIMESTAMP) IS NULL
+        WHEN b.raw_start_time IS NULL OR TRY_CAST(b.raw_start_time AS TIMESTAMP) IS NULL
         THEN b.collected_at_utc
         ELSE TRY_CAST(b.raw_start_time AS TIMESTAMP)
     END AS observed_at_utc,

@@ -38,13 +38,22 @@ class CollectorResult:
 
 
 def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: float = 15.0) -> bytes:
-    headers = dict(endpoint.headers)
+    headers, url = dict(endpoint.headers), endpoint.url
     if endpoint.auth_env_var:
         token = os.environ.get(endpoint.auth_env_var)
+        if not token and Path(".env").exists():
+            for ln in Path(".env").read_text(encoding="utf-8").splitlines():
+                if ln.strip().startswith(f"{endpoint.auth_env_var}="):
+                    token = ln.split("=", 1)[1].strip().strip('"').strip("'")
+                    os.environ[endpoint.auth_env_var] = token
+                    break
         if not token:
             raise PermissionError(f"Auth manquante: {endpoint.auth_env_var}")
-        headers["Authorization"] = f"Bearer {token}"
-    resp = client.get(endpoint.url, headers=headers, timeout=timeout)
+        if "{key}" in url or "{token}" in url:
+            url = url.replace("{key}", token).replace("{token}", token)
+        else:
+            headers["Authorization"] = f"Bearer {token}"
+    resp = client.get(url, headers=headers, timeout=timeout)
     resp.raise_for_status()
     return resp.content
 

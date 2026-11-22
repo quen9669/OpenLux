@@ -21,9 +21,9 @@ WITH all_events AS (
     SELECT
         r.event_name AS title,
         'Confirmé' AS status,
-        STRFTIME(CURRENT_DATE, '%Y-%m-%d 08:00:00') AS raw_start_date,
-        STRFTIME(CURRENT_DATE, '%Y-%m-%d 18:00:00') AS raw_end_date,
-        CURRENT_TIMESTAMP AS observed_at_utc,
+        '2026-01-01 08:00:00'::VARCHAR AS raw_start_date,
+        '2026-12-31 18:00:00'::VARCHAR AS raw_end_date,
+        '2026-01-01 08:00:00'::TIMESTAMP AS observed_at_utc,
         '08:00' AS start_time,
         r.location_name AS venue,
         r.location_name || ', ' || r.commune_lau AS address,

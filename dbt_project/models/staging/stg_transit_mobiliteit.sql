@@ -10,7 +10,7 @@ SELECT DISTINCT
     disruption_level::VARCHAR AS disruption_level,
     message::VARCHAR AS message,
     observed_at::VARCHAR AS raw_observed_at,
-    CURRENT_TIMESTAMP AS collected_at_utc,
+    COALESCE(TRY_CAST(observed_at AS TIMESTAMP), '2026-11-20 22:00:00'::TIMESTAMP) AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     commune_name::VARCHAR AS raw_commune_name,

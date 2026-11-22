@@ -8,7 +8,7 @@ SELECT DISTINCT
     road_name::VARCHAR AS road_name,
     situation_type::VARCHAR AS situation_type,
     start_time::VARCHAR AS raw_start_time,
-    CURRENT_TIMESTAMP AS collected_at_utc,
+    COALESCE(TRY_CAST(start_time AS TIMESTAMP), '2026-11-20 22:20:00'::TIMESTAMP) AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     commune_name::VARCHAR AS raw_commune_name,

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from openlux.core.parsers import PARSERS, cita_datex2, fuel_prices_csv, strikes_rss, vdl_parking
-from openlux.core.parsers_extra import vdl_roadworks_json
+from openlux.core.parsers_extra import vdl_roadworks_json, veloh_stations_json
 
 
 def test_cita_datex2_parses_sample_xml() -> None:
@@ -138,3 +138,36 @@ def test_vdl_roadworks_epoch_ms_conversion() -> None:
     assert len(works) == 1
     assert works[0]["start_date"].startswith("2025-") or works[0]["start_date"].startswith("2026-")
     assert works[0]["end_date"].startswith("2025-") or works[0]["end_date"].startswith("2026-")
+
+
+def test_veloh_stations_json_parses_v3_format() -> None:
+    raw = b"""[
+        {
+            "number": 53,
+            "name": "#00053-LUDWIG VAN BEETHOVEN",
+            "address": "Rue Ludwig van Beethoven 45",
+            "position": {"latitude": 49.59, "longitude": 6.1172},
+            "status": "OPEN",
+            "connected": true,
+            "totalStands": {
+                "capacity": 20,
+                "availabilities": {
+                    "bikes": 2,
+                    "stands": 15,
+                    "electricalBikes": 2,
+                    "mechanicalBikes": 0
+                }
+            }
+        }
+    ]"""
+    stations = veloh_stations_json(raw)
+    assert len(stations) == 1
+    st = stations[0]
+    assert st["facility_id"] == "VELOH_53"
+    assert st["station_number"] == 53
+    assert st["available_bikes"] == 2
+    assert st["available_electrical_bikes"] == 2
+    assert st["available_stands"] == 15
+    assert st["broken_stands"] == 3
+    assert st["total_capacity"] == 20
+    assert st["commune_name"] == "Luxembourg"

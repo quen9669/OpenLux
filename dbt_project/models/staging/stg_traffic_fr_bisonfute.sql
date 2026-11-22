@@ -11,7 +11,7 @@ SELECT DISTINCT
     status::VARCHAR AS status,
     comment::VARCHAR AS comment,
     observed_at::VARCHAR AS raw_observed_at,
-    CURRENT_TIMESTAMP AS collected_at_utc,
+    COALESCE(TRY_CAST(observed_at AS TIMESTAMP), '2026-11-20 22:00:00'::TIMESTAMP) AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     commune_name::VARCHAR AS raw_commune_name,

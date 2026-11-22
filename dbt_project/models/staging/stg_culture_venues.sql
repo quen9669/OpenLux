@@ -8,7 +8,7 @@ SELECT DISTINCT
     'Confirmé' AS status,
     raw_source.start_date::VARCHAR AS raw_start_date,
     raw_source.end_date::VARCHAR AS raw_end_date,
-    CURRENT_TIMESTAMP AS observed_at_utc,
+    COALESCE(TRY_CAST(raw_source.start_date AS TIMESTAMP), '2026-01-01 00:00:00'::TIMESTAMP) AS observed_at_utc,
     NULL::VARCHAR AS start_time,
     raw_source.venue::VARCHAR AS venue,
     NULL::VARCHAR AS address,

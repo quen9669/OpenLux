@@ -9,3 +9,4 @@ SELECT DISTINCT
     bidding_zone::VARCHAR AS bidding_zone,
     'electricity_spot_delu' AS source_id
 FROM raw_source
+WHERE observed_at IS NOT NULL

@@ -15,3 +15,4 @@ SELECT DISTINCT
     commune_name::VARCHAR AS raw_commune_name,
     'aviation_opensky_lu' AS source_id
 FROM raw_source
+WHERE icao24 IS NOT NULL

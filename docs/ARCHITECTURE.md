@@ -122,21 +122,21 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
-| `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 60 |
-| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 65 |
-| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 194 |
-| `src/openlux/core/parsers_extra.py` | Parsers spécialisés (STATEC permis SDMX, OpenSky, VDL chantiers ms Epoch, inflation, Vel'oH) | 148 |
-| `src/openlux/core/parsers_env.py` | Parsers environnementaux & énergie (qualité de l'air, pollen, météo Open-Meteo, spot SMARD) | 152 |
-| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze résilient) | 186 |
-| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps, table `obs_runs` et historique | 196 |
-| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md`, payload de supervision et métriques Prometheus | 193 |
-| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et conservation incrémentale | 200 |
-| `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 144 |
-| `src/openlux/api/main.py` | API REST FastAPI : cache résilient DuckDB, `/status`, `/metrics` (Prometheus), auto-sync lifespan | 198 |
-| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 163 |
-| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `schedule`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 197 |
-| `src/openlux/**/__init__.py` | En-têtes et initialisations de packages | 11 |
-| **Total Cœur Python** | **Tous les fichiers $\le 200$ lignes** | **2 107** |
+| `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 47 |
+| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 56 |
+| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 170 |
+| `src/openlux/core/parsers_extra.py` | Parsers spécialisés (STATEC permis SDMX, OpenSky, VDL chantiers ms Epoch, Vel'oH JCDecaux v3) | 171 |
+| `src/openlux/core/parsers_env.py` | Parsers environnementaux & macro (qualité de l'air, pollen, météo Open-Meteo, spot SMARD, inflation STATEC) | 171 |
+| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, auth query params, fallback, SHA-256, Bronze résilient) | 172 |
+| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps, table `obs_runs` et historique | 178 |
+| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md`, payload de supervision et métriques Prometheus | 180 |
+| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et conservation incrémentale | 191 |
+| `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 138 |
+| `src/openlux/api/main.py` | API REST FastAPI : cache résilient DuckDB, `/status`, `/metrics` (Prometheus), auto-sync lifespan | 163 |
+| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 148 |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `schedule`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 187 |
+| `src/openlux/**/__init__.py` | En-têtes et initialisations de packages | 9 |
+| **Total Cœur Python** | **Tous les fichiers $\le 200$ lignes (strictement $\le 191$)** | **1 981** |
 
 
 ---

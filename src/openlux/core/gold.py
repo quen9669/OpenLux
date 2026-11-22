@@ -21,6 +21,36 @@ from openlux.config import load_sources_config
 from openlux.core.quality import get_latest_source_health
 
 
+def _export_one(
+    con: duckdb.DuckDBPyConnection, tbl: str, tmp: Path, target: Path
+) -> tuple[Path, Path] | None:
+    t, f = tmp / f"{tbl}.parquet", target / f"{tbl}.parquet"
+    cols = [c[0] for c in con.execute(f"DESCRIBE SELECT * FROM {tbl}").fetchall()]
+    cols_s, cp = ", ".join(cols), f"TO '{t.as_posix()}' (FORMAT PARQUET, CODEC 'ZSTD')"
+    fb = f"COPY (SELECT * FROM {tbl} WHERE {cols[0]} IS NOT NULL) {cp}"
+    if f.exists() and f.stat().st_size > 0:
+        try:
+            p = f.as_posix()
+            u = f"SELECT * FROM read_parquet('{p}') UNION ALL BY NAME SELECT * FROM {tbl}"
+            q = f"SELECT DISTINCT {cols_s} FROM ({u}) WHERE {cols[0]} IS NOT NULL"
+            con.execute(f"COPY ({q}) {cp}")
+            tp = t.as_posix()
+            dq = (
+                f"SELECT count(*) FROM ("
+                f"(SELECT * FROM read_parquet('{p}') EXCEPT SELECT * FROM read_parquet('{tp}')) "
+                f"UNION ALL "
+                f"(SELECT * FROM read_parquet('{tp}') EXCEPT SELECT * FROM read_parquet('{p}')))"
+            )
+            if con.execute(dq).fetchone()[0] == 0:
+                t.unlink(missing_ok=True)
+                return None
+        except Exception:
+            con.execute(fb)
+    else:
+        con.execute(fb)
+    return (t, f)
+
+
 def export_gold_parquets(
     duckdb_path: Path | str = "data/openlux.duckdb", gold_dir: Path | str = "data/gold"
 ) -> list[str]:
@@ -37,26 +67,10 @@ def export_gold_parquets(
         time.sleep(0.2)
     if not con:
         return []
-    replaces, tables = [], []
     try:
         q_tbl = "SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'gold_%'"
         tables = [r[0] for r in con.execute(q_tbl).fetchall()]
-        for tbl in tables:
-            t, f = tmp / f"{tbl}.parquet", target / f"{tbl}.parquet"
-            cols = [c[0] for c in con.execute(f"DESCRIBE SELECT * FROM {tbl}").fetchall()]
-            cols_s, cp = ", ".join(cols), f"TO '{t.as_posix()}' (FORMAT PARQUET, CODEC 'ZSTD')"
-            fb = f"COPY (SELECT * FROM {tbl} WHERE {cols[0]} IS NOT NULL) {cp}"
-            if f.exists() and f.stat().st_size > 0:
-                try:
-                    p = f.as_posix()
-                    u = f"SELECT * FROM read_parquet('{p}') UNION ALL BY NAME SELECT * FROM {tbl}"
-                    q = f"SELECT DISTINCT {cols_s} FROM ({u}) WHERE {cols[0]} IS NOT NULL"
-                    con.execute(f"COPY ({q}) {cp}")
-                except Exception:
-                    con.execute(fb)
-            else:
-                con.execute(fb)
-            replaces.append((t, f))
+        replaces = [r for tbl in tables if (r := _export_one(con, tbl, tmp, target))]
     finally:
         con.close()
     for t, f in replaces:
