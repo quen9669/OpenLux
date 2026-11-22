@@ -1,0 +1,21 @@
+name: Fetch JCDecaux Sample
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch JCDecaux data
+        env:
+          KEY: ${{ secrets.JCDECAUX_API_KEY }}
+        run: |
+          mkdir -p output
+          curl -s "https://api.jcdecaux.com/vls/v1/stations?contract=luxembourg&apiKey=$KEY" > output/v1.json
+          curl -s "https://api.jcdecaux.com/vls/v3/stations?contract=luxembourg&apiKey=$KEY" > output/v3.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jcdecaux-sample
+          path: output/
