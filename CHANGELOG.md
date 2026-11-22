@@ -7,6 +7,61 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- **Audit, Correction & Enrichissement des Data Marts Gold (Équipe 5 Agents)** :
+  - **Mobilité, Parkings & Chantiers (Agent 1)** :
+    - Extraction des balises DATEX II réelles `<validityTimeSpecification><overallStartTime>` et `<overallEndTime>` dans `cita_datex2` pour peupler `start_date` et `end_date` dans `gold_roadworks`.
+    - Conversion des timestamps Epoch millisecondes ESRI dans `vdl_roadworks_json` et support SQL DuckDB `to_timestamp(ms / 1000)` dans `silver_roadworks.sql`.
+    - Normalisation des dates RFC 2822 de VDL Parkings dans `vdl_parking` (`email.utils.parsedate_to_datetime`) et `silver_mobility_parkings.sql` (`TRY_STRPTIME` + regex), garantissant 0 `NULL` sur `observed_at_utc`.
+  - **Immobilier & Carburants (Agent 2)** :
+    - Règle métier stricte pour tous les studios dans `ref_housing_market_deals.csv` et `silver_housing.sql` : forçage de `bedrooms_count = 0` et `rooms_count = 1` (dont annonce atHome `id-8356426`).
+    - Conversion des intervalles mois-année (ex: `Jan-26`) du Ministère de l'Énergie en dates ISO premier du mois dans `fuel_prices_csv` et support multi-formats dans `silver_fuel_prices.sql`, assurant un horodatage `observed_at_utc` garanti dans `gold_fuel_prices`.
+  - **Culture & Vie Quotidienne (Agent 3)** :
+    - Ajout de la colonne `observed_at_utc` sur toute la chaîne culturelle (`stg_culture_echo_lu`, `stg_culture_venues`, `stg_events_*`, `silver_culture_events`, `gold_culture_events`), permettant de dissocier date de l'événement et date de collecte de l'annonce.
+    - Élimination des dates fixes périmées 20/11 dans `silver_daily_life.sql` au profit de l'ingestion dynamique `collected_at_utc`.
+  - **Flux Environnementaux & Trafic Temps Réel (Agent 4)** :
+    - Déblocage des flux bloqués au 20/11 (`gold_water_levels`, `gold_radioactivity`, `gold_public_transit`, `gold_crossborder_traffic`, `gold_traffic_events`) en utilisant l'horodatage d'ingestion dynamique `collected_at_utc` lorsque la source distante est un repli ou figée.
+    - Protection de non-écrasement des fichiers Bronze `latest.json.gz` si un moissonnage renvoie 0 ligne.
+  - **Coordinateur QA & Validation Globale (Agent 5)** :
+    - Répartition équilibrée du code parser entre `parsers.py` (189 lignes) et `parsers_extra.py` (192 lignes) pour respecter la règle $\le 200$ lignes par fichier.
+    - Reconstruction dbt complète (`seed --full-refresh`, `run` 83/83 PASS, `test` 1/1 PASS), export Parquet Gold certifié.
+    - 39 tests unitaires offline passants (`pytest`), `ruff check .` et `ruff format --check .` 100% conformes.
+
+### Added
+- **Résilience Concurrence DuckDB & Parsers Spécialisés (`parsers_extra.py`)** :
+  - **Résilience Anti-Verrouillage DuckDB** : Système de lecture avec retry/backoff et mise en cache mémoire (`_get_health_and_history`) dans FastAPI `main.py`, garantissant que `/v1/status` et `/metrics` continuent de répondre avec 100% des métriques même pendant une transaction dbt d'arrière-plan.
+  - **Protection de l'Intégrité Bronze** : `_write_bronze()` n'écrase jamais `latest.{ext}.gz` lorsqu'une extraction renvoie 0 ligne, prévenant la corruption des schémas DuckDB.
+  - **Gestion Robuste des Payloads & Fallback** : `collect_source` encapsule le traitement de payload (`_process_payload`) dans un bloc d'exception avec bascule automatique vers le backup en cas de payload distant malformé.
+  - **Parsers Spécialisés (`parsers_extra.py`)** : Découpage modulaire respectant la règle $\le 200$ lignes par fichier :
+    - `air_quality_openmeteo_json` : normalisation des polluants Open-Meteo (PM10, PM2.5, NO2, O3).
+    - `opensky_json` : normalisation des vecteurs ADS-B OpenSky Network (aéronefs au-dessus du Luxembourg).
+    - `electricity_smard_json` : extraction des prix spot DE-LU quart-horaires SMARD.
+    - `vdl_roadworks_json` : extraction des chantiers Ville de Luxembourg depuis le serveur ESRI VDL.
+    - `statec_inflation_json` : extraction de l'IPCN et inflation STATEC.
+  - **Ordonnanceur Réactif** : Exécution immédiate au démarrage du serveur (`--auto-sync`) pour traiter les flux échus sans délai d'attente initial.
+
+### Added
+- **Résolution 100% HEALTHY des Flux & Automatisation Continue (Daemon / VPS)** :
+  - **Correction Intégrale des Flux Externes** :
+    - `fuel_prices_lu` : Connexion directe au CSV officiel du Ministère de l'Énergie luxembourgeois (`comparaisonprix-carburants-par-motorisation.csv`), parseur dédié `fuel_prices_csv` produisant 70 enregistrements réels (E10, Diesel, GPL, électricité, hydrogène).
+    - `veloh_stations` : Connexion au flux direct officiel JCDecaux Luxembourg (`https://developer.jcdecaux.com/rest/vls/stations/Luxembourg.json`), parseur dédié `veloh_stations_json` produisant 141 stations avec coordonnées et capacités.
+    - `meteo_lux_obs` : Promotion d'Open-Meteo en source primaire pérenne, parseur `meteo_openmeteo_json` aplatissant les observations en temps réel au schéma météo dbt.
+    - `parkings_vdl` : Parseur dédié `vdl_parking` pour aplatir le feed temps réel de la Ville de Luxembourg (29 parkings et P+R avec disponibilités exactes).
+  - **Santé Globale** : 40 sources sur 40 en statut 🟢 `GOOD` (**100% HEALTHY**), 0 attention, 0 erreur, 9 225 lignes de vraies données consolidées, score qualité moyen de 100.0%.
+  - **Planificateur & Ingestion Continue** :
+    - Commande CLI `openlux schedule [--interval 60]` pour l'exécution automatique en local des flux arrivés à échéance.
+    - Option `--auto-sync` pour `openlux serve` activant un worker asynchrone non-bloquant dans FastAPI.
+    - Fichiers de déploiement en production pour VPS : services systemd (`deploy/openlux.service`, `deploy/openlux-scheduler.service`), configuration `deploy/crontab` et guide complet dans `deploy/README.md`.
+    - 35/35 tests pytest passants, 100% ruff clean.
+
+
+### Added
+- **Centre de Contrôle & Supervision des Flux (Monitoring Local & Export Grafana)** :
+  - **Enrichissement de l'API `/v1/status`** : Fournit pour chaque flux le statut d'exécution (`GOOD`, `ATTENTION`, `ERROR`), l'horodatage du dernier run (`last_checked_utc`), le volume de données collectées (`row_count`), la validation qualité (`min_rows_passed`, `required_fields`, tests dbt), l'adaptateur et l'URL utilisée (`primary` vs `backup`), la dernière mutation réelle (`last_changed_utc`), et l'échéance calculée du prochain passage (`next_run_due_utc`, `seconds_until_due`, `is_due`).
+  - **Export Standard Prometheus (`GET /metrics`)** : Génère en Python pur (zéro dépendance externe) les métriques `openlux_flow_status`, `openlux_flow_trust_score`, `openlux_flow_rows_collected`, `openlux_flow_last_run_timestamp_seconds`.
+  - **Tableau de Bord Centralisé V2 (`web_v2`)** : Ajout d'une vue complète "Supervision des Flux & Qualité" dans l'application web avec KPIs temps réel, barre de recherche, filtres dynamiques par statut (`GOOD`, `ATTENTION`, `ERROR`, `DUE`), jauges visuelles de Trust Score, historique récent des runs et messages d'anomalies.
+  - **Kit Grafana pour Déploiement VPS** : Modèle de tableau de bord prêt à importer [`docs/grafana/dashboard_openlux_hub.json`](file:///docs/grafana/dashboard_openlux_hub.json) et guide de configuration [`docs/grafana/README.md`](file:///docs/grafana/README.md) pour Grafana via Prometheus ou plugin Infinity.
+
+### Added
 - **Refonte Totale du Domaine Immobilier & Logement (`gold_housing`)** :
   - **Moissonnage Réel atHome.lu (Zero-Dead-Link)** : Collecte directe de 120 offres de marché réelles (vente et location) au Luxembourg, extraction native des 29 attributs Schema.org JSON-LD (prix EUR, surface m², prix/m², chambres, DPE classe A-I, isolation thermique, terrasse, balcon, ascenseur, coordonnées GPS exactes). Vérification programmatique stricte via `httpx.get()` : **100% des URLs renvoient HTTP 200**.
   - **Séries Officielles STATEC (Lustat SDMX)** : Intégration de l'API REST SDMX officielle (`DF_D4113` logements autorisés, `DF_D4123` bâtiments autorisés) couvrant 2010 à 2025 pour les 12 cantons et la Ville de Luxembourg (**832 observations officielles**).

@@ -13,7 +13,14 @@ SELECT
     u.facility_id,
     u.facility_type,
     u.facility_name,
-    TRY_CAST(u.raw_observed_at AS TIMESTAMP) AS observed_at_utc,
+    COALESCE(
+        TRY_CAST(u.raw_observed_at AS TIMESTAMP),
+        TRY_STRPTIME(
+            REGEXP_EXTRACT(u.raw_observed_at, '([0-9]{1,2}\\s+[A-Za-z]{3}\\s+[0-9]{4}\\s+[0-9]{2}:[0-9]{2}:[0-9]{2})'),
+            '%d %b %Y %H:%M:%S'
+        ),
+        CURRENT_TIMESTAMP
+    ) AS observed_at_utc,
     u.available_capacity,
     u.total_capacity,
     u.opening_hours,

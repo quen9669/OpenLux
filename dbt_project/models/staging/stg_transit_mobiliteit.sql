@@ -10,6 +10,7 @@ SELECT
     disruption_level::VARCHAR AS disruption_level,
     message::VARCHAR AS message,
     observed_at::VARCHAR AS raw_observed_at,
+    CURRENT_TIMESTAMP AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     commune_name::VARCHAR AS raw_commune_name,

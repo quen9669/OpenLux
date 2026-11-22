@@ -11,11 +11,20 @@ SELECT
     u.work_id,
     u.authority,
     u.road_name,
-    TRY_CAST(u.raw_start_date AS TIMESTAMP) AS start_date,
-    TRY_CAST(u.raw_end_date AS TIMESTAMP) AS end_date,
+    CASE
+        WHEN TRY_CAST(u.raw_start_date AS BIGINT) IS NOT NULL THEN to_timestamp(TRY_CAST(u.raw_start_date AS BIGINT) / 1000.0)
+        ELSE TRY_CAST(u.raw_start_date AS TIMESTAMP)
+    END AS start_date,
+    CASE
+        WHEN TRY_CAST(u.raw_end_date AS BIGINT) IS NOT NULL THEN to_timestamp(TRY_CAST(u.raw_end_date AS BIGINT) / 1000.0)
+        ELSE TRY_CAST(u.raw_end_date AS TIMESTAMP)
+    END AS end_date,
     u.impact_level,
     u.title,
-    TRY_CAST(u.raw_observed_at AS TIMESTAMP) AS observed_at_utc,
+    CASE
+        WHEN TRY_CAST(u.raw_observed_at AS BIGINT) IS NOT NULL THEN to_timestamp(TRY_CAST(u.raw_observed_at AS BIGINT) / 1000.0)
+        ELSE TRY_CAST(u.raw_observed_at AS TIMESTAMP)
+    END AS observed_at_utc,
     COALESCE(u.lat, c.lat) AS lat,
     COALESCE(u.lon, c.lon) AS lon,
     COALESCE(c.code_lau, u.raw_commune_name) AS commune_lau,

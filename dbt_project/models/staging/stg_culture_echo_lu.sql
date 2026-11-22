@@ -28,6 +28,7 @@ SELECT
     COALESCE(raw_source.status::VARCHAR, 'Confirmé') AS status,
     raw_source.start_date::VARCHAR AS raw_start_date,
     raw_source.end_date::VARCHAR AS raw_end_date,
+    CURRENT_TIMESTAMP AS observed_at_utc,
     raw_source.start_time::VARCHAR AS start_time,
     raw_source.venue::VARCHAR AS venue,
     raw_source.address::VARCHAR AS address,

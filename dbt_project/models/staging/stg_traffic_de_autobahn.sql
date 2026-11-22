@@ -11,6 +11,7 @@ SELECT
     status::VARCHAR AS status,
     comment::VARCHAR AS comment,
     observed_at::VARCHAR AS raw_observed_at,
+    CURRENT_TIMESTAMP AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     commune_name::VARCHAR AS raw_commune_name,

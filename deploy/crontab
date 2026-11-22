@@ -1,0 +1,8 @@
+# Crontab de production pour OpenLux Hub (alternative au service openlux-scheduler.service)
+# À ajouter dans la crontab de l'utilisateur openlux (`crontab -e`)
+
+# Exécution toutes les 5 minutes des flux arrivés à échéance (cadence 15m, 30m, 60m, 24h)
+*/5 * * * * cd /opt/openlux-hub && /home/openlux/.cargo/bin/uv run openlux run --due >> /opt/openlux-hub/logs/cron_runs.log 2>&1
+
+# Compactage hebdomadaire des snapshots Bronze le dimanche à 03:00 UTC
+0 3 * * 0 cd /opt/openlux-hub && /home/openlux/.cargo/bin/uv run openlux compact >> /opt/openlux-hub/logs/cron_compact.log 2>&1

@@ -8,6 +8,7 @@ SELECT
     road_name::VARCHAR AS road_name,
     situation_type::VARCHAR AS situation_type,
     start_time::VARCHAR AS raw_start_time,
+    CURRENT_TIMESTAMP AS collected_at_utc,
     lat::DOUBLE AS lat,
     lon::DOUBLE AS lon,
     comment::VARCHAR AS traffic_comment,

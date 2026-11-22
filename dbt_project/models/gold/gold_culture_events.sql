@@ -4,6 +4,7 @@ SELECT
     status,
     start_date,
     end_date,
+    observed_at_utc,
     start_time,
     venue,
     address,

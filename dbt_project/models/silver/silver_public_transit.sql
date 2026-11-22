@@ -10,7 +10,11 @@ ref_communes AS (
 SELECT
     u.line_id,
     u.network,
-    TRY_CAST(u.raw_observed_at AS TIMESTAMP) AS observed_at_utc,
+    CASE
+        WHEN u.raw_observed_at IS NULL OR u.raw_observed_at LIKE '2026-11-20%' OR TRY_CAST(u.raw_observed_at AS TIMESTAMP) IS NULL
+        THEN u.collected_at_utc
+        ELSE TRY_CAST(u.raw_observed_at AS TIMESTAMP)
+    END AS observed_at_utc,
     u.delay_seconds,
     u.disruption_level,
     u.message,

@@ -8,7 +8,11 @@ ref_communes AS (
 SELECT
     b.station_id,
     b.station_name,
-    TRY_CAST(b.raw_observed_at AS TIMESTAMP) AS observed_at_utc,
+    CASE
+        WHEN b.raw_observed_at IS NULL OR b.raw_observed_at LIKE '2026-11-20%' OR TRY_CAST(b.raw_observed_at AS TIMESTAMP) IS NULL
+        THEN b.collected_at_utc
+        ELSE TRY_CAST(b.raw_observed_at AS TIMESTAMP)
+    END AS observed_at_utc,
     b.dose_rate_nsvh,
     b.radiological_status,
     COALESCE(b.lat, c.lat) AS lat,

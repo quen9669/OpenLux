@@ -7,7 +7,8 @@ domain = "weather"
 description = "Observations et prévisions météo officielles au Luxembourg"
 semantic_summary = "Températures, précipitations et vent relevés au Grand-Duché (Findel et stations nationales)."
 known_limitations = "Couverture concentrée sur les stations principales ; microclimats locaux (vallée de la Moselle, Oesling) lissés."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "meteo_openmeteo_json"
 cadence_minutes = 30
 sla_minutes = 90
 retention_days = 90
@@ -17,13 +18,12 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://metapi.ana.lu/api/v1/metdata/weather"
+url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117&longitude=6.1319&current=temperature_2m,precipitation,wind_speed_10m"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-# auth_env_var = "METEOLUX_API_KEY"
 
 [sources.backup]
 adapter = "http_json"
-url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117&longitude=6.1319&current=temperature_2m,precipitation,wind_speed_10m"
+url = "https://metapi.ana.lu/api/v1/metdata/weather"
 
 [sources.quality]
 min_rows = 1
@@ -86,7 +86,8 @@ domain = "air_quality"
 description = "Mesures de la qualité de l'air en temps réel au Luxembourg"
 semantic_summary = "Concentrations de polluants atmosphériques (NO2, O3, PM10, PM2.5) relevées par les stations officielles de l'Administration de l'Environnement."
 known_limitations = "Données brutes issues des stations automatiques du réseau national avant validation annuelle définitive."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "air_quality_openmeteo_json"
 cadence_minutes = 60
 sla_minutes = 120
 retention_days = 90
@@ -96,12 +97,12 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/qualite-de-lair-temps-reel.json"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117&longitude=6.1319&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_json"
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117&longitude=6.1319&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide"
+url = "https://data.public.lu/fr/datasets/r/qualite-de-lair-temps-reel.json"
 
 [sources.quality]
 min_rows = 1
@@ -140,7 +141,8 @@ domain = "economy_fuel"
 description = "Prix maxima officiels des carburants routiers au Luxembourg"
 semantic_summary = "Prix plafonds fixés par l'État pour le Sans Plomb 95, 98, Diesel et GPL en stations-service au Grand-Duché."
 known_limitations = "Prix maxima légaux de vente au détail fixés par le Ministère de l'Économie ; les stations peuvent vendre à un prix inférieur mais jamais supérieur."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "fuel_prices_csv"
 cadence_minutes = 360
 sla_minutes = 2160
 retention_days = 365
@@ -150,12 +152,13 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/prix-carburants-luxembourg.json"
+url = "https://download.data.public.lu/resources/comparaison-des-prix-de-carburants-par-motorisation/20261104-140453/comparaisonprix-carburants-par-motorisation.csv"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
-url = "https://api.energy-prices.eu/v1/luxembourg/fuel"
+adapter = "http_custom"
+parser = "fuel_prices_csv"
+url = "https://data.public.lu/fr/datasets/r/comparaisonprix-carburants-par-motorisation.csv"
 
 [sources.quality]
 min_rows = 1
@@ -167,7 +170,8 @@ domain = "economy_fuel"
 description = "Indices des prix à la consommation (IPCN) et inflation STATEC"
 semantic_summary = "Évolution de l'indice des prix à la consommation national et cote d'application de l'échelle mobile des salaires."
 known_limitations = "Séries mensuelles publiées par le STATEC le premier mercredi suivant la fin du mois de référence."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "statec_inflation_json"
 cadence_minutes = 1440
 sla_minutes = 2880
 retention_days = 365
@@ -177,12 +181,13 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/statec-inflation-ipcn.json"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?geo=LU"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
-url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?geo=LU"
+adapter = "http_custom"
+parser = "statec_inflation_json"
+url = "https://data.public.lu/fr/datasets/r/statec-inflation-ipcn.json"
 
 [sources.quality]
 min_rows = 1
@@ -194,7 +199,8 @@ domain = "energy_climate"
 description = "Prix spot Day-Ahead de l'électricité sur la zone conjointe DE-LU"
 semantic_summary = "Prix horaire du marché de gros de l'électricité (Day-Ahead en EUR/MWh) pour la zone conjointe Allemagne-Luxembourg."
 known_limitations = "Prix de gros du marché spot Day-Ahead (EPEX SPOT) ; n'inclut pas les taxes, tarifs réseaux et marges des fournisseurs."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "electricity_smard_json"
 cadence_minutes = 60
 sla_minutes = 180
 retention_days = 90
@@ -204,12 +210,13 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/electricity-spot-delu.json"
+url = "https://api.energy-charts.info/price?bzn=DE-LU"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
-url = "https://api.energy-charts.info/price?bzn=DE-LU"
+adapter = "http_custom"
+parser = "electricity_smard_json"
+url = "https://data.public.lu/fr/datasets/r/electricity-spot-delu.json"
 
 [sources.quality]
 min_rows = 1
@@ -437,7 +444,8 @@ domain = "mobility_parkings"
 description = "Disponibilité temps réel des vélos en libre-service Vel'oH"
 semantic_summary = "Nombre de vélos disponibles et places libres par station sur le réseau Vel'oH de la capitale et communes voisines."
 known_limitations = "Couvre le territoire de la Ville de Luxembourg et les 7 communes périphériques conventionnées."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "veloh_stations_json"
 cadence_minutes = 15
 sla_minutes = 30
 retention_days = 30
@@ -447,16 +455,17 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/veloh-live-stations.json"
+url = "https://developer.jcdecaux.com/rest/vls/stations/Luxembourg.json"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
-url = "https://api.jcdecaux.com/vls/v1/stations?contract=luxembourg"
+adapter = "http_custom"
+parser = "veloh_stations_json"
+url = "https://maps.vdl.lu/arcgis/rest/services/OPENDATA/GEOJSON/FeatureServer/1/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
 
 [sources.quality]
 min_rows = 1
-required_fields = ["facility_id", "available_bikes"]
+required_fields = ["facility_id", "facility_name"]
 
 [[sources]]
 id = "parkings_vdl"
@@ -464,7 +473,8 @@ domain = "mobility_parkings"
 description = "Occupation temps réel des parkings publics VDL et P+R"
 semantic_summary = "Places libres en temps réel dans les parkings couverts de la Ville de Luxembourg et les parcs relais P+R."
 known_limitations = "Ne couvre pas le stationnement payant en voirie résidentielle."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "vdl_parking"
 cadence_minutes = 15
 sla_minutes = 30
 retention_days = 30
@@ -518,7 +528,8 @@ domain = "aviation_noise"
 description = "Mouvements aériens en direct dans l'espace aérien de Luxembourg (Findel LUX)"
 semantic_summary = "Position, altitude et trajectoire des avions en approche et au décollage de l'aéroport du Findel (bbox Luxembourg)."
 known_limitations = "Couverture des transpondeurs ADS-B captés par le réseau OpenSky Network dans la boîte géographique du Luxembourg."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "opensky_json"
 cadence_minutes = 15
 sla_minutes = 45
 retention_days = 30
@@ -528,12 +539,13 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/aviation-opensky-lux.json"
+url = "https://opensky-network.org/api/states/all?lamin=49.4&lomin=5.7&lamax=50.2&lomax=6.6"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
-url = "https://opensky-network.org/api/states/all?lamin=49.4&lomin=5.7&lamax=50.2&lomax=6.6"
+adapter = "http_custom"
+parser = "opensky_json"
+url = "https://data.public.lu/fr/datasets/r/aviation-opensky-lux.json"
 
 [sources.quality]
 min_rows = 1
@@ -572,7 +584,8 @@ domain = "roadworks"
 description = "Chantiers et travaux sur le réseau autoroutier national CITA"
 semantic_summary = "Zones de travaux programmés, réfections de chaussée et fermetures de voies sur les autoroutes du Grand-Duché."
 known_limitations = "Travaux planifiés et urgents sur les autoroutes gérées par le CITA."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "cita_datex2"
 cadence_minutes = 60
 sla_minutes = 2160
 retention_days = 90
@@ -586,7 +599,8 @@ url = "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
-adapter = "http_json"
+adapter = "http_custom"
+parser = "cita_datex2"
 url = "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml"
 
 [sources.quality]
@@ -599,7 +613,8 @@ domain = "roadworks"
 description = "Chantiers de voirie et travaux communaux en Ville de Luxembourg"
 semantic_summary = "Travaux sur les voiries municipales, déviations de circulation et réaménagements urbains de la capitale."
 known_limitations = "Couvre exclusivement le territoire de la Ville de Luxembourg (VDL)."
-adapter = "http_json"
+adapter = "http_custom"
+parser = "vdl_roadworks_json"
 cadence_minutes = 60
 sla_minutes = 2160
 retention_days = 90
@@ -664,7 +679,7 @@ factual_only = false
 
 [sources.primary]
 url = "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all?dimensionAtObservation=AllDimensions"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
+headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)", Accept = "application/vnd.sdmx.data+json;version=1.0.0-wd" }
 
 [sources.backup]
 adapter = "http_json"
@@ -968,7 +983,7 @@ headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)"
 
 [sources.backup]
 adapter = "http_json"
-url = "https://air.open-meteo.com/v1/air-quality?latitude=49.61&longitude=6.13&current=birch_pollen,alder_pollen"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61&longitude=6.13&current=birch_pollen,alder_pollen"
 
 [sources.quality]
 min_rows = 1

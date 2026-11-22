@@ -6,7 +6,11 @@ SELECT
     event_id,
     road_name,
     situation_type,
-    TRY_CAST(raw_start_time AS TIMESTAMP) AS observed_at_utc,
+    CASE
+        WHEN raw_start_time IS NULL OR raw_start_time LIKE '2026-11-20%' OR TRY_CAST(raw_start_time AS TIMESTAMP) IS NULL
+        THEN collected_at_utc
+        ELSE TRY_CAST(raw_start_time AS TIMESTAMP)
+    END AS observed_at_utc,
     lat,
     lon,
     NULL::VARCHAR AS commune_lau,

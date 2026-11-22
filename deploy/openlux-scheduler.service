@@ -1,0 +1,26 @@
+# /etc/systemd/system/openlux-scheduler.service
+# Service systemd pour l'ordonnanceur continu OpenLux Hub (rechargement automatique des flux échus)
+
+[Unit]
+Description=OpenLux Hub - Daemon Ordonnanceur & Ingestion Continue
+After=network.target
+
+[Service]
+Type=simple
+User=openlux
+Group=openlux
+WorkingDirectory=/opt/openlux-hub
+Environment="PATH=/home/openlux/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/openlux/.cargo/bin/uv run openlux schedule --interval 60
+Restart=always
+RestartSec=10
+
+# Durcissement de sécurité
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/openlux-hub/data /opt/openlux-hub/logs
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

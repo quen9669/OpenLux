@@ -50,6 +50,10 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           Accueil & Gouvernance
         </button>
+        <button class="nav-tab" data-view="monitoring">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Supervision des Flux & Qualité
+        </button>
         <button class="nav-tab" data-view="donnees">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
           Catalogue de Données
@@ -128,6 +132,10 @@
           <button class="btn btn-primary" onclick="document.querySelector('.nav-tab[data-view=donnees]').click()">
             <span>Consulter les 22 Data Marts</span>
             <span>&rarr;</span>
+          </button>
+          <button class="btn btn-gov" onclick="document.querySelector('.nav-tab[data-view=monitoring]').click()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Supervision des Flux & Qualité &rarr;</span>
           </button>
           <button class="btn btn-secondary" onclick="document.querySelector('.nav-tab[data-view=decisions]').click()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -258,6 +266,91 @@
             </p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= VUE MONITORING : CENTRE DE CONTRÔLE DES FLUX & QUALITÉ ================= -->
+    <section class="view-panel" id="view-monitoring">
+      <div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <span style="font-size:0.75rem;font-weight:700;color:var(--gov-green);text-transform:uppercase;letter-spacing:0.06em;">OBSERVABILITÉ MLOps & SANTÉ DES FLUX</span>
+          <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Supervision des Flux & Qualité</h2>
+          <p style="font-size:0.95rem;color:var(--text-secondary);max-width:800px;margin-top:0.35rem;">
+            Surveillance centralisée en temps réel : cadences d'exécution, intégrité des données, volume extrait par requête, tests de qualité et diagnostics détaillés.
+          </p>
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+          <a href="/metrics" target="_blank" class="btn btn-secondary btn-sm" title="Exporter au format Prometheus pour Grafana">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            <span>Format Prometheus (/metrics)</span>
+          </a>
+          <a href="/v1/status" target="_blank" class="btn btn-secondary btn-sm" title="Consulter le flux JSON brut pour Grafana Infinity">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span>API JSON (/v1/status)</span>
+          </a>
+          <button class="btn btn-primary btn-sm" id="btnRefreshMonitoringV2" onclick="refreshMonitoringV2()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span>Rafraîchir en direct</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid Observabilité -->
+      <div class="stats-grid-v2" style="margin-bottom:2rem;">
+        <div class="stat-card-v2 gov">
+          <div class="stat-num-v2" id="monKpiGlobalStatus" style="color:var(--gov-green);">100% NOMINAL</div>
+          <div class="stat-lbl-v2">Santé Globale des Flux</div>
+          <div class="stat-detail-v2" id="monKpiGlobalDetail">31 flux sous contrôle SLA</div>
+        </div>
+        <div class="stat-card-v2">
+          <div class="stat-num-v2 mono" id="monKpiTotalRows">-</div>
+          <div class="stat-lbl-v2">Données Extraites (Lignes)</div>
+          <div class="stat-detail-v2">Volume consolidé certifié</div>
+        </div>
+        <div class="stat-card-v2">
+          <div class="stat-num-v2 mono" id="monKpiAvgScore">100.0%</div>
+          <div class="stat-lbl-v2">Trust Score Moyen</div>
+          <div class="stat-detail-v2">Fraîcheur, complétude & validité dbt</div>
+        </div>
+        <div class="stat-card-v2">
+          <div class="stat-num-v2 mono" id="monKpiActiveFlows">31 / 31</div>
+          <div class="stat-lbl-v2">Flux Sans Anomalie</div>
+          <div class="stat-detail-v2" id="monKpiAttentionErrors">0 en dégradation • 0 en erreur</div>
+        </div>
+      </div>
+
+      <!-- Barre de Filtres et Recherche Monitoring -->
+      <div class="catalog-header-bar" style="margin-bottom:1.25rem;">
+        <div class="catalog-search-box">
+          <input type="text" class="catalog-search-input" id="monSearchInput" placeholder="Filtrer par flux, domaine, adaptateur (ex: meteo, datex2, cita, http_json)..." oninput="handleMonitoringSearchV2(this.value)">
+          <span class="search-badge" id="monFilterCount">31 flux</span>
+        </div>
+        <div class="filter-pills-bar" id="monStatusFilters">
+          <button class="filter-btn-pill active" data-status="all" onclick="handleMonitoringStatusFilter('all')">Tous les flux</button>
+          <button class="filter-btn-pill" data-status="GOOD" onclick="handleMonitoringStatusFilter('GOOD')">🟢 Succès (GOOD)</button>
+          <button class="filter-btn-pill" data-status="ATTENTION" onclick="handleMonitoringStatusFilter('ATTENTION')">🟡 Dégradé (ATTENTION)</button>
+          <button class="filter-btn-pill" data-status="ERROR" onclick="handleMonitoringStatusFilter('ERROR')">🔴 Erreurs (ERROR)</button>
+          <button class="filter-btn-pill" data-status="DUE" onclick="handleMonitoringStatusFilter('DUE')">⏳ Échus / Prêts</button>
+        </div>
+      </div>
+
+      <!-- Tableau Central de Supervision des Flux -->
+      <div class="monitoring-table-container">
+        <table class="monitoring-table" id="monitoringTableV2">
+          <thead>
+            <tr>
+              <th style="width:22%;">Flux & Domaine</th>
+              <th style="width:13%;">Statut & Dernier Run</th>
+              <th style="width:16%;">Qualité & Validation</th>
+              <th style="width:18%;">Façon de Récupérer (Mode)</th>
+              <th style="width:15%;">Quantité Données & Mutation</th>
+              <th style="width:16%;">Cadence & Prochain Run</th>
+            </tr>
+          </thead>
+          <tbody id="monitoringTableBodyV2">
+            <!-- Rendu dynamique JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 

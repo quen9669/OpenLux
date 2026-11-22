@@ -38,15 +38,29 @@ def test_web_portal_serving(client: TestClient) -> None:
 
 
 def test_api_status(client: TestClient) -> None:
-    """Vérifie que /v1/status expose la santé globale et le statut des sources."""
+    """Vérifie que /v1/status expose la santé globale, KPIs et métriques riches des sources."""
     res = client.get("/v1/status")
     assert res.status_code == 200
     data = res.json()
     assert "status" in data
     assert "checked_at_utc" in data
+    assert "kpis" in data
+    assert "total_sources" in data["kpis"]
     assert "sources" in data
     assert isinstance(data["sources"], list)
     assert len(data["sources"]) >= 3
+    first = data["sources"][0]
+    for key in ("source_id", "trust_score", "row_count", "adapter", "min_rows_passed"):
+        assert key in first
+
+
+def test_api_prometheus_metrics(client: TestClient) -> None:
+    """Vérifie que /metrics expose les métriques au format texte Prometheus."""
+    res = client.get("/metrics")
+    assert res.status_code == 200
+    assert "openlux_flow_status" in res.text
+    assert "openlux_flow_trust_score" in res.text
+    assert "openlux_flow_rows_collected" in res.text
 
 
 def test_api_datasets_catalog(client: TestClient) -> None:

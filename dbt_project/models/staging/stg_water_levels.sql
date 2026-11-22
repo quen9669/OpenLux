@@ -8,6 +8,7 @@ SELECT
     station_name::VARCHAR AS station_name,
     river_name::VARCHAR AS river_name,
     observed_at::VARCHAR AS raw_observed_at,
+    CURRENT_TIMESTAMP AS collected_at_utc,
     water_level_cm::DOUBLE AS water_level_cm,
     discharge_m3s::DOUBLE AS discharge_m3s,
     alert_level::VARCHAR AS alert_level,

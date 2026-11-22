@@ -149,9 +149,17 @@ SELECT
     u.price_eur,
     u.surface_m2,
     u.price_eur_m2,
-    u.bedrooms_count,
+    CASE
+        WHEN LOWER(u.property_type) LIKE '%studio%' OR LOWER(u.description) LIKE '%studio%' OR u.property_type = 'Studio'
+        THEN COALESCE(u.bedrooms_count, 0)
+        ELSE u.bedrooms_count
+    END AS bedrooms_count,
     u.bathrooms_count,
-    u.rooms_count,
+    CASE
+        WHEN LOWER(u.property_type) LIKE '%studio%' OR LOWER(u.description) LIKE '%studio%' OR u.property_type = 'Studio'
+        THEN COALESCE(u.rooms_count, 1)
+        ELSE u.rooms_count
+    END AS rooms_count,
     u.has_balcony,
     u.has_terrace,
     u.has_garden,

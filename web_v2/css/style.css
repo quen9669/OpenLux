@@ -964,6 +964,169 @@ body {
   opacity: 1;
 }
 
+/* ================= CENTRE DE CONTRÔLE & MONITORING DES FLUX ================= */
+.monitoring-table-container {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 3rem;
+}
+
+.monitoring-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 980px;
+}
+
+.monitoring-table thead th {
+  padding: 0.85rem 1.15rem;
+  background-color: var(--bg-surface-elevated);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-medium);
+  white-space: nowrap;
+}
+
+.monitoring-table tbody td {
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+  vertical-align: top;
+}
+
+.monitoring-table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.monitoring-table tbody tr:hover {
+  background-color: var(--bg-surface-hover);
+}
+
+.mon-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+.mon-status-pill.good {
+  background-color: var(--gov-green-bg);
+  border: 1px solid var(--gov-green-border);
+  color: var(--gov-green);
+}
+
+.mon-status-pill.attention {
+  background-color: var(--gov-warning-bg);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--gov-warning);
+}
+
+.mon-status-pill.error {
+  background-color: var(--gov-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--gov-danger);
+}
+
+.mon-status-pill.not_tested {
+  background-color: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: var(--text-muted);
+}
+
+.mon-source-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: var(--radius-xs);
+  padding: 0.15rem 0.45rem;
+  letter-spacing: 0.04em;
+}
+
+.mon-source-badge.primary {
+  background-color: rgba(0, 161, 222, 0.15);
+  color: var(--lux-blue);
+  border: 1px solid rgba(0, 161, 222, 0.3);
+}
+
+.mon-source-badge.backup {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--gov-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.mon-quality-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.mon-quality-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.mon-err-box {
+  margin-top: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-xs);
+  background: var(--gov-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--gov-danger);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.mon-mini-history {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.mon-history-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mon-due-badge {
+  display: inline-flex;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: var(--radius-xs);
+  padding: 0.15rem 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.mon-due-badge.due {
+  background-color: var(--gov-warning-bg);
+  color: var(--gov-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.mon-due-badge.waiting {
+  background-color: rgba(148, 163, 184, 0.1);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .header-container { flex-direction: column; align-items: stretch; }

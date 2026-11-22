@@ -121,17 +121,19 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | Module | Rôle & Responsabilité Unique | Lignes |
 | :--- | :--- | :---: |
 | `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 60 |
-| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 55 |
-| `src/openlux/core/parsers.py` | Registre `PARSERS` : fonctions pures $\le 30$ lignes (`cita_datex2`, `strikes_rss`) | 83 |
-| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze) | 170 |
-| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps et table `obs_runs` (DuckDB) | 158 |
-| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md` et webhook alertes anti-spam | 94 |
-| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 175 |
-| `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 158 |
-| `src/openlux/api/main.py` | API REST FastAPI : Swagger, whitelist, DuckDB in-memory, stream CSV/GeoJSON | 176 |
-| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 155 |
-| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 175 |
-| **Total Cœur Python** | **Budget strict $< 1\,500$ lignes (cible $< 1\,200$)** | **1 468** |
+| `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 65 |
+| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 189 |
+| `src/openlux/core/parsers_extra.py` | Parsers spécialisés additionnels (air, OpenSky, SMARD, VDL chantiers ms Epoch, STATEC, Vel'oH, météo) | 192 |
+| `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze résilient) | 186 |
+| `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps, table `obs_runs` et historique | 196 |
+| `src/openlux/core/monitoring.py` | Régénération de `STATUS.md`, payload de supervision et métriques Prometheus | 193 |
+| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 197 |
+| `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 144 |
+| `src/openlux/api/main.py` | API REST FastAPI : cache résilient DuckDB, `/status`, `/metrics` (Prometheus), auto-sync lifespan | 198 |
+| `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 163 |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `schedule`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 199 |
+| `src/openlux/**/__init__.py` | En-têtes et initialisations de packages | 11 |
+| **Total Cœur Python** | **Tous les fichiers $\le 199$ lignes** | **1 993** |
 
 ---
 

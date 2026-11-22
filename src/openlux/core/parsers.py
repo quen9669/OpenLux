@@ -1,92 +1,189 @@
-"""Rôle : Registre de fonctions pures (sans I/O, <= 30 lignes) pour formats structurés complexes.
-Entrées/Sorties : Reçoit des octets bruts (XML, RSS, iCal) et produit une liste de dictionnaires.
+"""Rôle : Registre central de fonctions pures (sans I/O, <= 30 lignes) pour formats complexes.
+Entrées/Sorties : Reçoit des octets bruts (XML, RSS, JSON) et produit des listes de dicts.
 Hors-scope : N'effectue aucun appel réseau, aucun accès disque ni validation Pydantic.
 """
 
 from __future__ import annotations
 
+import csv
+import io
+import json
 import re
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
+from datetime import UTC
+from email.utils import parsedate_to_datetime
 
-_FR_KW = re.compile(r"\b(sncf|ter|a31|lorraine|metz|thionville|france)\b")
-_BE_KW = re.compile(r"\b(sncb|belgique|e411|arlon|bruxelles|wallonie)\b")
-_DE_KW = re.compile(r"\b(bahn|db|allemagne|trier|saarbrücken)\b")
+from openlux.core.parsers_extra import EXTRA_PARSERS
+
+_KW = {
+    "FR": re.compile(r"\b(sncf|ter|a31|lorraine|metz|france)\b"),
+    "BE": re.compile(r"\b(sncb|belgique|e411|arlon)\b"),
+    "DE": re.compile(r"\b(bahn|db|allemagne|trier)\b"),
+}
+
+
+def _tag(elem: ET.Element, suffix: str) -> ET.Element | None:
+    return next((x for x in elem.iter() if x.tag.endswith(suffix)), None)
+
+
+def _j(raw: bytes):
+    return json.loads(raw.decode("utf-8")) if isinstance(raw, (bytes, bytearray)) else raw
 
 
 def cita_datex2(raw: bytes) -> list[dict]:
-    """Parse le flux XML DATEX II du CITA en événements autoroutiers atomiques (<= 30 lignes)."""
-    # POURQUOI : Parsing pur sans I/O via ElementTree natif et résistant aux namespaces XML.
-    records: list[dict] = []
+    """Parse le flux XML DATEX II du CITA (trafic et chantiers) en dicts (<= 30 lignes)."""
     if not raw.strip():
-        return records
-    root = ET.fromstring(raw)
-    for elem in root.iter():
-        if elem.tag.endswith("situationRecord"):
-            rec_id = elem.attrib.get("id") or "UNKNOWN"
-            road_el = next((e for e in elem.iter() if e.tag.endswith("roadName")), None)
-            lat_el = next((e for e in elem.iter() if e.tag.endswith("latitude")), None)
-            lon_el = next((e for e in elem.iter() if e.tag.endswith("longitude")), None)
-            time_el = next((e for e in elem.iter() if "CreationTime" in e.tag), None)
-            val_el = next((e for e in elem.iter() if e.tag.endswith("value")), None)
-            r_name = road_el.text.strip() if road_el is not None and road_el.text else "A"
-            s_type = elem.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
-            s_time = time_el.text.strip() if time_el is not None and time_el.text else ""
-            r_lat = float(lat_el.text.strip()) if lat_el is not None and lat_el.text else None
-            r_lon = float(lon_el.text.strip()) if lon_el is not None and lon_el.text else None
-            r_comm = val_el.text.strip() if val_el is not None and val_el.text else ""
+        return []
+    if raw.strip().startswith((b"[", b"{")):
+        return d if isinstance((d := json.loads(raw.decode("utf-8"))), list) else [d]
+    records = []
+    for el in ET.fromstring(raw).iter():
+        if el.tag.endswith("situationRecord"):
+            rd, lat, lon = _tag(el, "roadName"), _tag(el, "latitude"), _tag(el, "longitude")
+            tm = next((x for x in el.iter() if "CreationTime" in x.tag), None)
+            st_t = next((x for x in el.iter() if x.tag.endswith("overallStartTime")), None)
+            end_t = next((x for x in el.iter() if x.tag.endswith("overallEndTime")), None)
+            rn = rd.text.strip() if rd is not None and rd.text else "A"
+            st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
+            eid = el.attrib.get("id", "UNKNOWN")
+            tm_s = tm.text.strip() if tm is not None and tm.text else ""
+            st_s = st_t.text.strip() if st_t is not None and st_t.text else tm_s
+            end_s = end_t.text.strip() if end_t is not None and end_t.text else None
+            vs = val.text.strip() if (val := _tag(el, "value")) is not None and val.text else ""
+            fla = float(lat.text.strip()) if lat is not None and lat.text else None
+            flo = float(lon.text.strip()) if lon is not None and lon.text else None
             records.append(
                 {
-                    "event_id": rec_id,
-                    "road_name": r_name,
-                    "situation_type": s_type,
-                    "start_time": s_time,
-                    "lat": r_lat,
-                    "lon": r_lon,
-                    "comment": r_comm,
+                    "event_id": eid,
+                    "work_id": eid,
+                    "road_name": rn,
+                    "situation_type": st,
+                    "impact_level": st,
+                    "start_time": st_s,
+                    "start_date": st_s,
+                    "end_date": end_s,
+                    "observed_at": tm_s,
+                    "title": vs or "CITA",
+                    "lat": fla,
+                    "lon": flo,
+                    "comment": vs,
+                    "commune_name": "Luxembourg",
                 }
             )
     return records
 
 
 def strikes_rss(raw: bytes) -> list[dict]:
-    """Parse et filtre les avis de grèves et manifestations depuis un flux RSS (<= 30 lignes)."""
-    # POURQUOI : Filtrage sans I/O garantissant Zero-PII et identification du pays (LU/FR/BE/DE).
+    """Parse et filtre les avis de grèves depuis un flux RSS (<= 30 lignes)."""
     kws = {"grève", "greve", "streik", "strike", "manifestation", "débrayage", "protest"}
-    records: list[dict] = []
     if not raw.strip():
-        return records
-    for item in ET.fromstring(raw).iter("item"):
-        title = (item.findtext("title") or "").strip()
-        link = (item.findtext("link") or "").strip()
-        guid = (item.findtext("guid") or link or title).strip()
-        full = f"{title.lower()} {(item.findtext('description') or '').lower()}"
-        if any(kw in full for kw in kws):
-            is_tr = any(
-                w in full for w in ["cfl", "bus", "tram", "train", "vol", "sncf", "ter", "db"]
-            )
-            cc, cn = "LU", "Luxembourg"
-            if _FR_KW.search(full):
-                cc, cn = "FR", "France"
-            elif _BE_KW.search(full):
-                cc, cn = "BE", "Belgique"
-            elif _DE_KW.search(full):
-                cc, cn = "DE", "Allemagne"
-            records.append(
-                {
-                    "strike_id": guid,
-                    "title": title[:140],
-                    "published_at": (item.findtext("pubDate") or "").strip(),
-                    "source_url": link,
-                    "sector": "TRANSPORT" if is_tr else "PUBLIC",
-                    "country_code": cc,
-                    "country_name": cn,
-                }
-            )
+        return []
+    records = []
+    for it in ET.fromstring(raw).iter("item"):
+        t, lnk = (it.findtext("title") or "").strip(), (it.findtext("link") or "").strip()
+        full = f"{t.lower()} {(it.findtext('description') or '').lower()}"
+        if not any(k in full for k in kws):
+            continue
+        is_tr = any(w in full for w in ["cfl", "bus", "tram", "train", "vol", "sncf", "ter", "db"])
+        cc = next((c for c, rx in _KW.items() if rx.search(full)), "LU")
+        cn = {"FR": "France", "BE": "Belgique", "DE": "Allemagne"}.get(cc, "Luxembourg")
+        records.append(
+            {
+                "strike_id": (it.findtext("guid") or lnk or t).strip(),
+                "title": t[:140],
+                "published_at": (it.findtext("pubDate") or "").strip(),
+                "source_url": lnk,
+                "sector": "TRANSPORT" if is_tr else "PUBLIC",
+                "country_code": cc,
+                "country_name": cn,
+            }
+        )
+    return records
+
+
+def vdl_parking(raw: bytes) -> list[dict]:
+    """Parse le feed JSON des parkings VDL en liste d'équipements (<= 30 lignes)."""
+    if not raw.strip() or isinstance(d := _j(raw), list):
+        return d if isinstance(d, list) else []
+    obs = d.get("last_build_date", "")
+    if obs and (not obs[:4].isdigit() or len(obs) < 10):
+        try:
+            obs = parsedate_to_datetime(obs).astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S")
+        except Exception:
+            pass
+    return [
+        {
+            "facility_id": f"PARKING_{p}",
+            "facility_name": v.get("titre", f"P_{p}"),
+            "available_spaces": int(v.get("actuel", 0) or 0),
+            "total_capacity": int(v.get("total", 0) or 0),
+            "lat": v.get("localisation", {}).get("latitude"),
+            "lon": v.get("localisation", {}).get("longitude"),
+            "observed_at": obs,
+            "commune_name": "Luxembourg",
+        }
+        for p, v in d.get("parking", {}).items()
+    ]
+
+
+def fuel_prices_csv(raw: bytes) -> list[dict]:
+    """Parse le CSV officiel des prix carburants du Ministère (<= 30 lignes)."""
+    if not raw.strip() or raw.strip().startswith(b"["):
+        return json.loads(raw.decode("utf-8")) if raw.strip().startswith(b"[") else []
+    types = (
+        "Essence_E10 Diesel_B7 Hydrogene LPG Electricie_Fournisseur Recharge_AC Recharge_DC".split()
+    )
+    records, text = [], raw.decode("utf-8", errors="replace").lstrip("\ufeff")
+    m_map = {
+        "jan": "01",
+        "feb": "02",
+        "mar": "03",
+        "apr": "04",
+        "may": "05",
+        "jun": "06",
+        "jul": "07",
+        "aug": "08",
+        "sep": "09",
+        "oct": "10",
+        "nov": "11",
+        "dec": "12",
+        "janv": "01",
+        "fevr": "02",
+        "févr": "02",
+        "mars": "03",
+        "avri": "04",
+        "juin": "06",
+        "juil": "07",
+        "aout": "08",
+        "août": "08",
+        "sept": "09",
+    }
+    for r in csv.DictReader(io.StringIO(text)):
+        dt = r.get("Intervalle", "").strip()
+        if m := re.match(r"^([A-Za-z]{3,4})[-/ ]+(\d{2,4})$", dt):
+            yr = f"20{m.group(2)}" if len(m.group(2)) == 2 else m.group(2)
+            dt = f"{yr}-{m_map.get(m.group(1).lower()[:4], '01')}-01 00:00:00"
+        for ft in types:
+            if v := r.get(ft):
+                try:
+                    records.append(
+                        {
+                            "fuel_type": ft,
+                            "price_eur_per_litre": float(v.replace(",", ".")),
+                            "observed_at": dt,
+                            "price_change_eur": 0.0,
+                        }
+                    )
+                except ValueError:
+                    pass
     return records
 
 
 PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
     "cita_datex2": cita_datex2,
     "strikes_rss": strikes_rss,
+    "vdl_parking": vdl_parking,
+    "fuel_prices_csv": fuel_prices_csv,
+    **EXTRA_PARSERS,
 }

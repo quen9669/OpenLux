@@ -46,12 +46,10 @@ def get_platform_health(domain: str | None = None) -> dict[str, Any]:
     """État de fraîcheur, Trust Score et anomalies par source ou domaine au Luxembourg."""
     sources, db = load_sources_config(), Path("data/openlux.duckdb")
     try:
-        con = duckdb.connect(str(db), read_only=True) if db.exists() else None
-    except duckdb.IOException:
-        con = None
-    health = get_latest_source_health(con) if con else {}
-    if con:
-        con.close()
+        with duckdb.connect(str(db), read_only=True) as con:
+            health = get_latest_source_health(con)
+    except Exception:
+        health = {}
     items = [
         {
             "source_id": s,
@@ -113,37 +111,38 @@ def search_luxembourg_events_and_works(
     """Recherche croisée sur les perturbations routières, chantiers autoroutiers et événements."""
     results: list[dict[str, Any]] = []
     if t_path := get_gold_table_path("gold_traffic_events"):
-        con = duckdb.connect(":memory:")
-        try:
-            con.execute("LOAD spatial;")
-        except Exception:
-            pass
-        sql = """
-            SELECT event_id, road_name, situation_type, traffic_comment, observed_at_utc, lat, lon
-            FROM read_parquet(?)
-            WHERE (LOWER(road_name) LIKE LOWER(?) OR LOWER(traffic_comment) LIKE LOWER(?)
-                   OR LOWER(situation_type) LIKE LOWER(?))
-              AND observed_at_utc >= TRY_CAST(? AS TIMESTAMP)
-              AND observed_at_utc <= TRY_CAST(? AS TIMESTAMP)
-        """
-        params: list[Any] = [
-            t_path.as_posix(),
-            f"%{query}%",
-            f"%{query}%",
-            f"%{query}%",
-            date_from,
-            date_to,
-        ]
-        if lat is not None and lon is not None:
-            sql += (
-                " AND lat IS NOT NULL AND lon IS NOT NULL AND "
-                "ST_Distance_Spheroid(ST_Point(lon, lat), ST_Point(?, ?)) <= ?"
-            )
-            params.extend([float(lon), float(lat), float(radius_km) * 1000.0])
-        cur = con.execute(sql + " LIMIT 50", params)
-        cols = [d[0] for d in cur.description]
-        results = [dict(zip(cols, r, strict=False)) for r in cur.fetchall()]
-        con.close()
+        with duckdb.connect(":memory:") as con:
+            try:
+                con.execute("LOAD spatial;")
+            except Exception:
+                pass
+            sql = """
+                SELECT event_id, road_name, situation_type, traffic_comment,
+                       observed_at_utc, lat, lon
+                FROM read_parquet(?)
+                WHERE (LOWER(road_name) LIKE LOWER(?) OR LOWER(traffic_comment) LIKE LOWER(?)
+                       OR LOWER(situation_type) LIKE LOWER(?))
+                  AND observed_at_utc >= TRY_CAST(? AS TIMESTAMP)
+                  AND observed_at_utc <= TRY_CAST(? AS TIMESTAMP)
+            """
+            params: list[Any] = [
+                t_path.as_posix(),
+                f"%{query}%",
+                f"%{query}%",
+                f"%{query}%",
+                date_from,
+                date_to,
+            ]
+            if lat is not None and lon is not None:
+                sql += (
+                    " AND lat IS NOT NULL AND lon IS NOT NULL AND "
+                    "ST_Distance_Spheroid(ST_Point(lon, lat), ST_Point(?, ?)) <= ?"
+                )
+                params.extend([float(lon), float(lat), float(radius_km) * 1000.0])
+            cur = con.execute(sql + " LIMIT 50", params)
+            results = [
+                dict(zip([d[0] for d in cur.description], r, strict=False)) for r in cur.fetchall()
+            ]
     return {
         "_meta": _mcp_meta("events_and_works", len(results), "Perturbations autoroutières."),
         "results": results,

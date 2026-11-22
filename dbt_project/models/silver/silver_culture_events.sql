@@ -1,28 +1,29 @@
 -- Silver: Consolidation, dédoublonnage et géolocalisation des événements culturels et manifestations
 WITH all_events AS (
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_culture_echo_lu') }}
     UNION ALL
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_culture_venues') }}
     UNION ALL
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_events_vdl') }}
     UNION ALL
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_events_visitlu') }}
     UNION ALL
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_venues_luxexpo') }}
     UNION ALL
-    SELECT title, status, raw_start_date, raw_end_date, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
+    SELECT title, status, raw_start_date, raw_end_date, observed_at_utc, start_time, venue, address, raw_city, category, price_eur, price_text, is_free, source_url, ticket_url, lat_echo, lon_echo, source_id
     FROM {{ ref('stg_venues_stade_coque') }}
     UNION ALL
     SELECT
         r.event_name AS title,
         'Confirmé' AS status,
-        '2026-11-20 08:00:00' AS raw_start_date,
-        '2026-11-20 18:00:00' AS raw_end_date,
+        STRFTIME(CURRENT_DATE, '%Y-%m-%d 08:00:00') AS raw_start_date,
+        STRFTIME(CURRENT_DATE, '%Y-%m-%d 18:00:00') AS raw_end_date,
+        CURRENT_TIMESTAMP AS observed_at_utc,
         '08:00' AS start_time,
         r.location_name AS venue,
         r.location_name || ', ' || r.commune_lau AS address,
@@ -47,6 +48,7 @@ deduped_events AS (
         status,
         TRY_CAST(raw_start_date AS TIMESTAMP) AS start_date,
         TRY_CAST(raw_end_date AS TIMESTAMP) AS end_date,
+        observed_at_utc,
         start_time,
         venue,
         address,
@@ -75,6 +77,7 @@ SELECT
     d.status,
     d.start_date,
     COALESCE(d.end_date, d.start_date) AS end_date,
+    d.observed_at_utc,
     COALESCE(d.start_time, STRFTIME(d.start_date, '%H:%M')) AS start_time,
     d.venue,
     COALESCE(d.address, d.venue || ', ' || COALESCE(c.commune_name, 'Luxembourg')) AS address,

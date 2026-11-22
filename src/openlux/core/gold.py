@@ -1,10 +1,13 @@
-"""Rôle : Export atomique, registre sécurisé et requêtes sur la couche Gold Parquet.
+"""Rôle : Export atomique, registre sécurisé, requêtes et streaming de la couche Gold Parquet.
 Entrées/Sorties : Lit/écrit les tables Gold dans data/gold/ et DuckDB en mémoire.
 Hors-scope : N'effectue pas d'appels réseau ni de transformation Silver dbt.
 """
 
 from __future__ import annotations
 
+import csv
+import io
+import json
 import os
 from datetime import UTC, datetime
 from pathlib import Path
@@ -53,24 +56,22 @@ def get_gold_table_path(dataset: str, gold_dir: Path | str = "data/gold") -> Pat
         return None
     valid = {p.stem.lower(): p for p in d.glob("gold_*.parquet")}
     norm = dataset.strip().lower()
-    return (
-        valid.get(norm)
-        or valid.get(f"gold_{norm}")
-        or next((p for s, p in valid.items() if norm in s), None)
-    )
+    return valid.get(norm) or valid.get(f"gold_{norm}")
 
 
 def get_gold_metadata(
     parquet_path: Path, row_count: int, duckdb_path: Path | str = "data/openlux.duckdb"
 ) -> dict[str, Any]:
-    con, p_s = duckdb.connect(":memory:"), parquet_path.as_posix()
-    cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()]
-    sid = (
-        con.execute("SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p_s]).fetchone()
-        if "source_id" in cols
-        else None
-    )
-    con.close()
+    with duckdb.connect(":memory:") as con:
+        p_s = parquet_path.as_posix()
+        cols = [
+            c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()
+        ]
+        sid = (
+            con.execute("SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p_s]).fetchone()
+            if "source_id" in cols
+            else None
+        )
     sid = sid[0] if sid and sid[0] else None
     src = load_sources_config().get(sid) if sid else None
     health: dict[str, Any] = {}
@@ -126,7 +127,6 @@ def query_gold_table(
         pass
     cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()]
     clauses, params = [], [p_s]
-
     if commune and "commune_lau" in cols:
         clauses.append("LOWER(commune_lau) LIKE LOWER(?)")
         params.append(f"%{commune}%")
@@ -155,3 +155,43 @@ def query_gold_table(
     out_cols = [d[0] for d in cur.description]
     rows = [dict(zip(out_cols, r, strict=False)) for r in cur.fetchall()]
     return con, out_cols, rows, total
+
+
+def stream_gold_export(path: Path, is_geojson: bool):
+    """Générateur de flux CSV ou GeoJSON depuis un fichier Parquet Gold."""
+    with duckdb.connect(":memory:") as con:
+        p = path.as_posix()
+        cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p]).fetchall()]
+        cur = con.execute("SELECT * FROM read_parquet(?)", [p])
+        if not is_geojson:
+            yield ",".join(cols) + "\n"
+            while chunk := cur.fetchmany(500):
+                buf = io.StringIO()
+                csv.writer(buf).writerows(
+                    [[x.isoformat() if hasattr(x, "isoformat") else x for x in r] for r in chunk]
+                )
+                yield buf.getvalue()
+        else:
+            lat_i, lon_i = (
+                cols.index("lat") if "lat" in cols else -1,
+                cols.index("lon") if "lon" in cols else -1,
+            )
+            yield '{"type": "FeatureCollection", "features": [\n'
+            first = True
+            while chunk := cur.fetchmany(500):
+                for r in chunk:
+                    valid = (
+                        lat_i >= 0 and lon_i >= 0 and r[lat_i] is not None and r[lon_i] is not None
+                    )
+                    geom = {"type": "Point", "coordinates": [r[lon_i], r[lat_i]]} if valid else None
+                    props = {
+                        cols[i]: (r[i].isoformat() if hasattr(r[i], "isoformat") else r[i])
+                        for i in range(len(cols))
+                        if i not in (lat_i, lon_i)
+                    }
+                    feat_json = json.dumps(
+                        {"type": "Feature", "geometry": geom, "properties": props}
+                    )
+                    yield f"{'' if first else ',\n'}{feat_json}"
+                    first = False
+            yield "\n]}"

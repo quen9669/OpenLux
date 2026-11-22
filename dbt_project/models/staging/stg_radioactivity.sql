@@ -7,6 +7,7 @@ SELECT
     station_id::VARCHAR AS station_id,
     station_name::VARCHAR AS station_name,
     observed_at::VARCHAR AS raw_observed_at,
+    CURRENT_TIMESTAMP AS collected_at_utc,
     dose_rate_nsvh::DOUBLE AS dose_rate_nsvh,
     status::VARCHAR AS radiological_status,
     lat::DOUBLE AS lat,

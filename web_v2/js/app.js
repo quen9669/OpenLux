@@ -447,6 +447,12 @@ const stateV2 = {
   datasets: DATASETS_V2,
   selectedDomain: "all",
   searchQuery: "",
+  monitoring: {
+    sources: [],
+    kpis: {},
+    searchQuery: "",
+    statusFilter: "all"
+  },
   theme: localStorage.getItem("openlux_theme_v2") || "dark"
 };
 
@@ -456,6 +462,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupDrawerV2();
   setupDevSnippetsV2();
   await refreshFromApiV2();
+  await refreshMonitoringV2();
   renderCatalogV2();
 });
 
@@ -514,6 +521,213 @@ async function refreshFromApiV2() {
   } catch {
     // Mode offline autonome nominal
   }
+}
+
+// Formatage du temps relatif
+function formatRelativeTime(iso) {
+  if (!iso) return "-";
+  try {
+    const diffSec = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
+    if (diffSec < 60) return "À l'instant";
+    if (diffSec < 3600) return `Il y a ${Math.floor(diffSec / 60)} min`;
+    if (diffSec < 86400) return `Il y a ${Math.floor(diffSec / 3600)} h`;
+    return `Il y a ${Math.floor(diffSec / 86400)} j`;
+  } catch {
+    return iso;
+  }
+}
+
+// Appel direct FastAPI pour la Supervision des Flux
+async function refreshMonitoringV2() {
+  const btn = document.getElementById("btnRefreshMonitoringV2");
+  if (btn) btn.classList.add("loading");
+  try {
+    const res = await fetch("/v1/status", { signal: AbortSignal.timeout(2500) });
+    if (res.ok) {
+      const data = await res.json();
+      stateV2.monitoring.sources = data.sources || [];
+      stateV2.monitoring.kpis = data.kpis || {};
+      renderMonitoringKPIs(data);
+      renderMonitoringV2();
+      showToastV2("Supervision des flux actualisée en direct");
+    }
+  } catch (e) {
+    console.warn("Mode monitoring hors-ligne ou API indisponible", e);
+  } finally {
+    if (btn) btn.classList.remove("loading");
+  }
+}
+
+function renderMonitoringKPIs(data) {
+  const kpis = data.kpis || {};
+  const globalEl = document.getElementById("monKpiGlobalStatus");
+  const detailEl = document.getElementById("monKpiGlobalDetail");
+  const rowsEl = document.getElementById("monKpiTotalRows");
+  const scoreEl = document.getElementById("monKpiAvgScore");
+  const activeEl = document.getElementById("monKpiActiveFlows");
+  const errEl = document.getElementById("monKpiAttentionErrors");
+
+  if (globalEl) {
+    const st = data.status || "HEALTHY";
+    globalEl.textContent = st === "HEALTHY" ? "100% NOMINAL" : (st === "ATTENTION" ? "ATTENTION" : "DÉGRADÉ");
+    globalEl.style.color = st === "HEALTHY" ? "var(--gov-green)" : (st === "ATTENTION" ? "var(--gov-warning)" : "var(--gov-danger)");
+  }
+  if (detailEl && kpis.total_sources) {
+    detailEl.textContent = `${kpis.total_sources} flux sous contrôle SLA`;
+  }
+  if (rowsEl && kpis.total_rows_collected !== undefined) {
+    rowsEl.textContent = kpis.total_rows_collected.toLocaleString();
+  }
+  if (scoreEl && kpis.average_trust_score !== undefined) {
+    scoreEl.textContent = `${kpis.average_trust_score.toFixed(1)}%`;
+  }
+  if (activeEl && kpis.total_sources) {
+    activeEl.textContent = `${kpis.healthy_count || 0} / ${kpis.total_sources}`;
+  }
+  if (errEl) {
+    errEl.textContent = `${kpis.attention_count || 0} en dégradation • ${kpis.error_count || 0} en erreur`;
+  }
+}
+
+function handleMonitoringSearchV2(q) {
+  stateV2.monitoring.searchQuery = q.trim().toLowerCase();
+  renderMonitoringV2();
+}
+
+function handleMonitoringStatusFilter(st) {
+  stateV2.monitoring.statusFilter = st;
+  document.querySelectorAll("#monStatusFilters .filter-btn-pill").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.status === st);
+  });
+  renderMonitoringV2();
+}
+
+function renderMonitoringV2() {
+  const tbody = document.getElementById("monitoringTableBodyV2");
+  const countEl = document.getElementById("monFilterCount");
+  if (!tbody) return;
+
+  const q = stateV2.monitoring.searchQuery;
+  const fSt = stateV2.monitoring.statusFilter;
+
+  const filtered = stateV2.monitoring.sources.filter(s => {
+    const matchQ = !q ||
+      s.source_id.toLowerCase().includes(q) ||
+      (s.domain && s.domain.toLowerCase().includes(q)) ||
+      (s.description && s.description.toLowerCase().includes(q)) ||
+      (s.adapter && s.adapter.toLowerCase().includes(q)) ||
+      (s.endpoint_url && s.endpoint_url.toLowerCase().includes(q));
+
+    let matchSt = true;
+    if (fSt === "GOOD") matchSt = s.status === "GOOD" || s.status === "UNCHANGED";
+    else if (fSt === "ATTENTION") matchSt = s.status === "ATTENTION";
+    else if (fSt === "ERROR") matchSt = s.status === "ERROR";
+    else if (fSt === "DUE") matchSt = s.is_due === true;
+
+    return matchQ && matchSt;
+  });
+
+  if (countEl) countEl.textContent = `${filtered.length} flux affiché${filtered.length > 1 ? "s" : ""}`;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;padding:2.5rem;color:var(--text-muted);">
+          Aucun flux ne correspond aux filtres sélectionnés.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(s => {
+    const pillClass = s.status.toLowerCase();
+    const scoreColor = s.trust_score >= 85 ? "var(--gov-green)" : (s.trust_score >= 60 ? "var(--gov-warning)" : "var(--gov-danger)");
+    const rowsStatus = s.min_rows_passed
+      ? `<span style="color:var(--gov-green);font-size:0.75rem;">✓ Seuil lignes atteint (min ${s.min_rows})</span>`
+      : `<span style="color:var(--gov-danger);font-size:0.75rem;">✗ Lignes insuffisantes (${s.row_count} / min ${s.min_rows})</span>`;
+
+    const mutBadge = (s.last_changed_utc && s.last_changed_utc === s.last_checked_utc)
+      ? `<span style="color:var(--gov-green);font-size:0.75rem;font-weight:600;">⚡ Nouvelle mutation</span>`
+      : `<span style="color:var(--text-muted);font-size:0.75rem;">Empreinte stable (SHA-256)</span>`;
+
+    const dueBadge = s.is_due
+      ? `<span class="mon-due-badge due">⏳ Échu (Exécution due)</span>`
+      : `<span class="mon-due-badge waiting">Dans ~${Math.max(1, Math.ceil(s.seconds_until_due / 60))} min</span>`;
+
+    const historyDots = (s.history || []).slice(-7).map(h => {
+      const col = h.status === "GOOD" || h.status === "UNCHANGED" ? "var(--gov-green)" : (h.status === "ATTENTION" ? "var(--gov-warning)" : "var(--gov-danger)");
+      return `<span class="mon-history-dot" style="background:${col};" title="${h.status} (${h.checked_at})"></span>`;
+    }).join("");
+
+    return `
+      <tr class="mon-row">
+        <td>
+          <div style="font-weight:700;color:var(--text-primary);font-size:0.95rem;">${s.source_id}</div>
+          <div style="margin-top:0.25rem;">
+            <span class="dm-domain-tag">${s.domain}</span>
+            <span class="mono" style="font-size:0.7rem;color:var(--text-muted);">${s.license_spdx || 'Open'}</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:0.35rem;line-height:1.4;">${s.description || ''}</div>
+          ${s.error_message ? `<div class="mon-err-box">⚠️ <strong>Anomalie :</strong> ${s.error_message}</div>` : ''}
+        </td>
+        <td>
+          <span class="mon-status-pill ${pillClass}">
+            <span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;"></span>
+            ${s.status}
+          </span>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.35rem;">
+            Contrôle : <strong>${formatRelativeTime(s.last_checked_utc)}</strong>
+          </div>
+          ${historyDots ? `<div class="mon-mini-history" title="Historique récent des runs">${historyDots}</div>` : ''}
+        </td>
+        <td>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">Trust Score</span>
+            <span class="mono" style="font-weight:800;color:${scoreColor};font-size:0.95rem;">${s.trust_score.toFixed(1)}%</span>
+          </div>
+          <div class="mon-quality-bar">
+            <div class="mon-quality-bar-fill" style="width:${Math.min(100, Math.max(5, s.trust_score))}%;background:${scoreColor};"></div>
+          </div>
+          <div style="margin-top:0.4rem;">
+            ${rowsStatus}
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.15rem;">
+            ✓ ${(s.required_fields || []).length} champs requis certifiés
+          </div>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+            <span class="mon-source-badge ${s.source_used}">${s.source_used}</span>
+            <code class="mono" style="font-size:0.72rem;padding:0.15rem 0.35rem;background:var(--bg-code);border-radius:3px;">${s.adapter}</code>
+          </div>
+          <a href="${s.endpoint_url}" target="_blank" rel="noopener" class="mono" style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem;display:inline-block;word-break:break-all;max-width:240px;text-decoration:none;" title="${s.endpoint_url}">
+            🔗 ${s.endpoint_url}
+          </a>
+        </td>
+        <td>
+          <div class="mono" style="font-size:1.05rem;font-weight:800;color:var(--text-primary);">${s.row_count.toLocaleString()} <span style="font-size:0.75rem;font-weight:500;color:var(--text-muted);">lignes</span></div>
+          <div style="margin-top:0.25rem;">
+            ${mutBadge}
+          </div>
+          <div class="mono" style="font-size:0.68rem;color:var(--text-muted);margin-top:0.25rem;" title="${s.sha256}">
+            SHA: ${s.sha256 ? s.sha256.substring(0, 10) + '...' : '-'}
+          </div>
+        </td>
+        <td>
+          <div style="font-size:0.8rem;color:var(--text-secondary);">
+            Cadence : <strong>${s.cadence_minutes} min</strong> (SLA ${s.sla_minutes}m)
+          </div>
+          <div style="margin-top:0.25rem;">
+            ${dueBadge}
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.35rem;">
+            Mutation : ${formatRelativeTime(s.last_changed_utc)}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
 // Rendu du Catalogue
