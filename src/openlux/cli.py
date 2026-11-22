@@ -115,7 +115,7 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
         selected = {
             s: c
             for s, c in sources.items()
-            if (not sources_filter or s in sources_filter)
+            if (sources_filter is None or s in sources_filter)
             and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
         }
         for sid, src in selected.items():
@@ -139,14 +139,7 @@ def schedule_pipeline(interval_seconds: int = 60) -> int:
 
 
 def rebuild_pipeline() -> int:
-    ensure_bronze_baseline(load_sources_config())
-    for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
-        _run_dbt_command(*c)
-    export_gold_parquets()
-    with _connect_db("data/openlux.duckdb") as con:
-        init_obs_runs_table(con)
-        generate_status_markdown(load_sources_config(), get_latest_source_health(con))
-    return 0
+    return run_pipeline(sources_filter=["__none__"])
 
 
 def _build_parser() -> argparse.ArgumentParser:
