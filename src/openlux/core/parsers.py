@@ -33,45 +33,61 @@ def _j(raw: bytes):
 
 
 def cita_datex2(raw: bytes) -> list[dict]:
-    """Parse le flux XML DATEX II du CITA (trafic et chantiers) en dicts (<= 30 lignes)."""
+    """Parse le flux XML DATEX II du CITA (trafic et chantiers) (<= 30 lignes)."""
     if not raw.strip():
         return []
     if raw.strip().startswith((b"[", b"{")):
         return d if isinstance((d := json.loads(raw.decode("utf-8"))), list) else [d]
     records = []
     for el in ET.fromstring(raw).iter():
-        if el.tag.endswith("situationRecord"):
-            rd, lat, lon = _tag(el, "roadName"), _tag(el, "latitude"), _tag(el, "longitude")
-            tm = next((x for x in el.iter() if "CreationTime" in x.tag), None)
-            st_t = next((x for x in el.iter() if x.tag.endswith("overallStartTime")), None)
-            end_t = next((x for x in el.iter() if x.tag.endswith("overallEndTime")), None)
-            rn = rd.text.strip() if rd is not None and rd.text else "A"
-            st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
-            eid = el.attrib.get("id", "UNKNOWN")
-            tm_s = tm.text.strip() if tm is not None and tm.text else ""
-            st_s = st_t.text.strip() if st_t is not None and st_t.text else tm_s
-            end_s = end_t.text.strip() if end_t is not None and end_t.text else None
-            vs = val.text.strip() if (val := _tag(el, "value")) is not None and val.text else ""
-            fla = float(lat.text.strip()) if lat is not None and lat.text else None
-            flo = float(lon.text.strip()) if lon is not None and lon.text else None
-            records.append(
-                {
-                    "event_id": eid,
-                    "work_id": eid,
-                    "road_name": rn,
-                    "situation_type": st,
-                    "impact_level": st,
-                    "start_time": st_s,
-                    "start_date": st_s,
-                    "end_date": end_s,
-                    "observed_at": tm_s,
-                    "title": vs or "CITA",
-                    "lat": fla,
-                    "lon": flo,
-                    "comment": vs,
-                    "commune_name": "Luxembourg",
-                }
+        if not el.tag.endswith("situationRecord"):
+            continue
+        lat, lon, rd = _tag(el, "latitude"), _tag(el, "longitude"), _tag(el, "roadName")
+        tm = next((x.text.strip() for x in el.iter() if "CreationTime" in x.tag), "")
+        st_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallStartTime")), tm)
+        end_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallEndTime")), None)
+        rn = rd.text.strip() if rd is not None and rd.text else None
+        if not rn:
+            prefixes = ("A", "N", "CR", "B")
+            rn = next(
+                (
+                    t
+                    for x in el.iter()
+                    if x.tag.endswith("value")
+                    and (t := (x.text or "").strip())
+                    and any(t.startswith(p) for p in prefixes)
+                    and len(t) <= 15
+                ),
+                "A",
             )
+        vs = next(
+            (
+                t
+                for x in el.iter()
+                if x.tag.endswith("value") and len(t := (x.text or "").strip()) > 4
+            ),
+            "",
+        )
+        st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
+        eid = el.attrib.get("id", "UNKNOWN")
+        records.append(
+            {
+                "event_id": eid,
+                "work_id": eid,
+                "road_name": rn,
+                "situation_type": st,
+                "impact_level": st,
+                "start_time": st_s,
+                "start_date": st_s,
+                "end_date": end_s,
+                "observed_at": tm,
+                "title": vs or "CITA",
+                "lat": float(lat.text.strip()) if lat is not None and lat.text else None,
+                "lon": float(lon.text.strip()) if lon is not None and lon.text else None,
+                "comment": vs,
+                "commune_name": "Luxembourg",
+            }
+        )
     return records
 
 
@@ -133,20 +149,16 @@ def fuel_prices_csv(raw: bytes) -> list[dict]:
     if not raw.strip() or raw.strip().startswith(b"["):
         return json.loads(raw.decode("utf-8")) if raw.strip().startswith(b"[") else []
     types = (
-        "Essence_E10 Diesel_B7 Hydrogene LPG Electricie_Fournisseur Recharge_AC Recharge_DC".split()
-    )
+        "Essence_E10 Diesel_B7 Hydrogene LPG Electricie_Fournisseur Recharge_AC Recharge_DC"
+    ).split()
     records, text = [], raw.decode("utf-8", errors="replace").lstrip("\ufeff")
-    _M = (
-        "jan feb mar apr may jun jul aug sep oct nov dec janv fevr févr mars avri juin juil"
-        " aout août sept".split()
-    )
-    _V = "01 02 03 04 05 06 07 08 09 10 11 12 01 02 02 03 04 06 07 08 08 09".split()
-    m_map = dict(zip(_M, _V, strict=False))
+    _M = "jan feb mar apr may jun jul aug sep oct nov dec".split()
+    m_map = {m: f"{i + 1:02d}" for i, m in enumerate(_M)}
     for r in csv.DictReader(io.StringIO(text)):
         dt = r.get("Intervalle", "").strip()
         if m := re.match(r"^([A-Za-z]{3,4})[-/ ]+(\d{2,4})$", dt):
             yr = f"20{m.group(2)}" if len(m.group(2)) == 2 else m.group(2)
-            dt = f"{yr}-{m_map.get(m.group(1).lower()[:4], '01')}-01 00:00:00"
+            dt = f"{yr}-{m_map.get(m.group(1).lower()[:3], '01')}-01 00:00:00"
         for ft in types:
             if v := r.get(ft):
                 try:

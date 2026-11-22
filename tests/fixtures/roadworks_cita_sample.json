@@ -6,7 +6,7 @@
     "end_date": "2026-11-30T00:00:00Z",
     "impact_level": "LANE_CLOSED",
     "title": "Réfection de chaussée échangeur Senningerberg",
-    "observed_at": "2026-11-20T22:00:00Z",
+    "observed_at": "2026-11-22T10:00:00Z",
     "lat": 49.645,
     "lon": 6.225,
     "commune_name": "Niederanven"
@@ -18,9 +18,81 @@
     "end_date": "2026-12-15T00:00:00Z",
     "impact_level": "SPEED_LIMIT",
     "title": "Élargissement à 2x3 voies vers Dudelange",
-    "observed_at": "2026-11-20T22:00:00Z",
+    "observed_at": "2026-11-22T10:00:00Z",
     "lat": 49.52,
     "lon": 6.13,
     "commune_name": "Bettembourg"
+  },
+  {
+    "work_id": "RW_A4_003",
+    "road_name": "A4",
+    "start_date": "2026-11-10T08:00:00Z",
+    "end_date": "2026-12-05T18:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Maintenance des glissières de sécurité Leudelange",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.568,
+    "lon": 6.065,
+    "commune_name": "Leudelange"
+  },
+  {
+    "work_id": "RW_A6_004",
+    "road_name": "A6",
+    "start_date": "2026-11-18T00:00:00Z",
+    "end_date": "2026-12-10T00:00:00Z",
+    "impact_level": "SPEED_LIMIT",
+    "title": "Modernisation échangeur Mamer-Capellen",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.635,
+    "lon": 6.012,
+    "commune_name": "Mamer"
+  },
+  {
+    "work_id": "RW_A7_005",
+    "road_name": "A7",
+    "start_date": "2026-11-20T00:00:00Z",
+    "end_date": "2026-12-20T00:00:00Z",
+    "impact_level": "TUNNEL_MAINTENANCE",
+    "title": "Inspection et maintenance des tunnels Gousselerbierg",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.725,
+    "lon": 6.138,
+    "commune_name": "Mersch"
+  },
+  {
+    "work_id": "RW_A13_006",
+    "road_name": "A13",
+    "start_date": "2026-11-12T00:00:00Z",
+    "end_date": "2026-11-28T00:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Réparation pont autoroutier liaison Hellange-Frisange",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.515,
+    "lon": 6.195,
+    "commune_name": "Frisange"
+  },
+  {
+    "work_id": "RW_N10_007",
+    "road_name": "N10",
+    "start_date": "2026-11-05T00:00:00Z",
+    "end_date": "2026-12-01T00:00:00Z",
+    "impact_level": "DETOUR",
+    "title": "Consolidation des berges de la Moselle",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.682,
+    "lon": 6.445,
+    "commune_name": "Grevenmacher"
+  },
+  {
+    "work_id": "RW_CR181_008",
+    "road_name": "CR181",
+    "start_date": "2026-11-16T08:00:00Z",
+    "end_date": "2026-12-02T18:00:00Z",
+    "impact_level": "ROAD_CLOSED",
+    "title": "Pose de conduites d'eau sous chaussée",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.658,
+    "lon": 6.095,
+    "commune_name": "Strassen"
   }
 ]

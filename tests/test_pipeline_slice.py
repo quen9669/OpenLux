@@ -241,6 +241,8 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         "gold_aviation_noise",
         "gold_roadworks",
         "gold_housing",
+        "gold_housing_listings",
+        "gold_housing_stats",
         "gold_daily_life",
         "gold_culture_events",
         "gold_strikes_disruptions",

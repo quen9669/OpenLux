@@ -133,6 +133,34 @@ WITH pii_checks AS (
     UNION ALL
 
     SELECT
+        'gold_housing_listings' AS table_name,
+        COALESCE(description, property_type) AS sampled_text
+    FROM {{ ref('gold_housing_listings') }}
+    WHERE (description IS NOT NULL AND (
+        regexp_matches(description, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(description, '(?:\+352|00352)\s?[0-9]{4,}')
+    )) OR (
+        regexp_matches(property_type, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(property_type, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
+
+    UNION ALL
+
+    SELECT
+        'gold_housing_stats' AS table_name,
+        COALESCE(description, property_type) AS sampled_text
+    FROM {{ ref('gold_housing_stats') }}
+    WHERE (description IS NOT NULL AND (
+        regexp_matches(description, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(description, '(?:\+352|00352)\s?[0-9]{4,}')
+    )) OR (
+        regexp_matches(property_type, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+        OR regexp_matches(property_type, '(?:\+352|00352)\s?[0-9]{4,}')
+    )
+
+    UNION ALL
+
+    SELECT
         'gold_daily_life' AS table_name,
         name AS sampled_text
     FROM {{ ref('gold_daily_life') }}

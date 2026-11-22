@@ -1,32 +1,2841 @@
-[
-  {
-    "facility_id": "PK_GLACIS",
-    "facility_name": "Parking Glacis",
-    "available_spaces": 420,
-    "total_capacity": 1200,
-    "observed_at": "2026-11-20T22:00:00Z",
-    "lat": 49.618,
-    "lon": 6.1255,
-    "commune_name": "Luxembourg"
-  },
-  {
-    "facility_id": "PK_KIRCHBERG_PR",
-    "facility_name": "P+R Kirchberg",
-    "available_spaces": 180,
-    "total_capacity": 600,
-    "observed_at": "2026-11-20T22:00:00Z",
-    "lat": 49.635,
-    "lon": 6.17,
-    "commune_name": "Luxembourg"
-  },
-  {
-    "facility_id": "PK_BOUILLON_PR",
-    "facility_name": "P+R Bouillon",
-    "available_spaces": 850,
-    "total_capacity": 2400,
-    "observed_at": "2026-11-20T22:00:00Z",
-    "lat": 49.598,
-    "lon": 6.108,
-    "commune_name": "Luxembourg"
+{
+  "last_build_date": "Sun, 22 Nov 2026 15:05:00 +0100",
+  "parking": {
+    "20": {
+      "id": 20,
+      "titre": "Adenauer",
+      "total": 406,
+      "actuel": 406,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.630363,
+        "longitude": 6.157175,
+        "mobilite": {
+          "fr": "Arrêt Konrad Adenauer : Lignes 7, 18, 25.",
+          "de": "Haltestelle Konrad Adenauer: Linien 7, 18, 25.",
+          "en": "Konrad Adenauer stop: Lines 7, 18, 25."
+        },
+        "entree": [
+          {
+            "adresse": "Boulevard Konrad Adenauer",
+            "latitude": 49.630087,
+            "longitude": 6.157185
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Boulevard Konrad Adenauer",
+            "latitude": 49.630072,
+            "longitude": 6.157079,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 10,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Lundi à vendredi de 8h00 à 18h00 : 0,50 euro par heure.\r\nDe 18h00 à 8h00 ainsi que les samedis et dimanches : gratuit.",
+          "de": "Montag bis Freitag von 8:00 bis 18:00 Uhr: 0,50 Euro pro Stunde.\r\nVon 18:00 bis 8:00 Uhr, sowie Samstag und Sonntag: kostenlos.",
+          "en": "Monday to Friday from 8:00 to 18:00: 0.50 euro per hour.\r\nFrom 18:00 to 08:00 and on Saturdays and Sundays: free."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "4796-4499",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_20.jpg"
+      }
+    },
+    "14": {
+      "id": 14,
+      "titre": "Auchan",
+      "total": 0,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.633296,
+        "longitude": 6.159885,
+        "mobilite": {
+          "fr": "Arrêt John F. Kennedy : Lignes 1, 16, 18.",
+          "de": "Haltestelle John F. Kennedy: Linien 1, 16, 18.",
+          "en": "John F. Kennedy stop: Lines 1, 16, 18."
+        },
+        "entree": [
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.632573,
+            "longitude": 6.170984
+          },
+          {
+            "adresse": "Circuit de la Foire Internationale",
+            "latitude": 49.634963,
+            "longitude": 6.168637
+          },
+          {
+            "adresse": "Rue Carlo Hemmer",
+            "latitude": 49.634468,
+            "longitude": 6.168631
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.631358,
+            "longitude": 6.169714,
+            "direction": ""
+          },
+          {
+            "adresse": "rue Alphonse Weicker",
+            "latitude": 49.634144,
+            "longitude": 6.167401,
+            "direction": ""
+          },
+          {
+            "adresse": "Circuit de la Foire Internationale",
+            "latitude": 49.634184,
+            "longitude": 6.16745,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 70,
+        "femmes": 10,
+        "e-cars": 91,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 10,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Pendant les horaires d'ouverture du centre commercial: \r\nDu lundi au vendredi de 7h00 à 21h00: \r\n1h00 : gratuit, \r\n2h00 : gratuit,\r\n2h30 : gratuit,\r\n2h45 : 1,00 euro,\r\n3h00 : 2,00 euro \r\n3h15 : 3,00 euro,\r\n3h30 : 4,00 euro,\r\n3h45 : 5,00 euro,\r\n4h00 : 6,00 euro,\r\n4h15 : 7,00 euro,\r\n4h30 : 8,00 euro,\r\n4h45 : 9,00 euro,\r\n5h00 : 10,00 euro,\r\n5h15 : 11,00 euro,\r\n5h30 : 12,00 euro,\r\n5h45 : 13,00 euro,\r\n6h00 : 14,00 euro,\r\n7h00 : 18,00 euro,\r\n8h00 : 22,00 euro,\r\n9h00 : 26,00 euro,\r\n10h00 : 30,00 euro,\r\n11h00 : 34,00 euro,\r\n12h00 : 38,00 euro,\r\n13h00 : 42,00 euro,\r\n14h00 : 46,00 euro,\r\nSamedi et Dimanche :\r\n1h00 : gratuit, \r\n2h00 : gratuit,\r\n3h00 : gratuit,\r\n4h00 : gratuit,\r\n4h15 : 1,00 euro,\r\n4h30 : 2,00 euro,\r\n4h45 : 3,00 euro,\r\n5h00 : 4,00 euro,\r\n5h15 : 5,00 euro,\r\n5h30 : 6,00 euro,\r\n5h45 : 7,00 euro,\r\n6h00 : 8,00 euro,\r\n7h00 : 12,00 euro,\r\n8h00 : 16,00 euro,\r\n9h00 : 20,00 euro,\r\n10h00 : 24,00 euro,\r\n11h00 : 28,00 euro,\r\n12h00 : 32,00 euro,\r\n13h00 : 36,00 euro,\r\n14h00 : 40,00 euro,\r\nEn dehors des horaires d'ouverture du centre commercial:\r\nDu lundi au dimanche de 21h00 à  7h00 :\r\n0h30 : 0,50 euro, \r\nmaximum de 10 euro.",
+          "de": "Während der Öffnungszeiten des Einkaufszentrums: \r\nMontag bis Freitag von 7:00 bis 21:00 Uhr:\r\n1St00 : gratis, \r\n2St00 : gratis,\r\n2St30 : gratis,\r\n2St45 : 1,00 euro, \r\n3St00 : 2,00 euro, \r\n3St15 : 3,00 euro, \r\n3St30 : 4,00 euro, \r\n3St45 : 5,00 euro, \r\n4St00 : 6,00 euro, \r\n4St15 : 7,00 euro, \r\n4St30 : 8,00 euro, \r\n4St45 : 9,00 euro, \r\n5St00 : 10,00 euro, \r\n5St15 : 11,00 euro,\r\n5St30 : 12,00 euro,\r\n5St45 : 13,00 euro,\r\n6St00 : 14,00 euro,\r\n7St00 : 18,00 euro,\r\n8St00 : 22,00 euro,\r\n9St00 : 26,00 euro,\r\n10St00 : 30,00 euro,\r\n11St00 : 34,00 euro,\r\n12St00 : 38,00 euro,\r\n13St00 : 42,00 euro,\r\n14St00 : 46,00 euro,\r\nSamstag und Sonntag :\r\n1St00 : gratis, \r\n2St00 : gratis,\r\n3St00 : gratis, \r\n4St00 : gratis, \r\n4St15 : 1,00 euro, \r\n4St30 : 2,00 euro, \r\n4St45 : 3,00 euro, \r\n5St00 : 4,00 euro, \r\n5St15 : 5,00 euro,\r\n5St30 : 6,00 euro,\r\n5St45 : 7,00 euro,\r\n6St00 : 8,00 euro,\r\n7St00 : 12,00 euro,\r\n8St00 : 16,00 euro,\r\n9St00 : 20,00 euro,\r\n10St00 : 24,00 euro,\r\n11St00 : 28,00 euro,\r\n12St00 : 32,00 euro,\r\n13St00 : 36,00 euro,\r\n14St00 : 40,00 euro,\r\nAußerhalb der Öffnungszeiten des Einkaufszentrums: \r\nMontag bis Sonntag von 21:00 Uhr bis 7:00 Uhr :\r\n0St30 : 0,50 Euro, \r\nmaximal 10 Euro.",
+          "en": "During the shopping center's opening hours:\r\nMonday to Friday from 7 a.m. to 9 p.m .:\r\n1h00 : free, \r\n2h00 : free,\r\n2h30 : free,\r\n2h45 : 1,00 euro,\r\n3h00 : 2,00 euro \r\n3h15 : 3,00 euro,\r\n3h30 : 4,00 euro,\r\n3h45 : 5,00 euro,\r\n4h00 : 6,00 euro,\r\n4h15 : 7,00 euro,\r\n4h30 : 8,00 euro,\r\n4h45 : 9,00 euro,\r\n5h00 : 10,00 euro,\r\n5h15 : 11,00 euro,\r\n5h30 : 12,00 euro,\r\n5h45 : 13,00 euro,\r\n6h00 : 14,00 euro,\r\n7h00 : 18,00 euro,\r\n8h00 : 22,00 euro,\r\n9h00 : 26,00 euro,\r\n10h00 : 30,00 euro,\r\n11h00 : 34,00 euro,\r\n12h00 : 38,00 euro,\r\n13h00 : 42,00 euro,\r\n14h00 : 46,00 euro,\r\nSaturday and Sunday :\r\n1h00 : free, \r\n2h00 : free,\r\n3h00 : free,\r\n4h00 : free,\r\n4h15 : 1,00 euro,\r\n4h30 : 2,00 euro,\r\n4h45 : 3,00 euro,\r\n5h00 : 4,00 euro,\r\n5h15 : 5,00 euro,\r\n5h30 : 6,00 euro,\r\n5h45 : 7,00 euro,\r\n6h00 : 8,00 euro,\r\n7h00 : 12,00 euro,\r\n8h00 : 16,00 euro,\r\n9h00 : 20,00 euro,\r\n10h00 : 24,00 euro,\r\n11h00 : 28,00 euro,\r\n12h00 : 32,00 euro,\r\n13h00 : 36,00 euro,\r\n14h00 : 40,00 euro,\r\nOutside the opening hours of the shopping center:\r\nMonday to Sunday from 9.00 pm to 7.00 am:\r\n0h30 : 0,50 euro, \r\nmaximum 10 euros."
+        },
+        "especes": true,
+        "debit": false,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "43 77 431",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_14.jpg"
+      }
+    },
+    "27": {
+      "id": 27,
+      "titre": "Bouillon",
+      "total": 2194,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Park and Ride",
+          "de": "Park and Ride",
+          "en": "Park and Ride"
+        },
+        "latitude": 49.599744,
+        "longitude": 6.107143,
+        "mobilite": {
+          "fr": "Arrêt P+R Bouillon : Lignes 1, 12, 15, 17, 24.",
+          "de": "Haltestelle P+R Bouillon: Linien 1, 12, 15, 17, 24.",
+          "en": "Arrêt P+R Bouillon : Lignes 1, 12, 15, 17, 24."
+        },
+        "entree": [
+          {
+            "adresse": "Rue de Bouillon",
+            "latitude": 49.599804,
+            "longitude": 6.105659
+          },
+          {
+            "adresse": "Rue de Bouillon",
+            "latitude": 49.599589,
+            "longitude": 6.109156
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue de Bouillon",
+            "latitude": 49.599813,
+            "longitude": 6.105546,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue de Bouillon",
+            "latitude": 49.599595,
+            "longitude": 6.109071,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 8,
+        "femmes": 13,
+        "e-cars": 70,
+        "car_sharing": 0,
+        "velos": 21,
+        "motos": 0,
+        "autocars": 26
+      },
+      "paiement": {
+        "politique_tarifaire": "gratuit24h",
+        "tarif": {
+          "fr": "24 heures de stationnement gratuit,\r\nà partir de la 25e heure de stationnement, le tarif s'élèvera à 10 euro par journée entamée.",
+          "de": "24 Stunden gratis,\r\nab der 25ten Stunde, beträgt die Parkgebühr 10 Euro pro angefangener Tag.",
+          "en": "24 heures de stationnement gratuit,\r\nà partir de la 25e heure de stationnement, le tarif s'élèvera à 10 euro par journée entamée."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "Extérieur : 7/7j et 24/24h.\r\nIntérieur : Lundi à dimanche de 6h00 à 22h00. Sortie possible en permanence.",
+        "de": "Aussen: 7T/7 und 24St/24.\r\nInnen: Montag bis Sontag von 6:00 bis 22:00 Uhr. Ausfahrt permanent möglich.",
+        "en": "Extérieur : 7/7j et 24/24h.\r\nIntérieur : Lundi à dimanche de 6h00 à 22h00. Sortie possible en permanence."
+      },
+      "divers": {
+        "park_and_ride": true,
+        "telephone": "26 12 37 70",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_27.jpg"
+      }
+    },
+    "29": {
+      "id": 29,
+      "titre": "Brasserie",
+      "total": 200,
+      "actuel": 182,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.611949,
+        "longitude": 6.142073,
+        "mobilite": {
+          "fr": "Arrêt Clausener Bréck : Lignes 9, 13, CN1.",
+          "de": "Haltestelle Clausener Bréck: Linien 9, 13, CN1.",
+          "en": "Clausener Bréck stop: Lines 9, 13, CN1."
+        },
+        "entree": [
+          {
+            "adresse": "Pont Margot Libens-Reiffers",
+            "latitude": 49.612059,
+            "longitude": 6.142275
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Pont Margot Libens-Reiffers",
+            "latitude": 49.61207,
+            "longitude": 6.142353,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 4,
+        "femmes": 0,
+        "e-cars": 20,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 2,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Tarif horaire : \r\n  1 heure : 2,50 euro, \r\n  2 heures : 5,00 euro, \r\n  3 heures : 7,50 euro, \r\n  4 heures : 10,00 euro, \r\n  5 heures : 12,50 euro, \r\n  6 heures : 15,00 euro, \r\n  7 heures : 17,50 euro, \r\n  8 heures : 20,00 euro, \r\n  9 heures : 22,50 euro, \r\n  10 heures : 25,00 euro, \r\n  11 heures : 27,50 euro, \r\n  12 heures : 30,00 euro. ",
+          "de": "Tagestarif :\r\n  1 Stunde: 2,50 Euro, \r\n  2 Stunden: 5,00 Euro, \r\n  3 Stunden: 7,50 Euro, \r\n  4 Stunden: 10,00 Euro, \r\n  5 Stunden: 12,50 Euro, \r\n  6 Stunden: 15,00 Euro, \r\n  7 Stunden: 17,50 Euro, \r\n  8 Stunden: 20,00 Euro, \r\n  9 Stunden: 22,50 Euro, \r\n  10 Stunden: 25,00 Euro,\r\n  11 Stunden: 27,50 Euro,\r\n  12 Stunden: 30,00 Euro.",
+          "en": "Day rate :\r\n   1 hour: 2.50 euro,\r\n   2 hours: 5.00 euro,\r\n   3 hours: 7.50 euro,\r\n   4 hours: 10.00 euro,\r\n   5 hours: 12.50 euro,\r\n   6 hours: 15.00 euro,\r\n   7 hours: 17.50 euro,\r\n   8 hours: 20.00 euro,\r\n   9 hours: 22.50 euro,\r\n   10 hours: 25.00 euro,\r\n   11 hours: 27.50 euro,\r\n   12 hours: 30.00 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7j/7 et 24h/24.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "26 47 82 90",
+        "photo_url": ""
+      }
+    },
+    "42": {
+      "id": 42,
+      "titre": "Campus Cents",
+      "total": 40,
+      "actuel": 25,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.616771,
+        "longitude": 6.164238,
+        "mobilite": {
+          "fr": "Lignes de bus: 7,14,25,29",
+          "de": "Buslinien: 7,14,25,29",
+          "en": "Bus lines: 7,14,25 and 29\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue de Trèves",
+            "latitude": 49.616632,
+            "longitude": 6.16434
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue de Trèves",
+            "latitude": 49.616588,
+            "longitude": 6.164317,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 5,
+        "femmes": 3,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 07h00 à 17h00 :\r\n 1h00 : 0,00 euro, \r\n 2h00 : 0,00 euro, \r\n 3h00 : 2,00 euro,  \r\n 4h00 : 4,00 euro, \r\n 5h00 : 6,00 euro, \r\n 6h00 : 8,00 euro, \r\n 7h00 : 10,00 euro, \r\n 8h00 : 12,00 euro, \r\n 9h00 : 14,00 euro, \r\n 10h00 : 16,00 euro, \r\n De 17h00 à 07h00 :\r\n 1h00 : 0,50 euro.",
+          "de": "Von 07:00 bis 17:00 Uhr:\r\n 1Std. : 0,00 euro, \r\n 2Std. : 0,00 euro,  \r\n 3Std. : 2,00 euro,  \r\n 4Std. : 4,00 euro, \r\n 5Std. : 6,00 euro, \r\n 6Std. : 8,00 euro, \r\n 7Std. : 10,00 euro, \r\n 8Std. : 12,00 euro, \r\n 9Std. : 14,00 euro, \r\n 10Std. : 16,00 euro, \r\n Von 17:00 bis 07:00 Uhr :\r\n 1Std. : 0,50 euro.",
+          "en": "From 7 a.m. to 5 p.m:\r\n 1h00 : 0,00 euro, \r\n2h00 : 0,00 euro,\r\n 3h00 : 2,00 euro,\r\n 4h00 : 4,00 euro, \r\n 5h00 : 6,00 euro, \r\n 6h00 : 8,00 euro, \r\n 7h00 : 10,00 euro, \r\n 8h00 : 12,00 euro, \r\n 9h00 : 14,00 euro, \r\n 10h00 : 16,00 euro, \r\nFrom 5 p.m. to 7 a.m.:\r\n 1h00 : 0,50 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": true,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,10 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7j/7 de 07h00 à 01h00",
+        "de": "7T/7 von 07:00 bis 01:00 Uhr",
+        "en": "7/7d from 7 a.m. to 1 a.m..\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "4813361",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_42.jpg"
+      }
+    },
+    "18": {
+      "id": 18,
+      "titre": "Coque",
+      "total": 211,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.62433,
+        "longitude": 6.15116,
+        "mobilite": {
+          "fr": "Arrêt Léon Hengen : Lignes 7, 12, 13.\r\nArrêts Erasme, Coque : Lignes 1, 16.",
+          "de": "Haltestelle Léon Hengen: Linien 7, 12, 13.\r\nHaltestellen Erasme, Coque: Linien 1, 16.",
+          "en": "Léon Hengen stop: Lines 7, 12, 13.\r\nErasme and Coque stops: Lines 1 and 16.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue Léon Hengen",
+            "latitude": 49.624342,
+            "longitude": 6.151242
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Léon Hengen",
+            "latitude": 49.625003,
+            "longitude": 6.152412,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue Léon Hengen",
+            "latitude": 49.625017,
+            "longitude": 6.15244,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 6,
+        "femmes": 0,
+        "e-cars": 8,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Tarif entre 07h00 et 17h00 en semaine:\r\n1-3 heures: 3,50 euro/h et à partir de la 4ième heure: 2,00 euro/h\r\n1-3 heures gratuites pour les clients de la Coque et à partir de la 4ième heure 2,00 euro/h\r\nTarif entre 07h00 et 17h00 les weekends et jours fériés:\r\n1-3 heures: 2,00 euro/h et à partir de la 4ième heure: 2,00 euro/h\r\n1-3 heures gratuites pour les clients de la Coque et à partir de la 4ième heure 2,00 euro/h\r\nTarif soirée de 17h00 à 07h00:\r\n2,00 euro/h\r\nTicket perdu: 30,00 euro",
+          "de": "Von 07:00 bis 17:00 Uhr während der Woche:\r\n1-3 Stunden: 3,50 Euro/St. und ab der 4. Stunde: 2,00 Euro/ St.\r\n1-3 Stunden kostenlos für Coque-Kunden und ab der 4. Stunde: 2,00 Euro/St.\r\nVon 07:00 bis 17:00 Uhr am Wochenende und an Feiertagen:\r\n1-3 Stunden: 2,00 Euro/St. und ab der 4. Stunde: 2,00 Euro/ St.\r\n1-3 Stunden kostenlos für Coque-Kunden und ab der 4. Stunde: 2,00 Euro/St.\r\nVon 17:00 - 07:00 Uhr:\r\n2,00 Euro/St.\r\nVerlorenes Ticket: 30,00 Euro",
+          "en": "From 7 a.m. to 5 p.m. during the week:\r\n1-3 hours: 3.50 euros /hr . and from the 4th hour: 2.00 euros / hour\r\n1-3 hours free for Coque customers and from the 4th hour: 2.00 euros / hour.\r\nFrom 7 a.m. to 5 p.m. on weekends and public holidays:\r\n1-3 hours: 2.00 euros / hour and from the 4th hour: 2.00 euros / hour\r\n1-3 hours free for Coque customers and from the 4th hour: 2.00 euros / hour.\r\nFrom 5:00 p.m. to 7:00 a.m .:\r\n2.00 euros / pc.\r\nLost ticket: 30.00 euros"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "Lundi-Vendredi: 06h15 - 22h15\r\nSamedi:              07h15 - 20h15\r\nDimanche:          07h15 - 18h15",
+        "de": "Montag - Freitag: 06:15 - 22:15 Uhr\r\nSamstag:               07:15 - 20:15 Uhr \r\nSonntag:               07:15 - 18:15 Uhr ",
+        "en": "Monday-Friday: 06.15am - 10.15pm\r\nSaturday:           07.15am - 8.15pm\r\nSunday:              07.15am - 6.15pm\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "43 60 601",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_18.jpg"
+      }
+    },
+    "17": {
+      "id": 17,
+      "titre": "Erasme",
+      "total": 322,
+      "actuel": 277,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.622559,
+        "longitude": 6.151508,
+        "mobilite": {
+          "fr": "Arrêt Léon Hengen : Lignes 7, 12, 13.\r\nArrêts Erasme, Coque : Lignes 1, 16.",
+          "de": "Haltestelle Léon Hengen : Linien 7, 12, 13.\r\nHaltestellen Erasme, Coque : Linien 1, 16.",
+          "en": "Stop Léon Hengen: Lines 7, 12, 13.\r\nStop Erasme, Coque: Lines 1, 16.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue Erasme",
+            "latitude": 49.622511,
+            "longitude": 6.151462
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Erasme",
+            "latitude": 49.622545,
+            "longitude": 6.151393,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 8,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 19h00\r\n0h30 : 0,80 euro,\r\n1h00 : 1,60 euro,\r\n1h30 : 2,40 euro,\r\n2h00 : 3,20 euro,\r\n2h30 : 4,00 euro,\r\n3h00 : 4,80 euro,\r\n3h30 : 5,60 euro,\r\n4h00 : 6,40 euro,\r\n4h30 : 7,20 euro,\r\n5h00 : 8,00 euro,\r\n6h00 : 9,70 euro,\r\n7h00 : 11,40 euro,\r\n8h00 : 13,20 euro,\r\n9h00 : 15,00 euro,\r\n10h00 : 16,80 euro,\r\n11h00 : 18,60 euro,\r\n12h00 : 20,40 euro,\r\n De 19h00 à 7h00 :\r\n0h30 : 0,40 euro.",
+          "de": "Von 7:00 bis 19:00 Uhr:\r\n 0St30 : 0,80 euro, \r\n 1St00 : 1,60 euro, \r\n 1St30 : 2,40 euro, \r\n 2St00 : 3,20 euro, \r\n 2St30 : 4,00 euro, \r\n 3St00 : 4,80 euro, \r\n 3St30 : 5,60 euro, \r\n 4St00 : 6,40 euro, \r\n 4St30 : 7,20 euro, \r\n 5St00 : 8,00 euro, \r\n 6St00 : 9,70 euro, \r\n 7St00 : 11,40 euro, \r\n 8St00 : 13,20 euro, \r\n 9St00 : 15,00 euro, \r\n10St00 : 16,80 euro, \r\n11St00 : 18,60 euro,\r\n12St00 : 20,40 euro,\r\n Von 19h00 bis 7h00 :\r\n 0St30 : 0,40 euro,",
+          "en": "From 7 a.m. to 7 p.m. :\r\n0h30 : 0,80 euro,\r\n1h00 : 1,60 euro,\r\n1h30 : 2,40 euro,\r\n2h00 : 3,20 euro,\r\n2h30 : 4,00 euro,\r\n3h00 : 4,80 euro,\r\n3h30 : 5,60 euro,\r\n4h00 : 6,40 euro,\r\n4h30 : 7,20 euro,\r\n5h00 : 8,00 euro,\r\n6h00 : 9,70 euro,\r\n7h00 : 11,40 euro,\r\n8h00 : 13,20 euro,\r\n9h00 : 15,00 euro,\r\n10h00 : 16,80 euro,\r\n11h00 : 18,60 euro,\r\n12h00 : 20,40 euro,\r\nFrom 7 p.m. to 7 a.m. :\r\n0h30 : 0,40 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "46 27 80",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_17.jpg"
+      }
+    },
+    "11": {
+      "id": 11,
+      "titre": "Fort Neipperg",
+      "total": 470,
+      "actuel": 340,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.6021,
+        "longitude": 6.135087,
+        "mobilite": {
+          "fr": "Arrêt Wallis : Lignes 3, 13.\r\n",
+          "de": "Haltestelle Wallis : Linien 3, 13.\r\n",
+          "en": "Stop Wallis : Lines 3, 13.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue du Fort Neipperg",
+            "latitude": 49.602242,
+            "longitude": 6.13492
+          },
+          {
+            "adresse": "Rue du Fort Neipperg",
+            "latitude": 49.602222,
+            "longitude": 6.13491
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Chemin de Fer",
+            "latitude": 49.60217,
+            "longitude": 6.135373,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue Chemin de Fer",
+            "latitude": 49.602098,
+            "longitude": 6.135342,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue Chemin de Fer",
+            "latitude": 49.602005,
+            "longitude": 6.135291,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 17,
+        "femmes": 15,
+        "e-cars": 20,
+        "car_sharing": 0,
+        "velos": 1,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 17h00 :\r\n 0h15 : 0,00 euro, \r\n 0h30 : 0,00 euro, \r\n 0h45 : 0,00 euro, \r\n 1h00 : 0,00 euro, \r\n 1h15 : 0,00 euro, \r\n 1h30 : 0,00 euro, \r\n 1h45 : 0,00 euro, \r\n 2h00 : 0,00 euro, \r\n 2h15 : 0,50 euro, \r\n 2h30 : 1,00 euro, \r\n 2h45 : 1,50 euro, \r\n 3h00 : 2,00 euro, \r\n 3h15 : 2,60 euro, \r\n 3h30 : 3,20 euro, \r\n 3h45 : 3,80 euro, \r\n 4h00 : 4,30 euro, \r\n 4h15 : 4,90 euro, \r\n 4h30 : 5,50 euro, \r\n 4h45 : 6,10 euro, \r\n 5h00 : 6,60 euro, \r\n 6h00 : 9,40 euro, \r\n 7h00 : 12,20 euro, \r\n 8h00 : 15,00 euro, \r\n 9h00 : 17,80 euro, \r\n 10h00 : 20,60 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,00 euro, \r\n 0St30 : 0,00 euro, \r\n 0St45 : 0,00 euro, \r\n 1St00 : 0,00 euro, \r\n 1St15 : 0,00 euro, \r\n 1St30 : 0,00 euro, \r\n 1St45 : 0,00 euro, \r\n 2St00 : 0,00 euro, \r\n 2St15 : 0,50 euro, \r\n 2St30 : 1,00 euro, \r\n 2St45 : 1,50 euro, \r\n 3St00 : 2,00 euro, \r\n 3St15 : 2,60 euro, \r\n 3St30 : 3,20 euro, \r\n 3St45 : 3,80 euro, \r\n 4St00 : 4,30 euro, \r\n 4St15 : 4,90 euro, \r\n 4St30 : 5,50 euro, \r\n 4St45 : 6,10 euro, \r\n 5St00 : 6,60 euro, \r\n 6St00 : 9,40 euro, \r\n 7St00 : 12,20 euro, \r\n 8St00 : 15,00 euro, \r\n 9St00 : 17,80 euro, \r\n 10St00 : 20,60 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,00 euro, \r\n 0h30 : 0,00 euro, \r\n 0h45 : 0,00 euro, \r\n 1h00 : 0,00 euro, \r\n 1h15 : 0,00 euro, \r\n 1h30 : 0,00 euro, \r\n 1h45 : 0,00 euro, \r\n 2h00 : 0,00 euro, \r\n 2h15 : 0,50 euro, \r\n 2h30 : 1,00 euro, \r\n 2h45 : 1,50 euro, \r\n 3h00 : 2,00 euro, \r\n 3h15 : 2,60 euro, \r\n 3h30 : 3,20 euro, \r\n 3h45 : 3,80 euro, \r\n 4h00 : 4,30 euro, \r\n 4h15 : 4,90 euro, \r\n 4h30 : 5,50 euro, \r\n 4h45 : 6,10 euro, \r\n 5h00 : 6,60 euro, \r\n 6h00 : 9,40 euro, \r\n 7h00 : 12,20 euro, \r\n 8h00 : 15,00 euro, \r\n 9h00 : 17,80 euro, \r\n 10h00 : 20,60 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": true,
+        "american_express": false,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": false,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_11.jpg"
+      }
+    },
+    "10": {
+      "id": 10,
+      "titre": "Fort Wedell",
+      "total": 240,
+      "actuel": 212,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.599891,
+        "longitude": 6.129518,
+        "mobilite": {
+          "fr": "Arrêt Commerce : Ligne 20.",
+          "de": "Haltestelle Commerce: Linie 20.",
+          "en": "Stop Commerce: Line 20.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue du Commerce",
+            "latitude": 49.599628,
+            "longitude": 6.129564
+          },
+          {
+            "adresse": "Rue du Commerce",
+            "latitude": 49.599598,
+            "longitude": 6.129606
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue du Commerce",
+            "latitude": 49.600069,
+            "longitude": 6.129188,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 12,
+        "femmes": 0,
+        "e-cars": 10,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 17h00 :\r\n 0h15 : 0,00 euro, \r\n 0h30 : 0,00 euro, \r\n 0h45 : 0,00 euro, \r\n 1h00 : 0,00 euro, \r\n 1h15 : 0,00 euro, \r\n 1h30 : 0,00 euro, \r\n 1h45 : 0,00 euro, \r\n 2h00 : 0,00 euro, \r\n 2h15 : 0,50 euro, \r\n 2h30 : 1,00 euro, \r\n 2h45 : 1,50 euro, \r\n 3h00 : 2,00 euro, \r\n 3h15 : 2,60 euro, \r\n 3h30 : 3,20 euro, \r\n 3h45 : 3,80 euro, \r\n 4h00 : 4,30 euro, \r\n 4h15 : 4,90 euro, \r\n 4h30 : 5,50 euro, \r\n 4h45 : 6,10 euro, \r\n 5h00 : 6,60 euro, \r\n 6h00 : 9,40 euro, \r\n 7h00 : 12,20 euro, \r\n 8h00 : 15,00 euro, \r\n 9h00 : 17,80 euro, \r\n 10h00 : 20,60 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,00 euro, \r\n 0St30 : 0,00 euro, \r\n 0St45 : 0,00 euro, \r\n 1St00 : 0,00 euro, \r\n 1St15 : 0,00 euro, \r\n 1St30 : 0,00 euro, \r\n 1St45 : 0,00 euro, \r\n 2St00 : 0,00 euro, \r\n 2St15 : 0,50 euro, \r\n 2St30 : 1,00 euro, \r\n 2St45 : 1,50 euro, \r\n 3St00 : 2,00 euro, \r\n 3St15 : 2,60 euro, \r\n 3St30 : 3,20 euro, \r\n 3St45 : 3,80 euro, \r\n 4St00 : 4,30 euro, \r\n 4St15 : 4,90 euro, \r\n 4St30 : 5,50 euro, \r\n 4St45 : 6,10 euro, \r\n 5St00 : 6,60 euro, \r\n 6St00 : 9,40 euro, \r\n 7St00 : 12,20 euro, \r\n 8St00 : 15,00 euro, \r\n 9St00 : 17,80 euro, \r\n 10St00 : 20,60 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,00 euro, \r\n 0h30 : 0,00 euro, \r\n 0h45 : 0,00 euro, \r\n 1h00 : 0,00 euro, \r\n 1h15 : 0,00 euro, \r\n 1h30 : 0,00 euro, \r\n 1h45 : 0,00 euro, \r\n 2h00 : 0,00 euro, \r\n 2h15 : 0,50 euro, \r\n 2h30 : 1,00 euro, \r\n 2h45 : 1,50 euro, \r\n 3h00 : 2,00 euro, \r\n 3h15 : 2,60 euro, \r\n 3h30 : 3,20 euro, \r\n 3h45 : 3,80 euro, \r\n 4h00 : 4,30 euro, \r\n 4h15 : 4,90 euro, \r\n 4h30 : 5,50 euro, \r\n 4h45 : 6,10 euro, \r\n 5h00 : 6,60 euro, \r\n 6h00 : 9,40 euro, \r\n 7h00 : 12,20 euro, \r\n 8h00 : 15,00 euro, \r\n 9h00 : 17,80 euro, \r\n 10h00 : 20,60 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "40 55 02",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_10.jpg"
+      }
+    },
+    "19": {
+      "id": 19,
+      "titre": "Gare",
+      "total": 620,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.59801,
+        "longitude": 6.132632,
+        "mobilite": {
+          "fr": "Arrêt Gare centrale : Toutes lignes sauf 3, 5, 6, 8, 12, 15, 17, 20, 24, 25, 30.",
+          "de": "Haltestelle Gare centrale: Alle Linien ausser 3, 5, 6, 8, 12, 15, 17, 20, 24, 25, 30.",
+          "en": "Central Station stop: All lines except 3, 5, 6, 8, 12, 15, 17, 20, 24, 25, 30.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Place de la Gare",
+            "latitude": 49.597918,
+            "longitude": 6.132734
+          },
+          {
+            "adresse": "Place de la Gare",
+            "latitude": 49.597908,
+            "longitude": 6.132779
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue d'Alsace",
+            "latitude": 49.5963,
+            "longitude": 6.131061,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue d'Alsace",
+            "latitude": 49.596274,
+            "longitude": 6.131025,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 6,
+        "femmes": 0,
+        "e-cars": 18,
+        "car_sharing": 10,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "07h00 à 19h00: 2.00 euro/heure, 19h00 à 07h00: 1.00 euro/heure.",
+          "de": "07h00 bis 19h00: 2 euro pro Stunde, 19h00 bis 07h00: 1euro pro Stunde.",
+          "en": "From 7 a.m. to 7 p.m.: €2.00 per hour. From 7 p.m. to 7 a.m.: €1.00 per hour.\r\n"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": true,
+        "remorque": true,
+        "max_poids": "2,5t",
+        "max_hauteur": "2,10 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "24892489",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_19.jpg"
+      }
+    },
+    "24": {
+      "id": 24,
+      "titre": "Gernsback",
+      "total": 445,
+      "actuel": 140,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.636165694848,
+        "longitude": 6.1744435146191,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "Rue Hugo Gernsback",
+            "latitude": 49.636168,
+            "longitude": 6.174476
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Hugo Gernsback",
+            "latitude": 49.636181,
+            "longitude": 6.174454,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 15,
+        "femmes": 0,
+        "e-cars": 14,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "1 heure :  1,40€\r\n2 heures : 2,80€\r\n3 heures : 4,20€\r\n4 heures : 7,50€\r\n24 heures : 15,00€",
+          "de": "1 Stunde :   1,40€\r\n2 Stunden : 2,80€\r\n3 Stunden : 4,20€\r\n4 Stunden : 7,50€\r\n24 Stunden: 15,00€",
+          "en": "1 hour :  1,40€\r\n2 hours : 2,80€\r\n3 hours : 4,20€\r\n4 hours: 7,50€\r\n1 day : 15,00€"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,20 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_24.jpg"
+      }
+    },
+    "22": {
+      "id": 22,
+      "titre": "Glacis",
+      "total": 1150,
+      "actuel": 1070,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.616823,
+        "longitude": 6.123708,
+        "mobilite": {
+          "fr": "Arrêt Lycée Robert Schuman : Lignes 2, 4.\r\nArrêt Glacis : Ligne 3.\r\nArrêt Parking Glacis : Ligne City Shopping Bus.",
+          "de": "Haltestelle Lycée Robert Schuman: Linien 2, 4.\r\nHaltestelle Glacis : Linie 3.\r\nHaltestelle Parking Glacis : Linie City Shopping Bus.",
+          "en": "Lycée Robert Schuman stop: Lines 2, 4.\r\nGlacis stop: Line 3.\r\nParking Glacis stop: Line City Shopping Bus.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Avenue de la Faïencerie",
+            "latitude": 49.615986,
+            "longitude": 6.122486
+          },
+          {
+            "adresse": "Allée Scheffer",
+            "latitude": 49.617102,
+            "longitude": 6.123059
+          },
+          {
+            "adresse": "Avenue de la Faïencerie / P. Autocars",
+            "latitude": 49.615994,
+            "longitude": 6.122125
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Avenue de la Faïencerie",
+            "latitude": 49.615986,
+            "longitude": 6.122486,
+            "direction": ""
+          },
+          {
+            "adresse": "Allée Scheffer",
+            "latitude": 49.617102,
+            "longitude": 6.123059,
+            "direction": ""
+          },
+          {
+            "adresse": "Avenue de la Faïencerie / P. Autocars",
+            "latitude": 49.615994,
+            "longitude": 6.122125,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 7,
+        "femmes": 0,
+        "e-cars": 32,
+        "car_sharing": 0,
+        "velos": 1,
+        "motos": 11,
+        "autocars": 33
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "1,00 euro par heure du lundi au vendredi de 8h00 à 18h00.",
+          "de": "1,00 Euro pro Stunde von Montag bis Freitag von  8:00 bis 18:00 Uhr.",
+          "en": "€1.00 per hour, Monday to Friday, 8 a.m. to 6 p.m."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": false,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "4796-4499",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_22.jpg"
+      }
+    },
+    "4": {
+      "id": 4,
+      "titre": "Knuedler",
+      "total": 606,
+      "actuel": 2,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.610291,
+        "longitude": 6.130014,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "Rue Notre-Dame",
+            "latitude": 49.610294,
+            "longitude": 6.13004
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Notre- Dame",
+            "latitude": 49.610297,
+            "longitude": 6.130144,
+            "direction": ""
+          },
+          {
+            "adresse": "Rue Notre-Dame",
+            "latitude": 49.610298,
+            "longitude": 6.130196,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 13,
+        "femmes": 4,
+        "e-cars": 18,
+        "car_sharing": 0,
+        "velos": 1,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,40 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,80 euro, \r\n 6St00 : 14,00 euro, \r\n 7St00 : 17,20 euro, \r\n 8St00 : 20,40 euro, \r\n 9St00 : 23,60 euro, \r\n 10St00 : 26,80 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "26 00 12",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_4.jpg"
+      }
+    },
+    "26": {
+      "id": 26,
+      "titre": "Kockelscheuer",
+      "total": 567,
+      "actuel": 104,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Park and Ride",
+          "de": "Park and Ride",
+          "en": "Park and Ride"
+        },
+        "latitude": 49.565774,
+        "longitude": 6.10772,
+        "mobilite": {
+          "fr": "Arrêt Kockelscheuer Patinoire : Ligne 18.",
+          "de": "Haltestelle Kockelscheuer Patinoire: Linie 18.",
+          "en": "Kockelscheuer Patinoire stop: Line 18."
+        },
+        "entree": [
+          {
+            "adresse": "Rue de Bettembourg",
+            "latitude": 49.566214,
+            "longitude": 6.108472
+          },
+          {
+            "adresse": "Rue de Bettembourg",
+            "latitude": 49.566213,
+            "longitude": 6.108534
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue de Bettembourg",
+            "latitude": 49.565055,
+            "longitude": 6.108309,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 8,
+        "femmes": 0,
+        "e-cars": 16,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "gratuit24h",
+        "tarif": {
+          "fr": "24 heures de stationnement gratuit. A partir de la 25e heure de stationnement, le tarif s’élèvera à 10 euro par journée entamée.",
+          "de": "24 Stunden gratis, ab der 25ten Stunde, beträgt die Parkgebühr 10 Euro pro angefangener Tag.",
+          "en": "24 hours of free parking. From the 25th hour of parking, the rate will be €10 per day.\r\n\r\n"
+        },
+        "especes": true,
+        "debit": false,
+        "visa": false,
+        "mastercard": false,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": true,
+        "telephone": "262742",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_26.jpg"
+      }
+    },
+    "25": {
+      "id": 25,
+      "titre": "Luxembourg Sud A",
+      "total": 831,
+      "actuel": 831,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Park and Ride",
+          "de": "Park and Ride",
+          "en": "Park and Ride"
+        },
+        "latitude": 49.578463,
+        "longitude": 6.128204,
+        "mobilite": {
+          "fr": "Arrêt P+R Luxembourg-Sud : Ligne 22.",
+          "de": "Haltestelle P+R Luxembourg-Sud: Linie 22.",
+          "en": "P+R Luxembourg-Sud stop: Line 22."
+        },
+        "entree": [
+          {
+            "adresse": "",
+            "latitude": 49.578248,
+            "longitude": 6.128968
+          },
+          {
+            "adresse": "",
+            "latitude": 49.578249,
+            "longitude": 6.129031
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "",
+            "latitude": 49.579413,
+            "longitude": 6.128417,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 4,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 21
+      },
+      "paiement": {
+        "politique_tarifaire": "gratuit24h",
+        "tarif": {
+          "fr": "24 heures de stationnement gratuit. A partir de la 25e heure de stationnement, le tarif s’élèvera à 10 euro par journée entamée.",
+          "de": "24 Stunden gratis, ab der 25ten Stunde, beträgt die Parkgebühr 10 Euro pro angefangener Tag.",
+          "en": "24 hours of free parking. From the 25th hour of parking, the rate will be €10 per day.\r\n"
+        },
+        "especes": true,
+        "debit": false,
+        "visa": false,
+        "mastercard": false,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": true,
+        "telephone": "26 27 42",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_25.jpg"
+      }
+    },
+    "12": {
+      "id": 12,
+      "titre": "Luxembourg Sud B",
+      "total": 560,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Park and Ride",
+          "de": "Park and Ride",
+          "en": "Park and Ride"
+        },
+        "latitude": 49.580272,
+        "longitude": 6.129044,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "",
+            "latitude": 49.579649,
+            "longitude": 6.129816
+          },
+          {
+            "adresse": "",
+            "latitude": 49.579634,
+            "longitude": 6.129862
+          },
+          {
+            "adresse": "",
+            "latitude": 49.580754,
+            "longitude": 6.12877
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "",
+            "latitude": 49.580767,
+            "longitude": 6.128844,
+            "direction": ""
+          },
+          {
+            "adresse": "",
+            "latitude": 49.579563,
+            "longitude": 6.12942,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 5,
+        "femmes": 0,
+        "e-cars": 54,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "gratuit24h",
+        "tarif": {
+          "fr": "24 heures de stationnement gratuit. A partir de la 25e heure de stationnement, le tarif s’élèvera à 10 euro par journée entamée.",
+          "de": "24 Stunden gratis, ab der 25ten Stunde, beträgt die Parkgebühr 10 Euro pro angefangener Tag.",
+          "en": "24 hours of free parking. From the 25th hour of parking, the rate will be €10 per day.\r\n"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": true,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": true,
+        "telephone": "26 27 42",
+        "photo_url": ""
+      }
+    },
+    "23": {
+      "id": 23,
+      "titre": "Luxexpo",
+      "total": 0,
+      "actuel": 0,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": true,
+      "panne": true,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.636242,
+        "longitude": 6.173242,
+        "mobilite": {
+          "fr": "Arrêt Parking Foire : Lignes 1, 18, 25.",
+          "de": "Haltestelle Parking Foire: Linien 1, 18, 25.",
+          "en": "Parking Foire stop: Lines 1, 18, 25."
+        },
+        "entree": [
+          {
+            "adresse": "Rue Hugo Gernsback",
+            "latitude": 49.635443,
+            "longitude": 6.174519
+          },
+          {
+            "adresse": "Rue Hugo Gernsback",
+            "latitude": 49.635418,
+            "longitude": 6.174481
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue Hugo Gernsback",
+            "latitude": 49.635392,
+            "longitude": 6.174441,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 15,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 6,
+        "motos": 6,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 07h00 à 21h00:\r\nles deux premières heures: 1,00€/heure\r\nà partir de la 3ième à la 14ième heure: 2,00€/heure\r\nDe 21h00 à 07h00:\r\n0,50€/heure",
+          "de": "Von 07:00 Uhr bis 21:00 Uhr:\r\ndie zwei ersten Stunden: 1,00€/Stunde\r\nvon der 3 Stunde bis zur 14 Stunde: 2,00€/Stunde\r\nVon 21:00 Uhr bis 07:00 Uhr:\r\n0,50€/Stunde",
+          "en": "From 7 a.m. to 9 p.m.\r\nThe first two hours cost €1.00 per hour.\r\nFrom the 3rd to the 14th hour, the cost is €2.00 per hour.\r\nFrom 9 p.m. to 7 a.m.\r\n0.50/hour"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": true,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": false,
+        "max_poids": "3,5t",
+        "max_hauteur": ""
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "4813361",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_23.jpg"
+      }
+    },
+    "8": {
+      "id": 8,
+      "titre": "Martyrs",
+      "total": 183,
+      "actuel": 117,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.605282,
+        "longitude": 6.128982,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "Rue du Plébiscite",
+            "latitude": 49.604818,
+            "longitude": 6.128959
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue de la Grève",
+            "latitude": 49.605625,
+            "longitude": 6.128692,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 12,
+        "femmes": 9,
+        "e-cars": 12,
+        "car_sharing": 0,
+        "velos": 32,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,30 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,60 euro, \r\n 6h00 : 13,40 euro, \r\n 7h00 : 16,20 euro, \r\n 8h00 : 19,00 euro, \r\n 9h00 : 21,80 euro, \r\n 10h00 : 24,60 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,30 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,60 euro, \r\n 6St00 : 13,40 euro, \r\n 7St00 : 16,20 euro, \r\n 8St00 : 19,00 euro, \r\n 9St00 : 21,80 euro, \r\n 10St00 : 24,60 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,30 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,60 euro, \r\n 6h00 : 13,40 euro, \r\n 7h00 : 16,20 euro, \r\n 8h00 : 19,00 euro, \r\n 9h00 : 21,80 euro, \r\n 10h00 : 24,60 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "1,95 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "621985491",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_8.jpg"
+      }
+    },
+    "6": {
+      "id": 6,
+      "titre": "Monterey",
+      "total": 310,
+      "actuel": 53,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.610424,
+        "longitude": 6.124042,
+        "mobilite": {
+          "fr": "Arrêts Hamilius, Royal, Monterey : Toutes lignes sauf 23, 24, 25.",
+          "de": "Haltestellen Hamilius, Royal, Monterey: Alle Linien ausser 23, 24, 25.",
+          "en": "Hamilius, Royal, Monterey stops: All lines except 23, 24, 25."
+        },
+        "entree": [
+          {
+            "adresse": "Avenue Monterey",
+            "latitude": 49.609996,
+            "longitude": 6.122352
+          },
+          {
+            "adresse": "Boulevard Prince Henri",
+            "latitude": 49.610087,
+            "longitude": 6.124426
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Boulevard Prince Henri",
+            "latitude": 49.610611,
+            "longitude": 6.124248,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 3,
+        "femmes": 7,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,40 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,80 euro, \r\n 6St00 : 14,00 euro, \r\n 7St00 : 17,20 euro, \r\n 8St00 : 20,40 euro, \r\n 9St00 : 23,60 euro, \r\n 10St00 : 26,80 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h",
+        "de": "7T/7 und 24St/24",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "26 27 42",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_6.jpg"
+      }
+    },
+    "30": {
+      "id": 30,
+      "titre": "Nobilis",
+      "total": 125,
+      "actuel": 100,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.602453,
+        "longitude": 6.134632,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "Rue du Fort Neipperg",
+            "latitude": 49.602475,
+            "longitude": 6.134861
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue du Fort Neipperg",
+            "latitude": 49.602457,
+            "longitude": 6.134853,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 3,
+        "femmes": 0,
+        "e-cars": 7,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "30 minutes: 0,90 euro\r\n1h00 : 1.90 euro\r\n1h30 : 2.80 euro\r\n2h00 : 3.80 euro\r\n2h30 : 4,70 euro\r\n3h00 : 5.70 euro\r\n3h30 : 6.90 euro\r\n4h00 : 8,10 euro\r\n4h30 : 9.30 euro\r\n5h00 : 11,50 euro\r\n6h00 : 13.90 euro\r\n7h00 : 16.30 euro\r\n8h00 : 18.70 euro\r\n9h00 : 21.10 euro\r\n10h00 : 23.50 euro",
+          "de": "30 Minuten: 0,90 Euro\r\n1 Stunde: 1,90 Euro\r\n1 Stunde 30 Minuten: 2,80 Euro\r\n2 Stunden: 3,80 Euro\r\n2 Stunden 30 Minuten: 4,70 Euro\r\n3 Stunden: 5,70 Euro\r\n3 Stunden 30 Minuten: 6,90 Euro\r\n4 Stunden: 8,10 Euro\r\n4 Stunden 30 Minuten: 9,30 Euro\r\n5 Stunden: 11,50 Euro\r\n6 Stunden: 13,90 Euro\r\n7 Stunden: 16,30 Euro\r\n8 Stunden: 18,70 Euro\r\n9 Stunden: 21,10 Euro\r\n10 Stunden: 23,50 Euro",
+          "en": "30 minutes: 0,90 euro\r\n1h00 : 1.90 euro\r\n1h30 : 2.80 euro\r\n2h00 : 3.80 euro\r\n2h30 : 4,70 euro\r\n3h00 : 5.70 euro\r\n3h30 : 6.90 euro\r\n4h00 : 8,10 euro\r\n4h30 : 9.30 euro\r\n5h00 : 11,50 euro\r\n6h00 : 13.90 euro\r\n7h00 : 16.30 euro\r\n8h00 : 18.70 euro\r\n9h00 : 21.10 euro\r\n10h00 : 23.50 euro"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "1,80 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "Lundi à dimanche de 06h00 à 21h00.",
+        "de": "Montag bis Sonntag von 6:00 bis 21:00 Uhr.",
+        "en": "Monday to Sunday, 6 a.m. to 9 p.m."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "2689181",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_30.jpg"
+      }
+    },
+    "15": {
+      "id": 15,
+      "titre": "Place de l'Europe",
+      "total": 600,
+      "actuel": 513,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.618997,
+        "longitude": 6.142651,
+        "mobilite": {
+          "fr": "Arrêt Philharmonie Mudam : Lignes 1, 13, 18.",
+          "de": "Haltestelle Philharmonie Mudam: Linien 1, 13, 18.",
+          "en": "Philharmonie Mudam stop: Lines 1, 13, 18."
+        },
+        "entree": [
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.619177,
+            "longitude": 6.14207
+          },
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.61959,
+            "longitude": 6.14324
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.61935,
+            "longitude": 6.14305,
+            "direction": ""
+          },
+          {
+            "adresse": "Avenue John F. Kennedy",
+            "latitude": 49.619461,
+            "longitude": 6.142469,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 10,
+        "femmes": 12,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Tarif de jour (7h00 à 19h00) : \r\n  1 heure : 1,60 euro, \r\n  2 heures : 3,20 euro, \r\n  3 heures : 4,80 euro, \r\n  4 heures : 6,40 euro, \r\n  5 heures : 8,00 euro, \r\n  6 heures : 9,70 euro, \r\n  7 heures : 11,40 euro, \r\n  8 heures : 13,20 euro, \r\n  9 heures : 15,00 euro, \r\n  10 heures : 16,80 euro, \r\n  11 heures : 18,60 euro, \r\n  12 heures : 20,40 euro.\r\nTarif de nuit (19h00 à 7h00) : \r\n  0,80 euro par heure",
+          "de": "Tagestarif (7:00 bis 19:00 Uhr): \r\n  1 Stunde: 1,60 Euro, \r\n  2 Stunden: 3,20 Euro, \r\n  3 Stunden: 4,80 Euro, \r\n  4 Stunden: 6,40 Euro, \r\n  5 Stunden: 8,00 Euro, \r\n  6 Stunden: 9,70 Euro, \r\n  7 Stunden: 11,40 Euro, \r\n  8 Stunden: 13,20 Euro, \r\n  9 Stunden: 15,00 Euro, \r\n  10 Stunden: 16,80 Euro, \r\n  11 Stunden: 18,60 Euro, \r\n  12 Stunden: 20,40 Euro.\r\nNachttarif (19:00 bis 7:00 Uhr): \r\n  0,80 Euro pro Stunde.",
+          "en": "Day rate (7am to 7pm):\r\n   1 hour: € 1.60,\r\n   2 hours: 3.20 euro,\r\n   3 hours: 4.80 euro,\r\n   4 hours: 6.40 euro,\r\n   5 hours: 8,00 euro,\r\n   6 hours: 9.70 euro,\r\n   7 hours: 11.40 euro,\r\n   8 hours: 13,20 euro,\r\n   9 hours: 15,00 euro,\r\n   10 hours: 16.80 euro,\r\n   11 hours: 18.60 euro,\r\n   12 hours: 20.40 euro.\r\nNight rate (7 pm to 7 am):\r\n   0.80 euro per hour"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "691 511 118",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_15.jpg"
+      }
+    },
+    "9": {
+      "id": 9,
+      "titre": "Rocade",
+      "total": 155,
+      "actuel": 133,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Gare",
+          "de": "Bahnhof",
+          "en": "Central station"
+        },
+        "latitude": 49.604076,
+        "longitude": 6.136815,
+        "mobilite": {
+          "fr": "Arrêt Wallis : Lignes 3, 13.",
+          "de": "Haltestelle Wallis: Linien 3, 13.",
+          "en": "Wallis stop: Lines 3, 13.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue du Laboratoire",
+            "latitude": 49.605428,
+            "longitude": 6.137858
+          },
+          {
+            "adresse": "Rue du Laboratoire",
+            "latitude": 49.603278,
+            "longitude": 6.136554
+          },
+          {
+            "adresse": "Rue du Laboratoire",
+            "latitude": 49.603302,
+            "longitude": 6.136596
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue du Laboratoire ",
+            "latitude": 49.605236,
+            "longitude": 6.13776,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": false,
+        "wc": false,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 4,
+        "femmes": 6,
+        "e-cars": 14,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": " De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,30 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,60 euro, \r\n 6h00 : 13,60 euro, \r\n 7h00 : 16,20 euro, \r\n 8h00 : 19,00 euro, \r\n 9h00 : 21,80 euro, \r\n 10h00 : 24,60 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,30 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,60 euro, \r\n 6St00 : 13,40 euro, \r\n 7St00 : 16,20 euro, \r\n 8St00 : 19,00 euro, \r\n 9St00 : 21,80 euro, \r\n 10St00 : 24,60 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5 p.m. :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,30 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,60 euro, \r\n 6h00 : 13,60 euro, \r\n 7h00 : 16,20 euro, \r\n 8h00 : 19,00 euro, \r\n 9h00 : 21,80 euro, \r\n 10h00 : 24,60 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": false,
+        "visa": true,
+        "mastercard": false,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,10 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "48 13 36 324",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_9.jpg"
+      }
+    },
+    "7": {
+      "id": 7,
+      "titre": "Rond Point Schuman",
+      "total": 382,
+      "actuel": 74,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.617288,
+        "longitude": 6.126428,
+        "mobilite": {
+          "fr": "Arrêt Lycée Robert Schuman : Lignes 2, 4.",
+          "de": "Haltestelle Lycée Robert Schuman: Linien 2, 4.",
+          "en": "Lycée Robert Schuman stop: Lines 2, 4."
+        },
+        "entree": [
+          {
+            "adresse": "Allée Scheffer",
+            "latitude": 49.617878,
+            "longitude": 6.125355
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue des Glacis",
+            "latitude": 49.617889,
+            "longitude": 6.125411,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 12,
+        "femmes": 8,
+        "e-cars": 12,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Samedi et dimanche : gratuit. \r\nDu lundi au vendredi:\r\nDe 8h00 à 18h00 :\r\n 1h00 : 1,00 euro, \r\n 2h00 : 2,00 euro, \r\n 3h00 : 3,00 euro, \r\n 4h00 : 4,00 euro, \r\n 5h00 : 5,00 euro, \r\n 6h00 : 6,00 euro, \r\n 7h00 : 7,00 euro, \r\n 8h00 : 8,00 euro, \r\n 9h00 : 9,00 euro, \r\n 10h00 : 10,00 euro,  \r\n De 18h00 à 8h00 : gratuit\r\n",
+          "de": "Samstag und Sonntag : kostenlos. \r\nVon Montags bis Freitags:\r\nVon 8:00 bis 18:00 Uhr:\r\n 1St00 : 1,00 euro,   \r\n 2St00 : 2,00 euro, \r\n 3St00 : 3,00 euro, \r\n 4St00 : 4,00 euro,  \r\n 5St00 : 5,00 euro, \r\n 6St00 : 6,00 euro, \r\n 7St00 : 7,00 euro, \r\n 8St00 : 8,00 euro, \r\n 9St00 : 9,00 euro, \r\n 10St00 : 10,00 euro, \r\n Von 18:00 bis 08:00Uhr: kostenlos\r\n ",
+          "en": "Saturday and Sunday: free.\r\nMonday to Friday:\r\nFrom 8 a.m. to 6 p.m. :\r\n  1h00: 1.00 euro,\r\n  2h00: 2,00 euro,\r\n  3h00: 3,00 euro,\r\n  4h00: 4,00 euro,\r\n  5h00: 5.00 euro,\r\n  6h00: 6,00 euro,\r\n  7h00: 7.00 euro,\r\n  8h00: 8.00 euro,\r\n  9h00: 9,00 euro,\r\n  10h00: 10.00 euro,\r\nFrom 6 p.m. to 8 a.m.: free of charge"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "Tous les jours de 6h30 à 23h30",
+        "de": "7T/7 von 6:30 bis 23:30 Uhr",
+        "en": "Every day from 6.30 a.m. to 11.30 p.m."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "48 13 36 331",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_7.jpg"
+      }
+    },
+    "36": {
+      "id": 36,
+      "titre": "Royal-Hamilius",
+      "total": 504,
+      "actuel": 129,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.610391399792,
+        "longitude": 6.1246146134679,
+        "mobilite": {
+          "fr": "",
+          "de": "",
+          "en": ""
+        },
+        "entree": [
+          {
+            "adresse": "Avenue Monterey",
+            "latitude": 49.610461,
+            "longitude": 6.125144
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Avenue Emile Reuter",
+            "latitude": 49.612258,
+            "longitude": 6.125155,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 18,
+        "femmes": 22,
+        "e-cars": 6,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "De 07h00 à 17h00:\r\n0h30 : 1,20 euro,\r\nJour max. (jusqu'à 17h00) : 26,80 € \r\nTarif de nuit (17h00 - 07h00): \r\n0h30 : 0,40 euro,\r\nMax. (jusqu'à 07h00) : 11,20 € \r\nTicket 24h : 38,00 € ",
+          "de": "Tagestarif (07:00 - 17:00 Uhr): \r\n0St30 : 1,20 euro,\r\nTagesmax. (bis 17:00 Uhr): 26,80 € \r\nNachttarif (17:00 - 07:00 Uhr): \r\n0St30 : 0,40 euro,\r\nMax. (bis 07:00 Uhr): 11,20 € \r\n24St Ticket: 38,00 €",
+          "en": "From 7 a.m. to 5p.m.:\r\n0h30 : 1,20 euro,\r\nMax. day (until 5 p.m.): €26,80 \r\nNight rate (5 p.m. - 7 a.m.): \r\n0h30 : 0,40 euro,\r\nMax. (until 7 a.m.): €11,20 \r\n24h ticket: €38,00"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,10 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h",
+        "de": "7T/7 und 24St./24",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_36.jpg"
+      }
+    },
+    "3": {
+      "id": 3,
+      "titre": "Saint-Esprit",
+      "total": 200,
+      "actuel": 3,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.608119,
+        "longitude": 6.133641,
+        "mobilite": {
+          "fr": "Arrêt F.D. Roosevelt : Lignes 2,3,4,5,9,10,13,14,18,19,22,31",
+          "de": "Haltestelle F.D. Roosevelt : Linien 2,3,4,5,9,10,13,14,18,19,22,31",
+          "en": "F.D. Roosevelt stop : Lines 2,3,4,5,9,10,13,14,18,19,22,31"
+        },
+        "entree": [
+          {
+            "adresse": "Boulevard Franklin D. Roosevelt",
+            "latitude": 49.608445,
+            "longitude": 6.132668
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Boulevard Franklin D. Roosevelt",
+            "latitude": 49.6085,
+            "longitude": 6.132604,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 13,
+        "femmes": 18,
+        "e-cars": 25,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": " De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.\r\nTicket perdu: 38€",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,40 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,80 euro, \r\n 6St00 : 14,00 euro, \r\n 7St00 : 17,20 euro, \r\n 8St00 : 20,40 euro, \r\n 9St00 : 23,60 euro, \r\n 10St00 : 26,80 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.\r\nVerlorenes Ticket: 38€",
+          "en": "From 7 a.m. to 5p.m.:\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.\r\nLost ticket: €38"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h",
+        "de": "7T/7 und 24St/24",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "+352 621 17 39 91",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_3.jpg"
+      }
+    },
+    "21": {
+      "id": 21,
+      "titre": "Stade",
+      "total": 400,
+      "actuel": 400,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.614382,
+        "longitude": 6.108344,
+        "mobilite": {
+          "fr": "Arrêt Stade : Ligne 22.",
+          "de": "Haltestelle Stade: Linie 22.",
+          "en": "Stade stop: Line 22.\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Rue d'Ostende",
+            "latitude": 49.614171,
+            "longitude": 6.108499
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Rue d'Ostende",
+            "latitude": 49.614249,
+            "longitude": 6.10799,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 6,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Samedi et dimanche : gratuit. \r\nDu lundi au vendredi:\r\nDe 8h00 à 18h00 :\r\n1h00 : 1,00 euro, \r\n2h00 : 2,00 euro, \r\n3h00 : 3,00 euro, \r\n4h00 : 4,00 euro, \r\n5h00 : 5,00 euro, \r\n6h00 : 6,00 euro, \r\n7h00 : 7,00 euro, \r\n8h00 : 8,00 euro, \r\n9h00 : 9,00 euro, \r\n10h00 : 10,00 euro, \r\nDe 18h00 à 8h00 : gratuit\r\n",
+          "de": "Samstag und Sonntag : kostenlos. \r\nVon Montags bis Freitags:\r\nVon 8:00 bis 18:00 Uhr:\r\n1St00 : 1,00 euro,   \r\n2St00 : 2,00 euro, \r\n3St00 : 3,00 euro, \r\n4St00 : 4,00 euro,  \r\n5St00 : 5,00 euro, \r\n6St00 : 6,00 euro, \r\n7St00 : 7,00 euro, \r\n8St00 : 8,00 euro, \r\n9St00 : 9,00 euro, \r\n10St00 : 10,00 euro, \r\nVon 18:00 bis 08:00Uhr: kostenlos\r\n ",
+          "en": "Saturday and Sunday: free.\r\nMonday to Friday:\r\nFrom 8 a.m. to 6 p.m. :\r\n1h00 : 1,00 euro, \r\n2h00 : 2,00 euro, \r\n3h00 : 3,00 euro, \r\n4h00 : 4,00 euro, \r\n5h00 : 5,00 euro, \r\n6h00 : 6,00 euro, \r\n7h00 : 7,00 euro, \r\n8h00 : 8,00 euro, \r\n9h00 : 9,00 euro, \r\n10h00 : 10,00 euro, \r\nFrom 6 p.m. to 8 a.m.: free of charge"
+        },
+        "especes": true,
+        "debit": false,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": false,
+        "gnc": false,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "Tous les jours de 6h00 à 01h00",
+        "de": "7T/7 von 6:00 bis 01:00 Uhr",
+        "en": "Every day from 6 a.m. to 1 a.m."
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "48 13 36 330",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_21.jpg"
+      }
+    },
+    "39": {
+      "id": 39,
+      "titre": "Stade de Luxembourg",
+      "total": 1824,
+      "actuel": 1689,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Park and Ride",
+          "de": "Park and Ride",
+          "en": "Park and Ride"
+        },
+        "latitude": 49.577398,
+        "longitude": 6.110952,
+        "mobilite": {
+          "fr": "Arrêt P+R Stade de Luxembourg: Lignes 5, 22\r\nArrêt Stade de Luxembourg: Lignes 5, 18, 20, 22, 27",
+          "de": "Haltestelle P+R Stade de Luxembourg: Linien 5, 22\r\nHaltestelle Stade de Luxembourg: Linien 5, 18, 20, 22, 27",
+          "en": "P+R Stade de Luxembourg stop: Lines 5, 22\r\nStade de Luxembourg stop: Lines 5, 18, 20, 22, 27\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Route d'Esch",
+            "latitude": 49.577741,
+            "longitude": 6.109804
+          },
+          {
+            "adresse": "Route d'Esch",
+            "latitude": 49.576304,
+            "longitude": 6.109371
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Route d'Esch",
+            "latitude": 49.577839,
+            "longitude": 6.109837,
+            "direction": "Leudelange / Kockelscheuer"
+          },
+          {
+            "adresse": "Boulevard de Kockelscheuer",
+            "latitude": 49.576078,
+            "longitude": 6.112483,
+            "direction": "Centre Ville / Toutes directions"
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 43,
+        "femmes": 97,
+        "e-cars": 56,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "gratuit24h",
+        "tarif": {
+          "fr": "24 heures de stationnement gratuit,\r\nà partir de la 25e heure de stationnement, le tarif s'élèvera à 10 euro par journée entamée.",
+          "de": "24 Stunden gratis, ab der 25ten Stunde, beträgt die Parkgebühr 10 Euro pro angefangener Tag.",
+          "en": "24 hours free parking, from the 25th hour of parking, the rate will be €10 per day.\r\n"
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": false,
+        "clous": false,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,10 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": true,
+        "telephone": "",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_39.jpg"
+      }
+    },
+    "1": {
+      "id": 1,
+      "titre": "Théâtre",
+      "total": 450,
+      "actuel": 62,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Centre",
+          "de": "Zentrum",
+          "en": "Center"
+        },
+        "latitude": 49.61291,
+        "longitude": 6.131021,
+        "mobilite": {
+          "fr": "Arrêt Kasinosgaass : Lignes 19, 20.\r\nArrêt Badanstalt : Lignes 5, 9, 10, 11, 14, 19, 20.",
+          "de": "Haltestelle Kasinosgaass: Linien 19, 20.\r\nHaltestelle Badanstalt: Linien 5, 9, 10, 11, 14, 19, 20.",
+          "en": "Kasinosgaass stop: Lines 19, 20.\r\nBadanstalt stop: Lines 5, 9, 10, 11, 14, 19, 20\r\n"
+        },
+        "entree": [
+          {
+            "adresse": "Place du Théâtre",
+            "latitude": 49.612989,
+            "longitude": 6.130578
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "Côte d'Eich",
+            "latitude": 49.613078,
+            "longitude": 6.131317,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": false
+      },
+      "nominal": {
+        "handicapes": 3,
+        "femmes": 0,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 0,
+        "motos": 0,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": " De 7h00 à 17h00 :\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\n De 17h00 à 7h00 :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro.\r\n ",
+          "de": "Von 7:00 bis 17:00 Uhr:\r\n 0St15 : 0,50 euro, \r\n 0St30 : 1.00 euro, \r\n 0St45 : 1,50 euro, \r\n 1St00 : 2,00 euro, \r\n 1St15 : 2.50 euro, \r\n 1St30 : 3,00 euro, \r\n 1St45 : 3,50 euro, \r\n 2St00 : 4,00 euro, \r\n 2St15 : 4,50 euro, \r\n 2St30 : 5,00 euro, \r\n St45 : 5,50 euro, \r\n 3St00 : 6,00 euro, \r\n 3St15 : 6,60 euro, \r\n 3St30 : 7,20 euro, \r\n 3St45 : 7,80 euro, \r\n 4St00 : 8,40 euro, \r\n 4St15 : 9,00 euro, \r\n 4St30 : 9,60 euro, \r\n 4St45 : 10,20 euro, \r\n 5St00 : 10,80 euro, \r\n 6St00 : 14,00 euro, \r\n 7St00 : 17,20 euro, \r\n 8St00 : 20,40 euro, \r\n 9St00 : 23,60 euro, \r\n 10St00 : 26,80 euro, \r\n Von 17h00 bis 7h00 :\r\n 0St30 : 0,40 euro, \r\n 1St00 : 0,80 euro.",
+          "en": "From 7 a.m. to 5p.m.:\r\n 0h15 : 0,50 euro, \r\n 0h30 : 1.00 euro, \r\n 0h45 : 1,50 euro, \r\n 1h00 : 2,00 euro, \r\n 1h15 : 2.50 euro, \r\n 1h30 : 3,00 euro, \r\n 1h45 : 3,50 euro, \r\n 2h00 : 4,00 euro, \r\n 2h15 : 4,50 euro, \r\n 2h30 : 5,00 euro, \r\n 2h45 : 5,50 euro, \r\n 3h00 : 6,00 euro, \r\n 3h15 : 6,60 euro, \r\n 3h30 : 7,20 euro, \r\n 3h45 : 7,80 euro, \r\n 4h00 : 8,40 euro, \r\n 4h15 : 9,00 euro, \r\n 4h30 : 9,60 euro, \r\n 4h45 : 10,20 euro, \r\n 5h00 : 10,80 euro, \r\n 6h00 : 14,00 euro, \r\n 7h00 : 17,20 euro, \r\n 8h00 : 20,40 euro, \r\n 9h00 : 23,60 euro, \r\n 10h00 : 26,80 euro, \r\nFrom 5 p.m. to 7 a.m. :\r\n 0h30 : 0,40 euro, \r\n 1h00 : 0,80 euro."
+        },
+        "especes": true,
+        "debit": true,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": false,
+        "indigo_neo": false
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "22 01 05",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_1.jpg"
+      }
+    },
+    "16": {
+      "id": 16,
+      "titre": "Trois Glands",
+      "total": 450,
+      "actuel": 400,
+      "tendance": 0,
+      "ouvert": true,
+      "complet": false,
+      "panne": false,
+      "localisation": {
+        "quartier": {
+          "fr": "Kirchberg",
+          "de": "Kirchberg",
+          "en": "Kirchberg"
+        },
+        "latitude": 49.617036322512,
+        "longitude": 6.1423352276627,
+        "mobilite": {
+          "fr": "Arrêt Philharmonie Mudam : Lignes 1, 13, 18.",
+          "de": "Haltestelle Philharmonie Mudam: Linien 1, 13, 18.",
+          "en": "Philharmonie Mudam stop: Lines 1, 13, 18."
+        },
+        "entree": [
+          {
+            "adresse": "2, rue du Fort Thüngen",
+            "latitude": 49.617063,
+            "longitude": 6.142307
+          }
+        ],
+        "sortie": [
+          {
+            "adresse": "2, rue du Fort Thüngen",
+            "latitude": 49.617062,
+            "longitude": 6.142292,
+            "direction": ""
+          }
+        ]
+      },
+      "service": {
+        "ascenseur": true,
+        "wc": true,
+        "wc_handicapes": true
+      },
+      "nominal": {
+        "handicapes": 3,
+        "femmes": 6,
+        "e-cars": 0,
+        "car_sharing": 0,
+        "velos": 1,
+        "motos": 4,
+        "autocars": 0
+      },
+      "paiement": {
+        "politique_tarifaire": "payant",
+        "tarif": {
+          "fr": "Tarif de jour (7h00 à 19h00) : \r\n 0h30 : 0,80 euro, \r\n 1h00 : 1,60 euro, \r\n 1h30 : 2,40 euro, \r\n 2h00 : 3,20 euro, \r\n 2h30 : 4,00 euro, \r\n 3h00 : 4,80 euro, \r\n 3h30 : 5,60 euro, \r\n 4h00 : 6,40 euro, \r\n 4h30 : 7,20 euro, \r\n 5h00 : 8,00 euro, \r\n 6h00 : 9,70 euro, \r\n 7h00 : 11,40 euro,\r\n 8h00 : 13,20 euro,\r\n 9h00 : 14,45 euro,\r\n 10h00 : 15,70 euro,\r\n 11h00 : 16,95 euro,\r\n 12h00 : 18,20 euro,\r\n 24h00 : 30,00 euro.",
+          "de": "Tagestarif (7:00 bis 19:00 Uhr): \r\n 0St30 : 0,80 Euro, \r\n 1St00 : 1,60 Euro, \r\n 1St30 : 2,40 Euro, \r\n 2St00 : 3,20 Euro, \r\n 2St30 : 4,00 Euro, \r\n 3St00 : 4,80 Euro, \r\n 3St30 : 5,60 Euro, \r\n 4St00 : 6,40 Euro, \r\n 4St30 : 7,20 Euro, \r\n 5St00 : 8,00 Euro, \r\n 6St00 : 9,70 Euro, \r\n 7St00 : 11,40 Euro,\r\n 8St00 : 13,20 Euro,\r\n 9St00 : 14,45 Euro,\r\n 10St00 : 15,70 Euro,\r\n 11St00 : 16,95 Euro,\r\n 12St00 : 18,20 Euro,\r\n 24St00 : 30,00 Euro.",
+          "en": "Day rate (7 a.m. to 7 p.m.) :\r\n  0h30: 0.80 euro,\r\n  1:00: 1,60 euro,\r\n  1:30: 2.40 euro,\r\n  2:00: 3.20 euro,\r\n  2h30: 4,00 euro,\r\n  3:00: 4.80 euro,\r\n  3:30: 5.60 euro,\r\n  4:00: 6.40 euro,\r\n  4h30: 7.20 euro,\r\n  5:00: 8,00 euro,\r\n  6:00: 9,70 euro,\r\n  7.00: 11.40 euro,\r\n  8:00: 13,20 euro,\r\n  9:00: 14,45 euro,\r\n  10:00: 15,70 euro,\r\n  11.00: 16,95 euro,\r\n  12:00: 18,20 euro,\r\n  24:00: 30,00 euro."
+        },
+        "especes": true,
+        "debit": false,
+        "visa": true,
+        "mastercard": true,
+        "payconiq": false,
+        "american_express": true,
+        "indigo_neo": true
+      },
+      "restrictions": {
+        "gpl": true,
+        "gnc": true,
+        "clous": true,
+        "moto": false,
+        "remorque": true,
+        "max_poids": "3,5t",
+        "max_hauteur": "2,00 m"
+      },
+      "message": {
+        "fr": "",
+        "de": "",
+        "en": ""
+      },
+      "ouverture": {
+        "fr": "7/7j et 24/24h.",
+        "de": "7T/7 und 24St/24.",
+        "en": "7/7d and 24/24h.\r\n"
+      },
+      "divers": {
+        "park_and_ride": false,
+        "telephone": "26 00 81 15",
+        "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_16.jpg"
+      }
+    }
   }
-]
+}

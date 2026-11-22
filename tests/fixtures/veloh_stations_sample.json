@@ -4,7 +4,7 @@
     "facility_name": "Vel'oH Hamilius",
     "available_bikes": 14,
     "total_capacity": 20,
-    "observed_at": "2026-11-20T22:00:00Z",
+    "observed_at": "2026-11-22T14:00:00Z",
     "lat": 49.6108,
     "lon": 6.1264,
     "commune_name": "Luxembourg"
@@ -14,7 +14,7 @@
     "facility_name": "Vel'oH Glacis",
     "available_bikes": 8,
     "total_capacity": 18,
-    "observed_at": "2026-11-20T22:00:00Z",
+    "observed_at": "2026-11-22T14:00:00Z",
     "lat": 49.6172,
     "lon": 6.126,
     "commune_name": "Luxembourg"
@@ -24,7 +24,7 @@
     "facility_name": "Vel'oH Gare Centrale",
     "available_bikes": 2,
     "total_capacity": 25,
-    "observed_at": "2026-11-20T22:00:00Z",
+    "observed_at": "2026-11-22T14:00:00Z",
     "lat": 49.6001,
     "lon": 6.1342,
     "commune_name": "Luxembourg"

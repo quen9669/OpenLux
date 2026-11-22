@@ -73,20 +73,24 @@ def vdl_roadworks_json(raw: bytes) -> list[dict]:
     """Parse le flux chantiers Ville de Luxembourg ESRI (<= 30 lignes)."""
     if not raw.strip() or isinstance(d := _j(raw), list):
         return d if isinstance(d, list) else []
-    rows = []
+    rows, now_s = [], datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
     for f in d.get("features", []):
         a, g = f.get("attributes", {}), f.get("geometry", {})
+        pts = g.get("rings", [[]])[0] if g.get("rings") else []
+        lat = round(sum(p[1] for p in pts) / len(pts), 5) if pts else float(g.get("y", 49.6116))
+        lon = round(sum(p[0] for p in pts) / len(pts), 5) if pts else float(g.get("x", 6.1319))
+        s_name = a.get("STREET_TYPICAL_NAME_LIST") or a.get("FK_QUART_NAME") or "Luxembourg-Ville"
         rows.append(
             {
                 "work_id": str(a.get("ROAD_WORK_ID") or a.get("OBJECTID", "UNKNOWN")),
-                "road_name": a.get("FK_QUART_NAME") or "Luxembourg-Ville",
+                "road_name": s_name,
                 "start_date": _ms_iso(a.get("START_DATE")),
                 "end_date": _ms_iso(a.get("END_DATE")),
-                "impact_level": "Chantier",
+                "impact_level": a.get("ENTREPRISE_TRAVAUX") or "Chantier",
                 "title": a.get("OBJECTIVE") or "Chantier VDL",
-                "observed_at": _ms_iso(a.get("PUBLICATION_DATE")),
-                "lat": float(g.get("y", 49.6116)),
-                "lon": float(g.get("x", 6.1319)),
+                "observed_at": _ms_iso(a.get("PUBLICATION_DATE")) or now_s,
+                "lat": lat,
+                "lon": lon,
                 "commune_name": "Luxembourg",
             }
         )

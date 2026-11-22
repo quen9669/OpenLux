@@ -7,6 +7,15 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- **Correction des Données Fraîches & Scission du Domaine Logement** :
+  - **Chantiers (`gold_roadworks`)** : Rétablissement des données réelles de la Ville de Luxembourg (22 chantiers actifs extraits de l'API ESRI avec coordonnées WGS84 et noms de voiries) aux côtés des 8 chantiers autoroutiers CITA avec dates de début/fin valides.
+  - **Mobilité & Stationnement (`gold_mobility_parkings`)** : Données réelles rafraîchies à la cadence 15 minutes (29 parkings de la capitale avec places disponibles en temps réel, 3 stations Vel'oH et 3 bornes Chargy) ; élimination des horodatages figés au 20/11.
+  - **Scission Immobilière (`gold_housing_listings` & `gold_housing_stats`)** : Découpage de l'immobilier en deux modèles distincts :
+    - `gold_housing_listings` : 120 offres de marché factuelles et détaillées (29 attributs, prix, surface, chambres, balcon, DPE).
+    - `gold_housing_stats` : agrégats statistiques macro officiels (statistiques de prix et transactions de l'Observatoire de l'Habitat + autorisations de bâtir STATEC).
+    - Maintien de `gold_housing` comme modèle unifié assurant une rétrocompatibilité totale.
+  - **Carburants (`gold_fuel_prices`)** : Actualisation des prix officiels pour le jour même (2026-11-22) et le lendemain (2026-11-23), permettant des tests multi-quotidiens fiables.
+  - **Météo (`gold_weather_observations`)** : Maintien et enrichissement des observations météorologiques pour la veille et le jour même couvrant l'ensemble des 12 cantons du pays (24 observations).
 - **Audit, Correction & Enrichissement des Data Marts Gold (Équipe 5 Agents)** :
   - **Mobilité, Parkings & Chantiers (Agent 1)** :
     - Extraction des balises DATEX II réelles `<validityTimeSpecification><overallStartTime>` et `<overallEndTime>` dans `cita_datex2` pour peupler `start_date` et `end_date` dans `gold_roadworks`.

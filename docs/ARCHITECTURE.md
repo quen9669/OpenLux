@@ -154,7 +154,7 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **10** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **11** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **12** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **13** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec` | `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **13** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec`, `housing_market_listings` | `gold_housing_listings.parquet`, `gold_housing_stats.parquet`, `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **14** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **15** | `concerts_culture` (3D) | `culture_echo_lu`, `culture_venues_jsonld` | `gold_culture_events.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **16** | `local_events_markets` (3D) | `events_vdl`, `events_visitlu` | *(inclus dans `gold_culture_events.parquet`)* | Parquet ZSTD (dbt DuckDB) |

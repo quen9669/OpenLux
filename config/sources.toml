@@ -624,12 +624,12 @@ publish_opendata_lu = true
 factual_only = true
 
 [sources.primary]
-url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query?where=1%3D1&outFields=*&f=json"
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query?where=1%3D1&outFields=*&f=json&outSR=4326"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
 adapter = "http_json"
-url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query?where=1%3D1&outFields=*&f=json"
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query?where=1%3D1&outFields=*&f=json&outSR=4326"
 
 [sources.quality]
 min_rows = 1
