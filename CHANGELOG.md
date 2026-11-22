@@ -22,7 +22,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
     - Déblocage des flux bloqués au 20/11 (`gold_water_levels`, `gold_radioactivity`, `gold_public_transit`, `gold_crossborder_traffic`, `gold_traffic_events`) en utilisant l'horodatage d'ingestion dynamique `collected_at_utc` lorsque la source distante est un repli ou figée.
     - Protection de non-écrasement des fichiers Bronze `latest.json.gz` si un moissonnage renvoie 0 ligne.
   - **Coordinateur QA & Validation Globale (Agent 5)** :
-    - Répartition équilibrée du code parser entre `parsers.py` (189 lignes) et `parsers_extra.py` (192 lignes) pour respecter la règle $\le 200$ lignes par fichier.
+    - Répartition équilibrée du code parser entre `parsers.py` (170 lignes), `parsers_extra.py` (143 lignes) et `parsers_env.py` (112 lignes) pour respecter la règle $\le 200$ lignes par fichier.
     - Reconstruction dbt complète (`seed --full-refresh`, `run` 83/83 PASS, `test` 1/1 PASS), export Parquet Gold certifié.
     - 39 tests unitaires offline passants (`pytest`), `ruff check .` et `ruff format --check .` 100% conformes.
 

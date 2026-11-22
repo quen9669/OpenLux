@@ -122,8 +122,9 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | :--- | :--- | :---: |
 | `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 60 |
 | `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 65 |
-| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 189 |
-| `src/openlux/core/parsers_extra.py` | Parsers spécialisés additionnels (air, OpenSky, SMARD, VDL chantiers ms Epoch, STATEC, Vel'oH, météo) | 192 |
+| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 170 |
+| `src/openlux/core/parsers_extra.py` | Parsers spécialisés (STATEC permis SDMX, OpenSky, VDL chantiers ms Epoch, inflation, Vel'oH) | 143 |
+| `src/openlux/core/parsers_env.py` | Parsers environnementaux & énergie (qualité de l'air, pollen, météo Open-Meteo, spot SMARD) | 112 |
 | `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze résilient) | 186 |
 | `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps, table `obs_runs` et historique | 196 |
 | `src/openlux/core/monitoring.py` | Régénération de `STATUS.md`, payload de supervision et métriques Prometheus | 193 |

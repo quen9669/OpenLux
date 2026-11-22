@@ -14,6 +14,7 @@ from collections.abc import Callable
 from datetime import UTC
 from email.utils import parsedate_to_datetime
 
+from openlux.core.parsers_env import ENV_PARSERS
 from openlux.core.parsers_extra import EXTRA_PARSERS
 
 _KW = {
@@ -135,30 +136,12 @@ def fuel_prices_csv(raw: bytes) -> list[dict]:
         "Essence_E10 Diesel_B7 Hydrogene LPG Electricie_Fournisseur Recharge_AC Recharge_DC".split()
     )
     records, text = [], raw.decode("utf-8", errors="replace").lstrip("\ufeff")
-    m_map = {
-        "jan": "01",
-        "feb": "02",
-        "mar": "03",
-        "apr": "04",
-        "may": "05",
-        "jun": "06",
-        "jul": "07",
-        "aug": "08",
-        "sep": "09",
-        "oct": "10",
-        "nov": "11",
-        "dec": "12",
-        "janv": "01",
-        "fevr": "02",
-        "févr": "02",
-        "mars": "03",
-        "avri": "04",
-        "juin": "06",
-        "juil": "07",
-        "aout": "08",
-        "août": "08",
-        "sept": "09",
-    }
+    _M = (
+        "jan feb mar apr may jun jul aug sep oct nov dec janv fevr févr mars avri juin juil"
+        " aout août sept".split()
+    )
+    _V = "01 02 03 04 05 06 07 08 09 10 11 12 01 02 02 03 04 06 07 08 08 09".split()
+    m_map = dict(zip(_M, _V, strict=False))
     for r in csv.DictReader(io.StringIO(text)):
         dt = r.get("Intervalle", "").strip()
         if m := re.match(r"^([A-Za-z]{3,4})[-/ ]+(\d{2,4})$", dt):
@@ -186,4 +169,5 @@ PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
     "vdl_parking": vdl_parking,
     "fuel_prices_csv": fuel_prices_csv,
     **EXTRA_PARSERS,
+    **ENV_PARSERS,
 }
