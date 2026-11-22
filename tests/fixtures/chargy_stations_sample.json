@@ -28,5 +28,95 @@
     "lat": 49.7142,
     "lon": 6.5028,
     "commune_name": "Mertert"
+  },
+  {
+    "facility_id": "CHG_MAMER_04",
+    "facility_name": "Chargy Mamer Gare",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.6278,
+    "lon": 6.0236,
+    "commune_name": "Mamer"
+  },
+  {
+    "facility_id": "CHG_CLERVAUX_05",
+    "facility_name": "Chargy Clervaux Gare",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 50.0544,
+    "lon": 6.0294,
+    "commune_name": "Clervaux"
+  },
+  {
+    "facility_id": "CHG_DIEKIRCH_06",
+    "facility_name": "Chargy Diekirch Esplanade",
+    "available_points": 3,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.8678,
+    "lon": 6.1558,
+    "commune_name": "Diekirch"
+  },
+  {
+    "facility_id": "CHG_ECHTERNACH_07",
+    "facility_name": "Chargy Echternach Gare",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.8117,
+    "lon": 6.4217,
+    "commune_name": "Echternach"
+  },
+  {
+    "facility_id": "CHG_MERSCH_08",
+    "facility_name": "Chargy Mersch Gare P+R",
+    "available_points": 4,
+    "total_points": 8,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.7489,
+    "lon": 6.1061,
+    "commune_name": "Mersch"
+  },
+  {
+    "facility_id": "CHG_REDANGE_09",
+    "facility_name": "Chargy Redange Centre",
+    "available_points": 2,
+    "total_points": 2,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.7656,
+    "lon": 5.8908,
+    "commune_name": "Redange-sur-Attert"
+  },
+  {
+    "facility_id": "CHG_REMICH_10",
+    "facility_name": "Chargy Remich Esplanade",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.5447,
+    "lon": 6.3683,
+    "commune_name": "Remich"
+  },
+  {
+    "facility_id": "CHG_VIANDEN_11",
+    "facility_name": "Chargy Vianden Gare",
+    "available_points": 1,
+    "total_points": 2,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.9350,
+    "lon": 6.2089,
+    "commune_name": "Vianden"
+  },
+  {
+    "facility_id": "CHG_WILTZ_12",
+    "facility_name": "Chargy Wiltz Gare",
+    "available_points": 2,
+    "total_points": 4,
+    "observed_at": "2026-11-22T14:00:00Z",
+    "lat": 49.9667,
+    "lon": 5.9333,
+    "commune_name": "Wiltz"
   }
 ]

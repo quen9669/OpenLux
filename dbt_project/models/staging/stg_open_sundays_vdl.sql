@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des ouvertures dominicales VDL depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/open_sundays_vdl/latest.json.gz')
+    FROM read_json_auto('data/bronze/open_sundays_vdl/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     item_id::VARCHAR AS item_id,
     'OPEN_SUNDAY' AS category,
     name::VARCHAR AS name,

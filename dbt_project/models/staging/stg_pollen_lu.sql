@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des concentrations polliniques depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/pollen_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/pollen_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.specie::VARCHAR AS specie,
     raw_source.risk_level::VARCHAR AS risk_level,
     raw_source.grains_m3::INTEGER AS grains_m3,

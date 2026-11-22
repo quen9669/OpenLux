@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des défibrillateurs AED depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_csv('data/bronze/aed_defib_lu/latest.csv.gz', header = true)
+    FROM read_csv('data/bronze/aed_defib_lu/**/*.csv.gz', header = true, union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     aed_id::VARCHAR AS aed_id,
     location_name::VARCHAR AS location_name,
     street::VARCHAR AS street,

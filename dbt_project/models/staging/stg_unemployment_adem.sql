@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des statistiques chômage ADEM depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_csv('data/bronze/unemployment_adem/latest.csv.gz', header = true)
+    FROM read_csv('data/bronze/unemployment_adem/**/*.csv.gz', header = true, union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     reference_month::VARCHAR AS reference_month,
     commune_name::VARCHAR AS raw_commune_name,
     jobseekers_count::INTEGER AS jobseekers_count,

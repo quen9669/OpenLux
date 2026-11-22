@@ -1,0 +1,304 @@
+{
+  "@context": "https://data.public.lu/dcat-ap-lu.jsonld",
+  "@type": "dcat:Dataset",
+  "title": "OpenLux — Data Marts Territoriaux et Quotidiens du Luxembourg",
+  "description": "Fédération open source de 20 domaines et 40 flux du Luxembourg.",
+  "publisher": {
+    "@type": "org:Organization",
+    "name": "OpenLux Hub"
+  },
+  "spatial": "http://publications.europa.eu/resource/authority/country/LUX",
+  "temporalResolution": "PT15M",
+  "distributions": [
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_air_quality",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_air_quality",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 8032,
+      "conformsTo": [
+        "Air Quality Directive 2008/50/EC",
+        "GeoJSON (EPSG:4326)"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_aviation_noise",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_aviation_noise",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_aviation_noise.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 8864,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_bathing_water",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_bathing_water",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_bathing_water.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 10202,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_chargy_stations",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_chargy_stations",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_chargy_stations.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 15308,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_civic_life",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_civic_life",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_civic_life.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 17756,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_crossborder_traffic",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_crossborder_traffic",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_crossborder_traffic.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 16742,
+      "conformsTo": [
+        "DATEX II (CEN/TS 16157)",
+        "Bison Futé / DIR Est"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_culture_events",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_culture_events",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_culture_events.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 54308,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_daily_life",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_daily_life",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_daily_life.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 21742,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_electricity_spot",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_electricity_spot",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_electricity_spot.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 8213,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_fuel_prices",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_fuel_prices",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_fuel_prices.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 6892,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_health_alerts",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_health_alerts",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_health_alerts.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 12885,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_holidays",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_holidays",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_holidays.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 21599,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_housing",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_housing",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 106855,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_housing_listings",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_housing_listings",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing_listings.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 88187,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_housing_stats",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_housing_stats",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing_stats.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 24912,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_luxembourg_daily_context",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_luxembourg_daily_context",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 57781,
+      "conformsTo": [
+        "Frictionless Data Package",
+        "DCAT-AP-LU 2.0"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_mobility_parkings",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_mobility_parkings",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 23621,
+      "conformsTo": [
+        "DATEX II Parking Publication",
+        "GeoJSON (EPSG:4326)"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_mobility_veloh",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_mobility_veloh",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 39792,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_public_transit",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_public_transit",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_public_transit.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 15906,
+      "conformsTo": [
+        "NeTEx (CEN/TS 16614)",
+        "SIRI (CEN/TS 15531)",
+        "GTFS-RT"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_radioactivity",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_radioactivity",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_radioactivity.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 12577,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_roadworks",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_roadworks",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_roadworks.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 42977,
+      "conformsTo": [
+        "DATEX II Roadworks",
+        "GeoJSON (EPSG:4326)"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_statec_inflation",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_statec_inflation",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_statec_inflation.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 3379,
+      "conformsTo": []
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_strikes_disruptions",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_strikes_disruptions",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_disruptions.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 45203,
+      "conformsTo": [
+        "RSS 2.0 / Dublin Core",
+        "ISO 3166-1 alpha-2"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_traffic_events",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_traffic_events",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 13147,
+      "conformsTo": [
+        "DATEX II (CEN/TS 16157)",
+        "GeoJSON (EPSG:4326)"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_water_levels",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_water_levels",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_water_levels.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 16829,
+      "conformsTo": [
+        "WISE (Water Information System for Europe)"
+      ]
+    },
+    {
+      "@type": "dcat:Distribution",
+      "title": "Distribution Parquet (ZSTD) — gold_weather_observations",
+      "accessURL": "https://api.openlux.lu/v1/data/gold_weather_observations",
+      "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
+      "mediaType": "application/vnd.apache.parquet",
+      "format": "parquet",
+      "byteSize": 10289,
+      "conformsTo": [
+        "WMO Core Profile",
+        "GeoJSON (EPSG:4326)"
+      ]
+    }
+  ]
+}

@@ -18,7 +18,7 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117&longitude=6.1319&current=temperature_2m,precipitation,wind_speed_10m"
+url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117,49.5242,49.6278,49.8678,49.8117,49.6806,49.7489,49.7656,49.5447,49.9350,49.9667,50.0544&longitude=6.1319,5.8911,6.0236,6.1558,6.4217,6.4414,6.1061,5.8908,6.3683,6.2089,5.9333,6.0294&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,precipitation,weather_code&past_days=92"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]
@@ -97,7 +97,7 @@ publish_opendata_lu = true
 factual_only = false
 
 [sources.primary]
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117&longitude=6.1319&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117,49.5242,49.6278,49.8678,49.8117,49.6806,49.7489,49.7656,49.5447,49.9350,49.9667,50.0544&longitude=6.1319,5.8911,6.0236,6.1558,6.4217,6.4414,6.1061,5.8908,6.3683,6.2089,5.9333,6.0294&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide&hourly=pm10,pm2_5,ozone,nitrogen_dioxide&past_days=92"
 headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
 [sources.backup]

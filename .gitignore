@@ -10,7 +10,10 @@ venv/
 ENV/
 
 # Data directory (local cache & storage)
-data/
+data/*
+!data/gold/
+data/gold/.tmp/
+data/gold/*.tmp
 *.duckdb
 *.duckdb.tmp*
 

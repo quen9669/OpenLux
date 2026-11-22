@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des manifestations Stade de Luxembourg et Coque depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/venues_stade_coque/latest.json.gz')
+    FROM read_json_auto('data/bronze/venues_stade_coque/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.title::VARCHAR AS title,
     'Confirmé' AS status,
     raw_source.start_date::VARCHAR AS raw_start_date,

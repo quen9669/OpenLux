@@ -91,10 +91,28 @@ WITH pii_checks AS (
 
     SELECT
         'gold_mobility_parkings' AS table_name,
-        facility_name AS sampled_text
+        parking_name AS sampled_text
     FROM {{ ref('gold_mobility_parkings') }}
-    WHERE regexp_matches(facility_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
-       OR regexp_matches(facility_name, '(?:\+352|00352)\s?[0-9]{4,}')
+    WHERE regexp_matches(parking_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(parking_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_mobility_veloh' AS table_name,
+        station_name AS sampled_text
+    FROM {{ ref('gold_mobility_veloh') }}
+    WHERE regexp_matches(station_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(station_name, '(?:\+352|00352)\s?[0-9]{4,}')
+
+    UNION ALL
+
+    SELECT
+        'gold_chargy_stations' AS table_name,
+        station_name AS sampled_text
+    FROM {{ ref('gold_chargy_stations') }}
+    WHERE regexp_matches(station_name, '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')
+       OR regexp_matches(station_name, '(?:\+352|00352)\s?[0-9]{4,}')
 
     UNION ALL
 

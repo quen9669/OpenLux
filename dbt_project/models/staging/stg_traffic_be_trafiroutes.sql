@@ -1,9 +1,9 @@
 -- Staging: Extraction brute du trafic frontalier E411 Belgique depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/traffic_be_trafiroutes/latest.json.gz')
+    FROM read_json_auto('data/bronze/traffic_be_trafiroutes/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     event_id::VARCHAR AS event_id,
     corridor::VARCHAR AS corridor,
     'ROAD' AS transport_mode,

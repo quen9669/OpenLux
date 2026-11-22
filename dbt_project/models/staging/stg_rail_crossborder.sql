@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des trains transfrontaliers depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/rail_crossborder/latest.json.gz')
+    FROM read_json_auto('data/bronze/rail_crossborder/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     event_id::VARCHAR AS event_id,
     corridor::VARCHAR AS corridor,
     'RAIL' AS transport_mode,

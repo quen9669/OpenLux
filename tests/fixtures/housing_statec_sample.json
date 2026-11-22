@@ -42,5 +42,93 @@
     "permits_count": 18,
     "units_authorized": 142,
     "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_CLR_HOUSE_2025",
+    "canton_code": "CLR",
+    "commune_name": "Clervaux",
+    "canton_name": "Clervaux",
+    "property_type": "HOUSE",
+    "reference_period": "2025",
+    "permits_count": 35,
+    "units_authorized": 40,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_ECH_APARTMENT_2025",
+    "canton_code": "ECH",
+    "commune_name": "Echternach",
+    "canton_name": "Echternach",
+    "property_type": "APARTMENT",
+    "reference_period": "2025",
+    "permits_count": 14,
+    "units_authorized": 68,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_GRE_TOTAL_RESIDENTIAL_2025",
+    "canton_code": "GRE",
+    "commune_name": "Grevenmacher",
+    "canton_name": "Grevenmacher",
+    "property_type": "TOTAL_RESIDENTIAL",
+    "reference_period": "2025",
+    "permits_count": 28,
+    "units_authorized": 115,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_MER_APARTMENT_2025",
+    "canton_code": "MER",
+    "commune_name": "Mersch",
+    "canton_name": "Mersch",
+    "property_type": "APARTMENT",
+    "reference_period": "2025",
+    "permits_count": 22,
+    "units_authorized": 96,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_RED_HOUSE_2025",
+    "canton_code": "RED",
+    "commune_name": "Redange-sur-Attert",
+    "canton_name": "Redange",
+    "property_type": "HOUSE",
+    "reference_period": "2025",
+    "permits_count": 30,
+    "units_authorized": 32,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_REM_APARTMENT_2025",
+    "canton_code": "REM",
+    "commune_name": "Remich",
+    "canton_name": "Remich",
+    "property_type": "APARTMENT",
+    "reference_period": "2025",
+    "permits_count": 19,
+    "units_authorized": 74,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_VIA_HOUSE_2025",
+    "canton_code": "VIA",
+    "commune_name": "Vianden",
+    "canton_name": "Vianden",
+    "property_type": "HOUSE",
+    "reference_period": "2025",
+    "permits_count": 8,
+    "units_authorized": 10,
+    "observed_at": "2026-11-21T00:00:00Z"
+  },
+  {
+    "record_id": "STATEC_WIL_TOTAL_RESIDENTIAL_2025",
+    "canton_code": "WIL",
+    "commune_name": "Wiltz",
+    "canton_name": "Wiltz",
+    "property_type": "TOTAL_RESIDENTIAL",
+    "reference_period": "2025",
+    "permits_count": 25,
+    "units_authorized": 88,
+    "observed_at": "2026-11-21T00:00:00Z"
   }
 ]

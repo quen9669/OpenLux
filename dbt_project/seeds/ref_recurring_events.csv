@@ -9,3 +9,12 @@ fest_schueberfouer,Schueberfouer Luxembourg,fair,LU0704,Champ du Glacis,Friday,1
 fest_marche_noel_vdl,Marché de Noël de Luxembourg (Winterlights),christmas_market,LU0704,Place d'Armes & Place de la Constitution,Friday,11:00,21:00,annual_december,https://www.vdl.lu
 fest_fete_nationale,Fête Nationale du Luxembourg,national_holiday,LU0704,Ville de Luxembourg,Sunday,10:00,23:59,annual_june_23,https://gouvernement.lu
 fest_oktav_maertchen,Mäertchen de l'Octave,fair,LU0704,Place Guillaume II,Saturday,08:00,20:00,annual_may,https://www.vdl.lu
+mkt_mamer_centre,Marché mensuel de Mamer,market,LU0106,Place de l'Indépendance,Friday,08:00,13:00,monthly_third,https://mamer.lu
+mkt_clervaux_place,Marché du terroir de Clervaux,market,LU0207,Place du Marché,Thursday,09:00,14:00,monthly_third,https://clervaux.lu
+mkt_echternach_marche,Marché mensuel d'Echternach,market,LU0405,Place du Marché,Wednesday,08:00,13:00,monthly_second,https://echternach.lu
+mkt_grevenmacher_marche,Marché bimensuel de Grevenmacher,market,LU0604,Place du Marché,Thursday,08:00,13:00,biweekly,https://grevenmacher.lu
+mkt_mersch_place,Marché bimensuel de Mersch,market,LU0806,Place Saint-Michel,Friday,08:00,12:30,biweekly,https://mersch.lu
+mkt_redange_attert,Marché du terroir de Redange,market,LU0907,Centre culturel,Sunday,10:00,16:00,monthly_first,https://redange.lu
+mkt_remich_esplanade,Marché bimensuel de Remich,market,LU1006,Esplanade de la Moselle,Monday,08:30,13:00,biweekly,https://remich.lu
+mkt_vianden_chateau,Marché traditionnel de Vianden,market,LU1103,Place Victor Hugo,Wednesday,08:00,12:30,monthly_first,https://vianden.lu
+mkt_wiltz_martyrs,Marché mensuel de Wiltz,market,LU1207,Place des Martyrs,Thursday,08:00,12:30,monthly_first,https://wiltz.lu

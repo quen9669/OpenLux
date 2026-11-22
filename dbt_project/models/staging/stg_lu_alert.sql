@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des messages d'urgence LU-Alert depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/lu_alert/latest.json.gz')
+    FROM read_json_auto('data/bronze/lu_alert/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.alert_id::VARCHAR AS alert_id,
     raw_source.headline::VARCHAR AS headline,
     raw_source.severity::VARCHAR AS severity,

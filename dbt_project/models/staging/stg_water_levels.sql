@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des niveaux d'eau et crues depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/water_levels_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/water_levels_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     station_id::VARCHAR AS station_id,
     station_name::VARCHAR AS station_name,
     river_name::VARCHAR AS river_name,

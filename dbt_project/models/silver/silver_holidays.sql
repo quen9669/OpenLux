@@ -14,6 +14,7 @@ WITH lu_holidays AS (
         source_id
     FROM {{ ref('stg_holidays_lu') }}
     WHERE raw_date IS NOT NULL
+      AND TRY_CAST(raw_date AS DATE) IS NOT NULL
 ),
 crossborder AS (
     SELECT
@@ -29,6 +30,8 @@ crossborder AS (
         is_school_vacation,
         'ref_crossborder_holidays' AS source_id
     FROM {{ ref('ref_crossborder_holidays') }}
+    WHERE holiday_date IS NOT NULL
+      AND TRY_CAST(holiday_date AS DATE) IS NOT NULL
 ),
 combined AS (
     SELECT * FROM lu_holidays
@@ -53,6 +56,7 @@ deduped AS (
             ORDER BY CASE WHEN source_id = 'holidays_lu' THEN 1 ELSE 2 END
         ) AS rn
     FROM combined
+    WHERE holiday_date IS NOT NULL
 )
 SELECT
     holiday_date,

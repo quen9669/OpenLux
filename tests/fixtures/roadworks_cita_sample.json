@@ -94,5 +94,89 @@
     "lat": 49.658,
     "lon": 6.095,
     "commune_name": "Strassen"
+  },
+  {
+    "work_id": "RW_N7_009",
+    "road_name": "N7",
+    "start_date": "2026-11-10T08:00:00Z",
+    "end_date": "2026-12-10T18:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Aménagement carrefour giratoire N7",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.8678,
+    "lon": 6.1558,
+    "commune_name": "Diekirch"
+  },
+  {
+    "work_id": "RW_N11_010",
+    "road_name": "N11",
+    "start_date": "2026-11-12T08:00:00Z",
+    "end_date": "2026-12-08T18:00:00Z",
+    "impact_level": "SPEED_LIMIT",
+    "title": "Renouvellement couche de roulement N11",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.8117,
+    "lon": 6.4217,
+    "commune_name": "Echternach"
+  },
+  {
+    "work_id": "RW_N10_011",
+    "road_name": "N10",
+    "start_date": "2026-11-14T08:00:00Z",
+    "end_date": "2026-12-12T18:00:00Z",
+    "impact_level": "DETOUR",
+    "title": "Sécurisation falaise rocheuse Our",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.9350,
+    "lon": 6.2089,
+    "commune_name": "Vianden"
+  },
+  {
+    "work_id": "RW_N18_012",
+    "road_name": "N18",
+    "start_date": "2026-11-15T08:00:00Z",
+    "end_date": "2026-12-15T18:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Réparation ouvrage d'art Clerve",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 50.0544,
+    "lon": 6.0294,
+    "commune_name": "Clervaux"
+  },
+  {
+    "work_id": "RW_N12_013",
+    "road_name": "N12",
+    "start_date": "2026-11-16T08:00:00Z",
+    "end_date": "2026-12-16T18:00:00Z",
+    "impact_level": "SPEED_LIMIT",
+    "title": "Réhabilitation chaussée N12",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.9667,
+    "lon": 5.9333,
+    "commune_name": "Wiltz"
+  },
+  {
+    "work_id": "RW_N22_014",
+    "road_name": "N22",
+    "start_date": "2026-11-18T08:00:00Z",
+    "end_date": "2026-12-18T18:00:00Z",
+    "impact_level": "LANE_CLOSED",
+    "title": "Création piste cyclable le long de la N22",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.7656,
+    "lon": 5.8908,
+    "commune_name": "Redange-sur-Attert"
+  },
+  {
+    "work_id": "RW_N2_015",
+    "road_name": "N2",
+    "start_date": "2026-11-19T08:00:00Z",
+    "end_date": "2026-12-19T18:00:00Z",
+    "impact_level": "SPEED_LIMIT",
+    "title": "Travaux d'assainissement traversée Remich",
+    "observed_at": "2026-11-22T10:00:00Z",
+    "lat": 49.5447,
+    "lon": 6.3683,
+    "commune_name": "Remich"
   }
 ]

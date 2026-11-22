@@ -2,7 +2,7 @@
 WITH raw_source AS (
     SELECT *
     FROM read_json_auto(
-        'data/bronze/culture_echo_lu/latest.json.gz',
+        'data/bronze/culture_echo_lu/**/*.json.gz', union_by_name = true,
         columns={
             'title': 'VARCHAR',
             'status': 'VARCHAR',
@@ -23,7 +23,7 @@ WITH raw_source AS (
         }
     )
 )
-SELECT
+SELECT DISTINCT
     raw_source.title::VARCHAR AS title,
     COALESCE(raw_source.status::VARCHAR, 'Confirmé') AS status,
     raw_source.start_date::VARCHAR AS raw_start_date,

@@ -14,3 +14,4 @@ SELECT
     is_school_vacation,
     source_id
 FROM {{ ref('silver_holidays') }}
+WHERE holiday_date IS NOT NULL

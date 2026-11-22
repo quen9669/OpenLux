@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des chantiers autoroutiers CITA depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/roadworks_cita/latest.json.gz')
+    FROM read_json_auto('data/bronze/roadworks_cita/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.work_id::VARCHAR AS work_id,
     'CITA' AS authority,
     raw_source.road_name::VARCHAR AS road_name,

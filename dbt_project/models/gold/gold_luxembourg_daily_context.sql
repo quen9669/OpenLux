@@ -93,10 +93,10 @@ roadworks_daily AS (
 strikes_daily AS (
     SELECT
         CAST(published_at_utc AS DATE) AS context_date,
-        commune_lau,
         COUNT(*) AS strikes_count
     FROM {{ ref('gold_strikes_disruptions') }}
-    GROUP BY 1, 2
+    WHERE published_at_utc IS NOT NULL AND country_code = 'LU'
+    GROUP BY 1
 ),
 -- 7. Niveaux d'eau et crues (local et national)
 water_daily AS (
@@ -165,7 +165,7 @@ consolidated AS (
     LEFT JOIN holidays_daily h ON dc.context_date = h.context_date
     LEFT JOIN traffic_daily tr ON dc.context_date = tr.context_date AND dc.commune_lau = tr.commune_lau
     LEFT JOIN roadworks_daily rw ON dc.context_date = rw.context_date AND dc.commune_lau = rw.commune_lau
-    LEFT JOIN strikes_daily st ON dc.context_date = st.context_date AND dc.commune_lau = st.commune_lau
+    LEFT JOIN strikes_daily st ON dc.context_date = st.context_date
     LEFT JOIN water_daily wl ON dc.context_date = wl.context_date AND dc.commune_lau = wl.commune_lau
     LEFT JOIN water_national wln ON dc.context_date = wln.context_date
     LEFT JOIN events_daily ev ON dc.context_date = ev.context_date AND dc.commune_lau = ev.commune_lau

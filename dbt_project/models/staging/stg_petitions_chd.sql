@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des pétitions publiques CHD depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/petitions_chd/latest.json.gz')
+    FROM read_json_auto('data/bronze/petitions_chd/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.petition_id::VARCHAR AS petition_id,
     raw_source.title::VARCHAR AS title,
     raw_source.signatures_count::INTEGER AS signatures_count,

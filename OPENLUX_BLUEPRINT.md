@@ -10,10 +10,13 @@
 
 Ce projet applique une discipline stricte inspirée des meilleurs dépôts open source minimalistes :
 
+0. **Priorité Absolue : Rétention Incrémentale Stricte (Zéro Suppression), Couverture des 12 Cantons & Historique Maximum** :
+   - **Ingestion Incrémentale Continue** : À chaque rechargement (`openlux run`, `openlux rebuild`), les nouvelles données sont ajoutées sans jamais supprimer l'existant. Les modèles staging dbt ingèrent l'intégralité des archives Bronze historiques (`**/*.json.gz`, `**/*.csv.gz`), et la couche Gold Parquet consolide en continu les enregistrements historiques et récents via `UNION ALL BY NAME` et `SELECT DISTINCT`. Aucune donnée importée n'est jamais détruite.
+   - **Couverture Exhaustive des 12 Cantons & Historique Maximum** : Les tables territoriales et géographiques (météo, crues, qualité de l'air, radioactivité, mobilité, chantiers, logement, santé, citoyenneté) garantissent un maillage national complet couvrant l'intégralité des 12 cantons luxembourgeois (Capellen, Clervaux, Diekirch, Echternach, Esch-sur-Alzette, Grevenmacher, Luxembourg, Mersch, Redange, Remich, Vianden, Wiltz) et extraient le maximum d'historique glissant disponible.
 1. **Data-Driven & Flux Atomiques** : On n'écrit **pas** 20 scripts de collecte différents. Les flux sont déclarés dans un seul fichier **`config/sources.toml`** (lu nativement via `tomllib` de Python 3.12) selon la règle **1 entrée = 1 flux HTTP atomique**, regroupés par `domain`. Ils sont exécutés par **3 adaptateurs génériques** (`http_json`, `http_csv`, `http_jsonld`) complétés par un registre léger `PARSERS` de fonctions pures ($\le 30$ lignes) pour les formats complexes (XML DATEX II, RSS filtré).
 2. **Budget de Code Strict** : L'ensemble du cœur Python (collecte, qualité, RGPD, API, MCP, alertes, publication `data.public.lu`) doit rester **sous les 1 500 lignes de code** (cible idéale : $< 1\,200$ lignes). Toute fonction dépassant 40 lignes ou tout fichier dépassant 200 lignes doit être justifié ou simplifié.
 3. **Boring Technology & 7 Dépendances Verrouillées** : 4 outils, exactement **7 bibliothèques Python runtime** verrouillées dans `pyproject.toml`, et la bibliothèque standard Python partout ailleurs (`tomllib`, `gzip`, `hashlib`, `re`, `xml.etree.ElementTree`, `logging`, `pathlib`, `dataclasses`, `os`, `uuid`). Aucune dépendance ne peut être ajoutée sans un ADR validé.
-4. **Séparation Lecture / Écriture Sans Verrou & Écriture Atomique** : DuckDB exécute les transformations en batch puis exporte la couche **Gold** uniquement en fichiers **Parquet compressés (`ZSTD`)** via un répertoire temporaire (`data/gold/.tmp/`) suivi d'un basculement atomique `os.replace()`. FastAPI et FastMCP lisent uniquement ces Parquet en mémoire (`:memory:`) : zéro verrou, zéro lecture de fichier partiel, migration triviale vers un VPS ou S3.
+4. **Séparation Lecture / Écriture Sans Verrou & Export Incrémental Atomique** : DuckDB exécute les transformations en batch puis exporte la couche **Gold** uniquement en fichiers **Parquet compressés (`ZSTD`)** via un répertoire temporaire (`data/gold/.tmp/`) suivi d'un basculement atomique `os.replace()`, en fusionnant incrémentalement l'historique Parquet existant. FastAPI et FastMCP lisent uniquement ces Parquet en mémoire (`:memory:`) : zéro verrou, zéro lecture de fichier partiel, migration triviale vers un VPS ou S3.
 5. **Zero-PII & Factual-Only by Design** : Aucune donnée personnelle (email, téléphone, nom d'individu) ne survit jusqu'aux couches Bronze/Silver/Gold. Le filtrage s'exécute récursivement sur les valeurs texte *avant* écriture Bronze. Pour la presse et les agendas culturels, seuls les faits bruts non protégeables sont conservés (`title` $\le 140$ caractères, zéro texte éditorial).
 6. **Reproductibilité & Transparence Totale** : La couche Bronze immuable permet un rejeu 100 % hors-ligne (`openlux rebuild`). Chaque décision d'architecture ou d'arbitrage quotidien est tracée dans `docs/ARCHITECTURE.md`, `docs/adr/` ou `docs/DECISIONS_LOG.md`.
 
@@ -49,10 +52,10 @@ flowchart LR
         BRZ[("BRONZE (Brut Immuable)<br/>data/bronze/{source}/YYYY/MM/DD/*.gz<br/>(Rejeu offline via rebuild)")]
     end
 
-    subgraph TRF["2. Transformation SQL (dbt-duckdb)"]
+    subgraph TRF["2. Transformation SQL (dbt-duckdb) & Ingestion Incrémentale"]
         SLV["SILVER (DuckDB)<br/>Typage, WGS84 EPSG:4326,<br/>Communes LAU, Dédoublonnage, SCD2"]
         TMP["data/gold/.tmp/*.parquet"]
-        GLD[("GOLD (Source de Vérité Unique)<br/>data/gold/*.parquet (ZSTD)<br/>Bascule atomique os.replace()")]
+        GLD[("GOLD (Rétention Incrémentale Zéro Suppression)<br/>data/gold/*.parquet (ZSTD)<br/>UNION ALL BY NAME + Bascule os.replace()")]
     end
 
     subgraph OBS["3. Qualité & Observabilité"]

@@ -1,58 +1,56 @@
--- Silver: Consolidation des mobilités douces, parkings et bornes de recharge
-WITH unified_staging AS (
-    SELECT * FROM {{ ref('stg_veloh_stations') }}
-    UNION ALL
+-- Silver: Nettoyage et enrichissement des parkings publics et P+R
+WITH raw_parkings AS (
     SELECT * FROM {{ ref('stg_parkings_vdl') }}
-    UNION ALL
-    SELECT * FROM {{ ref('stg_chargy_stations') }}
 ),
 ref_communes AS (
     SELECT * FROM {{ ref('ref_communes_lu') }}
 )
 SELECT
-    u.facility_id,
-    u.facility_type,
-    u.facility_name,
+    p.parking_id,
+    p.parking_name,
     COALESCE(
-        TRY_CAST(u.raw_observed_at AS TIMESTAMP),
+        TRY_CAST(p.raw_observed_at AS TIMESTAMP),
         TRY_STRPTIME(
-            REGEXP_EXTRACT(u.raw_observed_at, '([0-9]{1,2}\\s+[A-Za-z]{3}\\s+[0-9]{4}\\s+[0-9]{2}:[0-9]{2}:[0-9]{2})'),
+            REGEXP_EXTRACT(p.raw_observed_at, '([0-9]{1,2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})'),
             '%d %b %Y %H:%M:%S'
         ),
         CURRENT_TIMESTAMP
     ) AS observed_at_utc,
-    u.available_capacity,
-    u.total_capacity,
-    u.opening_hours,
+    p.available_spaces,
+    p.total_capacity,
     CASE
-        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%') THEN 0.00
-        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Knuedler%' OR u.facility_name LIKE '%Monterey%') THEN 2.80
-        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Théâtre%' OR u.facility_name LIKE '%Glacis%') THEN 2.00
-        WHEN u.facility_type = 'PARKING' THEN 2.50
-        WHEN u.facility_type = 'BIKE_SHARING' THEN 0.00
-        ELSE NULL
-    END AS hourly_rate_eur,
+        WHEN p.total_capacity >= p.available_spaces THEN p.total_capacity - p.available_spaces
+        ELSE 0
+    END AS occupied_spaces,
     CASE
-        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%') THEN 'P+R gratuit 24h'
-        WHEN u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Knuedler%' OR u.facility_name LIKE '%Monterey%') THEN '2.80 €/h (1ère-2ème h), puis 3.20 €/h'
-        WHEN u.facility_type = 'PARKING' AND u.facility_name LIKE '%Glacis%' THEN '1.00 €/h (8h-18h), gratuit nuit/WE'
-        WHEN u.facility_type = 'PARKING' THEN '2.50 €/h tarif standard'
-        WHEN u.facility_type = 'BIKE_SHARING' THEN 'Gratuit < 30min avec abonnement'
-        WHEN u.facility_type = 'EV_CHARGING' THEN '0.35 €/kWh AC 22kW'
-        ELSE 'Tarif non applicable'
-    END AS tariff_details,
-    (u.facility_type = 'PARKING' AND (u.facility_name LIKE '%Bouillon%' OR u.facility_name LIKE '%P+R%')) AS is_free_pr,
-    CASE
-        WHEN u.total_capacity > 0 THEN ROUND((u.total_capacity - u.available_capacity) * 100.0 / u.total_capacity, 1)
+        WHEN p.total_capacity > 0 THEN ROUND((p.total_capacity - p.available_spaces) * 100.0 / p.total_capacity, 1)
         ELSE NULL
     END AS occupancy_rate,
-    COALESCE(u.lat, c.lat) AS lat,
-    COALESCE(u.lon, c.lon) AS lon,
-    COALESCE(c.code_lau, u.raw_commune_name) AS commune_lau,
+    p.trend,
+    p.is_open,
+    (p.is_full OR (p.total_capacity > 0 AND p.available_spaces = 0)) AS is_full,
+    p.is_out_of_order,
+    p.is_free_pr,
+    p.opening_hours,
+    CASE
+        WHEN p.is_free_pr THEN 0.00
+        WHEN p.parking_name LIKE '%Knuedler%' OR p.parking_name LIKE '%Monterey%' THEN 2.80
+        WHEN p.parking_name LIKE '%Théâtre%' OR p.parking_name LIKE '%Glacis%' THEN 2.00
+        ELSE 2.50
+    END AS hourly_rate_eur,
+    CASE
+        WHEN p.is_free_pr THEN 'P+R gratuit 24h avec navette'
+        WHEN p.parking_name LIKE '%Knuedler%' OR p.parking_name LIKE '%Monterey%' THEN '2.80 €/h (1ère-2ème h), puis 3.20 €/h'
+        WHEN p.parking_name LIKE '%Glacis%' THEN '1.00 €/h (8h-18h), gratuit nuit/WE'
+        ELSE '2.50 €/h tarif standard'
+    END AS tariff_details,
+    COALESCE(p.lat, c.lat) AS lat,
+    COALESCE(p.lon, c.lon) AS lon,
+    COALESCE(c.code_lau, p.raw_commune_name) AS commune_lau,
     c.canton,
-    u.source_id
-FROM unified_staging u
+    p.source_id
+FROM raw_parkings p
 LEFT JOIN ref_communes c
-    ON LOWER(u.raw_commune_name) = LOWER(c.commune_name)
-    OR LOWER(u.raw_commune_name) = LOWER(c.commune_name_lb)
-    OR u.raw_commune_name = c.code_lau
+    ON LOWER(p.raw_commune_name) = LOWER(c.commune_name)
+    OR LOWER(p.raw_commune_name) = LOWER(c.commune_name_lb)
+    OR p.raw_commune_name = c.code_lau

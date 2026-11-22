@@ -1,9 +1,9 @@
--- Staging: Extraction brute des observations météo depuis la couche Bronze
+-- Staging: Extraction brute incrémentale des observations météo depuis la couche Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/meteo_lux_obs/latest.json.gz')
+    FROM read_json_auto('data/bronze/meteo_lux_obs/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     station_id::VARCHAR AS station_id,
     station_name::VARCHAR AS station_name,
     timestamp::VARCHAR AS raw_timestamp,

@@ -1,9 +1,9 @@
 -- Staging: Extraction brute de la qualité des eaux de baignade depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_csv('data/bronze/bathing_water_lu/latest.csv.gz', header = true)
+    FROM read_csv('data/bronze/bathing_water_lu/**/*.csv.gz', header = true, union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     site_id::VARCHAR AS site_id,
     site_name::VARCHAR AS site_name,
     water_body::VARCHAR AS water_body,

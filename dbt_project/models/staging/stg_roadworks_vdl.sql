@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des chantiers Ville de Luxembourg depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/roadworks_vdl/latest.json.gz')
+    FROM read_json_auto('data/bronze/roadworks_vdl/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.work_id::VARCHAR AS work_id,
     'VDL' AS authority,
     raw_source.road_name::VARCHAR AS road_name,

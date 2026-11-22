@@ -19,7 +19,10 @@ aed AS (
         'AED' AS record_type,
         location_name AS headline_or_name,
         access_hours AS status_or_severity,
-        NULL::DOUBLE AS metric_value,
+        CASE
+            WHEN access_hours LIKE '%24/7%' OR access_hours LIKE '%24h%' THEN 1.0
+            ELSE 0.5
+        END::DOUBLE AS metric_value,
         CURRENT_TIMESTAMP AS observed_at_utc,
         lat,
         lon,
@@ -33,7 +36,12 @@ alert AS (
         'LU_ALERT' AS record_type,
         headline AS headline_or_name,
         severity AS status_or_severity,
-        NULL::DOUBLE AS metric_value,
+        CASE
+            WHEN UPPER(severity) = 'EXTREME' THEN 4.0
+            WHEN UPPER(severity) = 'MAJOR' THEN 3.0
+            WHEN UPPER(severity) = 'MODERATE' THEN 2.0
+            ELSE 1.0
+        END::DOUBLE AS metric_value,
         TRY_CAST(raw_effective_utc AS TIMESTAMP) AS observed_at_utc,
         NULL::DOUBLE AS lat,
         NULL::DOUBLE AS lon,

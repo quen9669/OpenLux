@@ -12,6 +12,8 @@
 ## 🎯 Mission
 
 Fédérer les données publiques du Luxembourg (20 domaines : météo, mobilité, qualité de l'air, chantiers, eau, culture, calendrier républicain, énergie...) au sein d'une chaîne épurée :
+- **Priorité Absolue — Rétention Incrémentale Stricte (Zéro Suppression)** : Chaque rechargement accumule les données au fur et à mesure sans jamais supprimer l'historique importé (`UNION ALL BY NAME` + `SELECT DISTINCT` sur l'ensemble des tables).
+- **Priorité Absolue — Couverture des 12 Cantons & Historique Maximum** : Couverture géographique exhaustive sur l'ensemble des 12 cantons du Grand-Duché et récupération du maximum d'historique glissant possible (météo, air, crues, etc.).
 - **Bronze** : Données brutes immuables compressées (`.json.gz`, `.csv.gz`), rejouables hors-ligne.
 - **Silver / Gold** : Modélisation analytique SQL déclarative (`dbt-duckdb`), exports Parquet compressés ZSTD.
 - **Zero-PII & Factual-Only** : Filtrage strict des données personnelles et respect absolu du droit d'auteur.

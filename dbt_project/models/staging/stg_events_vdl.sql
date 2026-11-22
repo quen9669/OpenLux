@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des événements Ville de Luxembourg depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/events_vdl/latest.json.gz')
+    FROM read_json_auto('data/bronze/events_vdl/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.event_id::VARCHAR AS event_id,
     raw_source.title::VARCHAR AS title,
     'Confirmé' AS status,

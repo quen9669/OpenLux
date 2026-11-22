@@ -7,3 +7,5 @@ SELECT
     wage_index_quote,
     source_id
 FROM {{ ref('silver_statec_inflation') }}
+WHERE reference_month IS NOT NULL
+  AND ipcn_index IS NOT NULL

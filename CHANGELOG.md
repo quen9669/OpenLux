@@ -7,6 +7,31 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- **Automatisation du Rechargement & Synchronisation Git (GitHub Actions)** :
+  - **Workflow GitHub Actions (`.github/workflows/data_pipeline.yml`)** : Mise en place d'un workflow automatisé régulier (cron horaire `'0 * * * *'` + déclenchement manuel interactif `workflow_dispatch`), avec cache ultra-rapide des dépendances Python (`astral-sh/setup-uv@v5` avec `enable-cache: true`), permissions `contents: write`, collecte des données et transformations dbt complètes.
+  - **Commit & Push Atomique Conditionnel** : Détection des deltas de données sur `data/gold/*.parquet`, `data/gold/*.json` et `STATUS.md` via `git diff --staged --quiet`. Commit et push atomique automatique uniquement si des changements sont détectés (`[skip ci]`).
+  - **Hygiène & Sécurité Git (`.gitignore`)** : Configuration fine autorisant le suivi et le versioning des tables Gold Parquet (`data/gold/*.parquet`) et des métadonnées open data (`datapackage.json`, `dcat_ap_lu.json`), tout en excluant rigoureusement les répertoires temporaires (`data/gold/.tmp/`), les bases DuckDB (`*.duckdb`), le cache Bronze et les secrets locaux.
+  - **Support du Drapeau `--dry-run` dans CLI** : Prise en charge des arguments `--dry-run` et `--live` dans la commande CLI `openlux publish` pour alignement parfait avec le workflow CI/CD.
+
+- **Scission Tripartite Mobilité, Normalisations & Ingestion Incrémentale Continue** :
+  - **Scission Tripartite Mobilité & Stationnement** : Remplacement du modèle agrégé par 3 Data Marts Gold distincts spécialisés :
+    - `gold_mobility_parkings` : parcs de stationnement VDL et P+R (capacités totales, places disponibles, places occupées, taux d'occupation, tendance, statut ouvert/complet, tarifs horaires, P+R gratuit).
+    - `gold_mobility_veloh` : 141 stations de vélos en libre-service Vel'oH (capacités totales, vélos disponibles, attaches libres, attaches hors service, statut de location).
+    - `gold_chargy_stations` : réseau national de bornes de recharge électrique Chargy (points de charge disponibles, occupés, puissance en kW, connecteurs).
+  - **Correction Jours Fériés (`gold_holidays`)** : Correction du parsing de la Saint-Étienne / Deuxième jour de Noël (Stiefesdag) sur 2025-2027 avec dates ISO valides (`2025-12-26`, `2026-12-26`, `2027-12-26`) et 0 valeur NULL.
+  - **Purge Inflation STATEC (`gold_statec_inflation`)** : Élimination définitive de la ligne vide résiduelle dans toute la chaîne staging, silver et gold (`WHERE reference_month IS NOT NULL AND ipcn_index IS NOT NULL`).
+  - **Précision Horodatage & Découplage Spatial Grèves (`gold_strikes_disruptions`)** : Extraction de l'heure exacte de publication (HH:MM:SS) depuis les flux RSS dans `published_at_utc` ; suppression des colonnes `commune_lau`, `canton`, `lat`, `lon` pour éviter un rattachement artificiel à la capitale ; maintien du périmètre national et sectoriel (`country_name`, `sector`).
+  - **Sémantique & Métriques Défibrillateurs (`gold_health_alerts`)** : Clarification de la nature statique des défibrillateurs (AED) et valorisation d'une métrique d'accessibilité opérationnelle (1.0 pour disponibilité 24/7, 0.5 pour horaires restreints) et sévérité LU-Alert.
+  - **Météo Exhaustive Multi-Paramètres (`gold_weather_observations`)** : Moissonnage sans filtre sur les 12 cantons incluant l'humidité relative (`relative_humidity_2m`), la pression de surface (`surface_pressure`), le code météo WMO (`weather_code`) et les températures.
+  - **Validation Ingestion Incrémentale Zéro Suppression & Accumulation H+1** : Suite de tests `tests/test_incremental_retention.py` certifiant l'accumulation continue de nouvelles lignes sans régression de volume ni duplication indue lors d'un cycle horaire.
+  - **Résilience Définition Schémas Bronze DuckDB** : Ajout de la clause `columns={...}` dans `stg_parkings_vdl.sql` et `stg_veloh_stations.sql` éliminant les erreurs de liaison DuckDB (`Binder Error`) sur colonnes optionnelles.
+  - **Conformité Stricte Budget de Code** : Refactoring de `src/openlux/core/gold.py` ramené à 179 lignes (tous les fichiers Python du cœur strictement $\le 180$ lignes).
+  - **Résolution Verrou Fichier Windows Parquet (`src/openlux/core/gold.py`)** : Découplage de la lecture DuckDB et du remplacement atomique de fichier, fermeture explicite de la connexion DuckDB avant `os.replace`, et boucle de réessai automatique (5 tentatives) éliminant `PermissionError: [WinError 5]`.
+  - **Correction Invariant Physique Vel'oH (`silver_mobility_veloh.sql`)** : Suppression du double-comptage des bornes hors-service (`broken_or_disabled_stands = broken_stands`), restaurant l'invariant exact `available_bikes + available_stands + broken_or_disabled_stands == total_capacity`.
+  - **Isolation Hermétique des Tests Unitaires (`tests/test_incremental_retention.py`)** : Réécriture du test d'incrémentation horaire pour s'exécuter exclusivement sur une base DuckDB et un répertoire Gold temporaires (`tmp_path`), évitant toute injection de données fictives dans les Parquets de production.
+
+
+### Added
 - **Hardening Qualité, Portails Web & Accès Direct DuckDB** :
   - **Vue Miroir DuckDB (`weather_observations`)** : Modèle dbt view permettant l'interrogation directe dans `data/openlux.duckdb` sans le préfixe `gold_` (`SELECT * FROM weather_observations;`).
   - **Portails Web V1 et V2 (`web/`, `web_v2/`)** : Intégration complète des fiches data marts, schémas, métadonnées et sparklines pour `gold_housing_listings` (120 offres de marché factuelles) et `gold_housing_stats` (8 séries macro).

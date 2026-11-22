@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des autorisations de bâtir STATEC depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/housing_statec/latest.json.gz')
+    FROM read_json_auto('data/bronze/housing_statec/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     record_id::VARCHAR AS record_id,
     commune_name::VARCHAR AS raw_commune_name,
     canton_name::VARCHAR AS canton_name,

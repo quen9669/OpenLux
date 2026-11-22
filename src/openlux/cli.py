@@ -142,9 +142,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("schedule").add_argument("--interval", type=int, default=60, help="Secondes")
     for c in ["rebuild", "status", "compact", "mcp"]:
         sub.add_parser(c)
-    sub.add_parser("publish").add_argument(
-        "--live", dest="dry_run", action="store_false", default=True
-    )
+    pub = sub.add_parser("publish")
+    pub.add_argument("--live", dest="dry_run", action="store_false", default=True)
+    pub.add_argument("--dry-run", dest="dry_run", action="store_true", default=True)
     srv = sub.add_parser("serve", aliases=["api"])
     srv.add_argument("--host", default="127.0.0.1")
     srv.add_argument("--port", type=int, default=8000)

@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des autobus AVL temps réel depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/transit_avl_rt/latest.json.gz')
+    FROM read_json_auto('data/bronze/transit_avl_rt/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     line_id::VARCHAR AS line_id,
     network::VARCHAR AS network,
     delay_seconds::INTEGER AS delay_seconds,

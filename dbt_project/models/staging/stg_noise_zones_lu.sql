@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des zones de bruit stratégiques depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/noise_zones_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/noise_zones_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     zone_id::VARCHAR AS record_id,
     'NOISE_CONTOUR' AS record_type,
     zone_name::VARCHAR AS callsign_or_zone,

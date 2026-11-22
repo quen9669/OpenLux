@@ -238,6 +238,8 @@ def test_vertical_slice_end_to_end(tmp_path: Path) -> None:
         "gold_crossborder_traffic",
         "gold_public_transit",
         "gold_mobility_parkings",
+        "gold_mobility_veloh",
+        "gold_chargy_stations",
         "gold_aviation_noise",
         "gold_roadworks",
         "gold_housing",

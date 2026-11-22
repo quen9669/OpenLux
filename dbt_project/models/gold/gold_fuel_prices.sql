@@ -6,3 +6,4 @@ SELECT
     price_change_eur,
     source_id
 FROM {{ ref('silver_fuel_prices') }}
+ORDER BY observed_at_utc DESC NULLS LAST, fuel_type

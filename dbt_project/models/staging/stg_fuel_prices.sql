@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des prix maxima des carburants depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/fuel_prices_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/fuel_prices_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     fuel_type::VARCHAR AS fuel_type,
     observed_at::VARCHAR AS raw_observed_at,
     price_eur_per_litre::DOUBLE AS price_eur_per_litre,

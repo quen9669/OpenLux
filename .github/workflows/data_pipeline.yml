@@ -1,0 +1,70 @@
+name: OpenLux Data Pipeline & Sync
+
+on:
+  schedule:
+    # Exécution planifiée régulière toutes les heures (à la minute 0)
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      due_only:
+        description: 'Exécuter uniquement les flux échus (--due)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "data-sync"
+  cancel-in-progress: false
+
+jobs:
+  data-pipeline:
+    name: Run Pipeline & Sync Data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Execute OpenLux pipeline (collect, dbt transformations, gold export)
+        run: |
+          if [ "${{ github.event.inputs.due_only }}" = "true" ]; then
+            uv run openlux run --due
+          else
+            uv run openlux run
+          fi
+
+      - name: Update Open Data catalog metadata (datapackage & DCAT-AP-LU)
+        run: uv run openlux publish --dry-run
+
+      - name: Commit and push changes if data updated
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Ajouter les artefacts de la couche Gold, métadonnées et statut
+          git add data/gold/*.parquet data/gold/*.json STATUS.md
+
+          # Commit atomique uniquement si des changements sont détectés
+          if git diff --staged --quiet; then
+            echo "Aucune modification de données détectée. Rien à commiter."
+          else
+            echo "Modifications détectées. Création du commit atomique..."
+            git commit -m "chore(data): auto-update gold datasets and status [skip ci]"
+            git pull --rebase origin main || true
+            git push origin main
+          fi

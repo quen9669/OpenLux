@@ -14,3 +14,4 @@ SELECT
     canton,
     source_id
 FROM {{ ref('silver_roadworks') }}
+ORDER BY observed_at_utc DESC NULLS LAST, work_id

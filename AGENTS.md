@@ -29,7 +29,9 @@ Ton objectif est de livrer vite, proprement, avec un maximum de transparence et 
    - Config : utiliser **`tomllib`** (bibliothèque standard Python 3.12), **ne pas** ajouter `pyyaml`.
    - **Interdiction absolue** d'ajouter une autre bibliothèque sans accord explicite de l'utilisateur et création d'un ADR dans `docs/adr/`.
 
-3. **Atomicité & Concurrence** :
+3. **Atomicité, Concurrence & Ingestion Incrémentale Stricte (Priorité Absolue)** :
+   - **Rétention Incrémentale Zéro Suppression** : À chaque rechargement (`openlux run`, `openlux rebuild`), les nouvelles données sont ajoutées sans jamais supprimer l'existant. Les données sont accumulées en continu sans exception sur toutes les tables.
+   - **Couverture Exhaustive des 12 Cantons & Historique Maximum** : Couvrir l'intégralité des 12 cantons sur toutes les tables territoriales et récupérer le maximum d'historique possible.
    - **1 entrée `[[sources]]` dans `config/sources.toml` = 1 flux HTTP atomique** (regroupés par `domain`).
    - **Couche Gold** : stocker uniquement des fichiers **`.parquet` (ZSTD)** sur disque. Toujours écrire dans `data/gold/.tmp/{table}.parquet` puis basculer via `os.replace()`. Ne pas écrire de `.csv` statiques dans `data/gold/` (FastAPI les streame à la volée).
    - **Fraîcheur vs Mutation** : toujours logger `last_checked_utc` (y compris quand le hash SHA-256 renvoie `UNCHANGED`) séparément de `last_changed_utc`.

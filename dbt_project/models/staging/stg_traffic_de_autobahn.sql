@@ -1,9 +1,9 @@
 -- Staging: Extraction brute du trafic frontalier A64 Allemagne depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/traffic_de_autobahn/latest.json.gz')
+    FROM read_json_auto('data/bronze/traffic_de_autobahn/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     event_id::VARCHAR AS event_id,
     corridor::VARCHAR AS corridor,
     'ROAD' AS transport_mode,

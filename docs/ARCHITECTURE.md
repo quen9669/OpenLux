@@ -52,23 +52,25 @@ flowchart LR
 
 ---
 
-## 2. Découpage des Couches de Données
+## 2. Découpage des Couches de Données & Ingestion Incrémentale Stricte
 
 ### 2.1 Couche Bronze (Immuable & Rejouable)
 - **Format** : Fichiers bruts compressés GZIP (`.json.gz`, `.csv.gz`).
 - **Chemin** : `data/bronze/{source_id}/YYYY/MM/DD/{source_id}_{timestamp_utc}_{hash8}.[json|csv].gz` et miroir `latest.[json|csv].gz`.
 - **Garantie** : Sanitized Zero-PII et Factual-Only appliqués en amont de l'écriture. Les payloads inchangés (`UNCHANGED`) ne créent pas de nouveau fichier physique.
+- **Rétention Historique** : L'ensemble des archives quotidiennes est conservé.
 - **Rejeu** : `uv run openlux rebuild` permet de reconstruire l'intégralité des couches Silver et Gold sans aucun accès internet.
 
-### 2.2 Couche Silver (Normalisation & Typage SQL)
+### 2.2 Couche Silver (Normalisation, Typage SQL & Scan Historique Wildcard)
 - **Moteur** : DuckDB via `dbt-duckdb`.
 - **Modèles** :
-  - `staging` : Décompression et typage à la volée (`read_json_auto`, `read_csv`).
+  - `staging` : Décompression et typage à la volée lisant la totalité de l'historique Bronze via glob (`**/*.json.gz`, `**/*.csv.gz`, `union_by_name = true`) avec `SELECT DISTINCT`.
   - `silver` : Standardisation temporelle en UTC (`TIMESTAMP`), coordonnées projetées en WGS84 (`lat`, `lon` en EPSG:4326), jointure sur le référentiel officiel des 100 communes (`commune_lau`).
+  - **Couverture Cantons** : Couverture géographique obligatoire sur les 12 cantons du pays (Capellen, Clervaux, Diekirch, Echternach, Esch-sur-Alzette, Grevenmacher, Luxembourg, Mersch, Redange, Remich, Vianden, Wiltz).
 
-### 2.3 Couche Gold (Source de Vérité Unique)
+### 2.3 Couche Gold (Rétention Incrémentale Zéro Suppression)
 - **Format** : Uniquement fichiers Parquet compressés **ZSTD** dans `data/gold/{nom_table}.parquet`.
-- **Atomicité** : Écriture systématique dans `data/gold/.tmp/{nom_table}.parquet` puis basculement instantané via `os.replace()`.
+- **Atomicité & Incrémentalité Stricte** : Écriture systématique dans `data/gold/.tmp/{nom_table}.parquet` en exécutant un `SELECT DISTINCT *` fusionnant l'existant (`read_parquet`) et le nouveau lot (`UNION ALL BY NAME SELECT * FROM {table}`), puis basculement instantané via `os.replace()`. Aucune donnée importée n'est jamais écrasée ou supprimée. DuckDB interne est synchronisé via `CREATE OR REPLACE TABLE AS SELECT * FROM read_parquet(...)`.
 - **Isolation Lecture/Écriture** : FastAPI et FastMCP chargent les Parquet en mémoire vive (`:memory:`) ; ils ne subissent aucun verrouillage d'écriture.
 
 ---
@@ -122,23 +124,24 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | :--- | :--- | :---: |
 | `src/openlux/config.py` | Chargement natif `tomllib` et validation Pydantic de `config/sources.toml` | 60 |
 | `src/openlux/core/sanitizer.py` | Filtrage récursif Zero-PII (emails, téléphones) et garanties Factual-Only | 65 |
-| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 170 |
-| `src/openlux/core/parsers_extra.py` | Parsers spécialisés (STATEC permis SDMX, OpenSky, VDL chantiers ms Epoch, inflation, Vel'oH) | 143 |
-| `src/openlux/core/parsers_env.py` | Parsers environnementaux & énergie (qualité de l'air, pollen, météo Open-Meteo, spot SMARD) | 112 |
+| `src/openlux/core/parsers.py` | Registre central `PARSERS` : fonctions pures $\le 30$ lignes (DATEX II, grèves, parkings RFC 2822, carburants) | 194 |
+| `src/openlux/core/parsers_extra.py` | Parsers spécialisés (STATEC permis SDMX, OpenSky, VDL chantiers ms Epoch, inflation, Vel'oH) | 148 |
+| `src/openlux/core/parsers_env.py` | Parsers environnementaux & énergie (qualité de l'air, pollen, météo Open-Meteo, spot SMARD) | 152 |
 | `src/openlux/core/collector.py` | Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze résilient) | 186 |
 | `src/openlux/core/quality.py` | Calcul du Trust Score (0-100), traçabilité MLOps, table `obs_runs` et historique | 196 |
 | `src/openlux/core/monitoring.py` | Régénération de `STATUS.md`, payload de supervision et métriques Prometheus | 193 |
-| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et requêtes spatiales | 197 |
+| `src/openlux/core/gold.py` | Exportation atomique `.tmp` $\rightarrow$ `os.replace()`, whitelist et conservation incrémentale | 200 |
 | `src/openlux/publish/opendata_lu.py` | Métadonnées conformes (DCAT-AP-LU, Data Package), compactage Bronze & publication | 144 |
 | `src/openlux/api/main.py` | API REST FastAPI : cache résilient DuckDB, `/status`, `/metrics` (Prometheus), auto-sync lifespan | 198 |
 | `src/openlux/mcp/server.py` | Serveur FastMCP : 4 outils sémantiques IA connectés aux Data Marts Gold | 163 |
-| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `schedule`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 199 |
+| `src/openlux/cli.py` | CLI unifiée (`openlux run`, `schedule`, `rebuild`, `status`, `compact`, `publish`, `serve`, `mcp`) | 197 |
 | `src/openlux/**/__init__.py` | En-têtes et initialisations de packages | 11 |
-| **Total Cœur Python** | **Tous les fichiers $\le 199$ lignes** | **1 993** |
+| **Total Cœur Python** | **Tous les fichiers $\le 200$ lignes** | **2 107** |
+
 
 ---
 
-## 6. Domaines et Data Marts Actifs (40 Sources, 20 Domaines, 22 Tables Gold)
+## 6. Domaines et Data Marts Actifs (40 Sources, 20 Domaines, 24 Tables Gold)
 
 | # | Domaine | Sources Atomiques Incluses | Table Gold Produite | Format & Moteur |
 | :-: | :--- | :--- | :--- | :--- |
@@ -151,11 +154,13 @@ Chaque appel API `/v1/data/{dataset}` et chaque outil FastMCP fournit cette enve
 | **7** | `energy_climate` (3A) | `electricity_spot_delu`, `radioactivity_lu`, `bathing_water_lu` | `gold_electricity_spot.parquet`, `gold_radioactivity.parquet`, `gold_bathing_water.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **8** | `crossborder_traffic` (3B) | `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder` | `gold_crossborder_traffic.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **9** | `public_transit` (3B) | `transit_mobiliteit`, `transit_avl_rt` | `gold_public_transit.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **10** | `mobility_parkings` (3B) | `veloh_stations`, `parkings_vdl`, `chargy_stations` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **11** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **12** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **13** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec`, `housing_market_listings` | `gold_housing_listings.parquet`, `gold_housing_stats.parquet`, `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
-| **14** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **10** | `mobility_parkings` (3B) | `parkings_vdl` | `gold_mobility_parkings.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **11** | `mobility_veloh` (3B) | `veloh_stations` | `gold_mobility_veloh.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **12** | `chargy_stations` (3B) | `chargy_stations` | `gold_chargy_stations.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **13** | `aviation_noise` (3B) | `aviation_opensky_lu`, `noise_zones_lu` | `gold_aviation_noise.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **14** | `roadworks` (3C) | `roadworks_cita`, `roadworks_vdl` | `gold_roadworks.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **15** | `housing_construction` (3C) | `housing_observatoire`, `housing_statec`, `housing_market_listings` | `gold_housing_listings.parquet`, `gold_housing_stats.parquet`, `gold_housing.parquet` | Parquet ZSTD (dbt DuckDB) |
+| **16** | `daily_life_sport` (3C) | `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers` | `gold_daily_life.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **15** | `concerts_culture` (3D) | `culture_echo_lu`, `culture_venues_jsonld` | `gold_culture_events.parquet` | Parquet ZSTD (dbt DuckDB) |
 | **16** | `local_events_markets` (3D) | `events_vdl`, `events_visitlu` | *(inclus dans `gold_culture_events.parquet`)* | Parquet ZSTD (dbt DuckDB) |
 | **17** | `major_venues` (3D) | `venues_luxexpo`, `venues_stade_coque` | *(inclus dans `gold_culture_events.parquet`)* | Parquet ZSTD (dbt DuckDB) |
@@ -190,4 +195,23 @@ Le portail web officiel d'OpenLux Hub fournit une interface réactive épurée, 
 - **Intégration API & Fallback Déterministe** : Interroge dynamiquement `/v1/datasets`, `/v1/status` et `/v1/data/{dataset}`. Si l'API n'est pas encore démarrée, bascule sans erreur sur un mock riche des 22 Data Marts.
 - **Observabilité & Accès Multimodal** : Visualisation du Trust Score MLOps, schéma des colonnes, streaming CSV à la volée, téléchargement Parquet ZSTD d'origine, snippets DuckDB SQL in-memory et commandes FastMCP IA en 1 clic.
 - **Studio Design System Figma** : Onglet dédié intégrant la validation granulaire de la charte graphique (palette WCAG AAA, typographie Inter / JetBrains Mono, matrice des 5 états des boutons, badges de santé pulsants).
+
+---
+
+## 9. Automatisation CI/CD & Synchronisation Continue des Données (GitHub Actions)
+
+OpenLux Hub intègre un mécanisme d'ingestion et de synchronisation continue autonome via GitHub Actions :
+- **Workflow Dédié (`.github/workflows/data_pipeline.yml`)** :
+  - **Planification & Déclenchement** : Cron horaire régulier (`0 * * * *`) assurant la fraîcheur des données territoriales et déclenchement manuel interactif (`workflow_dispatch` avec option `--due`).
+  - **Permissions Restreintes** : `permissions: contents: write` permettant le push sécurisé des modifications vers le dépôt sans exposition de token administrateur.
+  - **Performance & Cache** : `astral-sh/setup-uv@v5` avec `enable-cache: true` et Python 3.12 pour des installations de dépendances quasi-instantanées.
+  - **Exécution Unifiée** :
+    1. Collecte résiliente des flux atomiques (`openlux run`).
+    2. Transformations déclaratives SQL dbt (`seed --full-refresh`, `run`, `test`).
+    3. Exportation incrémentale atomique de la couche Gold Parquet ZSTD (`data/gold/*.parquet`).
+    4. Régénération des métadonnées Frictionless Data Package et DCAT-AP-LU 2.0 (`openlux publish --dry-run`).
+    5. Actualisation du tableau de bord de santé MLOps `STATUS.md`.
+  - **Commit Atomique Conditionnel** : Contrôle différentiel strict (`git diff --staged --quiet`) pour ne créer un commit (`chore(data): auto-update gold datasets and status [skip ci]`) que lorsque des enregistrements nouveaux ou des modifications sont détectés, sans boucle de déclenchement infinie (`[skip ci]`).
+  - **Isolation Git & Hygiène du Dépôt** : `.gitignore` configuré pour suivre et versionner exclusivement `data/gold/*.parquet` et `data/gold/*.json`, tout en ignorant strictement les répertoires temporaires (`data/gold/.tmp/`), les fichiers de base de données DuckDB (`*.duckdb`) et les secrets locaux.
+
 

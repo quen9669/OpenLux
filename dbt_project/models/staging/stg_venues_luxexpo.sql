@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des foires et salons Luxexpo depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/venues_luxexpo/latest.json.gz')
+    FROM read_json_auto('data/bronze/venues_luxexpo/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     raw_source.title::VARCHAR AS title,
     'Confirmé' AS status,
     raw_source.start_date::VARCHAR AS raw_start_date,

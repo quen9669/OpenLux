@@ -1,9 +1,9 @@
 -- Staging: Extraction brute de la qualité de l'air depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/air_quality_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/air_quality_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     station_id::VARCHAR AS station_id,
     station_name::VARCHAR AS station_name,
     observed_at::VARCHAR AS raw_observed_at,

@@ -7,6 +7,7 @@ SELECT
     lat,
     lon,
     commune_lau,
+    canton,
     traffic_comment,
     source_id
 FROM {{ ref('silver_traffic_events') }}

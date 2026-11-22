@@ -1,9 +1,9 @@
 -- Staging: Extraction brute des pistes cyclables nationales depuis Bronze
 WITH raw_source AS (
     SELECT *
-    FROM read_json_auto('data/bronze/bike_lanes_lu/latest.json.gz')
+    FROM read_json_auto('data/bronze/bike_lanes_lu/**/*.json.gz', union_by_name = true)
 )
-SELECT
+SELECT DISTINCT
     item_id::VARCHAR AS item_id,
     'BIKE_LANE' AS category,
     name::VARCHAR AS name,
