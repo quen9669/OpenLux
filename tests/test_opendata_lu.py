@@ -62,3 +62,13 @@ def test_compact_bronze_dry_run(tmp_path: Path) -> None:
     count = compact_bronze_archives(tmp_path, dry_run=True)
     assert count == 1
     assert (src_dir / "snapshot_20260101_120000.gz").exists()
+
+
+def test_cli_publish_options() -> None:
+    """Vérifie que la CLI gère correctement --dry-run et --live."""
+    from openlux.cli import _build_parser
+
+    p = _build_parser()
+    assert p.parse_args(["publish"]).dry_run is True
+    assert p.parse_args(["publish", "--dry-run"]).dry_run is True
+    assert p.parse_args(["publish", "--live"]).dry_run is False

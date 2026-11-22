@@ -2,8 +2,8 @@ name: OpenLux Data Pipeline & Sync
 
 on:
   schedule:
-    # Exécution planifiée régulière toutes les heures (à la minute 0)
-    - cron: '0 * * * *'
+    # Exécution planifiée automatique toutes les 30 minutes
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       due_only:
@@ -54,6 +54,14 @@ jobs:
 
       - name: Update Open Data catalog metadata (datapackage & DCAT-AP-LU)
         run: uv run openlux publish --dry-run
+
+      - name: Upload DuckDB database artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openlux-duckdb
+          path: data/openlux.duckdb
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Commit and push changes if data updated
         run: |

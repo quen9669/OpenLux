@@ -33,13 +33,8 @@ from openlux.core.quality import (
 
 
 def _run_dbt_command(cmd: str, *args: str) -> bool:
-    opt = ("--project-dir", "dbt_project", "--profiles-dir", "dbt_project")
-    return (
-        subprocess.run(
-            [sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt], check=False
-        ).returncode
-        == 0
-    )
+    opt = ["--project-dir", "dbt_project", "--profiles-dir", "dbt_project"]
+    return subprocess.run([sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt]).returncode == 0
 
 
 def _connect_db(path: str = "data/openlux.duckdb", read_only: bool = False):
@@ -54,8 +49,8 @@ def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
     if not last_iso:
         return True
     with contextlib.suppress(Exception):
-        dt = (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
-        return dt >= float(source.cadence_minutes)
+        age = (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
+        return age >= float(source.cadence_minutes)
     return True
 
 
@@ -81,9 +76,7 @@ def _collect_and_record(
     con: duckdb.DuckDBPyConnection, sid: str, src: SourceConfig, r_id: str, prev: dict[str, Any]
 ) -> None:
     try:
-        res = collect_source(
-            src, last_sha256=prev.get("sha256"), last_changed_utc=prev.get("last_changed_utc")
-        )
+        res = collect_source(src, prev.get("sha256"), prev.get("last_changed_utc"))
     except Exception as exc:
         n = datetime.now(UTC).isoformat()
         res = CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
@@ -91,18 +84,8 @@ def _collect_and_record(
     m = calculate_trust_score(
         src, res.status, res.source_used, res.row_count, res.checked_at_utc, val
     )
-    record_run(
-        con,
-        r_id,
-        sid,
-        "git_v1",
-        m,
-        res.row_count,
-        res.checked_at_utc,
-        res.changed_at_utc,
-        res.sha256,
-        res.error_message,
-    )
+    meta = (res.checked_at_utc, res.changed_at_utc, res.sha256, res.error_message)
+    record_run(con, r_id, sid, "git_v1", m, res.row_count, *meta)
     send_alert_if_needed(sid, m.status, [prev.get("status", "GOOD")])
 
 
@@ -152,8 +135,8 @@ def _build_parser() -> argparse.ArgumentParser:
     for c in ["rebuild", "status", "compact", "mcp"]:
         sub.add_parser(c)
     pub = sub.add_parser("publish")
-    pub.add_argument("--live", dest="dry_run", action="store_false", default=True)
     pub.add_argument("--dry-run", dest="dry_run", action="store_true", default=True)
+    pub.add_argument("--live", dest="dry_run", action="store_false")
     srv = sub.add_parser("serve", aliases=["api"])
     srv.add_argument("--host", default="127.0.0.1")
     srv.add_argument("--port", type=int, default=8000)
@@ -186,21 +169,22 @@ def _dispatch(a: argparse.Namespace) -> int:
     elif a.cmd == "publish":
         from openlux.publish.opendata_lu import publish_to_data_public_lu
 
-        st = publish_to_data_public_lu(dry_run=a.dry_run)["status"]
-        print(f"Publication data.public.lu ({st}).")
+        res = publish_to_data_public_lu(dry_run=a.dry_run)
+        print(f"Publication data.public.lu ({res['status']}).")
     elif a.cmd == "status":
         db = "data/openlux.duckdb" if Path("data/openlux.duckdb").exists() else ":memory:"
         with _connect_db(db, read_only=True) as con:
-            init_obs_runs_table(con)
+            with contextlib.suppress(Exception):
+                init_obs_runs_table(con)
             generate_status_markdown(load_sources_config(), get_latest_source_health(con))
         print(Path("STATUS.md").read_text(encoding="utf-8"))
     return 0
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = _build_parser()
-    a = parser.parse_args(argv if argv is not None else sys.argv[1:])
-    return _dispatch(a) if a.cmd else (parser.print_help() or 0)
+    p = _build_parser()
+    a = p.parse_args(argv if argv is not None else sys.argv[1:])
+    return _dispatch(a) if a.cmd else (p.print_help() or 0)
 
 
 if __name__ == "__main__":

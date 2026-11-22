@@ -6,8 +6,22 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+### Added
+- **Cadence Automatique 30 Minutes & Persistance Artifact DuckDB (GitHub Actions)** :
+  - **Planification Cron 30 min (`.github/workflows/data_pipeline.yml`)** : Passage de la fréquence d'ingestion à `cron: '*/30 * * * *'` pour rafraîchir en continu l'ensemble des flux temps réel (parkings, trafic, météo, vélos).
+  - **Upload de la Base DuckDB Complète (`openlux-duckdb`)** : Étape `actions/upload-artifact@v4` publiant `data/openlux.duckdb` après chaque exécution avec rétention de 7 jours, garantissant une base binaire DuckDB immédiatement téléchargeable et prête à l'emploi.
+- **Couverture Météo Exhaustive des 12 Cantons & 92 Jours d'Historique (`gold_weather_observations`)** :
+  - **API Multi-Coordonnées Open-Meteo (`config/sources.toml`)** : Ingestion par lot des 12 coordonnées géographiques des chefs-lieux et cantons luxembourgeois avec 92 jours d'historique horaire (`past_days=92`).
+  - **Parser Résilient aux Valeurs Manquantes (`src/openlux/core/parsers_env.py`)** : Durcissement de `meteo_openmeteo_json` avec helper `_arr_v` protégeant contre les `None` sur les créneaux prévisionnels futurs, filtrage sur `obs <= now_iso` et attribution territoriale via distance euclidienne minimale.
+  - **Déduplication Stricte & Rattachement Spatial (`dbt_project/models/silver/silver_weather_observations.sql`)** : Filtrage `QUALIFY ROW_NUMBER() OVER (PARTITION BY station_id, observed_at_utc ORDER BY observed_at_utc DESC) = 1` et enrichissement avec `ref_communes_lu.csv` couvrant les 12 cantons sans aucune valeur NULL (26 769 observations réelles).
+- **Scission Officielle du Logement (`gold_housing_listings` & `gold_housing_stats`)** :
+  - Découplage strict entre les annonces transactionnelles réelles atHome.lu (120 offres de marché) et les séries macro-économiques STATEC / Observatoire de l'Habitat (8 séries agrégées), tout en maintenant la vue unifiée `gold_housing` pour la rétrocompatibilité.
+
 ### Fixed
-- **Intégration API JCDecaux v3 & Référentiel Territorial Réel Vel'oH (`gold_mobility_veloh`)** :
+- **Plafond Strict du Budget de Code & Compacité Modulaire** :
+  - Refactoring de `src/openlux/cli.py` (190 lignes), `src/openlux/core/gold.py` (194 lignes) et `src/openlux/core/parsers_env.py` (195 lignes) pour respecter la limite stricte de 200 lignes par fichier.
+  - 100% des fichiers Python sous 198 lignes, zéro warning Ruff (`ruff check` & `ruff format`), suite de tests 100% offline à 44 tests passants.
+
   - **Résolution Définitive de l'Anomalie "14 vélos disponibles"** : Remplacement de l'ancien catalogue statique sans données dynamiques par l'API officielle temps réel JCDecaux v3 (`/vls/v3/stations?contract=luxembourg&apiKey=...`). Le parc réel compte plus de 850 vélos disponibles (dont > 840 électriques) répartis sur 141 stations actives.
   - **Collecteur Sécurisé & Secrets GitHub Actions (`src/openlux/core/collector.py`)** : Prise en charge des variables secrètes dans les URLs d'API (`apiKey={key}` / `token={token}`) et chargement automatique des variables d'environnement (`JCDECAUX_API_KEY`). Injection du secret dans `.github/workflows/data_pipeline.yml`.
   - **Fallback Public Open Data GBFS v2 (`config/sources.toml`)** : Endpoint de secours public temps réel sans clé API (`api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json`) assurant la résilience et l'exécution hors-ligne continue.

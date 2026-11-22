@@ -173,7 +173,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 63303,
+      "byteSize": 142309,
       "conformsTo": [
         "Frictionless Data Package",
         "DCAT-AP-LU 2.0"
@@ -199,7 +199,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 142366,
+      "byteSize": 154047,
       "conformsTo": []
     },
     {
@@ -294,7 +294,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 17667,
+      "byteSize": 193032,
       "conformsTo": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"

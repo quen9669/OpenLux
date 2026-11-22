@@ -3,7 +3,7 @@
   "name": "openlux-hub-gold",
   "title": "OpenLux Hub — Données Ouvertes Consolidées du Luxembourg",
   "homepage": "https://github.com/quen9669/OpenLux",
-  "created": "2026-11-22T19:34:00.193659+00:00",
+  "created": "2026-11-22T19:55:32.322195+00:00",
   "license": "CC0-1.0",
   "publisher": {
     "name": "OpenLux Initiative",
@@ -1372,8 +1372,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 2229,
-      "sha256": "7f625e5de59fe2cab1cc584fb7e7097fd64497c6131ea5df0f194a9c7d03a29b",
+      "row_count": 11536,
+      "sha256": "06d4f74afaa0c65996f37a5e0d5762067d1b2dde8407daa9424106050529991c",
       "standards_applied": [
         "Frictionless Data Package",
         "DCAT-AP-LU 2.0"
@@ -1620,8 +1620,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 4091,
-      "sha256": "6d4bda7eae77afa2ef97236c2abc0b2b30f53292ab3bc32db1d332987cc03e46",
+      "row_count": 4935,
+      "sha256": "3a9de85ea533ba0b5531fa4d3af66fa1eab311979d1497c5d760cded54220b19",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -2243,8 +2243,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 34,
-      "sha256": "ad5713c0f14f688c9a4e8cc48173cdf7bbead25531ae8cfd66f7bad165aa4bfe",
+      "row_count": 26769,
+      "sha256": "cd3fbfb3d0e717449db479dbd08431ff6be04b472b24e6b6443a716c29252a6b",
       "standards_applied": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"

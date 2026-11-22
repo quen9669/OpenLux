@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
+import duckdb
 import pytest
 from fastapi.testclient import TestClient
 
@@ -270,3 +272,38 @@ def test_fuel_prices_freshness_in_api(client: TestClient) -> None:
     assert any("2026-11-22" in d or "2026-11-23" in d for d in dates)
     for r in data:
         assert float(r["price_eur_per_litre"]) > 0.0
+
+
+def test_gold_edge_cases(tmp_path: Path) -> None:
+    """Vérifie la robustesse Gold sur coordonnées nulles, tables sans date et vides."""
+    from openlux.core.gold import get_gold_metadata, query_gold_table, stream_gold_export
+
+    # 1. Coordonnées zéro dans stream_gold_export
+    p_zero = tmp_path / "test_zero.parquet"
+    with duckdb.connect() as con:
+        con.execute("CREATE TABLE tz (id INT, lat DOUBLE, lon DOUBLE)")
+        con.execute("INSERT INTO tz VALUES (1, 0.0, 0.0), (2, 49.6, 6.1)")
+        con.execute(f"COPY tz TO '{p_zero.as_posix()}' (FORMAT PARQUET)")
+    geo = json.loads("".join(stream_gold_export(p_zero, is_geojson=True)))
+    f0 = geo["features"][0]
+    assert f0["geometry"] is not None
+    assert f0["geometry"]["coordinates"] == [0.0, 0.0]
+
+    # 2. Table sans colonnes temporelles interrogée avec filtre de date
+    p_nodate = tmp_path / "test_nodate.parquet"
+    with duckdb.connect() as con:
+        con.execute("CREATE TABLE tn (id INT, name VARCHAR)")
+        con.execute("INSERT INTO tn VALUES (1, 'val')")
+        con.execute(f"COPY tn TO '{p_nodate.as_posix()}' (FORMAT PARQUET)")
+    c, cols, rows, tot = query_gold_table(p_nodate, date_from="2026-01-01")
+    c.close()
+    assert tot == 1
+    assert len(rows) == 1
+
+    # 3. Table vide sans lignes pour get_gold_metadata
+    p_empty = tmp_path / "test_empty.parquet"
+    with duckdb.connect() as con:
+        con.execute("CREATE TABLE te (source_id VARCHAR)")
+        con.execute(f"COPY te TO '{p_empty.as_posix()}' (FORMAT PARQUET)")
+    meta = get_gold_metadata(p_empty, row_count=0)
+    assert meta["dataset"] == "test_empty"

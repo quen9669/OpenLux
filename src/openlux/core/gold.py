@@ -28,25 +28,19 @@ def _export_one(
     cols = [c[0] for c in con.execute(f"DESCRIBE SELECT * FROM {tbl}").fetchall()]
     cols_s, cp = ", ".join(cols), f"TO '{t.as_posix()}' (FORMAT PARQUET, CODEC 'ZSTD')"
     fb = f"COPY (SELECT * FROM {tbl} WHERE {cols[0]} IS NOT NULL) {cp}"
-    if f.exists() and f.stat().st_size > 0:
-        try:
-            p = f.as_posix()
-            u = f"SELECT * FROM read_parquet('{p}') UNION ALL BY NAME SELECT * FROM {tbl}"
-            q = f"SELECT DISTINCT {cols_s} FROM ({u}) WHERE {cols[0]} IS NOT NULL"
-            con.execute(f"COPY ({q}) {cp}")
-            tp = t.as_posix()
-            dq = (
-                f"SELECT count(*) FROM ("
-                f"(SELECT * FROM read_parquet('{p}') EXCEPT SELECT * FROM read_parquet('{tp}')) "
-                f"UNION ALL "
-                f"(SELECT * FROM read_parquet('{tp}') EXCEPT SELECT * FROM read_parquet('{p}')))"
-            )
-            if con.execute(dq).fetchone()[0] == 0:
-                t.unlink(missing_ok=True)
-                return None
-        except Exception:
-            con.execute(fb)
-    else:
+    if not (f.exists() and f.stat().st_size > 0):
+        con.execute(fb)
+        return (t, f)
+    try:
+        p, tp = f.as_posix(), t.as_posix()
+        u = f"SELECT * FROM read_parquet('{p}') UNION ALL BY NAME SELECT * FROM {tbl}"
+        con.execute(f"COPY (SELECT DISTINCT {cols_s} FROM ({u}) WHERE {cols[0]} IS NOT NULL) {cp}")
+        s1, s2 = f"SELECT * FROM read_parquet('{p}')", f"SELECT * FROM read_parquet('{tp}')"
+        dq = f"SELECT count(*) FROM (({s1} EXCEPT {s2}) UNION ALL ({s2} EXCEPT {s1}))"
+        if con.execute(dq).fetchone()[0] == 0:
+            t.unlink(missing_ok=True)
+            return None
+    except Exception:
         con.execute(fb)
     return (t, f)
 
@@ -68,8 +62,8 @@ def export_gold_parquets(
     if not con:
         return []
     try:
-        q_tbl = "SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'gold_%'"
-        tables = [r[0] for r in con.execute(q_tbl).fetchall()]
+        q = "SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'gold_%'"
+        tables = [r[0] for r in con.execute(q).fetchall()]
         replaces = [r for tbl in tables if (r := _export_one(con, tbl, tmp, target))]
     finally:
         con.close()
@@ -80,8 +74,8 @@ def export_gold_parquets(
                 break
             time.sleep(0.05)
         with contextlib.suppress(Exception), duckdb.connect(str(duckdb_path)) as rw:
-            p_s = f.as_posix()
-            rw.execute(f"CREATE OR REPLACE TABLE {t.stem} AS SELECT * FROM read_parquet('{p_s}')")
+            p_pos = f.as_posix()
+            rw.execute(f"CREATE OR REPLACE TABLE {t.stem} AS SELECT * FROM read_parquet('{p_pos}')")
     return tables
 
 
@@ -99,13 +93,11 @@ def get_gold_table_path(dataset: str, gold_dir: Path | str = "data/gold") -> Pat
 def get_gold_metadata(
     parquet_path: Path, row_count: int, duckdb_path: Path | str = "data/openlux.duckdb"
 ) -> dict[str, Any]:
-    with duckdb.connect(":memory:") as con:
-        p_s = parquet_path.as_posix()
-        cols = [
-            c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p_s]).fetchall()
-        ]
+    sid = ""
+    with duckdb.connect(":memory:") as con, contextlib.suppress(Exception):
         q = "SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1"
-        sid = r[0] if "source_id" in cols and (r := con.execute(q, [p_s]).fetchone()) else ""
+        if r := con.execute(q, [parquet_path.as_posix()]).fetchone():
+            sid = str(r[0]) if r[0] else ""
     src, health = load_sources_config().get(sid) if sid else None, {}
     if Path(duckdb_path).exists():
         with contextlib.suppress(Exception), duckdb.connect(str(duckdb_path), read_only=True) as c:
@@ -115,7 +107,6 @@ def get_gold_metadata(
     with contextlib.suppress(Exception):
         age = (datetime.now(UTC) - datetime.fromisoformat(chk)).total_seconds() / 60.0
         stale = (age > float(src.sla_minutes)) or (st == "ERROR")
-    u = src.primary.url if src and src.primary else ""
     return {
         "dataset": parquet_path.stem,
         "trust_score": float(health.get("trust_score", 100.0)),
@@ -124,7 +115,7 @@ def get_gold_metadata(
         "last_checked_utc": chk,
         "last_changed_utc": health.get("last_changed_utc") or chk,
         "source_used": "primary",
-        "source_url": u,
+        "source_url": src.primary.url if src and src.primary else "",
         "license_spdx": src.license_spdx if src else "CC0-1.0",
         "commercial_use_safe": src.commercial_use_safe if src else True,
         "known_limitations": src.known_limitations if src else "",
@@ -153,13 +144,14 @@ def query_gold_table(
     if commune and "commune_lau" in cols:
         clauses.append("LOWER(commune_lau) LIKE LOWER(?)")
         params.append(f"%{commune}%")
-    dc = "observed_at_utc" if "observed_at_utc" in cols else "holiday_date"
-    cst = "TRY_CAST(? AS TIMESTAMP)" if dc == "observed_at_utc" else "?"
-    for d, op in [(date_from, ">="), (date_to, "<=")]:
-        if d:
-            clauses.append(f"{dc} {op} {cst}")
-            params.append(d)
-    if lat is not None and lon is not None and radius_km is not None and "lat" in cols:
+    dc = next((c for c in ("observed_at_utc", "holiday_date") if c in cols), None)
+    if dc:
+        cst = "TRY_CAST(? AS TIMESTAMP)" if dc == "observed_at_utc" else "?"
+        for d, op in [(date_from, ">="), (date_to, "<=")]:
+            if d:
+                clauses.append(f"{dc} {op} {cst}")
+                params.append(d)
+    if None not in (lat, lon, radius_km) and "lat" in cols:
         clauses.append(
             "lat IS NOT NULL AND lon IS NOT NULL AND "
             "ST_Distance_Spheroid(ST_Point(lon, lat), ST_Point(?, ?)) <= ?"
@@ -168,10 +160,8 @@ def query_gold_table(
     where = f" WHERE {' AND '.join(clauses)}" if clauses else ""
     total = con.execute(f"SELECT count(*) FROM read_parquet(?){where}", params).fetchone()[0]
     p_lim = list(params) + ([max(1, limit), max(0, offset)] if limit is not None else [])
-    cur = con.execute(
-        f"SELECT * FROM read_parquet(?){where}{' LIMIT ? OFFSET ?' if limit is not None else ''}",
-        p_lim,
-    )
+    s_lim = " LIMIT ? OFFSET ?" if limit is not None else ""
+    cur = con.execute(f"SELECT * FROM read_parquet(?){where}{s_lim}", p_lim)
     out_cols = [d[0] for d in cur.description]
     return con, out_cols, [dict(zip(out_cols, r, strict=False)) for r in cur.fetchall()], total
 
@@ -179,7 +169,6 @@ def query_gold_table(
 def stream_gold_export(path: Path, is_geojson: bool):
     """Générateur de flux CSV ou GeoJSON depuis un fichier Parquet Gold."""
     fmt = lambda v: v.isoformat() if hasattr(v, "isoformat") else v  # noqa: E731
-
     with duckdb.connect(":memory:") as con:
         p = path.as_posix()
         cols = [c[0] for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p]).fetchall()]
@@ -191,20 +180,15 @@ def stream_gold_export(path: Path, is_geojson: bool):
                 csv.writer(buf).writerows([[fmt(x) for x in r] for r in chunk])
                 yield buf.getvalue()
             return
-        lat_i = cols.index("lat") if "lat" in cols else -1
-        lon_i = cols.index("lon") if "lon" in cols else -1
+        la = cols.index("lat") if "lat" in cols else -1
+        lo = cols.index("lon") if "lon" in cols else -1
         yield '{"type": "FeatureCollection", "features": [\n'
         sep = ""
         while chunk := cur.fetchmany(500):
             for r in chunk:
-                geom = (
-                    {"type": "Point", "coordinates": [r[lon_i], r[lat_i]]}
-                    if lat_i >= 0 and lon_i >= 0 and r[lat_i] is not None and r[lon_i] is not None
-                    else None
-                )
-                props = {cols[i]: fmt(r[i]) for i in range(len(cols)) if i not in (lat_i, lon_i)}
-                yield f"{sep}" + json.dumps(
-                    {"type": "Feature", "geometry": geom, "properties": props}
-                )
+                valid = la >= 0 and lo >= 0 and r[la] is not None and r[lo] is not None
+                g = {"type": "Point", "coordinates": [r[lo], r[la]]} if valid else None
+                props = {cols[i]: fmt(r[i]) for i in range(len(cols)) if i not in (la, lo)}
+                yield f"{sep}{json.dumps({'type': 'Feature', 'geometry': g, 'properties': props})}"
                 sep = ",\n"
         yield "\n]}"
