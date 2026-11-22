@@ -7,6 +7,12 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- **Hardening Qualité, Portails Web & Accès Direct DuckDB** :
+  - **Vue Miroir DuckDB (`weather_observations`)** : Modèle dbt view permettant l'interrogation directe dans `data/openlux.duckdb` sans le préfixe `gold_` (`SELECT * FROM weather_observations;`).
+  - **Portails Web V1 et V2 (`web/`, `web_v2/`)** : Intégration complète des fiches data marts, schémas, métadonnées et sparklines pour `gold_housing_listings` (120 offres de marché factuelles) et `gold_housing_stats` (8 séries macro).
+  - **Résilience aux Verrous Concurrents DuckDB** : Helper `_connect_db()` avec retries automatiques dans `cli.py` évitant les collisions d'`IOException` sous Windows avec le serveur persistant `serve --auto-sync`.
+  - **Documentation & Catalogue (`docs/DATA_CATALOG.md`)** : Description exhaustive des schémas, sources et garanties de neutralité pour `gold_housing_listings` et `gold_housing_stats`.
+  - **Contrats d'API (`tests/test_api_contracts.py`)** : 3 tests d'intégration supplémentaires couvrant la scission immobilière, les chantiers VDL+CITA et la fraîcheur carburants (42 tests passants).
 - **Correction des Données Fraîches & Scission du Domaine Logement** :
   - **Chantiers (`gold_roadworks`)** : Rétablissement des données réelles de la Ville de Luxembourg (22 chantiers actifs extraits de l'API ESRI avec coordonnées WGS84 et noms de voiries) aux côtés des 8 chantiers autoroutiers CITA avec dates de début/fin valides.
   - **Mobilité & Stationnement (`gold_mobility_parkings`)** : Données réelles rafraîchies à la cadence 15 minutes (29 parkings de la capitale avec places disponibles en temps réel, 3 stations Vel'oH et 3 bornes Chargy) ; élimination des horodatages figés au 20/11.

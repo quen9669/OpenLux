@@ -217,3 +217,56 @@ def test_mcp_semantic_tools_offline() -> None:
     bad = query_dataset("'; DROP TABLE test;--")
     assert bad["_meta"]["status"] == "ERROR"
     assert len(bad["data"]) == 0
+
+
+def test_housing_split_contracts(client: TestClient) -> None:
+    """Vérifie les contrats de service des tables scindées (listings et stats)."""
+    # 1. gold_housing_listings
+    res_list = client.get("/v1/data/gold_housing_listings?limit=5")
+    assert res_list.status_code == 200
+    b_list = res_list.json()
+    assert "_meta" in b_list
+    assert len(b_list["data"]) > 0
+    first_l = b_list["data"][0]
+    for k in ("record_id", "property_type", "price_eur", "surface_m2", "energy_class"):
+        assert k in first_l
+
+    # 2. gold_housing_stats
+    res_stats = client.get("/v1/data/gold_housing_stats?limit=5")
+    assert res_stats.status_code == 200
+    b_stats = res_stats.json()
+    assert "_meta" in b_stats
+    assert len(b_stats["data"]) > 0
+    first_s = b_stats["data"][0]
+    for k in ("record_id", "record_type", "reference_period", "units_count"):
+        assert k in first_s
+
+    # 3. Alias sans préfixe gold_
+    assert client.get("/v1/data/housing_listings?limit=1").status_code == 200
+    assert client.get("/v1/data/housing_stats?limit=1").status_code == 200
+
+    # 4. Exports Parquet
+    assert client.get("/v1/exports/gold_housing_listings.parquet").status_code == 200
+    assert client.get("/v1/exports/gold_housing_stats.parquet").status_code == 200
+
+
+def test_roadworks_vdl_and_cita_in_api(client: TestClient) -> None:
+    """Vérifie la présence conjointe des chantiers VDL et CITA dans gold_roadworks."""
+    res = client.get("/v1/data/gold_roadworks?limit=50")
+    assert res.status_code == 200
+    data = res.json()["data"]
+    authorities = {r.get("authority") for r in data}
+    assert "VDL" in authorities
+    assert "CITA" in authorities
+
+
+def test_fuel_prices_freshness_in_api(client: TestClient) -> None:
+    """Vérifie l'actualisation et la validité des prix des carburants."""
+    res = client.get("/v1/data/gold_fuel_prices?limit=20")
+    assert res.status_code == 200
+    data = res.json()["data"]
+    assert len(data) >= 4
+    dates = {r.get("observed_at_utc", "")[:10] for r in data}
+    assert any("2026-11-22" in d or "2026-11-23" in d for d in dates)
+    for r in data:
+        assert float(r["price_eur_per_litre"]) > 0.0

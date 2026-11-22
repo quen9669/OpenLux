@@ -30,29 +30,30 @@ from openlux.core.quality import (
 
 
 def _dbt(cmd: str, *args: str) -> bool:
-    args_list = [
-        "-m",
-        "dbt.cli.main",
-        cmd,
-        *args,
-        "--project-dir",
-        "dbt_project",
-        "--profiles-dir",
-        "dbt_project",
-    ]
-    return subprocess.run([sys.executable, *args_list], check=False).returncode == 0
+    opt = ("--project-dir", "dbt_project", "--profiles-dir", "dbt_project")
+    res = subprocess.run([sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt], check=False)
+    return res.returncode == 0
 
 
 _run_dbt_command = _dbt
+
+
+def _connect_db(path: str = "data/openlux.duckdb", read_only: bool = False):
+    for i in range(8):
+        try:
+            return duckdb.connect(path, read_only=read_only)
+        except Exception:
+            if i == 7:
+                raise
+            time.sleep(0.3)
 
 
 def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
     if not last_iso:
         return True
     try:
-        return (
-            (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
-        ) >= float(source.cadence_minutes)
+        dt = (datetime.now(UTC) - datetime.fromisoformat(last_iso)).total_seconds() / 60.0
+        return dt >= float(source.cadence_minutes)
     except Exception:
         return True
 
@@ -60,7 +61,7 @@ def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
 def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False) -> int:
     sources, db_p = load_sources_config(), Path("data/openlux.duckdb")
     db_p.parent.mkdir(parents=True, exist_ok=True)
-    con = duckdb.connect(str(db_p))
+    con = _connect_db(str(db_p))
     try:
         init_obs_runs_table(con)
         health, r_id = get_latest_source_health(con), str(uuid.uuid4())
@@ -75,12 +76,9 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
 
         for sid, src in selected.items():
             prev = health.get(sid, {})
+            p_sha, p_ch = prev.get("sha256"), prev.get("last_changed_utc")
             try:
-                res = collect_source(
-                    src,
-                    last_sha256=prev.get("sha256"),
-                    last_changed_utc=prev.get("last_changed_utc"),
-                )
+                res = collect_source(src, last_sha256=p_sha, last_changed_utc=p_ch)
             except Exception as exc:
                 now_s = datetime.now(UTC).isoformat()
                 res = CollectorResult(
@@ -109,7 +107,7 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
         _dbt(*c)
     export_gold_parquets()
-    with duckdb.connect(str(db_p), read_only=True) as con_r:
+    with _connect_db(str(db_p), read_only=True) as con_r:
         generate_status_markdown(sources, get_latest_source_health(con_r))
     return 0
 
@@ -129,7 +127,7 @@ def rebuild_pipeline() -> int:
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
         _dbt(*c)
     export_gold_parquets()
-    with duckdb.connect("data/openlux.duckdb") as con:
+    with _connect_db("data/openlux.duckdb") as con:
         init_obs_runs_table(con)
         generate_status_markdown(load_sources_config(), get_latest_source_health(con))
     return 0
@@ -141,12 +139,12 @@ def main(argv: list[str] | None = None) -> int:
     r_p = sub.add_parser("run")
     r_p.add_argument("--sources")
     r_p.add_argument("--due", action="store_true")
-    sch = sub.add_parser("schedule")
-    sch.add_argument("--interval", type=int, default=60, help="Intervalle en secondes")
+    sub.add_parser("schedule").add_argument("--interval", type=int, default=60, help="Secondes")
     for c in ["rebuild", "status", "compact", "mcp"]:
         sub.add_parser(c)
-    pub = sub.add_parser("publish")
-    pub.add_argument("--live", dest="dry_run", action="store_false", default=True)
+    sub.add_parser("publish").add_argument(
+        "--live", dest="dry_run", action="store_false", default=True
+    )
     srv = sub.add_parser("serve", aliases=["api"])
     srv.add_argument("--host", default="127.0.0.1")
     srv.add_argument("--port", type=int, default=8000)
@@ -187,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if a.cmd == "status":
         db = "data/openlux.duckdb" if Path("data/openlux.duckdb").exists() else ":memory:"
-        with duckdb.connect(db) as con:
+        with _connect_db(db, read_only=True) as con:
             init_obs_runs_table(con)
             generate_status_markdown(load_sources_config(), get_latest_source_health(con))
         print(Path("STATUS.md").read_text(encoding="utf-8"))

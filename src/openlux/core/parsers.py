@@ -11,7 +11,7 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
-from datetime import UTC
+from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 
 from openlux.core.parsers_env import ENV_PARSERS
@@ -32,63 +32,55 @@ def _j(raw: bytes):
     return json.loads(raw.decode("utf-8")) if isinstance(raw, (bytes, bytearray)) else raw
 
 
+def _cita_road(el: ET.Element, rd: ET.Element | None) -> str:
+    if rd is not None and rd.text and rd.text.strip():
+        return rd.text.strip()
+    vals = [t for x in el.iter() if x.tag.endswith("value") and (t := (x.text or "").strip())]
+    return next(
+        (t for t in vals if any(t.startswith(p) for p in ("A", "N", "CR", "B")) and len(t) <= 15),
+        "A",
+    )
+
+
+def _cita_rec(el: ET.Element) -> dict:
+    lat, lon, rd = _tag(el, "latitude"), _tag(el, "longitude"), _tag(el, "roadName")
+    tm = next((x.text.strip() for x in el.iter() if "CreationTime" in x.tag), "")
+    st_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallStartTime")), tm)
+    end_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallEndTime")), None)
+    rn = _cita_road(el, rd)
+    vs = next(
+        (t for x in el.iter() if x.tag.endswith("value") and len(t := (x.text or "").strip()) > 4),
+        "",
+    )
+    st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
+    eid = el.attrib.get("id", "UNKNOWN")
+    fla = float(lat.text.strip()) if lat is not None and lat.text else None
+    flo = float(lon.text.strip()) if lon is not None and lon.text else None
+    return {
+        "event_id": eid,
+        "work_id": eid,
+        "road_name": rn,
+        "situation_type": st,
+        "impact_level": st,
+        "start_time": st_s,
+        "start_date": st_s,
+        "end_date": end_s,
+        "observed_at": tm,
+        "title": vs or "CITA",
+        "lat": fla,
+        "lon": flo,
+        "comment": vs,
+        "commune_name": "Luxembourg",
+    }
+
+
 def cita_datex2(raw: bytes) -> list[dict]:
     """Parse le flux XML DATEX II du CITA (trafic et chantiers) (<= 30 lignes)."""
     if not raw.strip():
         return []
     if raw.strip().startswith((b"[", b"{")):
         return d if isinstance((d := json.loads(raw.decode("utf-8"))), list) else [d]
-    records = []
-    for el in ET.fromstring(raw).iter():
-        if not el.tag.endswith("situationRecord"):
-            continue
-        lat, lon, rd = _tag(el, "latitude"), _tag(el, "longitude"), _tag(el, "roadName")
-        tm = next((x.text.strip() for x in el.iter() if "CreationTime" in x.tag), "")
-        st_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallStartTime")), tm)
-        end_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallEndTime")), None)
-        rn = rd.text.strip() if rd is not None and rd.text else None
-        if not rn:
-            prefixes = ("A", "N", "CR", "B")
-            rn = next(
-                (
-                    t
-                    for x in el.iter()
-                    if x.tag.endswith("value")
-                    and (t := (x.text or "").strip())
-                    and any(t.startswith(p) for p in prefixes)
-                    and len(t) <= 15
-                ),
-                "A",
-            )
-        vs = next(
-            (
-                t
-                for x in el.iter()
-                if x.tag.endswith("value") and len(t := (x.text or "").strip()) > 4
-            ),
-            "",
-        )
-        st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
-        eid = el.attrib.get("id", "UNKNOWN")
-        records.append(
-            {
-                "event_id": eid,
-                "work_id": eid,
-                "road_name": rn,
-                "situation_type": st,
-                "impact_level": st,
-                "start_time": st_s,
-                "start_date": st_s,
-                "end_date": end_s,
-                "observed_at": tm,
-                "title": vs or "CITA",
-                "lat": float(lat.text.strip()) if lat is not None and lat.text else None,
-                "lon": float(lon.text.strip()) if lon is not None and lon.text else None,
-                "comment": vs,
-                "commune_name": "Luxembourg",
-            }
-        )
-    return records
+    return [_cita_rec(el) for el in ET.fromstring(raw).iter() if el.tag.endswith("situationRecord")]
 
 
 def strikes_rss(raw: bytes) -> list[dict]:
@@ -119,16 +111,33 @@ def strikes_rss(raw: bytes) -> list[dict]:
     return records
 
 
+def _feat_parking(f: dict, i: int, obs: str) -> dict:
+    p, g = f.get("properties") or f.get("attributes", {}), f.get("geometry", {})
+    c = g.get("coordinates") or [p.get("x"), p.get("y")]
+    return {
+        "facility_id": f"PARKING_{p.get('OBJECTID', i)}",
+        "facility_name": p.get("NOM", f"P_{i}"),
+        "available_spaces": int(p.get("ACTUEL") or 0),
+        "total_capacity": int(p.get("TOTAL") or 0),
+        "lat": c[1] if len(c) > 1 else None,
+        "lon": c[0] if len(c) > 0 else None,
+        "observed_at": obs,
+        "commune_name": "Luxembourg",
+    }
+
+
 def vdl_parking(raw: bytes) -> list[dict]:
     """Parse le feed JSON des parkings VDL en liste d'équipements (<= 30 lignes)."""
     if not raw.strip() or isinstance(d := _j(raw), list):
         return d if isinstance(d, list) else []
-    obs = d.get("last_build_date", "")
+    obs = d.get("last_build_date") or datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
     if obs and (not obs[:4].isdigit() or len(obs) < 10):
         try:
             obs = parsedate_to_datetime(obs).astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S")
         except Exception:
             pass
+    if "features" in d:
+        return [_feat_parking(f, i, obs) for i, f in enumerate(d.get("features", []))]
     return [
         {
             "facility_id": f"PARKING_{p}",

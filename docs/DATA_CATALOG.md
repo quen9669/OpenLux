@@ -137,13 +137,29 @@ Chaque table comporte systématiquement les colonnes de traçabilité spatio-tem
 - **Schéma exact** : `work_id`, `authority`, `road_name`, `start_date`, `end_date`, `impact_level`, `title`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
 - **Limites connues** : Couvre les autoroutes CITA et le réseau municipal de la Ville de Luxembourg ; calendrier sous réserve d'aléas météo.
 
-### 2.16 `gold_housing` (Vague 3C & Refonte Complète)
+### 2.16 `gold_housing` (Modèle Unifié)
 - **Domaine** : `housing_construction`
 - **Grain** : 1 ligne par annonce active réelle, par observation de prix de l'Observatoire de l'Habitat ou par autorisation de bâtir STATEC.
 - **Fichier** : `data/gold/gold_housing.parquet` (ZSTD)
-- **Sources** : `housing_observatoire` (data.public.lu), `housing_statec` (Lustat SDMX DF_D4113/DF_D4123), `housing_market_listings` (atHome.lu vérifié HTTP 200).
+- **Sources** : `housing_observatoire`, `housing_statec`, `housing_market_listings`.
 - **Schéma exact (29 attributs factuels)** : `record_id`, `record_type`, `property_type`, `market_segment`, `reference_period`, `price_eur`, `surface_m2`, `price_eur_m2`, `bedrooms_count`, `bathrooms_count`, `rooms_count`, `has_balcony`, `has_terrace`, `has_garden`, `has_parking_or_garage`, `has_elevator`, `floor_number`, `construction_year`, `energy_class`, `thermal_insulation_class`, `description`, `street_name`, `postal_code`, `neighborhood_or_quartier`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `listing_url`, `units_count`, `observed_at_utc`, `source_id`.
-- **Garanties qualité** : Zéro lien mort (100% URLs vérifiées HTTP 200), zéro donnée mockée, zéro score d'opinion subjectif, unicité stricte (0 doublon), couverture rétrospective 15 ans (2010-2025) sur 102 communes.
+- **Garanties qualité** : Zéro lien mort (100% URLs vérifiées HTTP 200), zéro donnée mockée, zéro score d'opinion subjectif, unicité stricte.
+
+### 2.16.1 `gold_housing_listings` (Offres de Marché Individuelles)
+- **Domaine** : `housing_construction`
+- **Grain** : 1 ligne par offre ou annonce immobilière active du marché luxembourgeois (atHome et partenaires).
+- **Fichier** : `data/gold/gold_housing_listings.parquet` (ZSTD)
+- **Sources** : `housing_market_listings` (ref_housing_market_deals).
+- **Schéma exact (29 attributs factuels)** : `record_id`, `record_type`, `property_type`, `market_segment`, `price_eur`, `surface_m2`, `price_eur_m2`, `bedrooms_count`, `bathrooms_count`, `rooms_count`, `has_balcony`, `has_terrace`, `has_garden`, `has_parking_or_garage`, `has_elevator`, `floor_number`, `construction_year`, `energy_class`, `thermal_insulation_class`, `description`, `street_name`, `postal_code`, `neighborhood_or_quartier`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `listing_url`, `units_count`, `observed_at_utc`, `source_id`.
+- **Garanties qualité** : 100% annonces géolocalisées, conformité Zero-PII, caractéristiques architecturales et énergétiques objectives.
+
+### 2.16.2 `gold_housing_stats` (Statistiques Macro STATEC & Observatoire)
+- **Domaine** : `housing_construction`
+- **Grain** : 1 ligne par indicateur communal et périodique de l'habitat (prix constatés Observatoire ou permis STATEC).
+- **Fichier** : `data/gold/gold_housing_stats.parquet` (ZSTD)
+- **Sources** : `housing_observatoire` (Observatoire de l'Habitat), `housing_statec` (Lustat SDMX DF_D4113).
+- **Schéma exact** : `record_id`, `record_type`, `property_type`, `market_segment`, `reference_period`, `price_eur_m2`, `units_count`, `permits_count`, `description`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `observed_at_utc`, `source_id`.
+- **Garanties qualité** : Indicateurs macroéconomiques officiels sans mélange avec les annonces unitaires.
 
 ### 2.17 `gold_daily_life` (Vague 3C)
 - **Domaine** : `daily_life_sport`

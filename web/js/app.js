@@ -177,18 +177,57 @@ const FALLBACK_DATASETS = [
     ]
   },
   {
-    dataset: "gold_housing",
+    dataset: "gold_housing_listings",
     domain: "Immobilier & Marché",
-    description: "Observatoire de l'Habitat : loyers moyens, prix au m² par commune et types de biens.",
-    row_count: 102,
+    description: "Annonces immobilières du marché : 29 attributs factuels (prix, surface, pièces, DPE, extérieurs).",
+    row_count: 120,
     trust_score: 100.0,
     license_spdx: "CC0-1.0",
     columns: [
-      { name: "commune_code", type: "VARCHAR" },
+      { name: "record_id", type: "VARCHAR" },
+      { name: "property_type", type: "VARCHAR" },
+      { name: "price_eur", type: "DOUBLE" },
+      { name: "surface_m2", type: "DOUBLE" },
+      { name: "price_eur_m2", type: "DOUBLE" },
+      { name: "bedrooms_count", type: "INTEGER" },
+      { name: "energy_class", type: "VARCHAR" },
       { name: "commune_name", type: "VARCHAR" },
-      { name: "avg_rent_eur_sqm", type: "DOUBLE" },
-      { name: "avg_sale_price_eur_sqm", type: "DOUBLE" },
-      { name: "quarter_period", type: "VARCHAR" }
+      { name: "canton", type: "VARCHAR" }
+    ]
+  },
+  {
+    dataset: "gold_housing_stats",
+    domain: "Immobilier & Marché",
+    description: "Statistiques officielles du logement : Observatoire de l'Habitat & autorisations de bâtir STATEC.",
+    row_count: 8,
+    trust_score: 100.0,
+    license_spdx: "CC0-1.0",
+    columns: [
+      { name: "record_id", type: "VARCHAR" },
+      { name: "record_type", type: "VARCHAR" },
+      { name: "property_type", type: "VARCHAR" },
+      { name: "reference_period", type: "VARCHAR" },
+      { name: "price_eur_m2", type: "DOUBLE" },
+      { name: "units_count", type: "INTEGER" },
+      { name: "permits_count", type: "INTEGER" },
+      { name: "commune_name", type: "VARCHAR" }
+    ]
+  },
+  {
+    dataset: "gold_housing",
+    domain: "Immobilier & Marché",
+    description: "Modèle unifié : annonces de marché factuelles et séries statistiques macro.",
+    row_count: 128,
+    trust_score: 100.0,
+    license_spdx: "CC0-1.0",
+    columns: [
+      { name: "record_id", type: "VARCHAR" },
+      { name: "record_type", type: "VARCHAR" },
+      { name: "property_type", type: "VARCHAR" },
+      { name: "price_eur", type: "DOUBLE" },
+      { name: "surface_m2", type: "DOUBLE" },
+      { name: "price_eur_m2", type: "DOUBLE" },
+      { name: "commune_name", type: "VARCHAR" }
     ]
   },
   {

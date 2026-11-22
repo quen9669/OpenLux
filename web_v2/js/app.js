@@ -234,23 +234,73 @@ const DATASETS_V2 = [
     ]
   },
   {
-    dataset: "gold_housing",
+    dataset: "gold_housing_listings",
+    domain: "Immobilier & Marché",
+    source_org: "Marché immobilier (atHome & partenaires)",
+    source_url: "https://www.athome.lu/",
+    cadence: "Temps réel / 60 min",
+    sla: "SLA 120 min",
+    last_refresh: "2026-11-22 15:00:00 UTC",
+    row_count: 120,
+    sparkline: [110, 115, 118, 120, 120, 120, 120],
+    trust_score: 100.0,
+    license_spdx: "CC0-1.0",
+    description: "Annonces immobilières actives avec 29 attributs factuels (prix, surface, DPE, extérieurs).",
+    columns: [
+      { name: "record_id", type: "VARCHAR", desc: "Identifiant unique de l'offre" },
+      { name: "property_type", type: "VARCHAR", desc: "Type de bien (Appartement, Maison, Studio...)" },
+      { name: "price_eur", type: "DOUBLE", desc: "Prix demandé en Euros" },
+      { name: "surface_m2", type: "DOUBLE", desc: "Surface habitable en m²" },
+      { name: "price_eur_m2", type: "DOUBLE", desc: "Prix au m²" },
+      { name: "energy_class", type: "VARCHAR", desc: "Classe de performance énergétique" },
+      { name: "commune_name", type: "VARCHAR", desc: "Commune luxembourgeoise" },
+      { name: "canton", type: "VARCHAR", desc: "Canton géographique" }
+    ]
+  },
+  {
+    dataset: "gold_housing_stats",
     domain: "Immobilier & Marché",
     source_org: "Observatoire de l'Habitat & STATEC",
     source_url: "https://logement.public.lu/fr/observatoire-habitat.html",
-    cadence: "Trimestriel / Hebdomadaire",
+    cadence: "Trimestriel / Mensuel",
     sla: "SLA 10080 min",
-    last_refresh: "2026-11-15 08:00:00 UTC",
-    row_count: 102,
-    sparkline: [98, 99, 100, 100, 101, 101, 102],
+    last_refresh: "2026-11-22 15:00:00 UTC",
+    row_count: 8,
+    sparkline: [8, 8, 8, 8, 8, 8, 8],
     trust_score: 100.0,
     license_spdx: "CC0-1.0",
-    description: "Indicateurs neutres de l'habitat : loyers moyens, prix m² constatés et permis par commune.",
+    description: "Statistiques officielles : prix médians observatoire et autorisations de bâtir STATEC.",
     columns: [
-      { name: "commune_code", type: "VARCHAR", desc: "Code LAU officiel de la commune" },
-      { name: "commune_name", type: "VARCHAR", desc: "Nom de la commune" },
-      { name: "avg_rent_eur_sqm", type: "DOUBLE", desc: "Loyer moyen en €/m²" },
-      { name: "avg_sale_price_eur_sqm", type: "DOUBLE", desc: "Prix moyen de vente en €/m²" }
+      { name: "record_id", type: "VARCHAR", desc: "Clé unique de la série statistique" },
+      { name: "record_type", type: "VARCHAR", desc: "Origine statistique (STATEC ou Observatoire)" },
+      { name: "property_type", type: "VARCHAR", desc: "Typologie de bien" },
+      { name: "reference_period", type: "VARCHAR", desc: "Trimestre ou année de référence" },
+      { name: "price_eur_m2", type: "DOUBLE", desc: "Prix médian observé au m²" },
+      { name: "units_count", type: "INTEGER", desc: "Nombre de transactions ou logements autorisés" },
+      { name: "permits_count", type: "INTEGER", desc: "Nombre de permis délivrés" },
+      { name: "commune_name", type: "VARCHAR", desc: "Commune" }
+    ]
+  },
+  {
+    dataset: "gold_housing",
+    domain: "Immobilier & Marché",
+    source_org: "Observatoire de l'Habitat, STATEC & Marché",
+    source_url: "https://logement.public.lu/fr/observatoire-habitat.html",
+    cadence: "Trimestriel / Quotidien",
+    sla: "SLA 10080 min",
+    last_refresh: "2026-11-22 15:00:00 UTC",
+    row_count: 128,
+    sparkline: [120, 122, 125, 128, 128, 128, 128],
+    trust_score: 100.0,
+    license_spdx: "CC0-1.0",
+    description: "Modèle unifié : consolidation des offres de marché et des séries macroéconomiques.",
+    columns: [
+      { name: "record_id", type: "VARCHAR", desc: "Identifiant unique" },
+      { name: "record_type", type: "VARCHAR", desc: "Type d'enregistrement (LISTING ou STATISTIC)" },
+      { name: "property_type", type: "VARCHAR", desc: "Type de bien" },
+      { name: "price_eur", type: "DOUBLE", desc: "Prix en Euros" },
+      { name: "surface_m2", type: "DOUBLE", desc: "Surface en m²" },
+      { name: "commune_name", type: "VARCHAR", desc: "Nom de la commune" }
     ]
   },
   {
