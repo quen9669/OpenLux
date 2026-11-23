@@ -3,7 +3,7 @@
   "name": "openlux-hub-gold",
   "title": "OpenLux Hub — Données Ouvertes Consolidées du Luxembourg",
   "homepage": "https://github.com/quen9669/OpenLux",
-  "created": "2026-11-23T08:28:58.260449+00:00",
+  "created": "2026-11-23T20:28:49.341071+00:00",
   "license": "CC0-1.0",
   "publisher": {
     "name": "OpenLux Initiative",
@@ -21,8 +21,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 111276,
-      "sha256": "167f2ef6fdda8ca168bf4f1d799124cc9827c68eb4e533f6d0f2acbd30488b62",
+      "row_count": 116719,
+      "sha256": "5ffe6ec3eb10bc0aa8939d251b39ab07823f5133175926d99ae4751cf31e51ae",
       "standards_applied": [
         "Air Quality Directive 2008/50/EC",
         "GeoJSON (EPSG:4326)"
@@ -100,8 +100,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 127,
-      "sha256": "c45b7e6cb797ba976bb83643ba473938addf12e14e79110919e840a83f75c4f4",
+      "row_count": 138,
+      "sha256": "fd94568cd01661ea2c4f55693874cc224f4c5596e157fc79a1d7539d44e0c1b9",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -767,8 +767,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 53,
-      "sha256": "7670a70b56ba7a94e0fb534f7957f5eb4aeb58b8cf7550a35d97a1ccc3310bed",
+      "row_count": 55,
+      "sha256": "ede54415de10ad4531233c4f203044bebfb1a3c400738d0d0746dcd0144c9ad2",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1501,8 +1501,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 641,
-      "sha256": "ed23ad0c4c9e7e3084ec89117b5486fc87c138750ea41903d9d3d0e0ed868bec",
+      "row_count": 670,
+      "sha256": "59b2b58d582af3b81eadb86181a7461fb832731a6209afd7d2350e7e40b07b2f",
       "standards_applied": [
         "DATEX II Parking Publication",
         "GeoJSON (EPSG:4326)"
@@ -1620,8 +1620,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 5215,
-      "sha256": "077242fcad13fc5a74c276b6575c33296a85a945f488722f03296bf170fae725",
+      "row_count": 5354,
+      "sha256": "9cc9440325c70b443df394c2f0e0c2d7eb83f081232861e0b8d29a58d72d3ea1",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -1907,8 +1907,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 807,
-      "sha256": "071ffdb1fdfa60a52eed12c8c9300872f855bd8e1ff6b7b341b9ce3b1b80e759",
+      "row_count": 813,
+      "sha256": "ebedea09ffec1c5e5cacf085bb38951226440a2021c356862632e5524d0cf8a9",
       "standards_applied": [
         "DATEX II Roadworks",
         "GeoJSON (EPSG:4326)"
@@ -1991,8 +1991,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 6,
-      "sha256": "4a354b5ae7d51eb70dbe359084999929ac91b7d49ba735d65c5e63868e2dce34",
+      "row_count": 7,
+      "sha256": "4d8dd4b4b30e5356eef44c311dde538b01ae67e286ca174c03c17689472e2f8a",
       "standards_applied": [],
       "schema": {
         "fields": [
@@ -2037,8 +2037,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 126,
-      "sha256": "92369990c701df4a2a8129c860d69b3988b5d5cfbf52d4cf5bd03ea278f6bf64",
+      "row_count": 128,
+      "sha256": "001b16b343a096d77bb0fd3219421c330b0a3f1965514449693c6240b5ecd8a7",
       "standards_applied": [
         "RSS 2.0 / Dublin Core",
         "ISO 3166-1 alpha-2"
@@ -2096,8 +2096,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 90,
-      "sha256": "befa34889e8265b4a27ee37f0528b84037f7c4ec82efb1cfc1ee9f344cbaea5b",
+      "row_count": 93,
+      "sha256": "d50538ad137ba59b45ebcf801b5bfd5e81aa5d149a13d7e4821cea030fc0beca",
       "standards_applied": [
         "DATEX II (CEN/TS 16157)",
         "GeoJSON (EPSG:4326)"
@@ -2243,8 +2243,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 38000,
-      "sha256": "61eb265f1439b884551557b1fdb97684a158dc36671e8120b4bbe10d5dc5e2bd",
+      "row_count": 38180,
+      "sha256": "b80fea836b871db895a459b4b6d927dfd15ddf901003f1e01a969fe47044fb9c",
       "standards_applied": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"
