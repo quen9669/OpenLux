@@ -17,7 +17,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 583101,
+      "byteSize": 589402,
       "conformsTo": [
         "Air Quality Directive 2008/50/EC",
         "GeoJSON (EPSG:4326)"
@@ -30,7 +30,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_aviation_noise.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 12314,
+      "byteSize": 12424,
       "conformsTo": []
     },
     {
@@ -103,7 +103,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_electricity_spot.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 6424,
+      "byteSize": 7014,
       "conformsTo": []
     },
     {
@@ -123,7 +123,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_health_alerts.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 10037,
+      "byteSize": 10108,
       "conformsTo": []
     },
     {
@@ -186,7 +186,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 26225,
+      "byteSize": 26644,
       "conformsTo": [
         "DATEX II Parking Publication",
         "GeoJSON (EPSG:4326)"
@@ -199,7 +199,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 126864,
+      "byteSize": 129208,
       "conformsTo": []
     },
     {
@@ -246,7 +246,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_statec_inflation.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 3716,
+      "byteSize": 3725,
       "conformsTo": []
     },
     {
@@ -256,7 +256,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_disruptions.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 66160,
+      "byteSize": 72184,
       "conformsTo": [
         "RSS 2.0 / Dublin Core",
         "ISO 3166-1 alpha-2"
@@ -269,7 +269,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 9653,
+      "byteSize": 9808,
       "conformsTo": [
         "DATEX II (CEN/TS 16157)",
         "GeoJSON (EPSG:4326)"
@@ -294,7 +294,7 @@
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
       "format": "parquet",
-      "byteSize": 419551,
+      "byteSize": 421883,
       "conformsTo": [
         "WMO Core Profile",
         "GeoJSON (EPSG:4326)"
