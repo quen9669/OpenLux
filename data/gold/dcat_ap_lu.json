@@ -14,7 +14,7 @@
       "title": "Météo horaire (station Findel + 12 cantons)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 169701,
+      "byteSize": 169911,
       "license": [
         "CC-BY-4.0",
         "CC0-1.0"
@@ -25,7 +25,7 @@
       "title": "Qualité de l'air et pollens (modèle CAMS)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 498673,
+      "byteSize": 493026,
       "license": [
         "CC-BY-4.0"
       ]
@@ -35,7 +35,7 @@
       "title": "Niveaux d'eau des rivières (15 min)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_water_levels.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 52071,
+      "byteSize": 52225,
       "license": [
         "CC0-1.0"
       ]
@@ -65,7 +65,7 @@
       "title": "Événements trafic LU et frontaliers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 7830,
+      "byteSize": 8146,
       "license": [
         "CC0-1.0",
         "etalab-2.0"
@@ -76,7 +76,7 @@
       "title": "Chantiers routiers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_roadworks.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 20419,
+      "byteSize": 20413,
       "license": [
         "CC0-1.0"
       ]
@@ -86,7 +86,7 @@
       "title": "Perturbations bus et trains",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_transit_disruptions.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 4333,
+      "byteSize": 5027,
       "license": [
         "CC0-1.0",
         "ODbL-1.0",
@@ -98,7 +98,7 @@
       "title": "Disponibilités Vel'oh",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 12650,
+      "byteSize": 13057,
       "license": [
         "unspecified"
       ]
@@ -108,7 +108,7 @@
       "title": "Occupation des parkings (Ville)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 4699,
+      "byteSize": 4844,
       "license": [
         "CC0-1.0"
       ]
@@ -118,7 +118,7 @@
       "title": "Bornes de recharge Chargy",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_chargy_stations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 31560,
+      "byteSize": 31917,
       "license": [
         "CC0-1.0"
       ]
@@ -128,7 +128,7 @@
       "title": "Aéronefs au-dessus du Luxembourg",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_aviation.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 3619,
+      "byteSize": 3974,
       "license": [
         "unspecified"
       ]
@@ -220,7 +220,7 @@
       "title": "Pétitions à la Chambre des Députés",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_petitions.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 124909,
+      "byteSize": 124901,
       "license": [
         "CC0-1.0"
       ]
@@ -230,7 +230,7 @@
       "title": "Agenda culturel",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_culture_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 83223,
+      "byteSize": 83768,
       "license": [
         "unspecified"
       ]
@@ -240,7 +240,7 @@
       "title": "Articles de presse sur les grèves",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_news.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 18936,
+      "byteSize": 42145,
       "license": [
         "unspecified"
       ]
@@ -250,7 +250,7 @@
       "title": "Contexte quotidien par canton",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 11978,
+      "byteSize": 11962,
       "license": []
     }
   ]
