@@ -104,3 +104,4 @@ Ce journal recense tous les arbitrages techniques, petits compromis d'intégrati
 | 2026-11-25 | Défibrillateurs OSM filtrés | Bbox Overpass + exclusion des points sans commune LU ≤ 8 km | Aucun jeu officiel ; la bbox déborde sur BE/FR/DE | Oui |
 | 2026-11-25 | Portail V1 retiré | `/` redirige vers `/v2/` ; catalogue V2 lu depuis l'API ou `catalog.json` | Le V1 et l'ancien V2 affichaient des volumes, courbes et dates fictifs | Oui |
 | 2026-11-25 | Annonces athome.lu retirées | Seed `ref_housing_market_deals.csv` supprimé ; prix officiels de l'Observatoire à la place | Instantané figé d'un site commercial, adresses répétées | Oui |
+| 2026-11-25 | CI dbt sans base ni Bronze | `dbt build` dans `dbt_project/` sur des placeholders Bronze `[]` (CI et doc dbt) | `dbt test` seul échouait : aucune table Gold sur le runner ; 0 ligne suffit à valider SQL et tests | Oui |

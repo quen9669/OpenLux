@@ -31,12 +31,14 @@ jobs:
       - name: Run offline tests (pytest)
         run: uv run pytest
 
-      - name: Validate dbt configuration and models
+      - name: Create empty Bronze placeholders
+        # POURQUOI : Bronze n'est pas versionné ; '[]' par source permet de construire tous les modèles (0 ligne)
+        run: uv run python -c "from openlux.cli import ensure_bronze_placeholders as e; from openlux.config import load_sources_config as l; e(l())"
+
+      - name: Build and test dbt models (seed + run + test)
         # POURQUOI : dbt-duckdb résout seeds/ et ../data/ depuis le cwd => exécution dans dbt_project/
         working-directory: dbt_project
-        run: |
-          uv run dbt parse --project-dir . --profiles-dir .
-          uv run dbt test --project-dir . --profiles-dir .
+        run: uv run dbt build --project-dir . --profiles-dir .
 
       - name: Validate Open Data publication & metadata dry-run
         run: uv run openlux publish --dry-run
