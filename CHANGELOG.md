@@ -6,6 +6,21 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+### Fixed
+- Contexte quotidien : seuls hier et aujourd'hui sont recalculés ; en CI, les jours passés voyaient leurs compteurs trafic et chantiers écrasés par 0.
+- Un `dbt seed`, `run` ou `test` en échec arrête désormais le pipeline avant l'export Gold (code de sortie 1).
+- Alertes webhook : la règle « 3 ATTENTION de suite » reçoit l'historique réel de la source (elle ne pouvait jamais se déclencher).
+
+- Clients HTTP jamais fermés (collecte, alertes) : `httpx.get`/`httpx.post` quand aucun client n'est fourni.
+
+### Changed
+- GitHub Actions : `data/openlux.duckdb` restauré d'un run à l'autre (`actions/cache`) au lieu d'un artefact jamais relu ; les runs planifiés passent en `--due`.
+- Open-Meteo (météo, air, pollen) : fenêtre `past_days` 92 → 7 ; l'historique antérieur est déjà conservé dans le Parquet.
+
+### Removed
+- Commande `openlux compact` : elle écrivait un `history.parquet` que dbt ne lit pas.
+- `get_dbt_validity_score` : il cherchait des tests nommés d'après la source, qui n'existent pas, et renvoyait toujours 100.
+
 ## [3.0.0] — 2026-11-25 — Refonte « données fiables »
 
 ### Removed

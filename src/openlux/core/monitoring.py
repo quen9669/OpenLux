@@ -178,7 +178,7 @@ def send_alert_if_needed(
         and sum(1 for s in recent_history[-2:] if s == "ATTENTION") + 1 >= 3
     ):
         try:
-            (client or httpx.Client()).post(
+            (client or httpx).post(
                 target,
                 json={
                     "source_id": source_id,

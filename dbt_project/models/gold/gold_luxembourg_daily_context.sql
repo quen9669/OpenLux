@@ -63,3 +63,6 @@ FROM wx
 LEFT JOIN aq USING (context_date, canton)
 LEFT JOIN pub USING (context_date)
 LEFT JOIN trf USING (context_date, canton)
+-- POURQUOI : en CI, Bronze ne contient que le run courant ; recalculer un jour passé y écraserait
+-- (dernière version par clé) ses compteurs trafic/chantiers par 0. Les jours < hier restent figés.
+WHERE wx.context_date >= CURRENT_DATE - 1

@@ -155,21 +155,6 @@ def write_site_catalog(gold_dir: Path = Path("data/gold"), site_dir: Path = Path
     return out
 
 
-def compact_bronze_archives(bronze_dir: Path = Path("data/bronze"), dry_run: bool = False) -> int:
-    """Compacte les archives Bronze JSON d'une source en un Parquet d'historique."""
-    con, compacted = duckdb.connect(), 0
-    for s_dir in (d for d in bronze_dir.iterdir() if d.is_dir()) if bronze_dir.exists() else []:
-        archives = [p for p in s_dir.glob("*/*/*/*.json.gz") if p.is_file()]
-        if archives and not dry_run:
-            out_pq = s_dir / "history.parquet"
-            glob = f"{s_dir.as_posix()}/*/*/*/*.json.gz"
-            src = f"read_json('{glob}', format='array', union_by_name=true)"
-            con.execute(f"COPY (SELECT * FROM {src}) TO '{out_pq.as_posix()}' (FORMAT PARQUET)")
-        compacted += len(archives)
-    con.close()
-    return compacted
-
-
 def publish_to_data_public_lu(
     dry_run: bool = True, gold_dir: Path = Path("data/gold")
 ) -> dict[str, Any]:

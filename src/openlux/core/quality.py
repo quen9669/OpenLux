@@ -5,10 +5,8 @@ Hors-scope : N'effectue aucun appel réseau ni modification de fichiers Bronze/G
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 
 import duckdb
@@ -36,25 +34,6 @@ def init_obs_runs_table(con: duckdb.DuckDBPyConnection) -> None:
             recorded_at_utc VARCHAR
         )
     """)
-
-
-def get_dbt_validity_score(
-    source_id: str, run_results_path: Path | str = "dbt_project/target/run_results.json"
-) -> float:
-    path = Path(run_results_path)
-    if not path.exists():
-        return 100.0
-    try:
-        results = json.loads(path.read_text(encoding="utf-8")).get("results", [])
-        tests = [
-            r
-            for r in results
-            if r.get("unique_id", "").startswith("test.") and source_id in r.get("unique_id", "")
-        ]
-        passed = sum(1 for t in tests if t.get("status") in ("pass", "success"))
-        return 100.0 if not tests else round((passed / len(tests)) * 100.0, 1)
-    except Exception:
-        return 100.0
 
 
 def calculate_trust_score(

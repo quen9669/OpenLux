@@ -25,8 +25,8 @@ from openlux.core.gold import export_gold_parquets
 from openlux.core.monitoring import generate_status_markdown, send_alert_if_needed
 from openlux.core.quality import (
     calculate_trust_score,
-    get_dbt_validity_score,
     get_latest_source_health,
+    get_source_run_history,
     init_obs_runs_table,
     record_run,
 )
@@ -66,7 +66,12 @@ def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
 
 
 def _collect_and_record(
-    con: duckdb.DuckDBPyConnection, sid: str, src: SourceConfig, r_id: str, prev: dict[str, Any]
+    con: duckdb.DuckDBPyConnection,
+    sid: str,
+    src: SourceConfig,
+    r_id: str,
+    prev: dict[str, Any],
+    past: list[str],
 ) -> None:
     try:
         res = collect_source(
@@ -75,13 +80,10 @@ def _collect_and_record(
     except Exception as exc:
         n = datetime.now(UTC).isoformat()
         res = CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
-    val = get_dbt_validity_score(sid)
-    m = calculate_trust_score(
-        src, res.status, res.source_used, res.row_count, res.checked_at_utc, val
-    )
+    m = calculate_trust_score(src, res.status, res.source_used, res.row_count, res.checked_at_utc)
     meta = (res.checked_at_utc, res.changed_at_utc, res.sha256, res.error_message)
     record_run(con, r_id, sid, "git_v1", m, res.row_count, *meta)
-    send_alert_if_needed(sid, m.status, [prev.get("status", "GOOD")])
+    send_alert_if_needed(sid, m.status, past)
 
 
 def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False) -> int:
@@ -90,6 +92,7 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
     with _connect_db(str(db_p)) as con:
         init_obs_runs_table(con)
         health, r_id = get_latest_source_health(con), str(uuid.uuid4())
+        history = get_source_run_history(con)
         selected = {
             s: c
             for s, c in sources.items()
@@ -97,10 +100,14 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
             and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
         }
         for sid, src in selected.items():
-            _collect_and_record(con, sid, src, r_id, health.get(sid, {}))
+            past = [h["status"] for h in history.get(sid, [])]
+            _collect_and_record(con, sid, src, r_id, health.get(sid, {}), past)
     ensure_bronze_placeholders(sources)
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
-        _run_dbt_command(*c)
+        if not _run_dbt_command(*c):
+            # POURQUOI : un modèle ou un test dbt en échec ne doit jamais être publié comme sain
+            print(f"dbt {c[0]} en échec : export Gold annulé.", file=sys.stderr)
+            return 1
     export_gold_parquets()
     from openlux.publish.opendata_lu import publish_to_data_public_lu, write_site_catalog
 
@@ -131,7 +138,7 @@ def _build_parser() -> argparse.ArgumentParser:
     r.add_argument("--sources")
     r.add_argument("--due", action="store_true")
     sub.add_parser("schedule").add_argument("--interval", type=int, default=60)
-    for c in ["rebuild", "status", "compact", "mcp"]:
+    for c in ["rebuild", "status", "mcp"]:
         sub.add_parser(c)
     pub = sub.add_parser("publish")
     pub.add_argument("--dry-run", dest="dry_run", action="store_true", default=True)
@@ -161,10 +168,6 @@ def _dispatch(a: argparse.Namespace) -> int:
         from openlux.mcp.server import mcp
 
         mcp.run()
-    elif a.cmd == "compact":
-        from openlux.publish.opendata_lu import compact_bronze_archives
-
-        print(f"Compactage terminé : {compact_bronze_archives(Path('data/bronze'))} archives.")
     elif a.cmd == "publish":
         from openlux.publish.opendata_lu import publish_to_data_public_lu
 

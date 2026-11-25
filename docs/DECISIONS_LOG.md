@@ -105,3 +105,8 @@ Ce journal recense tous les arbitrages techniques, petits compromis d'intégrati
 | 2026-11-25 | Portail V1 retiré | `/` redirige vers `/v2/` ; catalogue V2 lu depuis l'API ou `catalog.json` | Le V1 et l'ancien V2 affichaient des volumes, courbes et dates fictifs | Oui |
 | 2026-11-25 | Annonces athome.lu retirées | Seed `ref_housing_market_deals.csv` supprimé ; prix officiels de l'Observatoire à la place | Instantané figé d'un site commercial, adresses répétées | Oui |
 | 2026-11-25 | CI dbt sans base ni Bronze | `dbt build` dans `dbt_project/` sur des placeholders Bronze `[]` (CI et doc dbt) | `dbt test` seul échouait : aucune table Gold sur le runner ; 0 ligne suffit à valider SQL et tests | Oui |
+| 2026-11-25 | Contexte quotidien figé avant la veille | `WHERE context_date >= CURRENT_DATE - 1` | En CI, Bronze ne contient que le run courant : un jour passé recalculé perdait ses compteurs trafic/chantiers | Oui |
+| 2026-11-25 | dbt en échec bloque l'export | `run_pipeline` renvoie 1 avant `export_gold_parquets` | Des tables cassées étaient publiées et `STATUS.md` restait GOOD | Oui |
+| 2026-11-25 | Alertes sur l'historique réel | Derniers statuts de `get_source_run_history` passés à `send_alert_if_needed` | Avec un seul statut, la règle des 3 ATTENTION était inatteignable | Oui |
+| 2026-11-25 | État DuckDB conservé en CI, runs planifiés en `--due` | `actions/cache` sur `data/openlux.duckdb` ; artefact supprimé | Sans historique, chaque run recollectait les 45 flux et réécrivait toutes les séries (dépôt git qui gonfle) | Oui |
+| 2026-11-25 | Open-Meteo `past_days` 92 → 7 | 7 jours recouvrent une interruption ; l'historique est dans le Parquet | Chaque run réécrivait 92 jours × 12 cantons (nouveau `collected_at_utc`) | Oui |

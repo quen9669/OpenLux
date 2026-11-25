@@ -36,7 +36,7 @@ sla_minutes = 180
 license_spdx = "CC-BY-4.0"
 data_origin = "model"
 [sources.primary]
-url = "https://api.open-meteo.com/v1/forecast?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m,precipitation,weather_code&past_days=92&forecast_days=1"
+url = "https://api.open-meteo.com/v1/forecast?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m,precipitation,weather_code&past_days=7&forecast_days=1"
 [sources.quality]
 min_rows = 1000
 
@@ -52,7 +52,7 @@ sla_minutes = 180
 license_spdx = "CC-BY-4.0"
 data_origin = "model"
 [sources.primary]
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=pm10,pm2_5,nitrogen_dioxide,ozone,european_aqi&past_days=92&forecast_days=1"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=pm10,pm2_5,nitrogen_dioxide,ozone,european_aqi&past_days=7&forecast_days=1"
 [sources.quality]
 min_rows = 1000
 
@@ -68,7 +68,7 @@ sla_minutes = 720
 license_spdx = "CC-BY-4.0"
 data_origin = "model"
 [sources.primary]
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=birch_pollen,grass_pollen,alder_pollen,mugwort_pollen,ragweed_pollen&past_days=92&forecast_days=1"
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=birch_pollen,grass_pollen,alder_pollen,mugwort_pollen,ragweed_pollen&past_days=7&forecast_days=1"
 
 [[sources]]
 id = "water_levels_age"

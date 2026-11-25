@@ -73,5 +73,4 @@ uv run ruff format --check .
 uv run pytest
 cd dbt_project && uv run dbt test --profiles-dir .
 uv run openlux publish --dry-run
-uv run openlux compact
 ```

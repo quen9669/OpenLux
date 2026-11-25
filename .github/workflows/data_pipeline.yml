@@ -42,26 +42,27 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
+      - name: Restore DuckDB state (obs_runs) from previous run
+        # POURQUOI : sans historique, ni UNCHANGED, ni --due, ni les alertes ne fonctionnent
+        uses: actions/cache@v4
+        with:
+          path: data/openlux.duckdb
+          key: openlux-duckdb-${{ github.run_id }}
+          restore-keys: openlux-duckdb-
+
       - name: Execute OpenLux pipeline (collect, dbt transformations, gold export)
         env:
           JCDECAUX_API_KEY: ${{ secrets.JCDECAUX_API_KEY }}
         run: |
-          if [ "${{ github.event.inputs.due_only }}" = "true" ]; then
-            uv run openlux run --due
-          else
+          # POURQUOI : runs planifiés = flux échus seulement (évite de réécrire toutes les séries)
+          if [ "${{ github.event.inputs.due_only }}" = "false" ]; then
             uv run openlux run
+          else
+            uv run openlux run --due
           fi
 
       - name: Update Open Data catalog metadata (datapackage & DCAT-AP-LU)
         run: uv run openlux publish --dry-run
-
-      - name: Upload DuckDB database artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: openlux-duckdb
-          path: data/openlux.duckdb
-          if-no-files-found: ignore
-          retention-days: 7
 
       - name: Commit and push changes if data updated
         run: |

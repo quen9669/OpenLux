@@ -86,7 +86,7 @@ def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: flo
         url = url.replace("{key}", token)
     for attempt in (1, 2):
         try:
-            resp = client.get(url, headers=headers, timeout=timeout)
+            resp = client.get(url, headers=headers, timeout=timeout, follow_redirects=True)
             resp.raise_for_status()
             return resp.content
         except (httpx.TransportError, httpx.HTTPStatusError):
@@ -123,7 +123,8 @@ def collect_source(
     last_changed_utc: str | None = None,
 ) -> CollectorResult:
     now = datetime.now(UTC)
-    now_iso, http, errors = now.isoformat(), client or httpx.Client(follow_redirects=True), []
+    # POURQUOI : sans client fourni, httpx.get() ferme sa connexion (un Client créé ici fuyait)
+    now_iso, http, errors = now.isoformat(), client or httpx, []
     for ep, label in [(source.primary, "primary"), (source.backup, "backup")]:
         if not ep:
             continue

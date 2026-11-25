@@ -88,10 +88,11 @@ aspirées sur athome.lu (instantané figé d'un site commercial).
 
 - `pytest` (73 tests, 100 % hors ligne) sur de **vraies réponses réduites** (`tests/fixtures/`, capturées le 24/11/2026).
 - `dbt test` : unicité des clés Gold, absence d'e-mail ou de téléphone dans les textes, points rattachés à un canton situés dans l'emprise du Luxembourg.
-- Trust Score = 0,35 × fraîcheur + 0,25 × complétude (`min_rows`) + 0,20 × validité dbt + 0,20 × source (backup 80) ; échec de collecte ⇒ `ERROR` (< 60).
+- Trust Score = 0,35 × fraîcheur + 0,25 × complétude (`min_rows`) + 0,20 × validité + 0,20 × source (backup 80) ; échec de collecte ⇒ `ERROR` (< 60). La validité vaut 100 si la collecte a réussi : un `dbt seed/run/test` en échec arrête le pipeline avant l'export (rien n'est publié).
+- `gold_luxembourg_daily_context` ne recalcule que la veille et le jour courant ; les jours antérieurs restent figés dans le Parquet.
 
 ## 7. Exposition
 
 - `openlux serve` : `/` redirige vers `/v2/` (le portail V1 à catalogue codé en dur a été retiré).
 - Le site V2 lit `/v1/datasets` et `/v1/status`, sinon l'instantané `web_v2/data/catalog.json` régénéré à chaque `openlux run`. Aucun chiffre n'est écrit à la main.
-- GitHub Actions (`data_pipeline.yml`, toutes les 30 min) : `openlux run`, puis commit de `data/gold`, `STATUS.md` et `web_v2/data/catalog.json`.
+- GitHub Actions (`data_pipeline.yml`, toutes les 30 min) : `openlux run --due` (seuls les flux échus), puis commit de `data/gold`, `STATUS.md` et `web_v2/data/catalog.json`. `data/openlux.duckdb` (`obs_runs`) est restauré d'un run à l'autre par `actions/cache` : `UNCHANGED`, `--due` et les alertes s'appuient sur cet historique.
