@@ -69,12 +69,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Ajouter les artefacts de la couche Gold, métadonnées et statut
-          git add data/gold/*.parquet data/gold/*.json STATUS.md
+          git add data/gold/*.parquet data/gold/*.json STATUS.md web_v2/data/catalog.json
 
           # Commit atomique uniquement si des changements réels de données (Parquet Gold) sont détectés
           if git diff --staged --quiet data/gold/*.parquet; then
             echo "Aucune modification de données détectée dans la couche Gold. Rien à commiter."
-            git checkout -- STATUS.md data/gold/*.json 2>/dev/null || true
+            git checkout -- STATUS.md data/gold/*.json web_v2/data/catalog.json 2>/dev/null || true
           else
             echo "Modifications de données détectées. Création du commit atomique..."
             git commit -m "chore(data): auto-update gold datasets and status [skip ci]"

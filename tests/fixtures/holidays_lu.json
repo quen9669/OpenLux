@@ -1,0 +1,29 @@
+[
+ {
+  "year": 2020,
+  "date": "2020-01-01",
+  "dayOfWeek": "Wednesday",
+  "en": "New Year's Day",
+  "fr": "Nouvel An",
+  "de": "Neujahr",
+  "lb": "Neijoerschdag"
+ },
+ {
+  "year": 2020,
+  "date": "2020-04-13",
+  "dayOfWeek": "Monday",
+  "en": "Easter Monday",
+  "fr": "Lundi de Pâques",
+  "de": "Ostermontag",
+  "lb": "Ouschterméindeg"
+ },
+ {
+  "year": 2020,
+  "date": "2020-05-01",
+  "dayOfWeek": "Friday",
+  "en": "Labour Day",
+  "fr": "1er mai",
+  "de": "Tag der Arbeit",
+  "lb": "Éischte Mee"
+ }
+]

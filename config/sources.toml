@@ -1,1105 +1,733 @@
 # OpenLux Hub - Registre Unique des Sources (config/sources.toml)
 # Règle d'or : 1 entrée [[sources]] = 1 flux HTTP atomique (primaire + backup optionnel).
+# Toutes les URLs ci-dessous ont été vérifiées en direct le 2026-11-24 (cf. reports/).
+# data_origin : official (producteur public) | model (estimation modélisée) | community | press.
+# Jetons d'URL résolus à la collecte : {today} {year} {last_year} {next_year} {now_ms}.
+
+# ───────────────────────────── MÉTÉO & ENVIRONNEMENT ─────────────────────────────
 
 [[sources]]
-id = "meteo_lux_obs"
+id = "meteo_findel_meteolux"
 domain = "weather"
-description = "Observations et prévisions météo officielles au Luxembourg"
-semantic_summary = "Températures, précipitations et vent relevés au Grand-Duché (Findel et stations nationales)."
-known_limitations = "Couverture concentrée sur les stations principales ; microclimats locaux (vallée de la Moselle, Oesling) lissés."
-adapter = "http_custom"
-parser = "meteo_openmeteo_json"
-cadence_minutes = 30
-sla_minutes = 90
-retention_days = 90
+description = "Observation officielle MeteoLux à la station Luxembourg-Findel (ELLX)"
+semantic_summary = "Température, humidité, pression QFF, vent et précipitations mesurés à l'aéroport."
+known_limitations = "Une seule station (Findel) ; instantané sans archive : l'historique est construit par accumulation."
+parser = "meteolux_hvd"
+cadence_minutes = 10
+sla_minutes = 60
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://api.open-meteo.com/v1/forecast?latitude=49.6117,49.5242,49.6278,49.8678,49.8117,49.6806,49.7489,49.7656,49.5447,49.9350,49.9667,50.0544&longitude=6.1319,5.8911,6.0236,6.1558,6.4217,6.4414,6.1061,5.8908,6.3683,6.2089,5.9333,6.0294&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,precipitation,weather_code&past_days=92"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
+url = "https://metapi.ana.lu/api/v1/hvd/observations"
 [sources.backup]
-adapter = "http_json"
-url = "https://metapi.ana.lu/api/v1/metdata/weather"
-
+url = "https://data.public.lu/fr/datasets/r/0e03052d-0506-481d-8fd8-98d670103204"
 [sources.quality]
 min_rows = 1
-required_fields = ["timestamp", "temperature"]
+
+[[sources]]
+id = "meteo_cantons_openmeteo"
+domain = "weather"
+description = "Météo horaire modélisée sur les 12 chefs-lieux de canton (Open-Meteo)"
+semantic_summary = "Température, humidité, pression, vent, pluie et code WMO, 92 derniers jours + aujourd'hui."
+known_limitations = "Données de modèle (point de grille), pas des mesures de station ; heures sans valeur ignorées."
+parser = "openmeteo_weather"
+cadence_minutes = 60
+sla_minutes = 180
+license_spdx = "CC-BY-4.0"
+data_origin = "model"
+[sources.primary]
+url = "https://api.open-meteo.com/v1/forecast?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m,precipitation,weather_code&past_days=92&forecast_days=1"
+[sources.quality]
+min_rows = 1000
+
+[[sources]]
+id = "air_quality_openmeteo"
+domain = "air_quality"
+description = "Qualité de l'air horaire modélisée (CAMS) sur les 12 chefs-lieux de canton"
+semantic_summary = "PM10, PM2.5, NO2, O3 et indice européen EAQI, 92 derniers jours."
+known_limitations = "Modèle CAMS Europe, pas des mesures : le réseau télémétrique AEV est figé depuis le 13/12/2025."
+parser = "openmeteo_long"
+cadence_minutes = 60
+sla_minutes = 180
+license_spdx = "CC-BY-4.0"
+data_origin = "model"
+[sources.primary]
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=pm10,pm2_5,nitrogen_dioxide,ozone,european_aqi&past_days=92&forecast_days=1"
+[sources.quality]
+min_rows = 1000
+
+[[sources]]
+id = "pollen_openmeteo"
+domain = "air_quality"
+description = "Concentrations polliniques horaires modélisées (CAMS) sur les 12 chefs-lieux de canton"
+semantic_summary = "Bouleau, graminées, aulne, armoise et ambroisie en grains/m³."
+known_limitations = "Modèle CAMS ; hors saison pollinique les valeurs sont nulles ou absentes."
+parser = "openmeteo_long"
+cadence_minutes = 180
+sla_minutes = 720
+license_spdx = "CC-BY-4.0"
+data_origin = "model"
+[sources.primary]
+url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=birch_pollen,grass_pollen,alder_pollen,mugwort_pollen,ragweed_pollen&past_days=92&forecast_days=1"
+
+[[sources]]
+id = "water_levels_age"
+domain = "water_levels"
+description = "Niveaux d'eau des 42 stations hydrométriques (Administration de la gestion de l'eau)"
+semantic_summary = "Hauteurs d'eau au pas de 15 min sur Moselle, Sûre, Alzette, Our, etc. (7 jours glissants)."
+known_limitations = "Fenêtre glissante de 7 jours ; Esch-Sûre est exprimé en m (barrage), les autres en cm ; pas de débit."
+parser = "water_levels_csv"
+cadence_minutes = 60
+sla_minutes = 360
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://inondations.public.lu/dam-assets/ctie/datas/Water-Levels-LocalTime.csv"
+[sources.backup]
+url = "https://data.public.lu/fr/datasets/r/94fecbb1-4fce-4bee-8f2d-fc03b9fa314f"
+[sources.quality]
+min_rows = 1000
+
+[[sources]]
+id = "bathing_status_age"
+domain = "bathing_water"
+description = "Sites de baignade officiels et statut de baignade en cours"
+semantic_summary = "15 zones de baignade (Haute-Sûre, Weiswampach, Remerschen…) et autorisation actuelle."
+known_limitations = "Statut 'hors saison' hors période estivale."
+parser = "bathing_sites"
+cadence_minutes = 720
+sla_minutes = 2880
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://features.geoportail.lu/collections/656/items?f=json&limit=100"
+[sources.quality]
+min_rows = 1
+
+[[sources]]
+id = "bathing_quality_age"
+domain = "bathing_water"
+description = "Classe de qualité des eaux de baignade (directive 2006/7/CE)"
+semantic_summary = "Classement officiel (excellente, bonne…) des 15 zones de baignade."
+known_limitations = "Classement annuel."
+parser = "bathing_sites"
+cadence_minutes = 1440
+sla_minutes = 10080
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://features.geoportail.lu/collections/581/items?f=json&limit=100"
+[sources.quality]
+min_rows = 1
+
+# ───────────────────────────── TRAFIC & TRANSPORTS ─────────────────────────────
 
 [[sources]]
 id = "traffic_cita_datex2"
-domain = "traffic_cita"
-description = "Événements de trafic autoroutier et perturbations CITA au Luxembourg"
-semantic_summary = "Bouchons, accidents, chantiers urgents et fermetures de voies sur le réseau autoroutier luxembourgeois."
-known_limitations = "Couvre uniquement les autoroutes gérées par le CITA (A1, A3, A4, A6, A7, A13, B40), sans les voiries communales."
-adapter = "http_custom"
-parser = "cita_datex2"
+domain = "traffic"
+description = "Événements de trafic sur le réseau autoroutier luxembourgeois (CITA, DATEX II)"
+semantic_summary = "Accidents, pannes, travaux et fermetures de voies en cours sur les autoroutes."
+known_limitations = "Autoroutes et voies express uniquement."
+parser = "datex2_lu"
 cadence_minutes = 15
-sla_minutes = 30
-retention_days = 30
+sla_minutes = 60
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+data_origin = "official"
 [sources.primary]
 url = "https://www.cita.lu/info_trafic/datex/situationrecord"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
 [sources.backup]
-adapter = "http_json"
-url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query?where=1%3D1&outFields=*&f=json"
-
-[sources.quality]
-min_rows = 0
-required_fields = ["event_id", "road_name"]
+url = "https://cita.lu/info_trafic/datex/situationrecord36"
 
 [[sources]]
-id = "holidays_lu"
-domain = "holidays_vacations"
-description = "Jours fériés légaux et vacances scolaires au Grand-Duché de Luxembourg"
-semantic_summary = "Calendrier officiel des jours fériés légaux et des vacances scolaires du Grand-Duché de Luxembourg."
-known_limitations = "Calendrier officiel luxembourgeois fixé par la loi et le Ministère de l'Éducation nationale."
-adapter = "http_csv"
-cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/jours-feries-luxembourg.csv"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.quality]
-min_rows = 10
-required_fields = ["date", "name"]
-
-[[sources]]
-id = "air_quality_lu"
-domain = "air_quality"
-description = "Mesures de la qualité de l'air en temps réel au Luxembourg"
-semantic_summary = "Concentrations de polluants atmosphériques (NO2, O3, PM10, PM2.5) relevées par les stations officielles de l'Administration de l'Environnement."
-known_limitations = "Données brutes issues des stations automatiques du réseau national avant validation annuelle définitive."
-adapter = "http_custom"
-parser = "air_quality_openmeteo_json"
+id = "traffic_vdl_info"
+domain = "traffic"
+description = "Informations trafic de la Ville de Luxembourg (chantiers, déviations, manifestations)"
+semantic_summary = "Perturbations de circulation publiées par la Ville sur la voirie communale."
+known_limitations = "Territoire de la Ville de Luxembourg uniquement."
+parser = "vdl_traffic_info"
 cadence_minutes = 60
-sla_minutes = 120
-retention_days = 90
+sla_minutes = 240
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.6117,49.5242,49.6278,49.8678,49.8117,49.6806,49.7489,49.7656,49.5447,49.9350,49.9667,50.0544&longitude=6.1319,5.8911,6.0236,6.1558,6.4217,6.4414,6.1061,5.8908,6.3683,6.2089,5.9333,6.0294&current=european_aqi,pm10,pm2_5,ozone,nitrogen_dioxide&hourly=pm10,pm2_5,ozone,nitrogen_dioxide&past_days=92"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://data.public.lu/fr/datasets/r/qualite-de-lair-temps-reel.json"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["station_id", "pollutant", "value"]
+url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query?where=1%3D1&outFields=*&f=json&outSR=4326"
 
 [[sources]]
-id = "water_levels_lu"
-domain = "water_levels"
-description = "Niveaux d'eau, débits et alertes crues des rivières du Luxembourg"
-semantic_summary = "Hauteurs d'eau et débits instantanés sur l'Alzette, la Moselle, la Sûre et affluents par l'Administration de la Gestion de l'Eau."
-known_limitations = "Mesures automatiques en direct soumises aux crues subites ; les débits extrêmes peuvent faire l'objet de recalibrations ultérieures."
-adapter = "http_json"
+id = "traffic_fr_dir_est"
+domain = "traffic"
+description = "Événements routiers en Lorraine nord (A31/A30, Bison Futé / DIR Est, DATEX II)"
+semantic_summary = "Travaux, fermetures et incidents sur l'axe Metz–Thionville–frontière."
+known_limitations = "Réseau non concédé ; filtré sur la boîte Lorraine nord (lat 48,85–49,6)."
+parser = "datex2_fr_lorraine"
 cadence_minutes = 30
-sla_minutes = 90
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+sla_minutes = 120
+license_spdx = "etalab-2.0"
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/niveaux-eau-inondations.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://inondations.lu/api/v1/water-levels"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["station_name", "water_level_cm"]
+url = "http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml"
 
 [[sources]]
-id = "fuel_prices_lu"
-domain = "economy_fuel"
-description = "Prix maxima officiels des carburants routiers au Luxembourg"
-semantic_summary = "Prix plafonds fixés par l'État pour le Sans Plomb 95, 98, Diesel et GPL en stations-service au Grand-Duché."
-known_limitations = "Prix maxima légaux de vente au détail fixés par le Ministère de l'Économie ; les stations peuvent vendre à un prix inférieur mais jamais supérieur."
-adapter = "http_custom"
-parser = "fuel_prices_csv"
-cadence_minutes = 360
-sla_minutes = 2160
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://download.data.public.lu/resources/comparaison-des-prix-de-carburants-par-motorisation/20261104-140453/comparaisonprix-carburants-par-motorisation.csv"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_custom"
-parser = "fuel_prices_csv"
-url = "https://data.public.lu/fr/datasets/r/comparaisonprix-carburants-par-motorisation.csv"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["fuel_type", "price_eur_per_litre"]
-
-[[sources]]
-id = "statec_inflation"
-domain = "economy_fuel"
-description = "Indices des prix à la consommation (IPCN) et inflation STATEC"
-semantic_summary = "Évolution de l'indice des prix à la consommation national et cote d'application de l'échelle mobile des salaires."
-known_limitations = "Séries mensuelles publiées par le STATEC le premier mercredi suivant la fin du mois de référence."
-adapter = "http_custom"
-parser = "statec_inflation_json"
-cadence_minutes = 1440
-sla_minutes = 2880
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx?geo=LU"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_custom"
-parser = "statec_inflation_json"
-url = "https://data.public.lu/fr/datasets/r/statec-inflation-ipcn.json"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["reference_month", "ipcn_index"]
-
-[[sources]]
-id = "electricity_spot_delu"
-domain = "energy_climate"
-description = "Prix spot Day-Ahead de l'électricité sur la zone conjointe DE-LU"
-semantic_summary = "Prix horaire du marché de gros de l'électricité (Day-Ahead en EUR/MWh) pour la zone conjointe Allemagne-Luxembourg."
-known_limitations = "Prix de gros du marché spot Day-Ahead (EPEX SPOT) ; n'inclut pas les taxes, tarifs réseaux et marges des fournisseurs."
-adapter = "http_custom"
-parser = "electricity_smard_json"
-cadence_minutes = 60
-sla_minutes = 180
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://api.energy-charts.info/price?bzn=DE-LU"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_custom"
-parser = "electricity_smard_json"
-url = "https://data.public.lu/fr/datasets/r/electricity-spot-delu.json"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["observed_at", "price_eur_per_mwh"]
-
-[[sources]]
-id = "radioactivity_lu"
-domain = "energy_climate"
-description = "Surveillance radiologique et taux de dose gamma ambiant au Luxembourg"
-semantic_summary = "Mesures du débit de dose gamma ambiant en continu issues du réseau national de télémesure de la Radioprotection."
-known_limitations = "Taux de dose ambiant instantané mesuré en nSv/h ; de légères élévations temporaires sont d'origine naturelle (lessivage du radon lors des pluies)."
-adapter = "http_json"
-cadence_minutes = 60
-sla_minutes = 180
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/surveillance-radiologique-luxembourg.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://remap.jrc.ec.europa.eu/api/v1/measurements?country=LU"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["station_name", "dose_rate_nsvh"]
-
-[[sources]]
-id = "bathing_water_lu"
-domain = "energy_climate"
-description = "Qualité des eaux de baignade des sites officiels au Luxembourg"
-semantic_summary = "Résultats des analyses bactériologiques et classement sanitaire officiel des plans d'eau autorisés à la baignade au Grand-Duché."
-known_limitations = "Analyses bimensuelles durant la saison balnéaire officielle (1er mai - 30 septembre) sur les sites balisés."
-adapter = "http_csv"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/eaux-de-baignade-luxembourg.csv"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_csv"
-url = "https://eau.geoportail.lu/wfs/bathing_water.csv"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["site_name", "quality_class"]
-
-[[sources]]
-id = "traffic_fr_bisonfute"
-domain = "crossborder_traffic"
-description = "Trafic et perturbations sur l'axe autoroutier A31 (France vers Luxembourg)"
-semantic_summary = "Temps de parcours, ralentissements et bouchons sur l'A31 entre Metz, Thionville et la frontière luxembourgeoise."
-known_limitations = "Données issues des capteurs DIR Est et Bison Futé ; temps de parcours indicatifs."
-adapter = "http_json"
+id = "traffic_de_a1"
+domain = "traffic"
+description = "Alertes trafic A1 autour de Trèves / Sarre (API Autobahn GmbH)"
+semantic_summary = "Bouchons et perturbations sur l'A1 près de la frontière luxembourgeoise."
+known_limitations = "Filtré sur la zone lat 49,3–50,1 / lon 6,0–7,2 ; licence non précisée par l'API."
+parser = "autobahn_events"
 cadence_minutes = 15
-sla_minutes = 45
-retention_days = 30
-license_spdx = "Open-EU"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+sla_minutes = 60
+license_spdx = "unspecified"
+data_origin = "official"
+commercial_use_safe = false
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/traffic-fr-a31.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
+url = "https://verkehr.autobahn.de/o/autobahn/A1/services/warning"
 [sources.backup]
-adapter = "http_json"
-url = "https://api.bison-fute.gouv.fr/v1/traffic/a31"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["event_id", "status"]
+url = "https://verkehr.autobahn.de/o/autobahn/A1/services/closure"
 
 [[sources]]
-id = "traffic_de_autobahn"
-domain = "crossborder_traffic"
-description = "Trafic et chantiers sur l'axe autoroutier A64 (Allemagne vers Luxembourg)"
-semantic_summary = "État du trafic, travaux et ralentissements sur l'A64 / B52 entre Trèves et Wasserbillig."
-known_limitations = "Flux fédéral Autobahn GmbH couvrant le réseau autoroutier allemand d'accès au Grand-Duché."
-adapter = "http_json"
+id = "traffic_de_a8"
+domain = "traffic"
+description = "Alertes trafic A8 Perl – Sarrelouis (API Autobahn GmbH)"
+semantic_summary = "Bouchons et perturbations sur l'A8 depuis la frontière de Schengen."
+known_limitations = "Filtré sur la zone frontalière ; licence non précisée par l'API."
+parser = "autobahn_events"
 cadence_minutes = 15
-sla_minutes = 45
-retention_days = 30
-license_spdx = "Open-EU"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+sla_minutes = 60
+license_spdx = "unspecified"
+data_origin = "official"
+commercial_use_safe = false
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/traffic-de-a64.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
+url = "https://verkehr.autobahn.de/o/autobahn/A8/services/warning"
 [sources.backup]
-adapter = "http_json"
-url = "https://verkehr.autobahn.de/o/vms/browse/station/A64"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["event_id", "status"]
+url = "https://verkehr.autobahn.de/o/autobahn/A8/services/closure"
 
 [[sources]]
-id = "traffic_be_trafiroutes"
-domain = "crossborder_traffic"
-description = "Trafic et encombrements sur l'axe autoroutier E411 (Belgique vers Luxembourg)"
-semantic_summary = "Conditions de circulation sur l'E411 entre Arlon, Sterpenich et Steinfort."
-known_limitations = "Flux SPW Mobilité Trafiroutes axé sur la province de Luxembourg (Belgique)."
-adapter = "http_json"
+id = "traffic_de_a64"
+domain = "traffic"
+description = "Alertes trafic A64 Trèves – Wasserbillig (API Autobahn GmbH)"
+semantic_summary = "Bouchons et perturbations sur l'A64, prolongement de l'A1 luxembourgeoise."
+known_limitations = "Liste souvent vide (aucune perturbation) ; licence non précisée par l'API."
+parser = "autobahn_events"
 cadence_minutes = 15
-sla_minutes = 45
-retention_days = 30
-license_spdx = "Open-EU"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+sla_minutes = 60
+license_spdx = "unspecified"
+data_origin = "official"
+commercial_use_safe = false
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/traffic-be-e411.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
+url = "https://verkehr.autobahn.de/o/autobahn/A64/services/warning"
 [sources.backup]
-adapter = "http_json"
-url = "https://trafiroutes.wallonie.be/api/v1/traffic/e411"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["event_id", "status"]
+url = "https://verkehr.autobahn.de/o/autobahn/A64/services/closure"
 
 [[sources]]
-id = "rail_crossborder"
-domain = "crossborder_traffic"
-description = "Circulation et retards des trains transfrontaliers vers Luxembourg"
-semantic_summary = "Suivi des lignes ferroviaires transfrontalières TER Fluo (Nancy-Metz-LU), CFL ligne 50 (Arlon-LU) et Athus."
-known_limitations = "Données consolidées issues des API SNCF Réseau, SNCB et CFL."
-adapter = "http_json"
+id = "rail_sncf_siri"
+domain = "transit"
+description = "Perturbations ferroviaires SNCF sur l'axe Metz–Thionville–Luxembourg (SIRI Lite SX)"
+semantic_summary = "Retards, suppressions et modifications de desserte des TER transfrontaliers."
+known_limitations = "Filtré par mots-clés (Luxembourg, Thionville, Metz, Bettembourg…)."
+parser = "sncf_siri_sx"
 cadence_minutes = 15
-sla_minutes = 45
-retention_days = 30
-license_spdx = "Open-EU"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+sla_minutes = 60
+license_spdx = "ODbL-1.0"
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/rail-crossborder.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.sncf.com/v1/coverage/sncf/lines/crossborder-lu"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["event_id", "status"]
+url = "https://proxy.transport.data.gouv.fr/resource/sncf-siri-lite-situation-exchange"
 
 [[sources]]
-id = "transit_mobiliteit"
-domain = "public_transit"
-description = "État du réseau de transport en commun national (Mobiliteit.lu)"
-semantic_summary = "Perturbations, retards et avis de travaux sur les réseaux CFL, Tram, RGTR et TICE."
-known_limitations = "Flux temps réel national opéré par l'Administration des Transports Publics."
-adapter = "http_json"
-cadence_minutes = 15
-sla_minutes = 15
-retention_days = 30
-license_spdx = "CC-BY-4.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+id = "rail_sncb_irail"
+domain = "transit"
+description = "Perturbations ferroviaires SNCB concernant Arlon / Luxembourg (iRail)"
+semantic_summary = "Avis de perturbation du réseau belge filtrés sur la ligne Arlon–Luxembourg."
+known_limitations = "API communautaire iRail (non officielle) ; licence non précisée."
+parser = "irail_disturbances"
+cadence_minutes = 30
+sla_minutes = 120
+license_spdx = "unspecified"
+data_origin = "community"
+commercial_use_safe = false
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/mobiliteit-transit-live.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.mobiliteit.lu/v1/disruptions"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["line_id", "disruption_level"]
+url = "https://api.irail.be/disturbances/?format=json&lang=fr"
 
 [[sources]]
-id = "transit_avl_rt"
-domain = "public_transit"
-description = "Temps réel et retards des autobus de la Ville de Luxembourg (AVL)"
-semantic_summary = "Horaires temps réel et déviations des lignes de bus municipales de la capitale luxembourgeoise."
-known_limitations = "Couvre exclusivement le réseau des autobus municipaux de la Ville de Luxembourg (lignes 1 à 33)."
-adapter = "http_json"
-cadence_minutes = 15
-sla_minutes = 15
-retention_days = 30
-license_spdx = "CC-BY-4.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+id = "bus_vdl_messages"
+domain = "transit"
+description = "Messages de perturbation des autobus de la Ville de Luxembourg (AVL)"
+semantic_summary = "Déviations, travaux et arrêts supprimés sur le réseau AVL."
+known_limitations = "Réseau AVL uniquement ; pas de temps réel RGTR/CFL/TICE sans clé API."
+parser = "vdl_bus_messages"
+cadence_minutes = 30
+sla_minutes = 120
+license_spdx = "CC0-1.0"
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/avl-bus-rt.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.vdl.lu/v1/avl/realtime"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["line_id", "network"]
+url = "https://web.vdl.lu/autobus/data/messages/messages.xml"
 
 [[sources]]
 id = "veloh_stations"
-domain = "mobility_parkings"
-description = "Disponibilité temps réel des vélos en libre-service Vel'oH"
-semantic_summary = "Nombre de vélos disponibles, places libres et statut temps réel par station sur le réseau Vel'oH de la capitale et des 7 communes périphériques conventionnées."
-known_limitations = "Couvre le territoire de la Ville de Luxembourg et les 7 communes périphériques (Bertrange, Hesperange, Leudelange, Mamer, Niederanven, Strassen, Walferdange)."
-adapter = "http_custom"
-parser = "veloh_stations_json"
+domain = "mobility_veloh"
+description = "Disponibilités en temps réel des stations Vel'oh (JCDecaux)"
+semantic_summary = "Vélos (électriques/mécaniques) et places libres par station, Luxembourg-Ville."
+known_limitations = "Primaire JCDecaux v3 avec clé (JCDECAUX_API_KEY) ; backup GBFS sans clé, positions via le seed GBFS."
+parser = "veloh_jcdecaux_v3"
 cadence_minutes = 15
-sla_minutes = 30
-retention_days = 30
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+sla_minutes = 60
+license_spdx = "unspecified"
+data_origin = "official"
 [sources.primary]
 url = "https://api.jcdecaux.com/vls/v3/stations?contract=luxembourg&apiKey={key}"
 auth_env_var = "JCDECAUX_API_KEY"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
 [sources.backup]
-adapter = "http_custom"
-parser = "veloh_stations_json"
 url = "https://api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json"
-
+parser = "veloh_gbfs_status"
 [sources.quality]
-min_rows = 1
-required_fields = ["facility_id", "facility_name"]
+min_rows = 50
 
 [[sources]]
 id = "parkings_vdl"
 domain = "mobility_parkings"
-description = "Occupation temps réel des parkings publics VDL et P+R"
-semantic_summary = "Places libres en temps réel dans les parkings couverts de la Ville de Luxembourg et les parcs relais P+R."
-known_limitations = "Ne couvre pas le stationnement payant en voirie résidentielle."
-adapter = "http_custom"
+description = "Occupation en temps réel des parkings de la Ville de Luxembourg"
+semantic_summary = "Places libres, capacité, tendance et état des parkings publics de la capitale."
+known_limitations = "Parkings gérés/relayés par la Ville uniquement."
 parser = "vdl_parking"
 cadence_minutes = 15
-sla_minutes = 30
-retention_days = 30
+sla_minutes = 60
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
 url = "https://feed.vdl.lu/circulation/parking/feed.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://maps.vdl.lu/arcgis/rest/services/OPENDATA/GEOJSON/FeatureServer/5/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
-
 [sources.quality]
-min_rows = 1
-required_fields = ["facility_id", "available_spaces"]
+min_rows = 10
 
 [[sources]]
 id = "chargy_stations"
-domain = "mobility_parkings"
-description = "Disponibilité et état des bornes de recharge électrique Chargy"
-semantic_summary = "Emplacement et disponibilité des points de recharge pour véhicules électriques du réseau public Chargy et SuperChargy."
-known_limitations = "Réseau national public luxembourgeois (Creos, Sudstroum et communes partenaires)."
-adapter = "http_json"
+domain = "mobility_charging"
+description = "Bornes de recharge publiques Chargy : état en direct de chaque connecteur"
+semantic_summary = "Connecteurs disponibles, en charge et hors service, puissance max, par site."
+known_limitations = "Réseau Chargy uniquement. POURQUOI clé en clair : elle est publiée dans le catalogue CC0 data.public.lu."
+parser = "chargy_kml"
 cadence_minutes = 15
-sla_minutes = 30
-retention_days = 30
+sla_minutes = 60
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/chargy-live-stations.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.chargy.lu/v1/stations/status"
-
+url = "https://my.chargy.lu/b2bev-external-services/resources/kml?API-KEY=486ac6e4-93b8-4369-9c6a-28f7c4e1a81f"
 [sources.quality]
-min_rows = 1
-required_fields = ["facility_id", "available_points"]
+min_rows = 100
 
 [[sources]]
-id = "aviation_opensky_lu"
-domain = "aviation_noise"
-description = "Mouvements aériens en direct dans l'espace aérien de Luxembourg (Findel LUX)"
-semantic_summary = "Position, altitude et trajectoire des avions en approche et au décollage de l'aéroport du Findel (bbox Luxembourg)."
-known_limitations = "Couverture des transpondeurs ADS-B captés par le réseau OpenSky Network dans la boîte géographique du Luxembourg."
-adapter = "http_custom"
-parser = "opensky_json"
-cadence_minutes = 15
-sla_minutes = 45
-retention_days = 30
-license_spdx = "Open"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+id = "aviation_opensky"
+domain = "aviation"
+description = "Aéronefs au-dessus du Luxembourg (OpenSky Network)"
+semantic_summary = "Position, altitude, vitesse et indicatif des aéronefs dans la zone LU."
+known_limitations = "Instantané ; couverture ADS-B communautaire ; quota d'appels anonymes limité."
+parser = "opensky_states"
+cadence_minutes = 30
+sla_minutes = 120
+license_spdx = "unspecified"
+data_origin = "community"
+commercial_use_safe = false
 [sources.primary]
 url = "https://opensky-network.org/api/states/all?lamin=49.4&lomin=5.7&lamax=50.2&lomax=6.6"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
-[sources.backup]
-adapter = "http_custom"
-parser = "opensky_json"
-url = "https://data.public.lu/fr/datasets/r/aviation-opensky-lux.json"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["icao24", "status"]
+# ───────────────────────────── CHANTIERS ─────────────────────────────
 
 [[sources]]
-id = "noise_zones_lu"
-domain = "aviation_noise"
-description = "Zones de bruit stratégiques et couloirs d'exposition aéroportuaire au Luxembourg"
-semantic_summary = "Cartographie stratégique du bruit (courbes d'isophonie Lden en dBA) autour du Findel et des infrastructures de transport."
-known_limitations = "Cartographie réglementaire de l'Administration de l'Environnement révisée périodiquement."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/noise-zones-luxembourg.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://env.geoportail.lu/wfs/strategic_noise_maps"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["zone_id", "noise_level_dba"]
-
-[[sources]]
-id = "roadworks_cita"
+id = "roadworks_cita_current"
 domain = "roadworks"
-description = "Chantiers et travaux sur le réseau autoroutier national CITA"
-semantic_summary = "Zones de travaux programmés, réfections de chaussée et fermetures de voies sur les autoroutes du Grand-Duché."
-known_limitations = "Travaux planifiés et urgents sur les autoroutes gérées par le CITA."
-adapter = "http_custom"
-parser = "cita_datex2"
-cadence_minutes = 60
-sla_minutes = 2160
-retention_days = 90
+description = "Chantiers en cours sur le réseau routier national (Ponts et Chaussées, DATEX II)"
+semantic_summary = "Chantiers actuels sur routes nationales et chemins repris, avec dates et restrictions."
+known_limitations = "Commentaires bruts du producteur (certains accents perdus à la source)."
+parser = "datex2_lu"
+cadence_minutes = 360
+sla_minutes = 1440
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+data_origin = "official"
 [sources.primary]
 url = "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
-[sources.backup]
-adapter = "http_custom"
-parser = "cita_datex2"
+[[sources]]
+id = "roadworks_cita_planned"
+domain = "roadworks"
+description = "Chantiers planifiés sur le réseau routier national (Ponts et Chaussées, DATEX II)"
+semantic_summary = "Chantiers à venir sur routes nationales et chemins repris."
+known_limitations = "Dates prévisionnelles susceptibles d'évoluer."
+parser = "datex2_lu"
+cadence_minutes = 720
+sla_minutes = 2880
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
 url = "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["work_id", "road_name"]
 
 [[sources]]
 id = "roadworks_vdl"
 domain = "roadworks"
-description = "Chantiers de voirie et travaux communaux en Ville de Luxembourg"
-semantic_summary = "Travaux sur les voiries municipales, déviations de circulation et réaménagements urbains de la capitale."
-known_limitations = "Couvre exclusivement le territoire de la Ville de Luxembourg (VDL)."
-adapter = "http_custom"
-parser = "vdl_roadworks_json"
-cadence_minutes = 60
-sla_minutes = 2160
-retention_days = 90
+description = "Grands chantiers de voirie de la Ville de Luxembourg"
+semantic_summary = "Chantiers d'infrastructure, tram et réseaux, avec rues concernées et entreprise."
+known_limitations = "Territoire de la Ville uniquement ; position = centroïde de l'emprise."
+parser = "vdl_roadworks"
+cadence_minutes = 360
+sla_minutes = 1440
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+data_origin = "official"
 [sources.primary]
 url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query?where=1%3D1&outFields=*&f=json&outSR=4326"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
 
-[sources.backup]
-adapter = "http_json"
+[[sources]]
+id = "roadworks_vdl_permits"
+domain = "roadworks"
+description = "Autorisations de petits chantiers sur la voie publique (Ville de Luxembourg)"
+semantic_summary = "Raccordements, trottoirs et interventions ponctuelles autorisés par la Ville."
+known_limitations = "Territoire de la Ville uniquement."
+parser = "vdl_roadworks"
+cadence_minutes = 360
+sla_minutes = 1440
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
 url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query?where=1%3D1&outFields=*&f=json&outSR=4326"
 
-[sources.quality]
-min_rows = 1
-required_fields = ["work_id", "road_name"]
+# ───────────────────────────── ÉCONOMIE & LOGEMENT ─────────────────────────────
 
 [[sources]]
-id = "housing_observatoire"
-domain = "housing_construction"
-description = "Prix de vente et loyers des logements par commune (Observatoire de l'Habitat)"
-semantic_summary = "Statistiques trimestrielles des prix moyens au m² des appartements et maisons au Luxembourg."
-known_limitations = "Données trimestrielles basées sur les actes notariés enregistrés par l'Administration de l'Enregistrement."
-adapter = "http_csv"
+id = "fuel_prices_lu"
+domain = "economy"
+description = "Prix moyens mensuels des carburants et de la recharge électrique (Direction générale Énergie)"
+semantic_summary = "Essence E10, Diesel B7, GPL, hydrogène, électricité et recharge AC/DC."
+known_limitations = "Moyennes mensuelles de l'année en cours ; unités différentes selon l'énergie (l, kg, kWh)."
+parser = "fuel_prices_csv"
 cadence_minutes = 1440
-sla_minutes = 144000
-retention_days = 365
+sla_minutes = 47520
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://download.data.public.lu/resources/prix-annonces-des-logements-par-commune/20260326-095804/vente-appartement-2010-2025.xlsx"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_csv"
-url = "https://download.data.public.lu/resources/prix-annonces-des-logements-par-commune/20260326-095818/vente-maison-2010-2025.xlsx"
-
+url = "https://data.public.lu/fr/datasets/r/d3a17cf8-5afc-4bf5-8222-9519e343d29d"
 [sources.quality]
-min_rows = 1
-required_fields = ["commune_name", "price_eur_m2"]
+min_rows = 7
 
 [[sources]]
-id = "housing_statec"
-domain = "housing_construction"
-description = "Autorisations de bâtir et permis de construire résidentiels STATEC"
-semantic_summary = "Nombre de logements autorisés et permis de construire accordés par commune et par an."
-known_limitations = "Séries annuelles et trimestrielles collectées par le STATEC auprès des 100 administrations communales."
-adapter = "http_custom"
-parser = "housing_statec_json"
+id = "inflation_ipcn_statec"
+domain = "economy"
+description = "Indice des prix à la consommation national (IPCN, STATEC, base 1948=100)"
+semantic_summary = "Série mensuelle et annuelle de l'IPCN depuis 1948 ; variation annuelle calculée en Silver."
+known_limitations = "Publication mensuelle avec ~1 mois de décalage."
+parser = "lustat_csv"
 cadence_minutes = 1440
-sla_minutes = 144000
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
+sla_minutes = 47520
+license_spdx = "CC-BY-4.0"
+data_origin = "official"
+[sources.primary]
+url = "https://lustat.statec.lu/rest/data/LU1,DSD_PRIX_CONSO@DF_E5100,1.0/all?dimensionAtObservation=AllDimensions"
+headers = { Accept = "application/vnd.sdmx.data+csv;version=2.0.0;labels=name" }
+[sources.quality]
+min_rows = 100
 
+[[sources]]
+id = "electricity_spot_delu"
+domain = "energy"
+description = "Prix spot day-ahead de l'électricité, zone DE-LU (energy-charts / SMARD)"
+semantic_summary = "Prix au quart d'heure en €/MWh depuis le 1er janvier de l'année précédente."
+known_limitations = "Zone de marché commune Allemagne-Luxembourg."
+parser = "energy_charts_price"
+cadence_minutes = 360
+sla_minutes = 1440
+license_spdx = "CC-BY-4.0"
+data_origin = "official"
+[sources.primary]
+url = "https://api.energy-charts.info/price?bzn=DE-LU&start={last_year}-01-01&end={today}"
+[sources.quality]
+min_rows = 96
+
+[[sources]]
+id = "building_permits_statec"
+domain = "housing"
+description = "Autorisations de bâtir : nombre de logements autorisés par canton (STATEC)"
+semantic_summary = "Logements autorisés par type de bâtiment et par canton, annuel depuis 2010."
+known_limitations = "Granularité cantonale et annuelle."
+parser = "lustat_csv"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "CC-BY-4.0"
+data_origin = "official"
 [sources.primary]
 url = "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all?dimensionAtObservation=AllDimensions"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)", Accept = "application/vnd.sdmx.data+json;version=1.0.0-wd" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://statistiques.public.lu/stat/api/v1/data/permits"
-
+headers = { Accept = "application/vnd.sdmx.data+csv;version=2.0.0;labels=name" }
 [sources.quality]
-min_rows = 1
-required_fields = ["record_id", "units_authorized"]
+min_rows = 100
 
 [[sources]]
-id = "bike_lanes_lu"
-domain = "daily_life_sport"
-description = "Réseau national des pistes cyclables (PC1 à PC32) au Luxembourg"
-semantic_summary = "Tracés, statut opérationnel et caractéristiques des pistes cyclables nationales gérées par les Ponts et Chaussées."
-known_limitations = "Réseau cyclable national officiel ; exclut les pistes purement locales non balisées."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 365
+id = "housing_prices_apartments"
+domain = "housing"
+description = "Prix annoncés de vente des appartements par commune (Observatoire de l'Habitat)"
+semantic_summary = "Nombre d'annonces, prix moyen et prix moyen au m² par commune, annuel depuis 2010."
+known_limitations = "Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions."
+parser = "observatoire_prices_xlsx"
+cadence_minutes = 10080
+sla_minutes = 525600
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/pistes-cyclables-nationales.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://tourisme.geoportail.lu/wfs/pistes_cyclables"
-
+url = "https://data.public.lu/fr/datasets/r/1d20f982-57e1-4ae2-a278-dc78c88c21dc"
 [sources.quality]
-min_rows = 1
-required_fields = ["item_id", "name"]
+min_rows = 100
 
 [[sources]]
-id = "open_sundays_vdl"
-domain = "daily_life_sport"
-description = "Ouvertures dominicales et nocturnes des commerces en Ville de Luxembourg"
-semantic_summary = "Calendrier officiel des dimanches et jours fériés où les commerces de la capitale sont autorisés à ouvrir."
-known_limitations = "Valable uniquement pour les commerces situés sur le territoire de la Ville de Luxembourg."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 365
+id = "housing_prices_houses"
+domain = "housing"
+description = "Prix annoncés de vente des maisons par commune (Observatoire de l'Habitat)"
+semantic_summary = "Nombre d'annonces, prix moyen et prix moyen au m² par commune, annuel depuis 2010."
+known_limitations = "Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions."
+parser = "observatoire_prices_xlsx"
+cadence_minutes = 10080
+sla_minutes = 525600
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/ouvertures-dominicales-vdl.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://cityshopping.lu/api/v1/open-sundays"
-
+url = "https://data.public.lu/fr/datasets/r/14b0156e-ff87-4a36-a867-933fc9a6f903"
 [sources.quality]
-min_rows = 1
-required_fields = ["item_id", "name"]
-
-[[sources]]
-id = "recycling_centers"
-domain = "daily_life_sport"
-description = "Parcs de recyclage et déchetteries nationales au Luxembourg"
-semantic_summary = "Emplacement, horaires d'ouverture et types de déchets acceptés dans les centres de recyclage intercommunaux (SIDEC, SIDEST, SIGRE, STEP)."
-known_limitations = "Accès généralement réservé aux résidents des communes membres du syndicat concerné."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/centres-recyclage-luxembourg.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://dechets.geoportail.lu/wfs/recycling_centers"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["item_id", "name"]
-
-[[sources]]
-id = "culture_echo_lu"
-domain = "concerts_culture"
-description = "Agenda culturel et sorties nationales Echo.lu (API officielle & OpenAPI)"
-semantic_summary = "Concerts, expositions, spectacles et festivals recensés sur la plateforme culturelle nationale luxembourgeoise via son API REST."
-known_limitations = "Extraction factuelle via OpenAPI /v1/experiences (utilise token API si configuré)."
-adapter = "http_json"
-cadence_minutes = 720
-sla_minutes = 1440
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact?x-algolia-application-id=PY7G9MVXE2&x-algolia-api-key=55301c0ef2e535ae29e6b6d697f4882d&query=&hitsPerPage=1000"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.echo.lu/v1/allExperiences"
-auth_env_var = "ECHO_API_KEY"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["title", "start_date"]
-
-[[sources]]
-id = "culture_venues_jsonld"
-domain = "concerts_culture"
-description = "Programmation officielle des grandes salles culturelles (Rockhal, Philharmonie...)"
-semantic_summary = "Dates, horaires, catégories et salles des représentations artistiques et concerts en direct."
-known_limitations = "Données limitées aux métadonnées factuelles structurées des établissements partenaires."
-adapter = "http_jsonld"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/culture-venues-luxembourg.html"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_jsonld"
-url = "https://rockhal.lu/agenda"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["title", "start_date"]
-
-[[sources]]
-id = "events_vdl"
-domain = "local_events_markets"
-description = "Agenda officiel et marchés hebdomadaires de la Ville de Luxembourg"
-semantic_summary = "Événements municipaux, marchés du Glacis, Winterlights et fêtes de la Ville de Luxembourg."
-known_limitations = "Concerne exclusivement les manifestations organisées ou autorisées sur le domaine public de la VDL."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/events-vdl.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.vdl.lu/v1/events"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["event_id", "title"]
-
-[[sources]]
-id = "events_visitlu"
-domain = "local_events_markets"
-description = "Manifestations touristiques et fêtes traditionnelles Visit Luxembourg"
-semantic_summary = "Événements touristiques majeurs, kermesses, braderies et fêtes traditionnelles à travers tout le Grand-Duché."
-known_limitations = "Extraction factuelle schema.org/Event du portail national de promotion touristique."
-adapter = "http_jsonld"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://visitluxembourg.com/fr/agenda"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_jsonld"
-url = "https://data.public.lu/fr/datasets/r/events-visitlu.html"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["title", "start_date"]
-
-[[sources]]
-id = "venues_luxexpo"
-domain = "major_venues"
-description = "Salons, foires et congrès au parc des expositions Luxexpo The Box"
-semantic_summary = "Calendrier officiel des salons internationaux, foires commerciales et expositions au Kirchberg."
-known_limitations = "Événements accueillis au parc des expositions Luxexpo The Box."
-adapter = "http_jsonld"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://thebox.lu/agenda"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_jsonld"
-url = "https://data.public.lu/fr/datasets/r/luxexpo-events.html"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["title", "start_date"]
-
-[[sources]]
-id = "venues_stade_coque"
-domain = "major_venues"
-description = "Rencontres sportives et compétitions au Stade de Luxembourg et à la Coque"
-semantic_summary = "Matchs officiels de football/rugby au Stade de Luxembourg et compétitions au Centre National Sportif d'Coque."
-known_limitations = "Manifestations sportives de grande envergure avec affluence significative."
-adapter = "http_jsonld"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://stadedeluxembourg.lu/agenda"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_jsonld"
-url = "https://coque.lu/agenda"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["title", "start_date"]
-
-[[sources]]
-id = "strikes_rss_lu"
-domain = "strikes_disruptions"
-description = "Avis de grèves, débrayages et manifestations syndicales au Luxembourg"
-semantic_summary = "Détection et extraction des préavis de grèves dans les transports publics et services essentiels via flux d'actualités."
-known_limitations = "Filtrage strict sur mots-clés grève/streik sans reproduction d'articles journalistiques complets."
-adapter = "http_custom"
-parser = "strikes_rss"
-cadence_minutes = 60
-sla_minutes = 240
-retention_days = 90
-license_spdx = "FACTUAL-ONLY"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://news.openlux.lu/rss/alerts.xml"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_custom"
-parser = "strikes_rss"
-url = "https://news.google.com/rss/search?q=greve+OR+streik+luxembourg&hl=fr&gl=LU&ceid=LU:fr"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["strike_id", "title"]
-
-[[sources]]
-id = "pollen_lu"
-domain = "health_pollen_alerts"
-description = "Concentrations polliniques et indices de risque allergique au Luxembourg"
-semantic_summary = "Niveaux d'émission et grains de pollen par mètre cube pour les essences allergisantes (bouleau, graminées, etc.)."
-known_limitations = "Relevés de la station aérobiologique nationale de Luxembourg-Ville représentatifs du bassin central."
-adapter = "http_custom"
-parser = "pollen_openmeteo_json"
-cadence_minutes = 1440
-sla_minutes = 2160
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/pollen-luxembourg.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61&longitude=6.13&current=birch_pollen,alder_pollen"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["specie", "risk_level"]
-
-[[sources]]
-id = "aed_defib_lu"
-domain = "health_pollen_alerts"
-description = "Recensement national des défibrillateurs automatisés externes (AED)"
-semantic_summary = "Localisation, accessibilité 24/7 et coordonnées des bornes de défibrillation d'urgence au Grand-Duché."
-known_limitations = "Recensement officiel du Corps grand-ducal d'incendie et de secours (CGDIS)."
-adapter = "http_csv"
-cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 365
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/defibrillateurs-aed-luxembourg.csv"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_csv"
-url = "https://sante.geoportail.lu/wfs/defibrillateurs.csv"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["aed_id", "location_name"]
-
-[[sources]]
-id = "lu_alert"
-domain = "health_pollen_alerts"
-description = "Alertes gouvernementales d'urgence à la population LU-Alert"
-semantic_summary = "Messages officiels d'alerte et consignes de sécurité émis par le Ministère de l'Intérieur."
-known_limitations = "Alertes actives uniquement lors de situations d'urgence grave ou d'exercices nationaux."
-adapter = "http_json"
-cadence_minutes = 15
-sla_minutes = 60
-retention_days = 90
-license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/lu-alert-active.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.lualert.lu/v1/alerts/active"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["alert_id", "headline"]
-
-[[sources]]
-id = "petitions_chd"
-domain = "civic_life"
-description = "Pétitions publiques auprès de la Chambre des Députés (seuil 4 500 signatures)"
-semantic_summary = "Suivi des pétitions citoyennes en cours de signature et détection du dépassement du seuil de débat public."
-known_limitations = "Pétitions recevables ouvertes à la signature sur petitiounen.chd.lu."
-adapter = "http_json"
-cadence_minutes = 1440
-sla_minutes = 4320
-retention_days = 180
-license_spdx = "Public-LU"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = true
-
-[sources.primary]
-url = "https://data.public.lu/fr/datasets/r/petitions-publiques-chd.json"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_json"
-url = "https://api.chd.lu/v1/petitions"
-
-[sources.quality]
-min_rows = 1
-required_fields = ["petition_id", "title"]
+min_rows = 100
 
 [[sources]]
 id = "unemployment_adem"
-domain = "civic_life"
-description = "Statistiques mensuelles de l'emploi et demandeurs d'emploi ADEM"
-semantic_summary = "Nombre de demandeurs d'emploi résidents et taux de chômage par commune et classe d'âge."
-known_limitations = "Publication mensuelle officielle de l'Agence pour le développement de l'emploi (ADEM)."
-adapter = "http_csv"
+domain = "labour"
+description = "Demandeurs d'emploi résidents par commune et par sexe (ADEM)"
+semantic_summary = "Série mensuelle depuis janvier 2012 pour les 100 communes et 12 cantons."
+known_limitations = "Noms de communes d'avant fusion sur les périodes anciennes."
+parser = "adem_communes_csv"
 cadence_minutes = 1440
-sla_minutes = 50400
-retention_days = 730
+sla_minutes = 47520
 license_spdx = "CC0-1.0"
-commercial_use_safe = true
-publish_opendata_lu = true
-factual_only = false
-
+data_origin = "official"
 [sources.primary]
-url = "https://data.public.lu/fr/datasets/r/adem-chomage-communes.csv"
-headers = { User-Agent = "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)" }
-
-[sources.backup]
-adapter = "http_csv"
-url = "https://statistiques.public.lu/api/adem/chomage.csv"
-
+url = "https://data.public.lu/fr/datasets/r/7bc964ea-7744-4860-ae84-24cc0ef3777d"
 [sources.quality]
-min_rows = 1
-required_fields = ["reference_month", "jobseekers_count"]
+min_rows = 1000
 
+# ───────────────────────────── CALENDRIER ─────────────────────────────
 
+[[sources]]
+id = "holidays_lu"
+domain = "calendar"
+description = "Jours fériés légaux du Luxembourg (fr/de/lb)"
+semantic_summary = "Jours fériés légaux depuis 2020 avec libellés officiels en trois langues."
+known_limitations = "Les jours de congé d'usage (non légaux) ne sont pas inclus."
+parser = "holidays_lu_json"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/9dd69c71-f55e-4124-87b8-4a54ba528335"
+[sources.backup]
+url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=LU&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+parser = "openholidays_lu"
+[sources.quality]
+min_rows = 10
 
+[[sources]]
+id = "school_holidays_lu"
+domain = "calendar"
+description = "Vacances scolaires luxembourgeoises (OpenHolidays)"
+semantic_summary = "Périodes de vacances et congés scolaires de l'année précédente à l'année suivante."
+known_limitations = "Source communautaire alimentée depuis les calendriers officiels."
+parser = "openholidays_lu"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "unspecified"
+data_origin = "community"
+[sources.primary]
+url = "https://openholidaysapi.org/SchoolHolidays?countryIsoCode=LU&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+[sources.quality]
+min_rows = 5
 
+[[sources]]
+id = "holidays_fr"
+domain = "calendar"
+description = "Jours fériés en France (frontaliers, OpenHolidays)"
+semantic_summary = "Jours fériés nationaux et régionaux (dont Alsace-Moselle) de l'année précédente à la suivante."
+known_limitations = "Source communautaire."
+parser = "openholidays_fr"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "unspecified"
+data_origin = "community"
+[sources.primary]
+url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=FR&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+
+[[sources]]
+id = "holidays_be"
+domain = "calendar"
+description = "Jours fériés en Belgique (frontaliers, OpenHolidays)"
+semantic_summary = "Jours fériés nationaux et régionaux de l'année précédente à la suivante."
+known_limitations = "Source communautaire."
+parser = "openholidays_be"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "unspecified"
+data_origin = "community"
+[sources.primary]
+url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=BE&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+
+[[sources]]
+id = "holidays_de"
+domain = "calendar"
+description = "Jours fériés en Allemagne (frontaliers, OpenHolidays)"
+semantic_summary = "Jours fériés nationaux et par Land (dont Rhénanie-Palatinat et Sarre)."
+known_limitations = "Source communautaire ; libellés en allemand."
+parser = "openholidays_de"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "unspecified"
+data_origin = "community"
+[sources.primary]
+url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+
+# ───────────────────────────── SANTÉ, ALERTES, ÉQUIPEMENTS ─────────────────────────────
+
+[[sources]]
+id = "weather_warnings_meteoalarm"
+domain = "alerts"
+description = "Vigilances météorologiques MeteoLux pour le Luxembourg (flux MeteoAlarm)"
+semantic_summary = "Avertissements pluie, vent, neige, orages… par zone Nord/Sud avec niveau de vigilance."
+known_limitations = "Inclut les messages d'annulation ; LU-Alert (CAP) non intégré car sans URL 'dernière alerte' stable."
+parser = "meteoalarm_json"
+cadence_minutes = 30
+sla_minutes = 120
+license_spdx = "CC-BY-4.0"
+data_origin = "official"
+[sources.primary]
+url = "https://feeds.meteoalarm.org/api/v1/warnings/feeds-luxembourg"
+
+[[sources]]
+id = "aed_osm"
+domain = "equipment"
+description = "Défibrillateurs automatisés externes (OpenStreetMap)"
+semantic_summary = "Localisation des DAE cartographiés par la communauté OSM au Luxembourg."
+known_limitations = "Aucun jeu officiel : données OSM (ODbL), complétude non garantie ; serveurs Overpass parfois saturés."
+parser = "overpass_aed"
+cadence_minutes = 10080
+sla_minutes = 43200
+license_spdx = "ODbL-1.0"
+data_origin = "community"
+[sources.primary]
+url = "https://overpass.kumi.systems/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3Bnode%5B%22emergency%22%3D%22defibrillator%22%5D%2849.44%2C5.73%2C50.19%2C6.53%29%3Bout%3B"
+[sources.backup]
+url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3Bnode%5B%22emergency%22%3D%22defibrillator%22%5D%2849.44%2C5.73%2C50.19%2C6.53%29%3Bout%3B"
+
+[[sources]]
+id = "recycling_centers"
+domain = "equipment"
+description = "Centres de recyclage (INSPIRE, Administration de l'environnement / Géoportail)"
+semantic_summary = "Les 26 centres de recyclage du pays avec adresse et position."
+known_limitations = "Pas d'horaires ; coordonnées reprojetées depuis EPSG:3035."
+parser = "recycling_gml"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/be8c3b2e-88d3-4ddb-955c-40b354123d29"
+[sources.quality]
+min_rows = 10
+
+[[sources]]
+id = "bike_routes_regional"
+domain = "equipment"
+description = "Itinéraires cyclables régionaux (Géoportail mymaps, Direction du tourisme)"
+semantic_summary = "717 tronçons cyclables avec nom, longueur et point médian."
+known_limitations = "Réseau régional ; pas de couche nationale unique en GeoJSON."
+parser = "mymaps_routes"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "CC0-1.0"
+data_origin = "official"
+[sources.primary]
+url = "https://data.geoportail.lu/mymaps?category=106&format=geojson"
+[sources.quality]
+min_rows = 100
+
+# ───────────────────────────── VIE CIVIQUE ─────────────────────────────
+
+[[sources]]
+id = "petitions_chd"
+domain = "civic"
+description = "Pétitions publiques et ordinaires déposées à la Chambre des Députés"
+semantic_summary = "Numéro, date de dépôt, intitulé officiel, statut et nombre de signatures."
+known_limitations = "Jeu non mis à jour depuis le 28/03/2025 (dernier dépôt 12/03/2025) ; motivations exclues."
+parser = "petitions_chd_csv"
+cadence_minutes = 10080
+sla_minutes = 525600
+license_spdx = "CC0-1.0"
+data_origin = "official"
+factual_only = true
+[sources.primary]
+url = "https://data.public.lu/fr/datasets/r/6c43ab5c-8fc2-493b-822a-35793ac1c840"
+[sources.quality]
+min_rows = 1000
+
+# ───────────────────────────── CULTURE & ACTUALITÉ ─────────────────────────────
+
+[[sources]]
+id = "culture_echo_lu"
+domain = "culture"
+description = "Agenda culturel national echo.lu (événements à venir)"
+semantic_summary = "Titre, dates, lieu, gratuité, prix minimum et commune des événements à venir."
+known_limitations = "Index de recherche public limité à 1000 résultats par requête ; conditions de réutilisation non publiées."
+parser = "echo_algolia"
+cadence_minutes = 360
+sla_minutes = 1440
+license_spdx = "unspecified"
+data_origin = "community"
+commercial_use_safe = false
+factual_only = true
+[sources.primary]
+url = "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact?x-algolia-application-id=PY7G9MVXE2&x-algolia-api-key=55301c0ef2e535ae29e6b6d697f4882d&query=&hitsPerPage=1000&attributesToRetrieve=objectID,experienceId,from,to,isFree,communes,_geoloc,rawExperience.title,rawExperience.categories,rawExperience.tickets,rawVenues.title&attributesToHighlight=&numericFilters=to_timestamp%3E%3D{now_ms}"
+[sources.quality]
+min_rows = 100
+
+[[sources]]
+id = "events_vdl_agenda"
+domain = "culture"
+description = "Agenda des événements de la Ville de Luxembourg (RSS)"
+semantic_summary = "Titre, date annoncée et lien des 30 prochains événements de la Ville."
+known_limitations = "Pas de lieu structuré ; pubDate utilisée comme date de l'événement."
+parser = "vdl_agenda_rss"
+cadence_minutes = 360
+sla_minutes = 1440
+license_spdx = "unspecified"
+data_origin = "official"
+factual_only = true
+[sources.primary]
+url = "https://www.vdl.lu/fr/agenda/rss.xml"
+
+[[sources]]
+id = "events_rockhal"
+domain = "culture"
+description = "Concerts à venir à la Rockhal (Esch-Belval)"
+semantic_summary = "Artiste, date, salle et genre des concerts programmés."
+known_limitations = "API WordPress non documentée."
+parser = "rockhal_shows"
+cadence_minutes = 720
+sla_minutes = 2880
+license_spdx = "unspecified"
+data_origin = "official"
+commercial_use_safe = false
+factual_only = true
+[sources.primary]
+url = "https://rockhal.lu/wp-json/rockhal/shows"
+
+[[sources]]
+id = "strikes_news"
+domain = "strikes"
+description = "Articles de presse sur les grèves au Luxembourg et chez les voisins (Google News)"
+semantic_summary = "Titre, éditeur, date et lien des articles mentionnant une grève."
+known_limitations = "Agrégateur de presse : titre et lien uniquement (factual-only) ; pays déduit par mots-clés."
+parser = "strikes_rss"
+cadence_minutes = 60
+sla_minutes = 360
+license_spdx = "unspecified"
+data_origin = "press"
+commercial_use_safe = false
+factual_only = true
+[sources.primary]
+url = "https://news.google.com/rss/search?q=gr%C3%A8ve+Luxembourg&hl=fr&gl=LU&ceid=LU:fr"
+[sources.backup]
+url = "https://www.rtl.lu/rss/national"

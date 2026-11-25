@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:d2LogicalModel xmlns:ns0="http://datex2.eu/schema/2/2_0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" modelBaseVersion="2">
+    <ns0:exchange>
+        <ns0:supplierIdentification>
+            <ns0:country>lu</ns0:country>
+            <ns0:nationalIdentifier>PCH</ns0:nationalIdentifier>
+        </ns0:supplierIdentification>
+    </ns0:exchange>
+    <ns0:payloadPublication xsi:type="SituationPublication" lang="en">
+        <ns0:publicationTime>2026-11-24T21:50:02.879568008+01:00</ns0:publicationTime>
+        <ns0:publicationCreator>
+            <ns0:country>lu</ns0:country>
+            <ns0:nationalIdentifier>PCH</ns0:nationalIdentifier>
+        </ns0:publicationCreator>
+        <ns0:situation id="238912" version="3">
+            <ns0:situationVersionTime>2026-11-24T19:50:35+01:00</ns0:situationVersionTime>
+            <ns0:headerInformation>
+                <ns0:confidentiality>noRestriction</ns0:confidentiality>
+                <ns0:informationStatus>real</ns0:informationStatus>
+            </ns0:headerInformation>
+            <ns0:situationRecord xsi:type="MaintenanceWorks" id="238912-1" version="1">
+                <ns0:situationRecordCreationTime>2026-11-24T19:50:35+01:00</ns0:situationRecordCreationTime>
+                <ns0:situationRecordVersionTime>2026-11-24T19:50:35+01:00</ns0:situationRecordVersionTime>
+                <ns0:probabilityOfOccurrence>certain</ns0:probabilityOfOccurrence>
+                <ns0:validity>
+                    <ns0:validityStatus>active</ns0:validityStatus>
+                    <ns0:validityTimeSpecification>
+                        <ns0:overallStartTime>2026-11-24T19:50:35+01:00</ns0:overallStartTime>
+                    </ns0:validityTimeSpecification>
+                </ns0:validity>
+                <ns0:groupOfLocations xsi:type="Linear">
+                    <ns0:locationForDisplay>
+                        <ns0:latitude>49.58624</ns0:latitude>
+                        <ns0:longitude>6.08696</ns0:longitude>
+                    </ns0:locationForDisplay>
+                    <ns0:supplementaryPositionalDescription>
+                        <ns0:affectedCarriagewayAndLanes>
+                            <ns0:carriageway>mainCarriageway</ns0:carriageway>
+                            <ns0:lane>lane1</ns0:lane>
+                            <ns0:lane>emergencyLane</ns0:lane>
+                        </ns0:affectedCarriagewayAndLanes>
+                    </ns0:supplementaryPositionalDescription>
+                    <ns0:alertCLinear xsi:type="AlertCMethod4Linear">
+                        <ns0:alertCLocationCountryCode>7</ns0:alertCLocationCountryCode>
+                        <ns0:alertCLocationTableNumber>1</ns0:alertCLocationTableNumber>
+                        <ns0:alertCLocationTableVersion>3.0</ns0:alertCLocationTableVersion>
+                        <ns0:alertCDirection>
+                            <ns0:alertCDirectionCoded>positive</ns0:alertCDirectionCoded>
+                            <ns0:alertCDirectionSense>true</ns0:alertCDirectionSense>
+                        </ns0:alertCDirection>
+                        <ns0:alertCMethod4PrimaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2302</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>2994</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4PrimaryPointLocation>
+                        <ns0:alertCMethod4SecondaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2301</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>-6</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4SecondaryPointLocation>
+                    </ns0:alertCLinear>
+                    <ns0:linearWithinLinearElement>
+                        <ns0:linearElement>
+                            <ns0:roadNumber>A6</ns0:roadNumber>
+                        </ns0:linearElement>
+                        <ns0:fromPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>1.0</ns0:distanceAlong>
+                        </ns0:fromPoint>
+                        <ns0:toPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>1375.0</ns0:distanceAlong>
+                        </ns0:toPoint>
+                    </ns0:linearWithinLinearElement>
+                </ns0:groupOfLocations>
+                <ns0:roadMaintenanceType>roadworks</ns0:roadMaintenanceType>
+            </ns0:situationRecord>
+        </ns0:situation>
+        <ns0:situation id="238911" version="3">
+            <ns0:situationVersionTime>2026-11-24T19:45:29+01:00</ns0:situationVersionTime>
+            <ns0:headerInformation>
+                <ns0:confidentiality>noRestriction</ns0:confidentiality>
+                <ns0:informationStatus>real</ns0:informationStatus>
+            </ns0:headerInformation>
+            <ns0:situationRecord xsi:type="MaintenanceWorks" id="238911-1" version="1">
+                <ns0:situationRecordCreationTime>2026-11-24T19:45:29+01:00</ns0:situationRecordCreationTime>
+                <ns0:situationRecordVersionTime>2026-11-24T19:45:29+01:00</ns0:situationRecordVersionTime>
+                <ns0:probabilityOfOccurrence>certain</ns0:probabilityOfOccurrence>
+                <ns0:validity>
+                    <ns0:validityStatus>active</ns0:validityStatus>
+                    <ns0:validityTimeSpecification>
+                        <ns0:overallStartTime>2026-11-24T19:45:29+01:00</ns0:overallStartTime>
+                    </ns0:validityTimeSpecification>
+                </ns0:validity>
+                <ns0:groupOfLocations xsi:type="Linear">
+                    <ns0:locationForDisplay>
+                        <ns0:latitude>49.590652</ns0:latitude>
+                        <ns0:longitude>6.087725</ns0:longitude>
+                    </ns0:locationForDisplay>
+                    <ns0:supplementaryPositionalDescription>
+                        <ns0:affectedCarriagewayAndLanes>
+                            <ns0:carriageway>mainCarriageway</ns0:carriageway>
+                            <ns0:lane>lane1</ns0:lane>
+                            <ns0:lane>emergencyLane</ns0:lane>
+                        </ns0:affectedCarriagewayAndLanes>
+                    </ns0:supplementaryPositionalDescription>
+                    <ns0:alertCLinear xsi:type="AlertCMethod4Linear">
+                        <ns0:alertCLocationCountryCode>7</ns0:alertCLocationCountryCode>
+                        <ns0:alertCLocationTableNumber>1</ns0:alertCLocationTableNumber>
+                        <ns0:alertCLocationTableVersion>3.0</ns0:alertCLocationTableVersion>
+                        <ns0:alertCDirection>
+                            <ns0:alertCDirectionCoded>positive</ns0:alertCDirectionCoded>
+                            <ns0:alertCDirectionSense>true</ns0:alertCDirectionSense>
+                        </ns0:alertCDirection>
+                        <ns0:alertCMethod4PrimaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2202</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>2320</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4PrimaryPointLocation>
+                        <ns0:alertCMethod4SecondaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2201</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>-40</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4SecondaryPointLocation>
+                    </ns0:alertCLinear>
+                    <ns0:linearWithinLinearElement>
+                        <ns0:linearElement>
+                            <ns0:roadNumber>A4</ns0:roadNumber>
+                        </ns0:linearElement>
+                        <ns0:fromPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>1.0</ns0:distanceAlong>
+                        </ns0:fromPoint>
+                        <ns0:toPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>871.0</ns0:distanceAlong>
+                        </ns0:toPoint>
+                    </ns0:linearWithinLinearElement>
+                </ns0:groupOfLocations>
+                <ns0:roadMaintenanceType>roadworks</ns0:roadMaintenanceType>
+            </ns0:situationRecord>
+        </ns0:situation>
+        <ns0:situation id="238910" version="3">
+            <ns0:situationVersionTime>2026-11-24T19:44:20+01:00</ns0:situationVersionTime>
+            <ns0:headerInformation>
+                <ns0:confidentiality>noRestriction</ns0:confidentiality>
+                <ns0:informationStatus>real</ns0:informationStatus>
+            </ns0:headerInformation>
+            <ns0:situationRecord xsi:type="MaintenanceWorks" id="238910-1" version="1">
+                <ns0:situationRecordCreationTime>2026-11-24T19:44:20+01:00</ns0:situationRecordCreationTime>
+                <ns0:situationRecordVersionTime>2026-11-24T19:44:20+01:00</ns0:situationRecordVersionTime>
+                <ns0:probabilityOfOccurrence>certain</ns0:probabilityOfOccurrence>
+                <ns0:validity>
+                    <ns0:validityStatus>active</ns0:validityStatus>
+                    <ns0:validityTimeSpecification>
+                        <ns0:overallStartTime>2026-11-24T19:44:20+01:00</ns0:overallStartTime>
+                    </ns0:validityTimeSpecification>
+                </ns0:validity>
+                <ns0:groupOfLocations xsi:type="Linear">
+                    <ns0:locationForDisplay>
+                        <ns0:latitude>49.591927</ns0:latitude>
+                        <ns0:longitude>6.088305</ns0:longitude>
+                    </ns0:locationForDisplay>
+                    <ns0:supplementaryPositionalDescription>
+                        <ns0:affectedCarriagewayAndLanes>
+                            <ns0:carriageway>mainCarriageway</ns0:carriageway>
+                            <ns0:lane>lane1</ns0:lane>
+                            <ns0:lane>emergencyLane</ns0:lane>
+                        </ns0:affectedCarriagewayAndLanes>
+                    </ns0:supplementaryPositionalDescription>
+                    <ns0:alertCLinear xsi:type="AlertCMethod4Linear">
+                        <ns0:alertCLocationCountryCode>7</ns0:alertCLocationCountryCode>
+                        <ns0:alertCLocationTableNumber>1</ns0:alertCLocationTableNumber>
+                        <ns0:alertCLocationTableVersion>3.0</ns0:alertCLocationTableVersion>
+                        <ns0:alertCDirection>
+                            <ns0:alertCDirectionCoded>positive</ns0:alertCDirectionCoded>
+                            <ns0:alertCDirectionSense>true</ns0:alertCDirectionSense>
+                        </ns0:alertCDirection>
+                        <ns0:alertCMethod4PrimaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2202</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>2320</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4PrimaryPointLocation>
+                        <ns0:alertCMethod4SecondaryPointLocation>
+                            <ns0:alertCLocation>
+                                <ns0:specificLocation>2201</ns0:specificLocation>
+                            </ns0:alertCLocation>
+                            <ns0:offsetDistance>
+                                <ns0:offsetDistance>-40</ns0:offsetDistance>
+                            </ns0:offsetDistance>
+                        </ns0:alertCMethod4SecondaryPointLocation>
+                    </ns0:alertCLinear>
+                    <ns0:linearWithinLinearElement>
+                        <ns0:linearElement>
+                            <ns0:roadNumber>A4</ns0:roadNumber>
+                        </ns0:linearElement>
+                        <ns0:fromPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>1.0</ns0:distanceAlong>
+                        </ns0:fromPoint>
+                        <ns0:toPoint xsi:type="DistanceFromLinearElementStart">
+                            <ns0:distanceAlong>1408.0</ns0:distanceAlong>
+                        </ns0:toPoint>
+                    </ns0:linearWithinLinearElement>
+                </ns0:groupOfLocations>
+                <ns0:roadMaintenanceType>roadworks</ns0:roadMaintenanceType>
+            </ns0:situationRecord>
+        </ns0:situation>
+        </ns0:payloadPublication>
+</ns0:d2LogicalModel>

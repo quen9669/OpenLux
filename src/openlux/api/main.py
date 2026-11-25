@@ -18,15 +18,15 @@ from fastapi.responses import FileResponse, PlainTextResponse, RedirectResponse,
 from starlette.staticfiles import StaticFiles
 
 from openlux.config import load_sources_config
-from openlux.core.gold import (
+from openlux.core.gold import get_gold_table_path
+from openlux.core.gold_query import (
     get_gold_metadata,
-    get_gold_table_path,
-    list_gold_datasets,
     query_gold_table,
     stream_gold_export,
 )
 from openlux.core.monitoring import build_monitoring_payload, format_prometheus_metrics
 from openlux.core.quality import get_latest_source_health, get_source_run_history
+from openlux.publish.opendata_lu import build_catalog
 
 _cached_health: dict[str, Any] = {}
 _cached_history: dict[str, Any] = {}
@@ -99,36 +99,7 @@ def get_prometheus_metrics() -> PlainTextResponse:
 
 @app.get("/v1/datasets")
 def list_datasets() -> dict[str, Any]:
-    sources, res = load_sources_config(), []
-    for name in list_gold_datasets():
-        p = (Path("data/gold") / f"{name}.parquet").as_posix()
-        with duckdb.connect(":memory:") as con:
-            cols = [
-                {"name": c[0], "type": c[1]}
-                for c in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [p]).fetchall()
-            ]
-            cnt = con.execute("SELECT count(*) FROM read_parquet(?)", [p]).fetchone()[0]
-            s_id = (
-                con.execute(
-                    "SELECT DISTINCT source_id FROM read_parquet(?) LIMIT 1", [p]
-                ).fetchone()
-                if any(c["name"] == "source_id" for c in cols)
-                else None
-            )
-        src = sources.get(s_id[0]) if s_id else None
-        res.append(
-            {
-                "dataset": name,
-                "row_count": cnt,
-                "columns": cols,
-                "description": getattr(src, "description", ""),
-                "semantic_summary": getattr(src, "semantic_summary", ""),
-                "known_limitations": getattr(src, "known_limitations", ""),
-                "license_spdx": getattr(src, "license_spdx", "CC0-1.0"),
-                "commercial_use_safe": getattr(src, "commercial_use_safe", True),
-            }
-        )
-    return {"datasets": res}
+    return {"datasets": build_catalog()}
 
 
 @app.get("/v1/data/{dataset}")
@@ -193,6 +164,11 @@ def v2_portal() -> RedirectResponse:
     return RedirectResponse(url="/v2/")
 
 
-for p, r, n in [("web_v2", "/v2", "web_v2"), ("web", "/", "web")]:
-    if Path(p).exists():
-        app.mount(r, StaticFiles(directory=p, html=True), name=n)
+@app.get("/")
+def root_portal() -> RedirectResponse:
+    # POURQUOI : l'ancien portail V1 (catalogue codé en dur) est retiré au profit de la V2
+    return RedirectResponse(url="/v2/")
+
+
+if Path("web_v2").exists():
+    app.mount("/v2", StaticFiles(directory="web_v2", html=True), name="web_v2")

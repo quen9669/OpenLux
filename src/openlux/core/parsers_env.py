@@ -1,195 +1,157 @@
-"""Rôle : Parsers d'observations environnementales et énergétiques (météo, air, pollen, énergie).
-Entrées/Sorties : Reçoit des octets bruts (JSON) et produit des listes de dicts standardisés.
-Hors-scope : N'effectue aucun appel réseau, aucun accès disque ni validation Pydantic.
+"""Rôle : Parsers environnement & énergie (météo, air/pollen, eau, baignade, électricité).
+Entrées/Sorties : Reçoit des octets bruts (JSON/CSV) et produit des listes de dicts plats.
+Hors-scope : Aucun appel réseau ; une valeur absente reste None (jamais de valeur par défaut).
 """
 
 from __future__ import annotations
 
-import json
+import csv
+import io
 from collections.abc import Callable
-from datetime import UTC, datetime
-from typing import Any
+
+from openlux.core.parsers import _f, _j, _utc
+
+# POURQUOI : variables Open-Meteo -> colonnes Gold (pression ramenée au niveau de la mer = QFF)
+_OM_WEATHER = {
+    "temperature_2m": "temperature_c",
+    "relative_humidity_2m": "humidity_pct",
+    "pressure_msl": "pressure_hpa",
+    "wind_speed_10m": "wind_speed_kmh",
+    "precipitation": "precipitation_mm",
+    "weather_code": "weather_code",
+}
 
 
-def _j(raw: bytes):
-    return json.loads(raw.decode("utf-8")) if isinstance(raw, (bytes, bytearray)) else raw
-
-
-_CANTONS = (
-    "49.61,6.13,Luxembourg;49.52,5.89,Differdange;49.63,6.02,Mamer;49.87,6.16,Diekirch;"
-    "49.81,6.42,Echternach;49.68,6.44,Grevenmacher;49.75,6.11,Mersch;49.77,5.89,Redange-sur-Attert;"
-    "49.54,6.37,Remich;49.94,6.21,Vianden;49.97,5.93,Wiltz;50.05,6.03,Clervaux"
-)
-_CANTON_LOCS = [
-    (float(a), float(b), c) for item in _CANTONS.split(";") for a, b, c in [item.split(",")]
-]
-
-
-def _commune_for(lat: float, lon: float) -> str:
-    return min(_CANTON_LOCS, key=lambda c: (c[0] - lat) ** 2 + (c[1] - lon) ** 2)[2]
-
-
-def _arr_v(arr: list | None, i: int, default: Any = 0.0) -> Any:
-    return arr[i] if arr and i < len(arr) and arr[i] is not None else default
-
-
-def air_quality_openmeteo_json(raw: bytes) -> list[dict]:
-    """Parse la qualité de l'air Open-Meteo temps réel et historique (<= 30 lignes)."""
-    if not raw.strip() or (isinstance(it := _j(raw), list) and it and "station_id" in it[0]):
-        return it if isinstance(it, list) else []
-    items, res = it if isinstance(it, list) else [it], []
-    pols = [("PM10", "pm10"), ("PM2.5", "pm2_5"), ("NO2", "nitrogen_dioxide"), ("O3", "ozone")]
-    for loc in items:
-        lat, lon = float(loc.get("latitude", 49.61)), float(loc.get("longitude", 6.13))
-        comm, c, h = _commune_for(lat, lon), loc.get("current", {}), loc.get("hourly", {})
-        times = h.get("time", []) or [c.get("time", datetime.now(UTC).isoformat())]
-        for i, obs in enumerate(times):
-            for p, k in pols:
-                if (v := _arr_v(h.get(k), i, c.get(k))) is not None:
-                    res.append(
-                        {
-                            "station_id": f"LU_AQ_{comm.upper()}",
-                            "station_name": f"Air {comm}",
-                            "commune_lau": comm,
-                            "lat": lat,
-                            "lon": lon,
-                            "observed_at": obs,
-                            "pollutant": p,
-                            "value": float(v),
-                            "unit": "ug/m3",
-                            "aqi_index": "GOOD" if float(v) < 50 else "MODERATE",
-                        }
-                    )
-    return res
-
-
-def pollen_openmeteo_json(raw: bytes) -> list[dict]:
-    """Parse les concentrations polliniques (liste ou backup Open-Meteo) (<= 30 lignes)."""
-    if not raw.strip() or isinstance(d := _j(raw), list):
-        return d if isinstance(d, list) else []
-    c, obs = d.get("current", {}), d.get("current", {}).get("time", datetime.now(UTC).isoformat())
-    return [
-        {
-            "specie": sp,
-            "risk_level": "HIGH"
-            if (v := float(c.get(k, 0.0))) > 50
-            else ("MODERATE" if v > 10 else "LOW"),
-            "grains_m3": int(v),
-            "observed_at": obs,
-            "station_name": "Luxembourg-Ville",
-            "commune_name": "Luxembourg",
-        }
-        for sp, k in [("Bouleau (Betula)", "birch_pollen"), ("Aulne (Alnus)", "alder_pollen")]
-    ]
-
-
-def meteo_openmeteo_json(raw: bytes) -> list[dict]:
-    """Parse les observations météo Open-Meteo temps réel et historique (<= 30 lignes)."""
-    if not raw.strip() or (isinstance(it := _j(raw), list) and it and "station_id" in it[0]):
-        return it if isinstance(it, list) else []
-    items, res = it if isinstance(it, list) else [it], []
-    now_iso = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M")
-    for loc in items:
-        lat, lon = float(loc.get("latitude", 49.61)), float(loc.get("longitude", 6.13))
-        comm, c, h = _commune_for(lat, lon), loc.get("current", {}), loc.get("hourly", {})
-        times = h.get("time", []) or [c.get("time", now_iso)]
-        t_s, p_s = h.get("temperature_2m"), h.get("precipitation")
-        w_s, rh_s = h.get("wind_speed_10m"), h.get("relative_humidity_2m")
-        pr_s, wc_s = h.get("surface_pressure"), h.get("weather_code")
-        for i, obs in enumerate(times):
-            if obs > now_iso:
+def openmeteo_weather(raw: bytes) -> list[dict]:
+    """Parse la grille horaire Open-Meteo (modèle, multi-points) ; ignore les heures sans valeur."""
+    locs, out = (d if isinstance(d := _j(raw), list) else [d]), []
+    for idx, loc in enumerate(locs):
+        h, la, lo = loc.get("hourly", {}), loc.get("latitude"), loc.get("longitude")
+        for i, t in enumerate(h.get("time", [])):
+            vals = {c: h[k][i] for k, c in _OM_WEATHER.items() if k in h}
+            if vals.get("temperature_c") is None:
                 continue
-            t_v = _arr_v(t_s, i, c.get("temperature_2m", 0.0))
-            p_v = _arr_v(p_s, i, c.get("precipitation", 0.0))
-            w_v = _arr_v(w_s, i, c.get("wind_speed_10m", 0.0))
-            rh_v = _arr_v(rh_s, i, c.get("relative_humidity_2m", 80.0))
-            pr_v = _arr_v(pr_s, i, c.get("surface_pressure", 1013.2))
-            wc_v = _arr_v(wc_s, i, c.get("weather_code", 0))
-            cond = (
-                "Rain"
-                if float(p_v or 0) > 0.5 or int(wc_v or 0) >= 50
-                else ("Clear" if int(wc_v or 0) in (0, 1) else "Clouds")
-            )
-            res.append(
+            out.append(
                 {
-                    "station_id": f"LU_METEO_{comm.upper()}",
-                    "station_name": f"Station {comm}",
-                    "timestamp": obs,
-                    "temperature": float(t_v or 0.0),
-                    "humidity": float(rh_v or 80.0),
-                    "pressure_hpa": float(pr_v or 1013.2),
-                    "wind_speed_kmh": float(w_v or 0.0),
-                    "precipitation_mm": float(p_v or 0.0),
-                    "condition": cond,
-                    "lat": lat,
-                    "lon": lon,
-                    "commune_lau": comm,
+                    "station_id": f"OM_{la:.3f}_{lo:.3f}",
+                    "station_name": "Point de grille Open-Meteo",
+                    "data_origin": "model",
+                    # POURQUOI : réponse dans l'ordre des points demandés (seed ref_model_points)
+                    "location_index": idx,
+                    "observed_at": _utc(t, local=False),
+                    **vals,
+                    "lat": la,
+                    "lon": lo,
                 }
             )
-    return res
+    return out
 
 
-def electricity_smard_json(raw: bytes) -> list[dict]:
-    """Parse les prix spot électricité SMARD DE-LU (<= 30 lignes)."""
-    if not raw.strip() or isinstance(d := _j(raw), list):
-        return d if isinstance(d, list) else []
-    p, t = d.get("price", []) or [], d.get("unix_seconds", []) or []
+def meteolux_hvd(raw: bytes) -> list[dict]:
+    """Parse l'observation officielle MeteoLux (station Findel ELLX, CC0) en une ligne."""
+    d = _j(raw)
+    v = {x["id"]: x["value"] for x in d.get("data", [])}
+    ws = _f(v.get("s2ff_rwymd0"))
     return [
         {
-            "observed_at": datetime.fromtimestamp(ts, UTC).isoformat(),
-            "price_eur_per_mwh": float(pr),
-            "bidding_zone": "DE-LU",
-        }
-        for ts, pr in zip(t, p, strict=False)
-    ]
-
-
-def statec_inflation_json(raw: bytes) -> list[dict]:
-    """Parse les indicateurs d'inflation STATEC (<= 30 lignes)."""
-    if not raw.strip() or isinstance(d := _j(raw), list):
-        return d if isinstance(d, list) else []
-    v = d.get("value", {})
-    val = float(list(v.values())[-1]) if isinstance(v, dict) and v else 1024.15
-    return [
-        {
-            "reference_month": "2026-10",
-            "observed_at": datetime.now(UTC).isoformat(),
-            "ipcn_index": val,
-            "inflation_annual_rate": 1.7,
-            "wage_index_quote": 944.43,
+            "station_id": "ELLX",
+            "station_name": "Luxembourg-Findel (MeteoLux)",
+            "data_origin": "station",
+            "observed_at": _utc(d.get("timestamp")),
+            "temperature_c": _f(v.get("st")),
+            "humidity_pct": _f(v.get("su")),
+            "pressure_hpa": _f(v.get("spsl")),
+            # POURQUOI : MeteoLux publie le vent en m/s, la Gold est en km/h
+            "wind_speed_kmh": round(ws * 3.6, 1) if ws is not None else None,
+            "precipitation_mm": _f(v.get("srr")),
+            "weather_code": None,
+            "lat": 49.63258,
+            "lon": 6.23301,
         }
     ]
 
 
-def housing_statec_json(raw: bytes) -> list[dict]:
-    """Parse les autorisations de bâtir STATEC (SDMX-JSON ou liste) (<= 30 lignes)."""
-    if not raw.strip() or isinstance(d := _j(raw), list):
-        return d if isinstance(d, list) else []
-    obs = (d.get("data", {}).get("dataSets", [{}])[0] or {}).get("observations", {})
+def openmeteo_long(raw: bytes) -> list[dict]:
+    """Parse toute variable horaire Open-Meteo (air, pollen) en format long avec son unité."""
+    locs, out = (d if isinstance(d := _j(raw), list) else [d]), []
+    for idx, loc in enumerate(locs):
+        h, units = loc.get("hourly", {}), loc.get("hourly_units", {})
+        la, lo = loc.get("latitude"), loc.get("longitude")
+        for var in (k for k in h if k != "time"):
+            for t, val in zip(h["time"], h[var], strict=False):
+                if val is not None:
+                    out.append(
+                        {
+                            "station_id": f"OM_{la:.3f}_{lo:.3f}",
+                            "observed_at": _utc(t, local=False),
+                            "location_index": idx,
+                            "pollutant": var,
+                            "value": float(val),
+                            "unit": units.get(var),
+                            "lat": la,
+                            "lon": lo,
+                        }
+                    )
+    return out
+
+
+def water_levels_csv(raw: bytes) -> list[dict]:
+    """Parse l'export AGE inondations.public.lu (CSV large, 15 min, heure locale)."""
+    rows = list(csv.reader(io.StringIO(raw.decode("utf-8-sig"))))
+    head, out = rows[0], []
+    for r in rows[1:]:
+        for ts, val in zip(head[3:], r[3:], strict=False):
+            if (v := _f(val)) is not None:
+                out.append(
+                    {
+                        "station_name": r[0].removeprefix("SN_"),
+                        "observed_at": _utc(ts, "%d.%m.%Y %H:%M"),
+                        "water_level": v,
+                        "unit": r[2],
+                    }
+                )
+    return out
+
+
+def bathing_sites(raw: bytes) -> list[dict]:
+    """Parse les sites de baignade (OGC API Features geoportail, collections 656 ou 581)."""
+    out = []
+    for f in _j(raw).get("features", []):
+        p, (lo, la) = f.get("properties", {}), f["geometry"]["coordinates"][:2]
+        oid = p.get("OBJECTID") or p.get("messstationen_GISADMIN_Badegewaesser_OBJECTID")
+        q = p.get("wasserrahmenrichtlinie_GISADMIN_Badegewaesser_Ergebnisse_RESULT")
+        out.append(
+            {
+                "site_id": str(oid),
+                "site_name": p.get("NAME"),
+                "bathing_status": p.get("Baignade"),
+                "quality_class": q,
+                "profile_url": p.get("Hyperlinks"),
+                "lat": la,
+                "lon": lo,
+            }
+        )
+    return out
+
+
+def energy_charts_price(raw: bytes) -> list[dict]:
+    """Parse les prix spot day-ahead DE-LU (energy-charts.info, données SMARD/BNetzA)."""
+    d = _j(raw)
     return [
-        {
-            "record_id": f"STATEC_{k.replace(':', '_')}",
-            "canton_code": "LUX",
-            "commune_name": "Luxembourg",
-            "canton_name": "Luxembourg",
-            "property_type": "RESIDENTIAL",
-            "reference_period": "2025",
-            "permits_count": int(v[0]) if v else 0,
-            "units_authorized": int(v[0]) if v else 0,
-            "observed_at": "2026-11-21T00:00:00Z",
-        }
-        for k, v in obs.items()
+        {"observed_at": _utc(t), "price_eur_per_mwh": _f(p), "bidding_zone": "DE-LU"}
+        for t, p in zip(d.get("unix_seconds", []), d.get("price", []), strict=False)
+        if p is not None
     ]
 
 
 ENV_PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
     f.__name__: f
     for f in (
-        air_quality_openmeteo_json,
-        pollen_openmeteo_json,
-        meteo_openmeteo_json,
-        electricity_smard_json,
-        statec_inflation_json,
-        housing_statec_json,
+        openmeteo_weather,
+        meteolux_hvd,
+        openmeteo_long,
+        water_levels_csv,
+        bathing_sites,
+        energy_charts_price,
     )
 }

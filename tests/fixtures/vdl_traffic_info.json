@@ -1,0 +1,153 @@
+{
+ "objectIdFieldName": "OBJECTID",
+ "globalIdFieldName": "",
+ "geometryType": "esriGeometryPoint",
+ "spatialReference": {
+  "wkid": 4326,
+  "latestWkid": 4326
+ },
+ "fields": [
+  {
+   "name": "OBJECTID",
+   "alias": "OBJECTID",
+   "type": "esriFieldTypeOID"
+  },
+  {
+   "name": "TRAF_INFO_ID",
+   "alias": "TRAF_INFO_ID",
+   "type": "esriFieldTypeBigInteger"
+  },
+  {
+   "name": "OBJECTIVE",
+   "alias": "OBJECTIVE",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "DESCRIPTION",
+   "alias": "DESCRIPTION",
+   "type": "esriFieldTypeString",
+   "length": 2000
+  },
+  {
+   "name": "FK_QUART_NAME",
+   "alias": "FK_QUART_NAME",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "STREET_TYPICAL_NAME",
+   "alias": "STREET_TYPICAL_NAME",
+   "type": "esriFieldTypeString",
+   "length": 60
+  },
+  {
+   "name": "PUBLICATION_DATE",
+   "alias": "PUBLICATION_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "START_DATE",
+   "alias": "START_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "START_TIME",
+   "alias": "START_TIME",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "END_DATE",
+   "alias": "END_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "END_TIME",
+   "alias": "END_TIME",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "INFO_TYPE",
+   "alias": "INFO_TYPE",
+   "type": "esriFieldTypeInteger"
+  },
+  {
+   "name": "INFO_TYPE_LABEL",
+   "alias": "INFO_TYPE_LABEL",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "DOC_ID",
+   "alias": "DOC_ID",
+   "type": "esriFieldTypeInteger"
+  },
+  {
+   "name": "DOC_DEVIATION_URL",
+   "alias": "DOC_DEVIATION_URL",
+   "type": "esriFieldTypeString",
+   "length": 2000
+  },
+  {
+   "name": "URL",
+   "alias": "URL",
+   "type": "esriFieldTypeString",
+   "length": 2000
+  }
+ ],
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 116040,
+    "TRAF_INFO_ID": 299375,
+    "OBJECTIVE": "Organisation de la prochaine phase du chantier de renaturation de la vallée de la pétrusse",
+    "DESCRIPTION": null,
+    "FK_QUART_NAME": "Hollerich",
+    "STREET_TYPICAL_NAME": "Rue de la Semois",
+    "PUBLICATION_DATE": 1745186400000,
+    "START_DATE": 1745809200000,
+    "START_TIME": "05h00",
+    "END_DATE": 1816959600000,
+    "END_TIME": "17h00 (selon besoin)",
+    "INFO_TYPE": 10,
+    "INFO_TYPE_LABEL": "chantier",
+    "DOC_ID": 11,
+    "DOC_DEVIATION_URL": null,
+    "URL": null
+   },
+   "geometry": {
+    "x": 6.122413659980266,
+    "y": 49.60260639619399
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 116044,
+    "TRAF_INFO_ID": 304187,
+    "OBJECTIVE": "Réorganisation de la circulation à la route d’echternach dans le cadre du chantier de suppression du pn 13 (passage à niveau) à dommeldange",
+    "DESCRIPTION": null,
+    "FK_QUART_NAME": "Dommeldange",
+    "STREET_TYPICAL_NAME": "Route d'Echternach",
+    "PUBLICATION_DATE": 1748815200000,
+    "START_DATE": 1749267000000,
+    "START_TIME": "05h30",
+    "END_DATE": 1798729200000,
+    "END_TIME": "16h00 (selon besoin)",
+    "INFO_TYPE": 10,
+    "INFO_TYPE_LABEL": "chantier",
+    "DOC_ID": 12,
+    "DOC_DEVIATION_URL": null,
+    "URL": null
+   },
+   "geometry": {
+    "x": 6.136724776658498,
+    "y": 49.63283675923491
+   }
+  }
+ ]
+}

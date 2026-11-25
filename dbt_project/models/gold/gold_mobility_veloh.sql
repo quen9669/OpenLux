@@ -1,29 +1,3 @@
--- Gold: Data Mart final des stations vélos en libre-service Vel'oH
-SELECT
-    station_id,
-    station_number,
-    station_name,
-    address,
-    observed_at_utc,
-    available_bikes,
-    available_electrical_bikes,
-    available_mechanical_bikes,
-    available_stands,
-    broken_or_disabled_stands,
-    total_capacity,
-    occupancy_rate,
-    status,
-    is_renting,
-    is_connected,
-    is_installed,
-    has_banking,
-    is_bonus,
-    hourly_rate_eur,
-    tariff_details,
-    opening_hours,
-    lat,
-    lon,
-    commune_lau,
-    canton,
-    source_id
-FROM {{ ref('silver_mobility_veloh') }}
+-- Gold Vel'oh : série temporelle des disponibilités par station
+{{ with_commune("SELECT * EXCLUDE (observed_at), " ~ utc('observed_at') ~ " AS observed_at_utc FROM " ~ ref('stg_mobility_veloh')) }}
+QUALIFY ROW_NUMBER() OVER (PARTITION BY station_number, observed_at_utc ORDER BY collected_at_utc DESC) = 1

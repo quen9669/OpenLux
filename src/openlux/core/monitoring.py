@@ -99,7 +99,7 @@ def build_monitoring_payload(
                 "min_rows_passed": rows >= min_r,
                 "required_fields": src.quality.required_fields,
                 "quality_test_passed": score >= 85.0 and rows >= min_r,
-                "adapter": f"{src.adapter}:{src.parser}" if src.parser else src.adapter,
+                "adapter": src.parser,
                 "source_used": used,
                 "endpoint_url": url,
                 "last_checked_utc": last_chk,

@@ -13,11 +13,11 @@ def _create_source(cadence: int = 15, sla: int = 30) -> SourceConfig:
         id="test_score_source",
         domain="weather",
         description="Source de test",
-        adapter="http_json",
+        parser="meteolux_hvd",
         cadence_minutes=cadence,
         sla_minutes=sla,
         primary=EndpointConfig(url="https://mock.primary.lu"),
-        quality=QualityConfig(min_rows=10, required_fields=["temp"]),
+        quality=QualityConfig(min_rows=10),
     )
 
 
@@ -104,3 +104,18 @@ def test_trust_score_not_tested() -> None:
     )
     assert metrics.status == "NOT_TESTED"
     assert metrics.trust_score == 0.0
+
+
+def test_fresh_but_failed_collection_is_always_error() -> None:
+    # Régression : un échec total frais avec min_rows=0 s'affichait ATTENTION (60) au lieu d'ERROR
+    src = _create_source()
+    src.quality.min_rows = 0
+    metrics = calculate_trust_score(
+        src,
+        collector_status="ERROR",
+        source_used="none",
+        row_count=0,
+        last_checked_utc=datetime.now(UTC).isoformat(),
+    )
+    assert metrics.status == "ERROR"
+    assert metrics.trust_score < 60.0

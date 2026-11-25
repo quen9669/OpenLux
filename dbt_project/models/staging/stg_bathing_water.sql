@@ -1,17 +1,5 @@
--- Staging: Extraction brute de la qualité des eaux de baignade depuis Bronze
-WITH raw_source AS (
-    SELECT *
-    FROM read_csv('data/bronze/bathing_water_lu/**/*.csv.gz', header = true, union_by_name = true)
-)
-SELECT DISTINCT
-    site_id::VARCHAR AS site_id,
-    site_name::VARCHAR AS site_name,
-    water_body::VARCHAR AS water_body,
-    inspection_date::VARCHAR AS raw_inspection_date,
-    quality_class::VARCHAR AS quality_class,
-    cyanobacteria_bloom::VARCHAR AS cyanobacteria_bloom,
-    lat::DOUBLE AS lat,
-    lon::DOUBLE AS lon,
-    commune_name::VARCHAR AS raw_commune_name,
-    'bathing_water_lu' AS source_id
-FROM raw_source
+-- Staging eaux de baignade : statut courant (collection 656) et classe de qualité (581)
+{% set cols = {'site_id': 'VARCHAR', 'site_name': 'VARCHAR', 'bathing_status': 'VARCHAR', 'quality_class': 'VARCHAR', 'profile_url': 'VARCHAR', 'lat': 'DOUBLE', 'lon': 'DOUBLE'} %}
+SELECT * FROM {{ bronze('bathing_status_age', cols) }}
+UNION ALL BY NAME
+SELECT * FROM {{ bronze('bathing_quality_age', cols) }}

@@ -1,0 +1,98 @@
+{
+ "shows": [
+  {
+   "id": 88975,
+   "permalink": "https://rockhal.lu/shows/mammoth/",
+   "genres": [
+    {
+     "term_id": 3200,
+     "name": "Rock",
+     "slug": "rock",
+     "term_group": 0,
+     "term_taxonomy_id": 3200,
+     "taxonomy": "roc_show_genre",
+     "description": "",
+     "parent": 0,
+     "count": 407,
+     "filter": "raw"
+    }
+   ],
+   "status": [
+    {
+     "term_id": 3199,
+     "name": "Buy now",
+     "slug": "buy-now",
+     "term_group": 0,
+     "term_taxonomy_id": 3199,
+     "taxonomy": "roc_show_status",
+     "description": "",
+     "parent": 0,
+     "count": 1482,
+     "filter": "raw"
+    }
+   ],
+   "status_string": "buy-now",
+   "availability": "available",
+   "availability_int": "479",
+   "title": "MAMMOTH",
+   "subtitle": "Q4 2026 Tour [TEMPLE OF METAL]",
+   "location": "Rockhal Club",
+   "organiser": "Rockhal",
+   "start_date": "Tue 01 Dec 2026",
+   "show_year": "2026",
+   "show_month": "December",
+   "end_date": "Tue 01 Dec 2026",
+   "duration": "0",
+   "custom_event_link": "",
+   "tm_id": "11697",
+   "published": "1768924850"
+  },
+  {
+   "id": 97789,
+   "permalink": "https://rockhal.lu/shows/the-chameleons/",
+   "genres": [
+    {
+     "term_id": 3207,
+     "name": "Pop",
+     "slug": "pop",
+     "term_group": 0,
+     "term_taxonomy_id": 3207,
+     "taxonomy": "roc_show_genre",
+     "description": "",
+     "parent": 0,
+     "count": 301,
+     "filter": "raw"
+    }
+   ],
+   "status": [
+    {
+     "term_id": 3199,
+     "name": "Buy now",
+     "slug": "buy-now",
+     "term_group": 0,
+     "term_taxonomy_id": 3199,
+     "taxonomy": "roc_show_status",
+     "description": "",
+     "parent": 0,
+     "count": 1482,
+     "filter": "raw"
+    }
+   ],
+   "status_string": "buy-now",
+   "availability": "available",
+   "availability_int": "778",
+   "title": "THE CHAMELEONS",
+   "subtitle": "",
+   "location": "Rockhal Club",
+   "organiser": "Rockhal",
+   "start_date": "Wed 02 Dec 2026",
+   "show_year": "2026",
+   "show_month": "December",
+   "end_date": "Wed 02 Dec 2026",
+   "duration": "0",
+   "custom_event_link": "",
+   "tm_id": "11760",
+   "published": "1775233209"
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+[
+ {
+  "latitude": 49.612,
+  "longitude": 6.119,
+  "generationtime_ms": 5.134224891662598,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 311.0,
+  "hourly_units": {
+   "time": "iso8601",
+   "temperature_2m": "°C",
+   "relative_humidity_2m": "%",
+   "pressure_msl": "hPa",
+   "wind_speed_10m": "km/h",
+   "precipitation": "mm",
+   "weather_code": "wmo code"
+  },
+  "hourly": {
+   "time": [
+    "2026-08-24T00:00",
+    "2026-08-24T01:00",
+    "2026-08-24T02:00",
+    "2026-11-24T21:00",
+    "2026-11-24T22:00",
+    "2026-11-24T23:00"
+   ],
+   "temperature_2m": [
+    null,
+    null,
+    null,
+    -1.0,
+    -1.1,
+    -1.2
+   ],
+   "relative_humidity_2m": [
+    null,
+    null,
+    null,
+    70,
+    71,
+    72
+   ],
+   "pressure_msl": [
+    null,
+    null,
+    null,
+    1019.3,
+    1018.5,
+    1018.2
+   ],
+   "wind_speed_10m": [
+    null,
+    null,
+    null,
+    9.7,
+    9.4,
+    7.9
+   ],
+   "precipitation": [
+    null,
+    null,
+    null,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "weather_code": [
+    null,
+    null,
+    null,
+    3,
+    3,
+    3
+   ]
+  }
+ },
+ {
+  "latitude": 49.522,
+  "longitude": 5.8869996,
+  "generationtime_ms": 5.148530006408691,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 311.0,
+  "location_id": 1,
+  "hourly_units": {
+   "time": "iso8601",
+   "temperature_2m": "°C",
+   "relative_humidity_2m": "%",
+   "pressure_msl": "hPa",
+   "wind_speed_10m": "km/h",
+   "precipitation": "mm",
+   "weather_code": "wmo code"
+  },
+  "hourly": {
+   "time": [
+    "2026-08-24T00:00",
+    "2026-08-24T01:00",
+    "2026-08-24T02:00",
+    "2026-11-24T21:00",
+    "2026-11-24T22:00",
+    "2026-11-24T23:00"
+   ],
+   "temperature_2m": [
+    null,
+    null,
+    null,
+    -1.6,
+    -1.8,
+    -1.8
+   ],
+   "relative_humidity_2m": [
+    null,
+    null,
+    null,
+    80,
+    80,
+    80
+   ],
+   "pressure_msl": [
+    null,
+    null,
+    null,
+    1019.0,
+    1018.2,
+    1017.9
+   ],
+   "wind_speed_10m": [
+    null,
+    null,
+    null,
+    13.7,
+    11.5,
+    10.8
+   ],
+   "precipitation": [
+    null,
+    null,
+    null,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "weather_code": [
+    null,
+    null,
+    null,
+    3,
+    3,
+    3
+   ]
+  }
+ }
+]

@@ -1,115 +1,108 @@
-"""Tests unitaires 100 % offline du moteur de collecte (fallback, SHA-256, MockTransport)."""
+"""Tests offline du moteur de collecte (fallback, SHA-256, auth optionnelle, jetons d'URL)."""
 
 from __future__ import annotations
 
+import json
+from datetime import UTC, datetime
+from pathlib import Path
+
 import httpx
+import pytest
 
 from openlux.config import EndpointConfig, QualityConfig, SourceConfig
-from openlux.core.collector import collect_source
+from openlux.core import collector
+from openlux.core.collector import _expand_url, collect_source
+
+PAYLOAD = {"unix_seconds": [1795500000, 1795500900], "price": [101.5, 99.0]}
 
 
-def _build_dummy_source(
-    primary_url: str = "https://mock.primary.lu/data.json",
-    backup_url: str | None = "https://mock.backup.com/data.json",
-    auth_var: str | None = None,
-) -> SourceConfig:
+@pytest.fixture(autouse=True)
+def _isolated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(collector, "BRONZE", tmp_path / "bronze")
+    monkeypatch.setattr(collector.time, "sleep", lambda _s: None)
+
+
+def _source(backup: str | None = "https://mock.backup/x", auth: str | None = None) -> SourceConfig:
     return SourceConfig(
         id="mock_source",
         domain="test",
-        description="Source de test mock",
-        adapter="http_json",
+        description="Source de test",
+        parser="energy_charts_price",
         cadence_minutes=15,
         sla_minutes=30,
-        primary=EndpointConfig(url=primary_url, auth_env_var=auth_var),
-        backup=EndpointConfig(url=backup_url) if backup_url else None,
-        quality=QualityConfig(min_rows=1, required_fields=["id"]),
+        primary=EndpointConfig(url="https://mock.primary/x", auth_env_var=auth),
+        backup=EndpointConfig(url=backup) if backup else None,
+        quality=QualityConfig(min_rows=1),
     )
 
 
-def test_collector_primary_success() -> None:
-    def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json=[{"id": 1, "name": "Findel"}])
+def _client(handler) -> httpx.Client:
+    return httpx.Client(transport=httpx.MockTransport(handler))
 
-    client = httpx.Client(transport=httpx.MockTransport(handler))
-    source = _build_dummy_source()
-    res = collect_source(source, client=client)
 
-    assert res.status == "SUCCESS"
-    assert res.source_used == "primary"
-    assert res.row_count == 1
+def test_primary_success_writes_bronze() -> None:
+    res = collect_source(_source(), client=_client(lambda r: httpx.Response(200, json=PAYLOAD)))
+    assert (res.status, res.source_used, res.row_count) == ("SUCCESS", "primary", 2)
+    assert res.file_path is not None and res.file_path.exists()
     assert len(res.sha256) == 64
-    assert res.file_path is not None
-    assert res.file_path.exists()
 
 
-def test_collector_fallback_to_backup_when_primary_fails() -> None:
-    def handler(request: httpx.Request) -> httpx.Response:
-        if "mock.primary.lu" in str(request.url):
-            return httpx.Response(500, text="Internal Server Error")
-        return httpx.Response(200, json=[{"id": 2, "name": "Backup Station"}])
+def test_fallback_to_backup_is_attention() -> None:
+    def handler(r: httpx.Request) -> httpx.Response:
+        return httpx.Response(500) if "primary" in str(r.url) else httpx.Response(200, json=PAYLOAD)
 
-    client = httpx.Client(transport=httpx.MockTransport(handler))
-    source = _build_dummy_source()
-    res = collect_source(source, client=client)
+    res = collect_source(_source(), client=_client(handler))
+    assert (res.status, res.source_used) == ("ATTENTION", "backup")
 
-    assert res.status == "ATTENTION"
+
+def test_backup_can_use_its_own_parser() -> None:
+    src = _source()
+    src.backup.parser = "meteolux_hvd"
+    hvd = {"data": [{"id": "st", "value": 3.1}], "timestamp": "2026-11-24T20:00:00Z"}
+
+    def handler(r: httpx.Request) -> httpx.Response:
+        return httpx.Response(500) if "primary" in str(r.url) else httpx.Response(200, json=hvd)
+
+    res = collect_source(src, client=_client(handler))
     assert res.source_used == "backup"
-    assert res.row_count == 1
+    assert json.loads(res.raw_bytes)[0]["temperature_c"] == 3.1
 
 
-def test_collector_unchanged_idempotence_sha256() -> None:
-    payload = [{"id": 42, "status": "ok"}]
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json=payload)
-
-    client = httpx.Client(transport=httpx.MockTransport(handler))
-    source = _build_dummy_source()
-
-    # 1er run -> SUCCESS
-    res1 = collect_source(source, client=client)
-    assert res1.status == "SUCCESS"
-
-    # 2e run avec le même sha256 -> UNCHANGED
-    res2 = collect_source(
-        source,
-        client=client,
-        last_sha256=res1.sha256,
-        last_changed_utc=res1.changed_at_utc,
+def test_unchanged_payload_is_idempotent() -> None:
+    cl = _client(lambda r: httpx.Response(200, json=PAYLOAD))
+    first = collect_source(_source(), client=cl)
+    second = collect_source(
+        _source(), client=cl, last_sha256=first.sha256, last_changed_utc=first.changed_at_utc
     )
-    assert res2.status == "UNCHANGED"
-    assert res2.sha256 == res1.sha256
-    assert res2.file_path is None  # Aucun nouveau fichier horodaté n'a été créé
-    assert res2.changed_at_utc == res1.changed_at_utc
+    assert second.status == "UNCHANGED" and second.file_path is None
+    assert second.changed_at_utc == first.changed_at_utc
 
 
-def test_collector_both_fail_returns_error() -> None:
-    def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(503, text="Service Unavailable")
-
-    client = httpx.Client(transport=httpx.MockTransport(handler))
-    source = _build_dummy_source()
-    res = collect_source(source, client=client)
-
-    assert res.status == "ERROR"
-    assert res.source_used == "none"
-    assert res.row_count == 0
+def test_both_endpoints_failing_is_error_without_any_data() -> None:
+    res = collect_source(_source(), client=_client(lambda r: httpx.Response(503)))
+    assert (res.status, res.row_count, res.raw_bytes) == ("ERROR", 0, b"")
+    assert "primary" in res.error_message and "backup" in res.error_message
 
 
-def test_collector_missing_auth_env_var_marks_not_tested_or_falls_back() -> None:
-    def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json=[{"id": 99}])
+def test_transient_error_is_retried_once() -> None:
+    calls = {"n": 0}
 
-    client = httpx.Client(transport=httpx.MockTransport(handler))
-    # Source sans backup avec auth requise manquante
-    src_no_backup = _build_dummy_source(backup_url=None, auth_var="NON_EXISTENT_KEY_12345")
-    res_no_backup = collect_source(src_no_backup, client=client)
-    assert res_no_backup.status == "NOT_TESTED"
+    def handler(r: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        return httpx.Response(404) if calls["n"] == 1 else httpx.Response(200, json=PAYLOAD)
 
-    # Source avec backup qui doit basculer sans planter
-    src_with_backup = _build_dummy_source(
-        backup_url="https://mock.backup.com/data.json", auth_var="NON_EXISTENT_KEY_12345"
-    )
-    res_backup = collect_source(src_with_backup, client=client)
-    assert res_backup.status == "ATTENTION"
-    assert res_backup.source_used == "backup"
+    res = collect_source(_source(backup=None), client=_client(handler))
+    assert res.status == "SUCCESS" and calls["n"] == 2
+
+
+def test_missing_api_key_never_crashes() -> None:
+    cl = _client(lambda r: httpx.Response(200, json=PAYLOAD))
+    assert collect_source(_source(None, "NO_SUCH_KEY_42"), client=cl).status == "NOT_TESTED"
+    res = collect_source(_source(auth="NO_SUCH_KEY_42"), client=cl)
+    assert (res.status, res.source_used) == ("ATTENTION", "backup")
+
+
+def test_url_date_tokens() -> None:
+    now = datetime(2026, 11, 24, 12, 0, tzinfo=UTC)
+    url = _expand_url("x?from={last_year}-01-01&to={today}&y={next_year}&t={now_ms}", now)
+    assert url == "x?from=2025-01-01&to=2026-11-24&y=2027&t=1795521600000"

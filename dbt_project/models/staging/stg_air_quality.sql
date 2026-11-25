@@ -1,19 +1,12 @@
--- Staging: Extraction brute de la qualité de l'air depuis Bronze
-WITH raw_source AS (
-    SELECT *
-    FROM read_json_auto('data/bronze/air_quality_lu/**/*.json.gz', union_by_name = true)
-)
-SELECT DISTINCT
-    station_id::VARCHAR AS station_id,
-    station_name::VARCHAR AS station_name,
-    observed_at::VARCHAR AS raw_observed_at,
-    pollutant::VARCHAR AS pollutant,
-    value::DOUBLE AS pollutant_value,
-    unit::VARCHAR AS unit,
-    aqi_index::VARCHAR AS aqi_index,
-    lat::DOUBLE AS lat,
-    lon::DOUBLE AS lon,
-    commune_lau::VARCHAR AS commune_lau,
-    'air_quality_lu' AS source_id
-FROM raw_source
-WHERE station_id IS NOT NULL
+-- Staging qualité de l'air et pollens (modèle CAMS via Open-Meteo), format long
+{% set cols = {'station_id': 'VARCHAR', 'location_index': 'INTEGER', 'observed_at': 'VARCHAR', 'pollutant': 'VARCHAR', 'value': 'DOUBLE', 'unit': 'VARCHAR', 'lat': 'DOUBLE', 'lon': 'DOUBLE'} %}
+-- POURQUOI : points modèle rattachés au chef-lieu demandé (grid_lat/grid_lon = maille réelle)
+SELECT
+    m.* EXCLUDE (lat, lon), m.lat AS grid_lat, m.lon AS grid_lon,
+    COALESCE(p.point_name, NULL) AS point_name,
+    COALESCE(c.lat, m.lat) AS lat, COALESCE(c.lon, m.lon) AS lon
+FROM (SELECT * FROM {{ bronze('air_quality_openmeteo', cols) }}
+UNION ALL BY NAME
+SELECT * FROM {{ bronze('pollen_openmeteo', cols) }}) m
+LEFT JOIN {{ ref('ref_model_points') }} p USING (location_index)
+LEFT JOIN {{ ref('ref_communes_lu') }} c ON c.code_lau = p.code_lau

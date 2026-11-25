@@ -1,0 +1,76 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "OBJECTID": 11,
+    "NAME": "Lac Weiswampach Zone 2",
+    "Hyperlinks": "https://eau.gouvernement.lu/dam-assets/badegewaesser/profil-du-lac-de-weiswampach.pdf",
+    "Baignade": "hors saison",
+    "pygeoapi_id": 1
+   },
+   "id": 1,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.064593341363868,
+     50.1387342610614
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "OBJECTID": 14,
+    "NAME": "Lac Weiswampach Zone 1",
+    "Hyperlinks": "https://eau.gouvernement.lu/dam-assets/badegewaesser/profil-du-lac-de-weiswampach.pdf",
+    "Baignade": "hors saison",
+    "pygeoapi_id": 2
+   },
+   "id": 2,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.06676355229204,
+     50.13774723870548
+    ]
+   }
+  }
+ ],
+ "numberReturned": 15,
+ "numberMatched": 15,
+ "links": [
+  {
+   "type": "application/geo+json",
+   "rel": "self",
+   "title": "This document as GeoJSON",
+   "href": "https://features.geoportail.lu/collections/656/items?f=json&limit=100"
+  },
+  {
+   "rel": "alternate",
+   "type": "application/ld+json",
+   "title": "This document as RDF (JSON-LD)",
+   "href": "https://features.geoportail.lu/collections/656/items?f=jsonld&limit=100"
+  },
+  {
+   "type": "text/html",
+   "rel": "alternate",
+   "title": "This document as HTML",
+   "href": "https://features.geoportail.lu/collections/656/items?f=html&limit=100"
+  },
+  {
+   "type": "text/csv; charset=utf-8",
+   "rel": "alternate",
+   "title": "This document as CSV",
+   "href": "https://features.geoportail.lu/collections/656/items?f=csv&limit=100"
+  },
+  {
+   "type": "application/json",
+   "title": "Eaux de baignade",
+   "rel": "collection",
+   "href": "https://features.geoportail.lu/collections/656"
+  }
+ ],
+ "timeStamp": "2026-11-24T20:55:33.985012Z"
+}

@@ -1,213 +1,91 @@
-# Catalogue des Données OpenLux Hub
+# Catalogue des données OpenLux (V3)
 
-> Ce catalogue recense les tables analytiques de la couche **Gold** produites par OpenLux Hub, leurs schémas, leurs garanties de fraîcheur et leurs limites d'usage connues (`known_limitations`).
+> Instantané mesuré le 25/11/2026 à partir de `data/gold/*.parquet` (volumes, couverture, sources).
+> La version vivante est servie par `GET /v1/datasets` et par le site `/v2/`. Aucune donnée n'est saisie à la main.
 
----
+| Table | Domaine | Lignes | Couverture | Sources | Licences |
+| :--- | :--- | ---: | :--- | :--- | :--- |
+| `gold_weather_observations` | Environnement | 22,179 | 2026-09-10 → 2026-11-25 | `meteo_cantons_openmeteo`, `meteo_findel_meteolux` | CC-BY-4.0, CC0-1.0 |
+| `gold_air_quality` | Environnement | 267,840 | 2026-08-25 → 2026-11-25 | `air_quality_openmeteo`, `pollen_openmeteo` | CC-BY-4.0 |
+| `gold_water_levels` | Environnement | 28,289 | 2026-11-18 → 2026-11-25 | `water_levels_age` | CC0-1.0 |
+| `gold_bathing_water` | Environnement | 15 | 2026-11-25 → 2026-11-25 | `bathing_status_age` | CC0-1.0 |
+| `gold_weather_warnings` | Environnement | 6 | 2026-11-25 → 2026-11-25 | `weather_warnings_meteoalarm` | CC-BY-4.0 |
+| `gold_traffic_events` | Mobilité | 63 | 2023-03-24 → 2026-11-29 | `traffic_cita_datex2`, `traffic_fr_dir_est`, `traffic_vdl_info` | CC0-1.0, etalab-2.0 |
+| `gold_roadworks` | Mobilité | 333 | 2020-05-28 → 2027-03-01 | `roadworks_cita_current`, `roadworks_cita_planned`, `roadworks_vdl`, `roadworks_vdl_permits` | CC0-1.0 |
+| `gold_transit_disruptions` | Mobilité | 12 | 2026-05-03 → 2026-11-24 | `bus_vdl_messages`, `rail_sncb_irail`, `rail_sncf_siri` | CC0-1.0, ODbL-1.0, unspecified |
+| `gold_mobility_veloh` | Mobilité | 160 | 2025-05-28 → 2026-11-25 | `veloh_stations` | unspecified |
+| `gold_mobility_parkings` | Mobilité | 87 | 2026-11-25 → 2026-11-25 | `parkings_vdl` | CC0-1.0 |
+| `gold_chargy_stations` | Mobilité | 1,572 | 2026-11-25 → 2026-11-25 | `chargy_stations` | CC0-1.0 |
+| `gold_aviation` | Mobilité | 21 | 2026-11-25 → 2026-11-25 | `aviation_opensky` | unspecified |
+| `gold_fuel_prices` | Économie | 70 | 2026-01 → 2026-10 | `fuel_prices_lu` | CC0-1.0 |
+| `gold_inflation` | Économie | 946 | 1948-01 → 2026-10 | `inflation_ipcn_statec` | CC-BY-4.0 |
+| `gold_electricity_spot` | Économie | 46,971 | 2024-12-31 → 2026-11-25 | `electricity_spot_delu` | CC-BY-4.0 |
+| `gold_unemployment` | Économie | 36,186 | 2012-01 → 2026-10 | `unemployment_adem` | CC0-1.0 |
+| `gold_building_permits` | Logement | 1,040 | 2010 → 2025 | `building_permits_statec` | CC-BY-4.0 |
+| `gold_housing_prices` | Logement | 3,382 | 2010 → 2025 | `housing_prices_apartments`, `housing_prices_houses` | CC0-1.0 |
+| `gold_holidays` | Calendrier | 435 | 2020-01-01 → 2036-12-26 | `holidays_be`, `holidays_de`, `holidays_fr`, `holidays_lu`, `school_holidays_lu` | CC0-1.0, unspecified |
+| `gold_equipment` | Territoire | 1,021 | 2026-11-25 → 2026-11-25 | `aed_osm`, `bike_routes_regional`, `recycling_centers` | CC0-1.0, ODbL-1.0 |
+| `gold_petitions` | Vie civique | 3,146 | 2006-07-17 → 2025-03-11 | `petitions_chd` | CC0-1.0 |
+| `gold_culture_events` | Culture | 1,118 | 2026-01-07 → 2028-04-15 | `culture_echo_lu`, `events_rockhal`, `events_vdl_agenda` | unspecified |
+| `gold_strikes_news` | Actualité | 44 | 2013-11-05 → 2026-10-11 | `strikes_news` | unspecified |
+| `gold_luxembourg_daily_context` | Synthèse | 924 | 2026-09-10 → 2026-11-25 |  |  |
 
-## 1. Vue d'Ensemble des Tables Gold
+## Registre des 45 sources
 
-Toutes les tables Gold sont stockées au format Parquet compressé en `ZSTD` dans le répertoire `data/gold/`.
-Chaque table comporte systématiquement les colonnes de traçabilité spatio-temporelle lorsque cela est applicable :
-- `observed_at_utc` (`TIMESTAMP`) : Horodatage universel de la mesure.
-- `commune_lau` (`VARCHAR`) : Code officiel LAU de la commune luxembourgeoise.
-- `lat` (`DOUBLE`), `lon` (`DOUBLE`) : Coordonnées géographiques en WGS84 (EPSG:4326).
-- `source_id` (`VARCHAR`) : Identifiant du flux d'origine.
+| Source | Nature | Licence | URL primaire | Backup | Limites connues |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `meteo_findel_meteolux` | official | CC0-1.0 | https://metapi.ana.lu/api/v1/hvd/observations | https://data.public.lu/fr/datasets/r/0e03052d-0506-481d-8fd8-98d670103204 | Une seule station (Findel) ; instantané sans archive : l'historique est construit par accumulation. |
+| `meteo_cantons_openmeteo` | model | CC-BY-4.0 | https://api.open-meteo.com/v1/forecast | — | Données de modèle (point de grille), pas des mesures de station ; heures sans valeur ignorées. |
+| `air_quality_openmeteo` | model | CC-BY-4.0 | https://air-quality-api.open-meteo.com/v1/air-quality | — | Modèle CAMS Europe, pas des mesures : le réseau télémétrique AEV est figé depuis le 13/12/2025. |
+| `pollen_openmeteo` | model | CC-BY-4.0 | https://air-quality-api.open-meteo.com/v1/air-quality | — | Modèle CAMS ; hors saison pollinique les valeurs sont nulles ou absentes. |
+| `water_levels_age` | official | CC0-1.0 | https://inondations.public.lu/dam-assets/ctie/datas/Water-Levels-LocalTime.csv | https://data.public.lu/fr/datasets/r/94fecbb1-4fce-4bee-8f2d-fc03b9fa314f | Fenêtre glissante de 7 jours ; Esch-Sûre est exprimé en m (barrage), les autres en cm ; pas de débit. |
+| `bathing_status_age` | official | CC0-1.0 | https://features.geoportail.lu/collections/656/items | — | Statut 'hors saison' hors période estivale. |
+| `bathing_quality_age` | official | CC0-1.0 | https://features.geoportail.lu/collections/581/items | — | Classement annuel. |
+| `traffic_cita_datex2` | official | CC0-1.0 | https://www.cita.lu/info_trafic/datex/situationrecord | https://cita.lu/info_trafic/datex/situationrecord36 | Autoroutes et voies express uniquement. |
+| `traffic_vdl_info` | official | CC0-1.0 | https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query | — | Territoire de la Ville de Luxembourg uniquement. |
+| `traffic_fr_dir_est` | official | etalab-2.0 | http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml | — | Réseau non concédé ; filtré sur la boîte Lorraine nord (lat 48,85–49,6). |
+| `traffic_de_a1` | official | unspecified | https://verkehr.autobahn.de/o/autobahn/A1/services/warning | https://verkehr.autobahn.de/o/autobahn/A1/services/closure | Filtré sur la zone lat 49,3–50,1 / lon 6,0–7,2 ; licence non précisée par l'API. |
+| `traffic_de_a8` | official | unspecified | https://verkehr.autobahn.de/o/autobahn/A8/services/warning | https://verkehr.autobahn.de/o/autobahn/A8/services/closure | Filtré sur la zone frontalière ; licence non précisée par l'API. |
+| `traffic_de_a64` | official | unspecified | https://verkehr.autobahn.de/o/autobahn/A64/services/warning | https://verkehr.autobahn.de/o/autobahn/A64/services/closure | Liste souvent vide (aucune perturbation) ; licence non précisée par l'API. |
+| `rail_sncf_siri` | official | ODbL-1.0 | https://proxy.transport.data.gouv.fr/resource/sncf-siri-lite-situation-exchange | — | Filtré par mots-clés (Luxembourg, Thionville, Metz, Bettembourg…). |
+| `rail_sncb_irail` | community | unspecified | https://api.irail.be/disturbances/ | — | API communautaire iRail (non officielle) ; licence non précisée. |
+| `bus_vdl_messages` | official | CC0-1.0 | https://web.vdl.lu/autobus/data/messages/messages.xml | — | Réseau AVL uniquement ; pas de temps réel RGTR/CFL/TICE sans clé API. |
+| `veloh_stations` | official | unspecified | https://api.jcdecaux.com/vls/v3/stations | https://api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json | Primaire JCDecaux v3 avec clé (JCDECAUX_API_KEY) ; backup GBFS sans clé, positions via le seed GBFS. |
+| `parkings_vdl` | official | CC0-1.0 | https://feed.vdl.lu/circulation/parking/feed.json | — | Parkings gérés/relayés par la Ville uniquement. |
+| `chargy_stations` | official | CC0-1.0 | https://my.chargy.lu/b2bev-external-services/resources/kml | — | Réseau Chargy uniquement. POURQUOI clé en clair : elle est publiée dans le catalogue CC0 data.public.lu. |
+| `aviation_opensky` | community | unspecified | https://opensky-network.org/api/states/all | — | Instantané ; couverture ADS-B communautaire ; quota d'appels anonymes limité. |
+| `roadworks_cita_current` | official | CC0-1.0 | https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml | — | Commentaires bruts du producteur (certains accents perdus à la source). |
+| `roadworks_cita_planned` | official | CC0-1.0 | https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml | — | Dates prévisionnelles susceptibles d'évoluer. |
+| `roadworks_vdl` | official | CC0-1.0 | https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query | — | Territoire de la Ville uniquement ; position = centroïde de l'emprise. |
+| `roadworks_vdl_permits` | official | CC0-1.0 | https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query | — | Territoire de la Ville uniquement. |
+| `fuel_prices_lu` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/d3a17cf8-5afc-4bf5-8222-9519e343d29d | — | Moyennes mensuelles de l'année en cours ; unités différentes selon l'énergie (l, kg, kWh). |
+| `inflation_ipcn_statec` | official | CC-BY-4.0 | https://lustat.statec.lu/rest/data/LU1,DSD_PRIX_CONSO@DF_E5100,1.0/all | — | Publication mensuelle avec ~1 mois de décalage. |
+| `electricity_spot_delu` | official | CC-BY-4.0 | https://api.energy-charts.info/price | — | Zone de marché commune Allemagne-Luxembourg. |
+| `building_permits_statec` | official | CC-BY-4.0 | https://lustat.statec.lu/rest/data/LU1,DF_D4113/all | — | Granularité cantonale et annuelle. |
+| `housing_prices_apartments` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/1d20f982-57e1-4ae2-a278-dc78c88c21dc | — | Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions. |
+| `housing_prices_houses` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/14b0156e-ff87-4a36-a867-933fc9a6f903 | — | Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions. |
+| `unemployment_adem` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/7bc964ea-7744-4860-ae84-24cc0ef3777d | — | Noms de communes d'avant fusion sur les périodes anciennes. |
+| `holidays_lu` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/9dd69c71-f55e-4124-87b8-4a54ba528335 | https://openholidaysapi.org/PublicHolidays | Les jours de congé d'usage (non légaux) ne sont pas inclus. |
+| `school_holidays_lu` | community | unspecified | https://openholidaysapi.org/SchoolHolidays | — | Source communautaire alimentée depuis les calendriers officiels. |
+| `holidays_fr` | community | unspecified | https://openholidaysapi.org/PublicHolidays | — | Source communautaire. |
+| `holidays_be` | community | unspecified | https://openholidaysapi.org/PublicHolidays | — | Source communautaire. |
+| `holidays_de` | community | unspecified | https://openholidaysapi.org/PublicHolidays | — | Source communautaire ; libellés en allemand. |
+| `weather_warnings_meteoalarm` | official | CC-BY-4.0 | https://feeds.meteoalarm.org/api/v1/warnings/feeds-luxembourg | — | Inclut les messages d'annulation ; LU-Alert (CAP) non intégré car sans URL 'dernière alerte' stable. |
+| `aed_osm` | community | ODbL-1.0 | https://overpass.kumi.systems/api/interpreter | https://overpass-api.de/api/interpreter | Aucun jeu officiel : données OSM (ODbL), complétude non garantie ; serveurs Overpass parfois saturés. |
+| `recycling_centers` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/be8c3b2e-88d3-4ddb-955c-40b354123d29 | — | Pas d'horaires ; coordonnées reprojetées depuis EPSG:3035. |
+| `bike_routes_regional` | official | CC0-1.0 | https://data.geoportail.lu/mymaps | — | Réseau régional ; pas de couche nationale unique en GeoJSON. |
+| `petitions_chd` | official | CC0-1.0 | https://data.public.lu/fr/datasets/r/6c43ab5c-8fc2-493b-822a-35793ac1c840 | — | Jeu non mis à jour depuis le 28/03/2025 (dernier dépôt 12/03/2025) ; motivations exclues. |
+| `culture_echo_lu` | community | unspecified | https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact | — | Index de recherche public limité à 1000 résultats par requête ; conditions de réutilisation non publiées. |
+| `events_vdl_agenda` | official | unspecified | https://www.vdl.lu/fr/agenda/rss.xml | — | Pas de lieu structuré ; pubDate utilisée comme date de l'événement. |
+| `events_rockhal` | official | unspecified | https://rockhal.lu/wp-json/rockhal/shows | — | API WordPress non documentée. |
+| `strikes_news` | press | unspecified | https://news.google.com/rss/search | https://www.rtl.lu/rss/national | Agrégateur de presse : titre et lien uniquement (factual-only) ; pays déduit par mots-clés. |
 
----
+## Domaines sans source fiable (retirés)
 
-## 2. Data Marts Actifs
-
-### 2.1 `gold_weather_observations`
-- **Domaine** : `weather`
-- **Grain** : 1 ligne par station météorologique et par relevé.
-- **Fichier** : `data/gold/gold_weather_observations.parquet` (ZSTD)
-- **Sources** : `meteo_lux_obs` (MeteoLux, backup Open-Meteo).
-- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `temperature`, `humidity`, `pressure_hpa`, `wind_speed_kmh`, `precipitation_mm`, `weather_condition`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Mesures concentrées sur les stations officielles principales (Findel, etc.) ; microclimats locaux non captés.
-
-### 2.2 `gold_traffic_events`
-- **Domaine** : `traffic_cita`
-- **Grain** : 1 ligne par événement de circulation routière (accident, bouchon, chantier).
-- **Fichier** : `data/gold/gold_traffic_events.parquet` (ZSTD)
-- **Sources** : `traffic_cita_datex2` (CITA DATEX II XML via `cita_datex2`).
-- **Schéma exact** : `event_id`, `road_name`, `situation_type`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `traffic_comment`, `source_id`.
-- **Limites connues** : Couvre exclusivement le réseau autoroutier national exploité par CITA (A1, A3, A4, A6, A7, A13, B40).
-
-### 2.3 `gold_holidays`
-- **Domaine** : `holidays_vacations`
-- **Grain** : 1 ligne par date de jour férié officiel ou tradition de la Grande Région (2025-2027).
-- **Fichier** : `data/gold/gold_holidays.parquet` (ZSTD)
-- **Sources** : `holidays_lu` (`data.public.lu`), `ref_crossborder_holidays` (LU, FR, BE, DE, Lorraine).
-- **Schéma exact** : `holiday_date`, `observed_at_utc`, `country_code`, `country_name`, `region_code`, `holiday_name`, `holiday_name_fr`, `holiday_name_de`, `holiday_name_lb`, `is_legal_holiday`, `is_customary_tradition`, `is_school_vacation`, `commune_lau`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Calendrier légal et fêtes coutumières (Saint-Nicolas en Lorraine, Vendredi Saint en Moselle et Sarre, Fête-Dieu, etc.).
-
-### 2.4 `gold_air_quality` (Vague 3A)
-- **Domaine** : `air_quality`
-- **Grain** : 1 ligne par station, par polluant mesuré et par relevé.
-- **Fichier** : `data/gold/gold_air_quality.parquet` (ZSTD)
-- **Sources** : `air_quality_lu` (Administration de l'Environnement, backup Open-Meteo Air Quality).
-- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `pollutant`, `pollutant_value`, `unit`, `aqi_index`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Données issues des stations automatiques avant validation définitive annuelle.
-
-### 2.5 `gold_water_levels` (Vague 3A)
-- **Domaine** : `water_levels`
-- **Grain** : 1 ligne par station hydrologique et par relevé.
-- **Fichier** : `data/gold/gold_water_levels.parquet` (ZSTD)
-- **Sources** : `water_levels_lu` (Administration de la Gestion de l'Eau).
-- **Schéma exact** : `station_id`, `station_name`, `river_name`, `observed_at_utc`, `water_level_cm`, `discharge_m3s`, `alert_level`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Mesures automatiques en direct soumises aux crues subites.
-
-### 2.6 `gold_fuel_prices` (Vague 3A)
-- **Domaine** : `economy_fuel`
-- **Grain** : 1 ligne par type de carburant routier et par mise à jour officielle.
-- **Fichier** : `data/gold/gold_fuel_prices.parquet` (ZSTD)
-- **Sources** : `fuel_prices_lu` (Ministère de l'Économie).
-- **Schéma exact** : `fuel_type`, `observed_at_utc`, `price_eur_per_litre`, `price_change_eur`, `source_id`.
-- **Limites connues** : Prix maxima légaux autorisés au Luxembourg ; les stations peuvent appliquer des rabais.
-
-### 2.7 `gold_statec_inflation` (Vague 3A)
-- **Domaine** : `economy_fuel`
-- **Grain** : 1 ligne par mois de référence.
-- **Fichier** : `data/gold/gold_statec_inflation.parquet` (ZSTD)
-- **Sources** : `statec_inflation` (STATEC, backup Eurostat).
-- **Schéma exact** : `reference_month`, `observed_at_utc`, `ipcn_index`, `inflation_annual_rate`, `wage_index_quote`, `source_id`.
-- **Limites connues** : Publication mensuelle officielle le premier mercredi suivant la fin du mois.
-
-### 2.8 `gold_electricity_spot` (Vague 3A)
-- **Domaine** : `energy_climate`
-- **Grain** : 1 ligne par heure d'échéance Day-Ahead.
-- **Fichier** : `data/gold/gold_electricity_spot.parquet` (ZSTD)
-- **Sources** : `electricity_spot_delu` (ENTSO-E / EPEX SPOT DE-LU).
-- **Schéma exact** : `observed_at_utc`, `price_eur_per_mwh`, `bidding_zone`, `data_origin`, `is_imputed`, `source_id`.
-- **Limites connues** : Prix spot de gros conjointe Allemagne-Luxembourg ; `data_origin` indique si la donnée est physique réelle (`REEL`) ou interpolée (`IMPUTE`).
-
-### 2.9 `gold_radioactivity` (Vague 3A)
-- **Domaine** : `energy_climate`
-- **Grain** : 1 ligne par sonde de télémesure nationale et par relevé.
-- **Fichier** : `data/gold/gold_radioactivity.parquet` (ZSTD)
-- **Sources** : `radioactivity_lu` (Division de la Radioprotection).
-- **Schéma exact** : `station_id`, `station_name`, `observed_at_utc`, `dose_rate_nsvh`, `radiological_status`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Mesure en nSv/h ; légères hausses naturelles lors des épisodes de pluie (radon).
-
-### 2.10 `gold_bathing_water` (Vague 3A)
-- **Domaine** : `energy_climate`
-- **Grain** : 1 ligne par site officiel de baignade et par contrôle sanitaire.
-- **Fichier** : `data/gold/gold_bathing_water.parquet` (ZSTD)
-- **Sources** : `bathing_water_lu` (Administration de la Gestion de l'Eau).
-- **Schéma exact** : `site_id`, `site_name`, `water_body`, `observed_at_utc`, `quality_class`, `cyanobacteria_bloom`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Prélèvements réalisés bimensuellement pendant la saison estivale (mai - septembre).
-
-### 2.11 `gold_crossborder_traffic` (Vague 3B)
-- **Domaine** : `crossborder_traffic`
-- **Grain** : 1 ligne par événement ou corridor frontalier (A31, A64, E411, lignes TER/CFL).
-- **Fichier** : `data/gold/gold_crossborder_traffic.parquet` (ZSTD)
-- **Sources** : `traffic_fr_bisonfute`, `traffic_de_autobahn`, `traffic_be_trafiroutes`, `rail_crossborder`.
-- **Schéma exact** : `event_id`, `corridor`, `transport_mode`, `observed_at_utc`, `delay_minutes`, `status`, `comment`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Temps de parcours et retards indicatifs fournis par les gestionnaires d'infrastructures voisins (DIR Est, Autobahn GmbH, SPW, SNCF).
-
-### 2.12 `gold_public_transit` (Vague 3B)
-- **Domaine** : `public_transit`
-- **Grain** : 1 ligne par ligne de transport, réseau et état de service.
-- **Fichier** : `data/gold/gold_public_transit.parquet` (ZSTD)
-- **Sources** : `transit_mobiliteit`, `transit_avl_rt`.
-- **Schéma exact** : `line_id`, `network`, `observed_at_utc`, `delay_seconds`, `disruption_level`, `message`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Couvre le réseau national Mobiliteit.lu (CFL, Tram, RGTR) et les autobus municipaux AVL.
-
-### 2.13 `gold_mobility_parkings` (Vague 3B)
-- **Domaine** : `mobility_parkings`
-- **Grain** : 1 ligne par équipement de mobilité (station Vel'oH, parking public, P+R, borne Chargy).
-- **Fichier** : `data/gold/gold_mobility_parkings.parquet` (ZSTD)
-- **Sources** : `veloh_stations`, `parkings_vdl`, `chargy_stations`.
-- **Schéma exact** : `facility_id`, `facility_type`, `facility_name`, `observed_at_utc`, `available_capacity`, `total_capacity`, `occupancy_rate`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Taux d'occupation en temps réel ; ne comprend pas le stationnement payant résidentiel en voirie.
-
-### 2.14 `gold_aviation_noise` (Vague 3B)
-- **Domaine** : `aviation_noise`
-- **Grain** : 1 ligne par mouvement aérien Findel (vols en approche/décollage) ou contour de bruit réglementaire.
-- **Fichier** : `data/gold/gold_aviation_noise.parquet` (ZSTD)
-- **Sources** : `aviation_opensky_lu`, `noise_zones_lu`.
-- **Schéma exact** : `record_id`, `record_type`, `callsign_or_zone`, `observed_at_utc`, `altitude_m_or_dba`, `status`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Vols ADS-B captés par OpenSky dans la bounding box Luxembourg ; courbes d'isophonie réglementaires révisées périodiquement.
-
-### 2.15 `gold_roadworks` (Vague 3C)
-- **Domaine** : `roadworks`
-- **Grain** : 1 ligne par chantier ou perturbation programmée sur le réseau autoroutier et voiries communales VDL.
-- **Fichier** : `data/gold/gold_roadworks.parquet` (ZSTD)
-- **Sources** : `roadworks_cita`, `roadworks_vdl`.
-- **Schéma exact** : `work_id`, `authority`, `road_name`, `start_date`, `end_date`, `impact_level`, `title`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Couvre les autoroutes CITA et le réseau municipal de la Ville de Luxembourg ; calendrier sous réserve d'aléas météo.
-
-### 2.16 `gold_housing` (Modèle Unifié)
-- **Domaine** : `housing_construction`
-- **Grain** : 1 ligne par annonce active réelle, par observation de prix de l'Observatoire de l'Habitat ou par autorisation de bâtir STATEC.
-- **Fichier** : `data/gold/gold_housing.parquet` (ZSTD)
-- **Sources** : `housing_observatoire`, `housing_statec`, `housing_market_listings`.
-- **Schéma exact (29 attributs factuels)** : `record_id`, `record_type`, `property_type`, `market_segment`, `reference_period`, `price_eur`, `surface_m2`, `price_eur_m2`, `bedrooms_count`, `bathrooms_count`, `rooms_count`, `has_balcony`, `has_terrace`, `has_garden`, `has_parking_or_garage`, `has_elevator`, `floor_number`, `construction_year`, `energy_class`, `thermal_insulation_class`, `description`, `street_name`, `postal_code`, `neighborhood_or_quartier`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `listing_url`, `units_count`, `observed_at_utc`, `source_id`.
-- **Garanties qualité** : Zéro lien mort (100% URLs vérifiées HTTP 200), zéro donnée mockée, zéro score d'opinion subjectif, unicité stricte.
-
-### 2.16.1 `gold_housing_listings` (Offres de Marché Individuelles)
-- **Domaine** : `housing_construction`
-- **Grain** : 1 ligne par offre ou annonce immobilière active du marché luxembourgeois (atHome et partenaires).
-- **Fichier** : `data/gold/gold_housing_listings.parquet` (ZSTD)
-- **Sources** : `housing_market_listings` (ref_housing_market_deals).
-- **Schéma exact (29 attributs factuels)** : `record_id`, `record_type`, `property_type`, `market_segment`, `price_eur`, `surface_m2`, `price_eur_m2`, `bedrooms_count`, `bathrooms_count`, `rooms_count`, `has_balcony`, `has_terrace`, `has_garden`, `has_parking_or_garage`, `has_elevator`, `floor_number`, `construction_year`, `energy_class`, `thermal_insulation_class`, `description`, `street_name`, `postal_code`, `neighborhood_or_quartier`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `listing_url`, `units_count`, `observed_at_utc`, `source_id`.
-- **Garanties qualité** : 100% annonces géolocalisées, conformité Zero-PII, caractéristiques architecturales et énergétiques objectives.
-
-### 2.16.2 `gold_housing_stats` (Statistiques Macro STATEC & Observatoire)
-- **Domaine** : `housing_construction`
-- **Grain** : 1 ligne par indicateur communal et périodique de l'habitat (prix constatés Observatoire ou permis STATEC).
-- **Fichier** : `data/gold/gold_housing_stats.parquet` (ZSTD)
-- **Sources** : `housing_observatoire` (Observatoire de l'Habitat), `housing_statec` (Lustat SDMX DF_D4113).
-- **Schéma exact** : `record_id`, `record_type`, `property_type`, `market_segment`, `reference_period`, `price_eur_m2`, `units_count`, `permits_count`, `description`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `observed_at_utc`, `source_id`.
-- **Garanties qualité** : Indicateurs macroéconomiques officiels sans mélange avec les annonces unitaires.
-
-### 2.17 `gold_daily_life` (Vague 3C)
-- **Domaine** : `daily_life_sport`
-- **Grain** : 1 ligne par aménagement ou équipement du quotidien (pistes cyclables nationales, ouvertures dominicales VDL, parcs de recyclage).
-- **Fichier** : `data/gold/gold_daily_life.parquet` (ZSTD)
-- **Sources** : `bike_lanes_lu`, `open_sundays_vdl`, `recycling_centers`.
-- **Schéma exact** : `item_id`, `category`, `name`, `status_or_schedule`, `details`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Pistes cyclables gérées par les Ponts & Chaussées ; horaires des centres de recyclage et commerces sous réserve d'actualisation municipale.
-
-### 2.18 `gold_culture_events` (Vague 3D)
-- **Domaine** : `concerts_culture`, `local_events_markets`, `major_venues`
-- **Grain** : 1 ligne par manifestation culturelle ou sortie unique (dédoublonnée par titre et date de début).
-- **Fichier** : `data/gold/gold_culture_events.parquet` (ZSTD)
-- **Sources** : `culture_echo_lu`, `culture_venues_jsonld`, `events_vdl`, `events_visitlu`, `venues_luxexpo`, `venues_stade_coque`, `ref_recurring_events`.
-- **Schéma exact** : `title`, `status`, `start_date`, `end_date`, `start_time`, `venue`, `address`, `category`, `price_eur`, `price_text`, `is_free`, `source_url`, `ticket_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Liens canoniques HTTPS vérifiés sans 404 (`https://www.echo.lu/fr/experiences/{slug}`) ; statut réel de programmation (`Annulé`, `Confirmé`, `Reporté`) ; horaires précis en fuseau horaire `Europe/Luxembourg` ; tarification factuelle (`price_eur`, `price_text`) et billetterie directe (`ticket_url`) ; adresses physiques des lieux sans reproduction de textes descriptifs sous droit d'auteur (`FACTUAL-ONLY`).
-
-### 2.19 `gold_strikes_disruptions` (Vague 3D)
-- **Domaine** : `strikes_disruptions`
-- **Grain** : 1 ligne par préavis ou alerte de grève / manifestation sociale.
-- **Fichier** : `data/gold/gold_strikes_disruptions.parquet` (ZSTD)
-- **Sources** : `strikes_rss_lu`.
-- **Schéma exact** : `strike_id`, `title`, `published_at_utc`, `sector`, `source_url`, `commune_lau`, `canton`, `lat`, `lon`, `source_id`.
-- **Limites connues** : Filtrage algorithmique pur sur flux d'actualités via mots-clés grève/streik ; niveau d'impact effectif sujet à l'évolution des négociations.
-
-### 2.20 `gold_health_alerts` (Vague 3D)
-- **Domaine** : `health_pollen_alerts`
-- **Grain** : 1 ligne par relevé d'allergène, borne de défibrillation d'urgence ou message LU-Alert.
-- **Fichier** : `data/gold/gold_health_alerts.parquet` (ZSTD)
-- **Sources** : `pollen_lu`, `aed_defib_lu`, `lu_alert`.
-- **Schéma exact** : `record_id`, `record_type`, `headline_or_name`, `status_or_severity`, `metric_value`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Concentrations polliniques issues de la station aérobiologique centrale ; messages LU-Alert actifs uniquement en situation d'urgence ou test officiel.
-
-### 2.21 `gold_civic_life` (Vague 3D)
-- **Domaine** : `civic_life`
-- **Grain** : 1 ligne par pétition publique citoyenne ou statistique mensuelle communale de l'emploi ADEM.
-- **Fichier** : `data/gold/gold_civic_life.parquet` (ZSTD)
-- **Sources** : `petitions_chd`, `unemployment_adem`.
-- **Schéma exact** : `record_id`, `record_type`, `title_or_indicator`, `signatures_count`, `rate_value`, `status`, `observed_at_utc`, `lat`, `lon`, `commune_lau`, `canton`, `source_id`.
-- **Limites connues** : Pétitions issues du portail de la Chambre des Députés ; statistiques de l'emploi publiées mensuellement par l'ADEM.
-
----
-
-## 3. Vue Consolidée Multimodale
-
-### 3.1 `gold_luxembourg_daily_context` (Consolidation globale Phase 3)
-- **Grain** : `context_date × commune_lau` (100 communes luxembourgeoises).
-- **Fichier** : `data/gold/gold_luxembourg_daily_context.parquet` (ZSTD)
-- **Sources consolidées** : Jointure des 8 signaux quotidiens (`gold_weather_observations`, `gold_air_quality`, `gold_holidays`, `gold_traffic_events`, `gold_crossborder_traffic`, `gold_roadworks`, `gold_strikes_disruptions`, `gold_water_levels`, `gold_culture_events`).
-- **Schéma exact** : `context_date`, `commune_lau`, `commune_name`, `canton`, `lat`, `lon`, `avg_temperature_c`, `total_precipitation_mm`, `max_wind_speed_kmh`, `max_aqi_index`, `is_legal_holiday`, `is_school_vacation`, `traffic_events_count`, `active_roadworks_count`, `strikes_count`, `max_water_alert_status`, `major_events_count`, `source_id`.
-- **Usage IA privilégié** : Fournit le contexte spatio-temporel complet d'une journée au Luxembourg pour les agents conversationnels, assistants de vie locale et modèles d'analyse multimodaux.
+- **Radioactivité ambiante** : les valeurs EURDEP/REMAP exigent une authentification ; seule la liste des 14 sondes est publique.
+- **Bruit** : cartes stratégiques (polygones) sans série temporelle exploitable.
+- **Trafic wallon (E411/E25)** : le flux DATEX II exige des identifiants.
+- **Temps réel RGTR/CFL/TICE** : l'API mobiliteit.lu exige une clé `accessId`.
+- **Ouvertures dominicales** : aucune source machine-lisible.
+- **LU-Alert** : publié en CAP sur data.public.lu, mais sans URL stable « dernière alerte » (un fichier par alerte).
+- **Agendas visitluxembourg, Luxexpo, Stade, Coque** : aucune donnée structurée (ni API ni JSON-LD).

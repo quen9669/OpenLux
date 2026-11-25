@@ -1,173 +1,158 @@
-"""Tests unitaires offline pour le module core/parsers.py (XML DATEX II)."""
+"""Tests offline des parsers sur de vraies réponses réduites (tests/fixtures, 24/11/2026).
+Chaque test vérifie une règle de fiabilité : aucune valeur inventée, filtres, fuseaux, unités.
+"""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from openlux.core.parsers import PARSERS, cita_datex2, fuel_prices_csv, strikes_rss, vdl_parking
-from openlux.core.parsers_extra import vdl_roadworks_json, veloh_stations_json
+import pytest
+
+from openlux.core.collector import PARSERS
+
+FX = Path("tests/fixtures")
 
 
-def test_cita_datex2_parses_sample_xml() -> None:
-    fixture_path = Path("tests/fixtures/cita_datex2_sample.xml")
-    assert fixture_path.exists()
-    raw = fixture_path.read_bytes()
-
-    records = cita_datex2(raw)
-    assert len(records) == 2
-
-    # Vérification du 1er événement (bouchon sur A1)
-    rec1 = records[0]
-    assert rec1["event_id"] == "REC_2026_01"
-    assert rec1["road_name"] == "A1"
-    assert rec1["situation_type"] == "AbnormalTraffic"
-    assert rec1["lat"] == 49.6385
-    assert rec1["lon"] == 6.2155
-    assert "Bouchon de 3 km" in rec1["comment"]
-
-    # Vérification du 2e événement (travaux sur A3)
-    rec2 = records[1]
-    assert rec2["event_id"] == "REC_2026_02"
-    assert rec2["road_name"] == "A3"
-    assert rec2["lat"] == 49.5280
-    assert rec2["lon"] == 6.1120
+def run(parser: str, fixture: str) -> list[dict]:
+    return PARSERS[parser]((FX / fixture).read_bytes())
 
 
-def test_cita_datex2_empty_or_malformed() -> None:
-    assert cita_datex2(b"") == []
-    assert cita_datex2(b"   ") == []
+@pytest.mark.parametrize(
+    ("parser", "fixture", "key"),
+    [
+        ("datex2_lu", "cita_situationrecord.xml", "event_id"),
+        ("datex2_lu", "cita_chantiers.xml", "event_id"),
+        ("vdl_bus_messages", "vdl_bus_messages.xml", "disruption_id"),
+        ("vdl_traffic_info", "vdl_traffic_info.json", "event_id"),
+        ("meteolux_hvd", "meteolux_hvd.json", "station_id"),
+        ("water_levels_csv", "water_levels.csv", "station_name"),
+        ("bathing_sites", "bathing_status.json", "site_id"),
+        ("veloh_gbfs_status", "gbfs_station_status.json", "station_number"),
+        ("vdl_parking", "vdl_parking.json", "parking_id"),
+        ("chargy_kml", "chargy.kml", "site_name"),
+        ("vdl_roadworks", "vdl_roadworks_layer1.json", "work_id"),
+        ("vdl_roadworks", "vdl_roadworks_layer5.json", "work_id"),
+        ("mymaps_routes", "mymaps_bike_routes.json", "route_id"),
+        ("holidays_lu_json", "holidays_lu.json", "holiday_date"),
+        ("meteoalarm_json", "meteoalarm_lu.json", "alert_id"),
+        ("petitions_chd_csv", "petitions_chd.csv", "petition_id"),
+        ("adem_communes_csv", "adem_communes.csv", "reference_month"),
+        ("lustat_csv", "lustat_ipcn.csv", "time_period"),
+        ("lustat_csv", "lustat_permits.csv", "time_period"),
+        ("fuel_prices_csv", "fuel_prices.csv", "energy_type"),
+        ("recycling_gml", "recycling_centers.gml", "item_id"),
+        ("overpass_aed", "overpass_aed.json", "item_id"),
+        ("echo_algolia", "echo_algolia.json", "event_id"),
+        ("vdl_agenda_rss", "vdl_agenda.xml", "event_id"),
+        ("rockhal_shows", "rockhal_shows.json", "event_id"),
+    ],
+)
+def test_parser_returns_records_with_key(parser: str, fixture: str, key: str) -> None:
+    recs = run(parser, fixture)
+    assert recs, f"{parser} n'a rien extrait de {fixture}"
+    assert all(r.get(key) not in (None, "") for r in recs)
 
 
-def test_parsers_registry_contains_cita_datex2() -> None:
-    assert "cita_datex2" in PARSERS
-    assert callable(PARSERS["cita_datex2"])
+def test_datex2_road_coordinates_and_utc() -> None:
+    recs = run("datex2_lu", "cita_situationrecord.xml")
+    assert all(49.4 < r["lat"] < 50.2 and 5.7 < r["lon"] < 6.6 for r in recs)
+    assert all(r["start_time_utc"].endswith("+00:00") for r in recs if r["start_time_utc"])
+    assert any(r["road_name"] for r in recs)
 
 
-def test_strikes_rss_filters_and_extracts() -> None:
-    fixture_path = Path("tests/fixtures/strikes_rss_sample.xml")
-    assert fixture_path.exists()
-    raw = fixture_path.read_bytes()
-
-    records = strikes_rss(raw)
-    assert len(records) == 3  # Le 2e article (inauguration) doit être ignoré
-
-    rec1 = records[0]
-    assert rec1["strike_id"] == "STRIKE_2026_RGTR_01"
-    assert "grève" in rec1["title"].lower()
-    assert rec1["sector"] == "TRANSPORT"
-    assert rec1["country_code"] == "LU"
-    assert rec1["country_name"] == "Luxembourg"
-    assert "news.openlux.lu" in rec1["source_url"]
-
-    rec2 = records[1]
-    assert rec2["strike_id"] == "STRIKE_2026_FP_03"
-    assert "manifestation" in rec2["title"].lower()
-    assert rec2["sector"] == "PUBLIC"
-    assert rec2["country_code"] == "LU"
-    assert rec2["country_name"] == "Luxembourg"
-
-    rec3 = records[2]
-    assert rec3["strike_id"] == "STRIKE_2026_SNCF_04"
-    assert rec3["sector"] == "TRANSPORT"
-    assert rec3["country_code"] == "FR"
-    assert rec3["country_name"] == "France"
+def test_datex2_france_keeps_only_lorraine_bbox() -> None:
+    recs = run("datex2_fr_lorraine", "bisonfute_events.xml")
+    assert recs and all(48.85 <= r["lat"] <= 49.6 and r["country_code"] == "FR" for r in recs)
 
 
-def test_strikes_rss_empty() -> None:
-    assert strikes_rss(b"") == []
-    assert strikes_rss(b"   ") == []
+def test_autobahn_filters_border_zone() -> None:
+    recs = run("autobahn_events", "autobahn_a8_closure.json")
+    assert "far-away" not in {r["event_id"] for r in recs}
+    assert all(r["road_name"] == "A8" for r in recs)
 
 
-def test_cita_datex2_validity_time_specification() -> None:
-    xml = b"""<?xml version="1.0" encoding="utf-8"?>
-<d2LogicalModel xmlns="http://datex2.eu/schema/2/2_0">
-  <payloadPublication>
-    <situation id="SIT_01">
-      <situationRecord id="REC_01" xsi:type="MaintenanceWorks" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <situationRecordCreationTime>2026-11-20T22:00:00Z</situationRecordCreationTime>
-        <validity>
-          <validityTimeSpecification>
-            <overallStartTime>2026-11-22T08:00:00Z</overallStartTime>
-            <overallEndTime>2026-11-22T18:00:00Z</overallEndTime>
-          </validityTimeSpecification>
-        </validity>
-      </situationRecord>
-    </situation>
-  </payloadPublication>
-</d2LogicalModel>"""
-    recs = cita_datex2(xml)
-    assert len(recs) == 1
-    assert recs[0]["start_date"] == "2026-11-22T08:00:00Z"
-    assert recs[0]["end_date"] == "2026-11-22T18:00:00Z"
+def test_rail_filters_luxembourg_axis() -> None:
+    sncf = run("sncf_siri_sx", "sncf_siri_sx.xml")
+    axis = ("luxemb", "thionville", "metz")
+    assert sncf and all(any(k in f"{r['title']} {r['detail']}".lower() for k in axis) for r in sncf)
+    irail = run("irail_disturbances", "irail_disturbances.json")
+    assert [r["disruption_id"] for r in irail] == ["0"]
 
 
-def test_vdl_parking_rfc2822_conversion() -> None:
-    raw = b"""{
-        "last_build_date": "Sun, 22 Nov 2026 13:16:00 +0100",
-        "parking": {
-            "glacis": {"titre": "Glacis", "actuel": 400, "total": 1200}
-        }
-    }"""
-    parks = vdl_parking(raw)
-    assert len(parks) == 1
-    assert "2026-11-22" in parks[0]["observed_at"]
+def test_openmeteo_skips_missing_hours_and_keeps_order_index() -> None:
+    recs = run("openmeteo_weather", "openmeteo_weather.json")
+    assert all(r["temperature_c"] is not None for r in recs)
+    assert {r["location_index"] for r in recs} == {0, 1}
+    assert all(r["data_origin"] == "model" for r in recs)
+    air = run("openmeteo_long", "openmeteo_air.json")
+    assert {r["pollutant"] for r in air} >= {"pm10", "european_aqi"}
 
 
-def test_fuel_prices_csv_intervalle_conversion() -> None:
-    raw = b"Intervalle,Diesel_B7,Essence_E10\nJan-26,1.45,1.55\n"
-    rows = fuel_prices_csv(raw)
-    assert len(rows) == 2
-    assert rows[0]["observed_at"] == "2026-01-01 00:00:00"
+def test_meteolux_converts_wind_to_kmh() -> None:
+    (r,) = run("meteolux_hvd", "meteolux_hvd.json")
+    assert r["data_origin"] == "station" and r["station_id"] == "ELLX"
+    assert r["wind_speed_kmh"] is None or r["wind_speed_kmh"] >= 0
 
 
-def test_vdl_roadworks_epoch_ms_conversion() -> None:
-    raw = b"""{
-        "features": [
-            {
-                "attributes": {
-                    "OBJECTID": 101,
-                    "START_DATE": 1750024800000,
-                    "END_DATE": 1750111200000,
-                    "OBJECTIVE": "Chantier Royal"
-                },
-                "geometry": {"x": 6.13, "y": 49.61}
-            }
-        ]
-    }"""
-    works = vdl_roadworks_json(raw)
-    assert len(works) == 1
-    assert works[0]["start_date"].startswith("2025-") or works[0]["start_date"].startswith("2026-")
-    assert works[0]["end_date"].startswith("2025-") or works[0]["end_date"].startswith("2026-")
+def test_water_levels_local_time_to_utc_and_units() -> None:
+    recs = run("water_levels_csv", "water_levels.csv")
+    assert all(r["observed_at"].endswith("+00:00") for r in recs)
+    assert {r["unit"] for r in recs if r["station_name"] == "Esch-Sure"} == {"m"}
+    assert not any(r["station_name"].startswith("SN_") for r in recs)
 
 
-def test_veloh_stations_json_parses_v3_format() -> None:
-    raw = b"""[
-        {
-            "number": 53,
-            "name": "#00053-LUDWIG VAN BEETHOVEN",
-            "address": "Rue Ludwig van Beethoven 45",
-            "position": {"latitude": 49.59, "longitude": 6.1172},
-            "status": "OPEN",
-            "connected": true,
-            "totalStands": {
-                "capacity": 20,
-                "availabilities": {
-                    "bikes": 2,
-                    "stands": 15,
-                    "electricalBikes": 2,
-                    "mechanicalBikes": 0
-                }
-            }
-        }
-    ]"""
-    stations = veloh_stations_json(raw)
-    assert len(stations) == 1
-    st = stations[0]
-    assert st["facility_id"] == "VELOH_53"
-    assert st["station_number"] == 53
-    assert st["available_bikes"] == 2
-    assert st["available_electrical_bikes"] == 2
-    assert st["available_stands"] == 15
-    assert st["broken_stands"] == 3
-    assert st["total_capacity"] == 20
-    assert st["commune_name"] == "Luxembourg"
+def test_energy_charts_drops_null_prices() -> None:
+    recs = run("energy_charts_price", "energy_charts_price.json")
+    assert len(recs) == 3 and all(r["price_eur_per_mwh"] is not None for r in recs)
+
+
+def test_chargy_counts_connectors() -> None:
+    for r in run("chargy_kml", "chargy.kml"):
+        used = r["connectors_available"] + r["connectors_charging"] + r["connectors_out_of_service"]
+        assert used <= r["connectors_total"]
+
+
+def test_opensky_ignores_unknown_positions() -> None:
+    recs = run("opensky_states", "opensky_states.json")
+    assert "abc123" not in {r["icao24"] for r in recs}
+
+
+def test_openholidays_excludes_bank_holidays() -> None:
+    recs = run("openholidays_lu", "openholidays_school_lu.json")
+    assert recs and "Vendredi saint" not in {r["name_fr"] for r in recs}
+    assert {r["country_code"] for r in recs} == {"LU"}
+
+
+def test_petitions_exclude_free_text() -> None:
+    for r in run("petitions_chd_csv", "petitions_chd.csv"):
+        keys = {"petition_id", "filing_date", "title", "petition_type", "status", "signatures"}
+        assert set(r) == keys
+        assert len(r["title"]) <= 140
+
+
+def test_observatoire_xlsx_masks_small_samples() -> None:
+    rows = run("observatoire_prices_xlsx", "observatoire_prices.xlsx")
+    recs = {r["commune_name"]: r for r in rows}
+    assert recs["Luxembourg"]["avg_price_eur_m2"] == pytest.approx(11234.75)
+    assert recs["Luxembourg"]["reference_year"] == 2024
+    assert recs["Bech"]["avg_price_eur"] is None  # '*' = moins de 30 annonces, jamais imputé
+
+
+def test_recycling_reprojection_lands_in_luxembourg() -> None:
+    for r in run("recycling_gml", "recycling_centers.gml"):
+        assert 49.44 < r["lat"] < 50.19 and 5.73 < r["lon"] < 6.53
+
+
+def test_fuel_units_are_explicit() -> None:
+    units = {r["energy_type"]: r["unit"] for r in run("fuel_prices_csv", "fuel_prices.csv")}
+    assert units["Diesel_B7"] == "EUR/l" and units["Hydrogene"] == "EUR/kg"
+
+
+def test_strikes_rss_keeps_only_strike_titles() -> None:
+    recs = run("strikes_rss", "google_news_strikes.xml")
+    assert all("grève" in r["title"].lower() or "streik" in r["title"].lower() for r in recs)
+
+
+def test_culture_titles_are_truncated() -> None:
+    for p, f in [("echo_algolia", "echo_algolia.json"), ("rockhal_shows", "rockhal_shows.json")]:
+        assert all(len(r["title"]) <= 140 for r in run(p, f))

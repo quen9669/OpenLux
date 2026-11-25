@@ -91,3 +91,16 @@ Ce journal recense tous les arbitrages techniques, petits compromis d'intégrati
 | 2026-11-22 | Plafond Strict Budget de Code & Durcissement Sceptique | Restauration de `--live` dans `cli.py`, correction de l'évaluation falsy sur coordonnées 0.0 dans `stream_gold_export`, sécurisation des filtres temporels dans `query_gold_table`, et compacité stricte `cli.py` (190 l.) et `gold.py` (194 l.) avec les 17 fichiers Python <= 200 lignes | Conforme aux directives d'AGENTS.md, zéro avertissement ruff, 45 tests unitaires et d'intégration 100% passants | Oui |
 
 
+| 2026-11-25 | Refonte V3 : suppression de l'injection de fixtures | `ensure_bronze_baseline` supprimé ; une source jamais collectée reçoit `[]` (0 ligne) | Les fixtures de test se retrouvaient en Gold dès qu'une source échouait | Oui |
+| 2026-11-25 | Refonte V3 : registre des sources vérifié | 45 flux, tous testés en direct le 24/11/2026 ; environ 25 URLs inventées remplacées ou retirées (cf. docs/sources/) | Les liens `data.public.lu/r/<nom-lisible>` renvoyaient tous 404 | Oui |
+| 2026-11-25 | Bug `collect_source` | Appel positionnel corrigé (le SHA était passé à la place du client HTTP) | Toute source déjà collectée plantait au run suivant | Oui |
+| 2026-11-25 | Échec = ERROR | `calculate_trust_score` force `ERROR` (< 60) si primaire et backup échouent | Un échec avec `min_rows = 0` s'affichait ATTENTION (60) | Oui |
+| 2026-11-25 | 2e essai réseau | Une nouvelle tentative après 3 s sur erreur de transport ou HTTP | 404 passagers du CDN inondations.public.lu, saturation d'Overpass | Oui |
+| 2026-11-25 | dbt exécuté depuis `dbt_project/` | `cwd=dbt_project`, chemins `../data` | `dbt seed` lancé depuis la racine échouait sans bruit (référentiels jamais chargés) | Oui |
+| 2026-11-25 | Seed communes officiel | `scripts/build_reference_seeds.py` (limites administratives CC0, centroïdes surfaciques) | 23 codes LAU faux dans l'ancien seed | Oui |
+| 2026-11-25 | Points modèle = chefs-lieux | `ref_model_points.csv` + `location_index` ; maille réelle dans `grid_lat`/`grid_lon` | Le recalage sur la grille Open-Meteo faisait changer de canton certains points (Diekirch) | Oui |
+| 2026-11-25 | Rattachement commune ≤ 8 km | Centroïde le plus proche, sinon NULL | Écarte les points frontaliers (FR/DE) ; approximation documentée | Oui |
+| 2026-11-25 | XLSX : chaînes partagées sur toutes les colonnes | `_cell()` résout `t="s"` partout | Un prix masqué « * » devenait l'index de la chaîne (ex. 4 €/m²) | Oui |
+| 2026-11-25 | Défibrillateurs OSM filtrés | Bbox Overpass + exclusion des points sans commune LU ≤ 8 km | Aucun jeu officiel ; la bbox déborde sur BE/FR/DE | Oui |
+| 2026-11-25 | Portail V1 retiré | `/` redirige vers `/v2/` ; catalogue V2 lu depuis l'API ou `catalog.json` | Le V1 et l'ancien V2 affichaient des volumes, courbes et dates fictifs | Oui |
+| 2026-11-25 | Annonces athome.lu retirées | Seed `ref_housing_market_deals.csv` supprimé ; prix officiels de l'Observatoire à la place | Instantané figé d'un site commercial, adresses répétées | Oui |

@@ -1,0 +1,119 @@
+{
+ "licence": [
+  "Creative Commons",
+  "https://creativecommons.org/public-domain/cc0/"
+ ],
+ "docUrl": "/docs",
+ "data": [
+  {
+   "id": "s2dd_rwy060",
+   "value": 63
+  },
+  {
+   "id": "s2dd_rwy240",
+   "value": 55
+  },
+  {
+   "id": "s2dd_rwymd0",
+   "value": 63
+  },
+  {
+   "id": "s2ddgust_rwy060",
+   "value": 59
+  },
+  {
+   "id": "s2ddgust_rwy240",
+   "value": 49
+  },
+  {
+   "id": "s2ddgust_rwymd0",
+   "value": 61
+  },
+  {
+   "id": "s2ff_rwy060",
+   "value": 4.6
+  },
+  {
+   "id": "s2ff_rwy240",
+   "value": 3.6
+  },
+  {
+   "id": "s2ff_rwymd0",
+   "value": 6.2
+  },
+  {
+   "id": "s2ffgust_rwy060",
+   "value": 5.1
+  },
+  {
+   "id": "s2ffgust_rwy240",
+   "value": 4.1
+  },
+  {
+   "id": "s2ffgust_rwymd0",
+   "value": 6.7
+  },
+  {
+   "id": "sh_rwy060",
+   "value": 0
+  },
+  {
+   "id": "sh_rwy240",
+   "value": 0
+  },
+  {
+   "id": "spsl",
+   "value": 1019.7
+  },
+  {
+   "id": "sqfe",
+   "value": 972.7
+  },
+  {
+   "id": "sqnh",
+   "value": 1017.2
+  },
+  {
+   "id": "srr",
+   "value": 0.0
+  },
+  {
+   "id": "st",
+   "value": -2.4
+  },
+  {
+   "id": "stags",
+   "value": -2.9
+  },
+  {
+   "id": "std",
+   "value": -6.1
+  },
+  {
+   "id": "stw",
+   "value": -3.7
+  },
+  {
+   "id": "su",
+   "value": 76
+  },
+  {
+   "id": "svp",
+   "value": 3.8
+  },
+  {
+   "id": "svv",
+   "value": 9999
+  },
+  {
+   "id": "svv_rwy060",
+   "value": 9999
+  },
+  {
+   "id": "svv_rwy240",
+   "value": 9999
+  }
+ ],
+ "totalItemCount": 27,
+ "timestamp": "2026-11-24T20:55:00Z"
+}

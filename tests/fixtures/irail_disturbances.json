@@ -1,0 +1,22 @@
+{
+ "version": "1.4",
+ "timestamp": "1795560000",
+ "disturbance": [
+  {
+   "id": "0",
+   "title": "Arlon - Luxembourg : trafic perturbé",
+   "description": "Travaux entre Arlon et Kleinbettingen.",
+   "type": "planned",
+   "timestamp": "1795550000",
+   "link": "https://www.belgiantrain.be"
+  },
+  {
+   "id": "1",
+   "title": "Gent - Brugge : trafic interrompu",
+   "description": "Incident.",
+   "type": "disturbance",
+   "timestamp": "1795550000",
+   "link": "https://www.belgiantrain.be"
+  }
+ ]
+}

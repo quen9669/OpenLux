@@ -1,20 +1,3 @@
--- Gold: Data Mart final des bornes de recharge électrique Chargy
-SELECT
-    station_id,
-    station_name,
-    network_operator,
-    observed_at_utc,
-    available_charging_points,
-    total_charging_points,
-    occupied_charging_points,
-    occupancy_rate,
-    power_kw,
-    connector_types,
-    tariff_details,
-    opening_hours,
-    lat,
-    lon,
-    commune_lau,
-    canton,
-    source_id
-FROM {{ ref('silver_chargy_stations') }}
+-- Gold Chargy : série temporelle de l'état des connecteurs par site
+{{ with_commune("SELECT * FROM " ~ ref('stg_chargy_stations')) }}
+QUALIFY ROW_NUMBER() OVER (PARTITION BY site_name, collected_at_utc ORDER BY connectors_total DESC) = 1

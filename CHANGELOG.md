@@ -6,6 +6,33 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [3.0.0] — 2026-11-25 — Refonte « données fiables »
+
+### Removed
+- Injection des fixtures de test dans Bronze (`ensure_bronze_baseline`) : les tables Gold contenaient des lignes fictives.
+- Environ 25 URLs de sources inventées, et les domaines sans source réelle vérifiée : radioactivité, bruit, trafic wallon, ouvertures dominicales, visitluxembourg, Luxexpo, Stade, Coque.
+- Seeds non sourcés : annonces athome.lu, marchés récurrents, fériés frontaliers saisis à la main.
+- Portail V1 (`web/`) et catalogue V2 codé en dur (volumes, courbes et dates fictifs).
+- Scripts de moissonnage hors registre (`scripts/harvest_*`, `deploy_production.py`, etc.).
+- Historique Gold du 20 au 24/11, indissociable des lignes fictives (purgé puis reconstruit).
+
+### Added
+- Registre de 45 flux vérifiés en direct, avec backup et parser dédié quand le format diffère, et `data_origin` (official, model, community, press).
+- Nouveaux domaines réels : station MeteoLux du Findel, niveaux d'eau AGE (42 stations), baignade, vigilances MeteoAlarm, trafic DIR Est (A31) et Autobahn (A1, A8, A64), perturbations SNCF, SNCB et bus VdL, Chargy en temps réel (524 sites), IPCN STATEC depuis 1948, chômage ADEM par commune depuis 2012, prix de l'Observatoire de l'Habitat depuis 2010, logements autorisés STATEC, fériés LU/FR/BE/DE et vacances scolaires, recyclage, défibrillateurs OSM, itinéraires cyclables, agenda echo.lu, VdL et Rockhal.
+- Référentiels régénérés depuis les sources officielles (`scripts/build_reference_seeds.py`).
+- Catalogue mesuré (`/v1/datasets`, `web_v2/data/catalog.json`, Data Package, DCAT-AP-LU) et site V2 branché dessus.
+- Tests sur de vraies réponses réduites (73 pytest) et tests dbt (unicité des clés, Zero-PII, emprise géographique).
+- Rapport de vérification des sources : `docs/sources/`.
+
+### Fixed
+- `collect_source` recevait le SHA à la place du client HTTP.
+- Un échec de collecte total s'affichait ATTENTION au lieu d'ERROR.
+- `dbt seed` lancé depuis la racine échouait sans bruit (dbt s'exécute désormais depuis `dbt_project/`).
+- 23 codes LAU faux dans `ref_communes_lu.csv`.
+- Valeurs codées en dur : inflation, cote d'indexation, commune « Luxembourg », dates par défaut, valeur courante substituée aux heures manquantes.
+- Prix XLSX masqués « * » lus comme des nombres.
+
+
 ### Added
 - **Cadence Automatique 30 Minutes & Persistance Artifact DuckDB (GitHub Actions)** :
   - **Planification Cron 30 min (`.github/workflows/data_pipeline.yml`)** : Passage de la fréquence d'ingestion à `cron: '*/30 * * * *'` pour rafraîchir en continu l'ensemble des flux temps réel (parkings, trafic, météo, vélos).

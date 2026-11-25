@@ -1,0 +1,47 @@
+[
+ {
+  "id": "94a439b6-3317-4325-9215-510374dc1c65",
+  "startDate": "2024-12-21",
+  "endDate": "2025-01-05",
+  "type": "School",
+  "name": [
+   {
+    "language": "FR",
+    "text": "Vacances de Noël"
+   }
+  ],
+  "regionalScope": "National",
+  "temporalScope": "FullDay",
+  "nationwide": true
+ },
+ {
+  "id": "7bb7beb4-9639-497a-8127-3d2f0f4c81b3",
+  "startDate": "2025-02-15",
+  "endDate": "2025-02-23",
+  "type": "School",
+  "name": [
+   {
+    "language": "FR",
+    "text": "Congé de Carnaval"
+   }
+  ],
+  "regionalScope": "National",
+  "temporalScope": "FullDay",
+  "nationwide": true
+ },
+ {
+  "id": "bank-1",
+  "startDate": "2024-12-21",
+  "endDate": "2025-01-05",
+  "type": "Bank",
+  "name": [
+   {
+    "language": "FR",
+    "text": "Vendredi saint"
+   }
+  ],
+  "regionalScope": "National",
+  "temporalScope": "FullDay",
+  "nationwide": true
+ }
+]

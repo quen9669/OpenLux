@@ -1,22 +1,3 @@
--- Gold: Data Mart final des événements culturels, spectacles et salons
-SELECT
-    title,
-    status,
-    start_date,
-    end_date,
-    observed_at_utc,
-    start_time,
-    venue,
-    address,
-    category,
-    price_eur,
-    price_text,
-    is_free,
-    source_url,
-    ticket_url,
-    commune_lau,
-    canton,
-    lat,
-    lon,
-    source_id
-FROM {{ ref('silver_culture_events') }}
+-- Gold agenda culturel (echo.lu, Ville de Luxembourg, Rockhal) — champs factuels uniquement
+{{ with_commune("SELECT * EXCLUDE (start_utc, end_utc), " ~ utc('start_utc') ~ " AS start_utc, " ~ utc('end_utc') ~ " AS end_utc FROM " ~ ref('stg_culture_events')) }}
+QUALIFY ROW_NUMBER() OVER (PARTITION BY event_id ORDER BY collected_at_utc DESC) = 1

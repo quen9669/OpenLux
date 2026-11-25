@@ -1,194 +1,155 @@
-"""Rôle : Registre central de fonctions pures (sans I/O, <= 30 lignes) pour formats complexes.
-Entrées/Sorties : Reçoit des octets bruts (XML, RSS, JSON) et produit des listes de dicts.
-Hors-scope : N'effectue aucun appel réseau, aucun accès disque ni validation Pydantic.
+"""Rôle : Helpers communs + parsers trafic & transports (DATEX II, Autobahn, SIRI, bus VdL).
+Entrées/Sorties : Reçoit des octets bruts (XML/JSON) et produit des listes de dicts plats.
+Hors-scope : Aucun appel réseau, aucun accès disque, aucune valeur inventée (champ absent = None).
 """
 
 from __future__ import annotations
 
-import csv
-import io
 import json
-import re
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
 from datetime import UTC, datetime
-from email.utils import parsedate_to_datetime
+from functools import partial
+from zoneinfo import ZoneInfo
 
-from openlux.core.parsers_env import ENV_PARSERS
-from openlux.core.parsers_extra import EXTRA_PARSERS
-
-_KW = {
-    "FR": re.compile(r"\b(sncf|ter|a31|lorraine|metz|france)\b"),
-    "BE": re.compile(r"\b(sncb|belgique|e411|arlon)\b"),
-    "DE": re.compile(r"\b(bahn|db|allemagne|trier)\b"),
-}
-
-
-def _tag(elem: ET.Element, suffix: str) -> ET.Element | None:
-    return next((x for x in elem.iter() if x.tag.endswith(suffix)), None)
+_LU_TZ = ZoneInfo("Europe/Luxembourg")
+_XSI = "{http://www.w3.org/2001/XMLSchema-instance}type"
 
 
 def _j(raw: bytes):
-    return json.loads(raw.decode("utf-8")) if isinstance(raw, (bytes, bytearray)) else raw
+    return json.loads(raw.decode("utf-8-sig"))
 
 
-def _cita_road(el: ET.Element, rd: ET.Element | None) -> str:
-    if rd is not None and rd.text and rd.text.strip():
-        return rd.text.strip()
-    vals = [t for x in el.iter() if x.tag.endswith("value") and (t := (x.text or "").strip())]
-    return next(
-        (t for t in vals if any(t.startswith(p) for p in ("A", "N", "CR", "B")) and len(t) <= 15),
-        "A",
-    )
+def _utc(val, fmt: str | None = None, local: bool = True) -> str | None:
+    """Normalise ISO, epoch (s/ms) ou date locale (fmt) en ISO-8601 UTC ; None si illisible."""
+    if val in (None, ""):
+        return None
+    try:
+        if isinstance(val, int | float) or str(val).isdigit():
+            f = float(val)
+            return datetime.fromtimestamp(f / 1000 if f > 1e11 else f, UTC).isoformat()
+        s = str(val).strip()
+        d = datetime.strptime(s, fmt) if fmt else datetime.fromisoformat(s.replace("Z", "+00:00"))
+        # POURQUOI : les flux luxembourgeois sans fuseau sont en heure locale (CET/CEST)
+        d = d if d.tzinfo else d.replace(tzinfo=_LU_TZ if local else UTC)
+        return d.astimezone(UTC).isoformat()
+    except (ValueError, OverflowError, OSError):
+        return None
 
 
-def _cita_rec(el: ET.Element) -> dict:
-    lat, lon, rd = _tag(el, "latitude"), _tag(el, "longitude"), _tag(el, "roadName")
-    tm = next((x.text.strip() for x in el.iter() if "CreationTime" in x.tag), "")
-    st_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallStartTime")), tm)
-    end_s = next((x.text.strip() for x in el.iter() if x.tag.endswith("overallEndTime")), None)
-    rn = _cita_road(el, rd)
-    vs = next(
-        (t for x in el.iter() if x.tag.endswith("value") and len(t := (x.text or "").strip()) > 4),
-        "",
-    )
-    st = el.attrib.get("{http://www.w3.org/2001/XMLSchema-instance}type", "situation")
-    eid = el.attrib.get("id", "UNKNOWN")
-    fla = float(lat.text.strip()) if lat is not None and lat.text else None
-    flo = float(lon.text.strip()) if lon is not None and lon.text else None
+def _f(v) -> float | None:
+    try:
+        return float(str(v).replace(",", ".")) if v not in (None, "") else None
+    except ValueError:
+        return None
+
+
+def _x(el: ET.Element, suffix: str) -> str | None:
+    """Texte du premier descendant dont le tag finit par `suffix` (indépendant du namespace)."""
+    n = next((e for e in el.iter() if e.tag.split("}")[-1] == suffix and e.text), None)
+    return n.text.strip() if n is not None else None
+
+
+def _texts(el: ET.Element) -> list[str]:
+    return [t for e in el.iter() if e.tag.endswith("}value") and (t := (e.text or "").strip())]
+
+
+def _datex_road(rec: ET.Element) -> str | None:
+    if road := _x(rec, "roadNumber"):
+        return road
+    for nm in (e for e in rec.iter() if e.tag.endswith("}name")):
+        if _x(nm, "tpegOtherPointDescriptorType") == "linkName":
+            return _x(nm, "value")
+    return None
+
+
+def _datex_rec(rec: ET.Element, country: str) -> dict:
+    vals = [v for c in rec.iter() if c.tag.endswith("generalPublicComment") for v in _texts(c)]
+    vals = [v for v in dict.fromkeys(vals) if v]
+    sub = next((c.text for c in rec if c.tag.endswith("Type") and c.text), None)
     return {
-        "event_id": eid,
-        "work_id": eid,
-        "road_name": rn,
-        "situation_type": st,
-        "impact_level": st,
-        "start_time": st_s,
-        "start_date": st_s,
-        "end_date": end_s,
-        "observed_at": tm,
-        "title": vs or "CITA",
-        "lat": fla,
-        "lon": flo,
-        "comment": vs,
-        "commune_name": "Luxembourg",
+        "event_id": rec.attrib.get("id"),
+        "country_code": country,
+        "road_name": _datex_road(rec),
+        "situation_type": rec.attrib.get(_XSI, "").split(":")[-1],
+        "situation_subtype": sub,
+        "validity_status": _x(rec, "validityStatus"),
+        "start_time_utc": _utc(_x(rec, "overallStartTime")),
+        "end_time_utc": _utc(_x(rec, "overallEndTime")),
+        "observed_at": _utc(_x(rec, "situationRecordVersionTime")),
+        "description": " | ".join(vals)[:300] or None,
+        "lat": _f(_x(rec, "latitude")),
+        "lon": _f(_x(rec, "longitude")),
     }
 
 
-def cita_datex2(raw: bytes) -> list[dict]:
-    """Parse le flux XML DATEX II du CITA (trafic et chantiers) (<= 30 lignes)."""
-    if not raw.strip():
-        return []
-    if raw.strip().startswith((b"[", b"{")):
-        return d if isinstance((d := json.loads(raw.decode("utf-8"))), list) else [d]
-    return [_cita_rec(el) for el in ET.fromstring(raw).iter() if el.tag.endswith("situationRecord")]
+def datex2_situations(raw: bytes, country: str = "LU", bbox: tuple | None = None) -> list[dict]:
+    """Parse une publication DATEX II v2/v3 (situationRecord), filtrée optionnellement par bbox."""
+    recs = [_datex_rec(e, country) for e in ET.fromstring(raw).iter() if e.tag.endswith("Record")]
+    recs = [r for r in recs if r["event_id"] and (r["lat"] is not None or not bbox)]
+    if bbox:
+        la0, lo0, la1, lo1 = bbox
+        recs = [r for r in recs if la0 <= r["lat"] <= la1 and lo0 <= r["lon"] <= lo1]
+    return recs
 
 
-def strikes_rss(raw: bytes) -> list[dict]:
-    """Parse et filtre les avis de grèves depuis un flux RSS (<= 30 lignes)."""
-    kws = {"grève", "greve", "streik", "strike", "manifestation", "débrayage", "protest"}
-    if not raw.strip():
-        return []
-    records = []
-    for it in ET.fromstring(raw).iter("item"):
-        t, lnk = (it.findtext("title") or "").strip(), (it.findtext("link") or "").strip()
-        full = f"{t.lower()} {(it.findtext('description') or '').lower()}"
-        if not any(k in full for k in kws):
-            continue
-        is_tr = any(w in full for w in ["cfl", "bus", "tram", "train", "vol", "sncf", "ter", "db"])
-        cc = next((c for c, rx in _KW.items() if rx.search(full)), "LU")
-        cn = {"FR": "France", "BE": "Belgique", "DE": "Allemagne"}.get(cc, "Luxembourg")
-        records.append(
+def autobahn_events(raw: bytes, bbox: tuple = (49.3, 6.0, 50.1, 7.2)) -> list[dict]:
+    """Parse l'API Autobahn GmbH (warning/closure/roadworks) autour de la frontière LU."""
+    d, out = _j(raw), []
+    for svc, items in d.items():
+        for it in items or []:
+            la, lo = _f(it["coordinate"]["lat"]), _f(it["coordinate"]["long"])
+            if la is None or not (bbox[0] <= la <= bbox[2] and bbox[1] <= lo <= bbox[3]):
+                continue
+            out.append(
+                {
+                    "event_id": it.get("identifier"),
+                    "country_code": "DE",
+                    "road_name": (it.get("title") or "").split("|")[0].strip() or None,
+                    "situation_type": it.get("display_type") or svc,
+                    "situation_subtype": it.get("abnormalTrafficType"),
+                    "validity_status": "planned" if it.get("future") else "active",
+                    "start_time_utc": _utc(it.get("startTimestamp")),
+                    "end_time_utc": None,
+                    "observed_at": _utc(it.get("startTimestamp")),
+                    "description": f"{it.get('title', '')} ({(it.get('subtitle') or '').strip()})",
+                    "lat": la,
+                    "lon": lo,
+                }
+            )
+    return out
+
+
+def vdl_traffic_info(raw: bytes) -> list[dict]:
+    """Parse les infos trafic ArcGIS de la Ville de Luxembourg (couche TRAFIC_INFO/0)."""
+    out = []
+    for ft in _j(raw).get("features", []):
+        a, g = ft.get("attributes", {}), ft.get("geometry") or {}
+        out.append(
             {
-                "strike_id": (it.findtext("guid") or lnk or t).strip(),
-                "title": t[:140],
-                "published_at": (it.findtext("pubDate") or "").strip(),
-                "source_url": lnk,
-                "sector": "TRANSPORT" if is_tr else "PUBLIC",
-                "country_code": cc,
-                "country_name": cn,
+                "event_id": f"VDL-{a.get('TRAF_INFO_ID') or a.get('OBJECTID')}",
+                "country_code": "LU",
+                "road_name": a.get("STREET_TYPICAL_NAME"),
+                "situation_type": a.get("INFO_TYPE_LABEL"),
+                "situation_subtype": None,
+                "validity_status": None,
+                "start_time_utc": _utc(a.get("START_DATE")),
+                "end_time_utc": _utc(a.get("END_DATE")),
+                "observed_at": _utc(a.get("PUBLICATION_DATE")),
+                "description": (a.get("OBJECTIVE") or "")[:300] or None,
+                "lat": _f(g.get("y")),
+                "lon": _f(g.get("x")),
             }
         )
-    return records
+    return out
 
 
-def _feat_parking(f: dict, i: int, obs: str) -> dict:
-    p, g = f.get("properties") or f.get("attributes", {}), f.get("geometry", {})
-    c = g.get("coordinates") or [p.get("x"), p.get("y")]
-    return {
-        "facility_id": f"PARKING_{p.get('OBJECTID', i)}",
-        "facility_name": p.get("NOM", f"P_{i}"),
-        "available_spaces": int(p.get("ACTUEL") or 0),
-        "total_capacity": int(p.get("TOTAL") or 0),
-        "lat": c[1] if len(c) > 1 else None,
-        "lon": c[0] if len(c) > 0 else None,
-        "observed_at": obs,
-        "commune_name": "Luxembourg",
-    }
+# POURQUOI : bbox Lorraine nord (Metz–Thionville–frontière) pour ne garder que l'A31/A30 utile
+_FR_BBOX = (48.85, 5.6, 49.6, 6.7)
 
-
-def vdl_parking(raw: bytes) -> list[dict]:
-    """Parse le feed JSON des parkings VDL en liste d'équipements (<= 30 lignes)."""
-    if not raw.strip() or isinstance(d := _j(raw), list):
-        return d if isinstance(d, list) else []
-    obs = d.get("last_build_date") or datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
-    if obs and (not obs[:4].isdigit() or len(obs) < 10):
-        try:
-            obs = parsedate_to_datetime(obs).astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S")
-        except Exception:
-            pass
-    if "features" in d:
-        return [_feat_parking(f, i, obs) for i, f in enumerate(d.get("features", []))]
-    return [
-        {
-            "facility_id": f"PARKING_{p}",
-            "facility_name": v.get("titre", f"P_{p}"),
-            "available_spaces": int(v.get("actuel", 0) or 0),
-            "total_capacity": int(v.get("total", 0) or 0),
-            "lat": v.get("localisation", {}).get("latitude"),
-            "lon": v.get("localisation", {}).get("longitude"),
-            "observed_at": obs,
-            "commune_name": "Luxembourg",
-        }
-        for p, v in d.get("parking", {}).items()
-    ]
-
-
-def fuel_prices_csv(raw: bytes) -> list[dict]:
-    """Parse le CSV officiel des prix carburants du Ministère (<= 30 lignes)."""
-    if not raw.strip() or raw.strip().startswith(b"["):
-        return json.loads(raw.decode("utf-8")) if raw.strip().startswith(b"[") else []
-    types = (
-        "Essence_E10 Diesel_B7 Hydrogene LPG Electricie_Fournisseur Recharge_AC Recharge_DC"
-    ).split()
-    records, text = [], raw.decode("utf-8", errors="replace").lstrip("\ufeff")
-    _M = "jan feb mar apr may jun jul aug sep oct nov dec".split()
-    m_map = {m: f"{i + 1:02d}" for i, m in enumerate(_M)}
-    for r in csv.DictReader(io.StringIO(text)):
-        dt = r.get("Intervalle", "").strip()
-        if m := re.match(r"^([A-Za-z]{3,4})[-/ ]+(\d{2,4})$", dt):
-            yr = f"20{m.group(2)}" if len(m.group(2)) == 2 else m.group(2)
-            dt = f"{yr}-{m_map.get(m.group(1).lower()[:3], '01')}-01 00:00:00"
-        for ft in types:
-            if v := r.get(ft):
-                try:
-                    records.append(
-                        {
-                            "fuel_type": ft,
-                            "price_eur_per_litre": float(v.replace(",", ".")),
-                            "observed_at": dt,
-                            "price_change_eur": 0.0,
-                        }
-                    )
-                except ValueError:
-                    pass
-    return records
-
-
-PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
-    "cita_datex2": cita_datex2,
-    "strikes_rss": strikes_rss,
-    "vdl_parking": vdl_parking,
-    "fuel_prices_csv": fuel_prices_csv,
-    **EXTRA_PARSERS,
-    **ENV_PARSERS,
+TRAFFIC_PARSERS: dict[str, Callable[[bytes], list[dict]]] = {
+    "datex2_lu": datex2_situations,
+    "datex2_fr_lorraine": partial(datex2_situations, country="FR", bbox=_FR_BBOX),
+    "autobahn_events": autobahn_events,
+    "vdl_traffic_info": vdl_traffic_info,
 }

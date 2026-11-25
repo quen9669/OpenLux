@@ -1,17 +1,3 @@
--- Gold: Data Mart final des observations météo nationales luxembourgeoises
-SELECT
-    station_id,
-    station_name,
-    observed_at_utc,
-    temperature,
-    humidity,
-    pressure_hpa,
-    wind_speed_kmh,
-    precipitation_mm,
-    weather_condition,
-    lat,
-    lon,
-    commune_lau,
-    canton,
-    source_id
-FROM {{ ref('silver_weather_observations') }}
+-- Gold météo : 1 ligne par station/point de grille et heure (dernière collecte retenue)
+{{ with_commune("SELECT * EXCLUDE (observed_at), " ~ utc('observed_at') ~ " AS observed_at_utc FROM " ~ ref('stg_weather')) }}
+QUALIFY ROW_NUMBER() OVER (PARTITION BY station_id, observed_at_utc ORDER BY collected_at_utc DESC) = 1

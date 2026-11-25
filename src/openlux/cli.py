@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import hashlib
+import gzip
 import os
 import subprocess
 import sys
@@ -20,7 +20,7 @@ from typing import Any
 import duckdb
 
 from openlux.config import SourceConfig, load_sources_config
-from openlux.core.collector import CollectorResult, _process_payload, _write_bronze, collect_source
+from openlux.core.collector import CollectorResult, collect_source
 from openlux.core.gold import export_gold_parquets
 from openlux.core.monitoring import generate_status_markdown, send_alert_if_needed
 from openlux.core.quality import (
@@ -33,8 +33,19 @@ from openlux.core.quality import (
 
 
 def _run_dbt_command(cmd: str, *args: str) -> bool:
-    opt = ["--project-dir", "dbt_project", "--profiles-dir", "dbt_project"]
-    return subprocess.run([sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt]).returncode == 0
+    # POURQUOI : dbt-duckdb résout seeds/ et ../data/ depuis le cwd : on exécute depuis dbt_project/
+    opt = ["--project-dir", ".", "--profiles-dir", "."]
+    cmd_line = [sys.executable, "-m", "dbt.cli.main", cmd, *args, *opt]
+    return subprocess.run(cmd_line, cwd="dbt_project").returncode == 0
+
+
+def ensure_bronze_placeholders(sources: dict[str, SourceConfig]) -> None:
+    """Bronze vide ('[]') pour toute source jamais collectée : 0 ligne, jamais de fixture."""
+    for sid in sources:
+        d = Path("data/bronze") / sid
+        if not any(d.glob("**/*.json.gz")):
+            d.mkdir(parents=True, exist_ok=True)
+            (d / "empty.json.gz").write_bytes(gzip.compress(b"[]"))
 
 
 def _connect_db(path: str = "data/openlux.duckdb", read_only: bool = False):
@@ -54,29 +65,13 @@ def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
     return True
 
 
-def ensure_bronze_baseline(sources: dict[str, SourceConfig]) -> None:
-    fdir = Path("tests/fixtures")
-    if not fdir.exists():
-        return
-    for sid, src in sources.items():
-        if any((Path("data/bronze") / sid).glob("**/*.gz")):
-            continue
-        c = (
-            list(fdir.glob(f"{sid}_sample.*"))
-            or list(fdir.glob(f"{sid.replace('_lu', '')}_sample.*"))
-            or ([fdir / "cita_datex2_sample.xml"] if "cita" in sid else [])
-        )
-        if c and c[0].exists():
-            with contextlib.suppress(Exception):
-                p, cnt, ext = _process_payload(src, c[0].read_bytes())
-                _write_bronze(sid, p, ext, hashlib.sha256(p).hexdigest(), datetime.now(UTC), cnt)
-
-
 def _collect_and_record(
     con: duckdb.DuckDBPyConnection, sid: str, src: SourceConfig, r_id: str, prev: dict[str, Any]
 ) -> None:
     try:
-        res = collect_source(src, prev.get("sha256"), prev.get("last_changed_utc"))
+        res = collect_source(
+            src, last_sha256=prev.get("sha256"), last_changed_utc=prev.get("last_changed_utc")
+        )
     except Exception as exc:
         n = datetime.now(UTC).isoformat()
         res = CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
@@ -103,10 +98,14 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
         }
         for sid, src in selected.items():
             _collect_and_record(con, sid, src, r_id, health.get(sid, {}))
-    ensure_bronze_baseline(sources)
+    ensure_bronze_placeholders(sources)
     for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
         _run_dbt_command(*c)
     export_gold_parquets()
+    from openlux.publish.opendata_lu import publish_to_data_public_lu, write_site_catalog
+
+    publish_to_data_public_lu(dry_run=True)
+    write_site_catalog()
     with _connect_db(str(db_p), read_only=True) as con_r:
         generate_status_markdown(sources, get_latest_source_health(con_r))
     return 0

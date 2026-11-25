@@ -1,0 +1,134 @@
+{
+ "hits": [
+  {
+   "communes": [
+    "luxembourg"
+   ],
+   "experienceId": "rak-porcelain-culinary-world-cup-2026-b73EPf",
+   "from": {
+    "_seconds": 1795590000,
+    "_nanoseconds": 0
+   },
+   "isFree": false,
+   "rawExperience": {
+    "categories": [
+     "business-events-sector-other",
+     "business-events-international"
+    ],
+    "tickets": [
+     {
+      "price": 14,
+      "title": "One day ticket"
+     },
+     {
+      "price": 0,
+      "title": "5 day ticket"
+     },
+     {
+      "price": 10,
+      "title": "Group ticket (for 10 people minimum)"
+     },
+     {
+      "price": 28,
+      "title": "5 day ticket for group (10 people minimum)"
+     }
+    ],
+    "title": {
+     "en": "EXPOGAST - RAK Porcelain Culinary World Cup 2026"
+    }
+   },
+   "rawVenues": [
+    {
+     "title": "Luxexpo The Box"
+    }
+   ],
+   "to": {
+    "_seconds": 1795590000,
+    "_nanoseconds": 0
+   },
+   "_geoloc": [
+    {
+     "lat": 49.63607019969098,
+     "lng": 6.172941134872376
+    }
+   ],
+   "objectID": "RBYkaqyuOZ9za9wh1BYn"
+  },
+  {
+   "communes": [
+    "betzdorf"
+   ],
+   "experienceId": "betzwork-together-FEZ0f6",
+   "from": {
+    "_seconds": 1795593600,
+    "_nanoseconds": 0
+   },
+   "isFree": true,
+   "rawExperience": {
+    "categories": [
+     "health",
+     "other"
+    ],
+    "tickets": [],
+    "title": {
+     "de": "BetzWork Together",
+     "en": "BetzWork Together",
+     "fr": "BetzWork Together"
+    }
+   },
+   "rawVenues": [
+    {
+     "title": "Fischer Mensdorf "
+    }
+   ],
+   "to": {
+    "_seconds": 1795604400,
+    "_nanoseconds": 0
+   },
+   "_geoloc": [
+    {
+     "lat": 49.6577519,
+     "lng": 6.293038999999999
+    }
+   ],
+   "objectID": "Xp2VC7ln9xDXdPfejYmF"
+  }
+ ],
+ "nbHits": 3614,
+ "page": 0,
+ "nbPages": 1,
+ "hitsPerPage": 1000,
+ "exhaustiveNbHits": true,
+ "exhaustiveTypo": true,
+ "exhaustive": {
+  "nbHits": true,
+  "typo": true
+ },
+ "query": "",
+ "params": "x-algolia-application-id=PY7G9MVXE2&x-algolia-api-key=55301c0ef2e535ae29e6b6d697f4882d&query=&hitsPerPage=1000&attributesToRetrieve=objectID,experienceId,from,to,isFree,communes,_geoloc,rawExperience.title,rawExperience.categories,rawExperience.tickets,rawVenues.title&attributesToHighlight=&numericFilters=to_timestamp%3E%3D1795564800000",
+ "renderingContent": {},
+ "processingTimeMS": 4,
+ "processingTimingsMS": {
+  "_request": {
+   "roundTrip": 23
+  },
+  "afterFetch": {
+   "format": {
+    "decompress": 2,
+    "total": 62
+   }
+  },
+  "fetch": {
+   "scanning": 1,
+   "total": 2
+  },
+  "getIdx": {
+   "load": {
+    "total": 1
+   },
+   "total": 1
+  },
+  "total": 4
+ },
+ "serverTimeMS": 68
+}

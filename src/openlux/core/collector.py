@@ -1,26 +1,41 @@
-"""Rôle : Moteur de collecte unifié (3 adaptateurs + custom, fallback, SHA-256, Bronze).
-Entrées/Sorties : Reçoit une SourceConfig et écrit le flux compressé dans data/bronze/.
-Hors-scope : N'exécute pas les transformations dbt ni le calcul du Trust Score.
+"""Rôle : Moteur de collecte unifié (primaire -> backup, parser dédié, SHA-256, Bronze).
+Entrées/Sorties : Reçoit une SourceConfig et écrit les enregistrements nettoyés dans data/bronze/.
+Hors-scope : N'exécute pas dbt ; n'écrit JAMAIS de données de substitution si une source échoue.
 """
 
 from __future__ import annotations
 
-import csv
 import gzip
 import hashlib
-import io
 import json
 import os
+import time
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import httpx
-from bs4 import BeautifulSoup
 
 from openlux.config import EndpointConfig, SourceConfig
-from openlux.core.parsers import PARSERS
-from openlux.core.sanitizer import apply_factual_only, sanitize_text, sanitize_value
+from openlux.core.parsers import TRAFFIC_PARSERS
+from openlux.core.parsers_city import CITY_PARSERS
+from openlux.core.parsers_civic import CIVIC_PARSERS
+from openlux.core.parsers_culture import CULTURE_PARSERS
+from openlux.core.parsers_env import ENV_PARSERS
+from openlux.core.parsers_files import FILE_PARSERS
+from openlux.core.parsers_transit import TRANSIT_PARSERS
+from openlux.core.sanitizer import apply_factual_only, sanitize_value
+
+PARSERS = (
+    TRAFFIC_PARSERS
+    | TRANSIT_PARSERS
+    | ENV_PARSERS
+    | CITY_PARSERS
+    | CIVIC_PARSERS
+    | CULTURE_PARSERS
+    | FILE_PARSERS
+)
+BRONZE = Path("data/bronze")
 
 
 @dataclass
@@ -37,100 +52,67 @@ class CollectorResult:
     error_message: str | None = None
 
 
-def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: float = 15.0) -> bytes:
-    headers, url = dict(endpoint.headers), endpoint.url
+def _expand_url(url: str, now: datetime) -> str:
+    """Jetons de date dans les URLs (fenêtres glissantes d'API) : {today} {year} {next_year}..."""
+    tokens = {
+        "{today}": now.date().isoformat(),
+        "{year}": str(now.year),
+        "{next_year}": str(now.year + 1),
+        "{last_year}": str(now.year - 1),
+        "{days_ago_90}": (now - timedelta(days=90)).date().isoformat(),
+        "{now_ms}": str(int(now.timestamp() * 1000)),
+    }
+    for k, v in tokens.items():
+        url = url.replace(k, v)
+    return url
+
+
+def _token(var: str) -> str | None:
+    token = os.environ.get(var)
+    if not token and Path(".env").exists():
+        for ln in Path(".env").read_text(encoding="utf-8").splitlines():
+            if ln.strip().startswith(f"{var}="):
+                token = ln.split("=", 1)[1].strip().strip("\"'")
+    return token
+
+
+def _fetch_endpoint(endpoint: EndpointConfig, client: httpx.Client, timeout: float = 90.0) -> bytes:
+    headers = {"User-Agent": "OpenLuxHub/1.0 (+https://github.com/quen9669/OpenLux)"}
+    headers |= endpoint.headers
+    url = _expand_url(endpoint.url, datetime.now(UTC))
     if endpoint.auth_env_var:
-        token = os.environ.get(endpoint.auth_env_var)
-        if not token and Path(".env").exists():
-            for ln in Path(".env").read_text(encoding="utf-8").splitlines():
-                if ln.strip().startswith(f"{endpoint.auth_env_var}="):
-                    token = ln.split("=", 1)[1].strip().strip('"').strip("'")
-                    os.environ[endpoint.auth_env_var] = token
-                    break
-        if not token:
+        if not (token := _token(endpoint.auth_env_var)):
             raise PermissionError(f"Auth manquante: {endpoint.auth_env_var}")
-        if "{key}" in url or "{token}" in url:
-            url = url.replace("{key}", token).replace("{token}", token)
-        else:
-            headers["Authorization"] = f"Bearer {token}"
-    resp = client.get(url, headers=headers, timeout=timeout)
-    resp.raise_for_status()
-    return resp.content
+        url = url.replace("{key}", token)
+    for attempt in (1, 2):
+        try:
+            resp = client.get(url, headers=headers, timeout=timeout)
+            resp.raise_for_status()
+            return resp.content
+        except (httpx.TransportError, httpx.HTTPStatusError):
+            # POURQUOI : CDN en cours de rafraîchissement / serveurs Overpass saturés => 2e essai
+            if attempt == 2:
+                raise
+            time.sleep(3)
+    raise RuntimeError("inatteignable")
 
 
-def _process_json(raw: bytes, factual_only: bool) -> tuple[bytes, int]:
-    cleaned = sanitize_value(json.loads(raw.decode("utf-8")))
-    if factual_only:
-        cleaned = apply_factual_only(cleaned)
-    normalized = json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8")
-    return normalized, len(cleaned) if isinstance(cleaned, list) else (1 if cleaned else 0)
+def parse_payload(source: SourceConfig, raw: bytes, parser: str | None = None) -> tuple[bytes, int]:
+    """Applique le parser déclaré, puis la sanitisation Zero-PII et le filtre Factual-Only."""
+    name = parser or source.parser
+    if name not in PARSERS:
+        raise ValueError(f"Parser inconnu: {name}")
+    records = sanitize_value(PARSERS[name](raw))
+    if source.factual_only:
+        records = apply_factual_only(records)
+    return json.dumps(records, ensure_ascii=False, sort_keys=True).encode("utf-8"), len(records)
 
 
-def _process_csv(raw: bytes) -> tuple[bytes, int]:
-    reader = csv.reader(io.StringIO(raw.decode("utf-8", errors="replace")))
-    out = io.StringIO()
-    writer = csv.writer(out, lineterminator="\n")
-    rows = [[sanitize_text(c) for c in r] for r in reader]
-    writer.writerows(rows)
-    return out.getvalue().encode("utf-8"), sum(
-        1 for i, r in enumerate(rows) if i > 0 and any(c.strip() for c in r)
-    )
-
-
-def _process_jsonld(raw: bytes, factual_only: bool) -> tuple[bytes, int]:
-    soup = BeautifulSoup(raw.decode("utf-8", errors="replace"), "html.parser")
-    events = []
-    for tag in soup.find_all("script", type="application/ld+json"):
-        if tag.string:
-            try:
-                data = json.loads(tag.string)
-                events.extend(
-                    item
-                    for item in (data if isinstance(data, list) else [data])
-                    if "event" in str(item.get("@type", "")).lower()
-                )
-            except Exception:
-                pass
-    cleaned = sanitize_value(events)
-    if factual_only:
-        cleaned = apply_factual_only(cleaned, strict_whitelist=True)
-    return json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8"), len(cleaned)
-
-
-def _process_payload(source: SourceConfig, raw: bytes) -> tuple[bytes, int, str]:
-    if source.adapter == "http_json":
-        b, count = _process_json(raw, source.factual_only)
-        return b, count, "json"
-    if source.adapter == "http_csv":
-        b, count = _process_csv(raw)
-        return b, count, "csv"
-    if source.adapter == "http_jsonld":
-        b, count = _process_jsonld(raw, source.factual_only)
-        return b, count, "json"
-    if source.adapter == "http_custom" and source.parser in PARSERS:
-        records = PARSERS[source.parser](raw)
-        cleaned = sanitize_value(records)
-        if source.factual_only:
-            cleaned = apply_factual_only(cleaned)
-        return (
-            json.dumps(cleaned, ensure_ascii=False, sort_keys=True).encode("utf-8"),
-            len(cleaned),
-            "json",
-        )
-    raise ValueError(f"Adaptateur non supporté: {source.adapter} / {source.parser}")
-
-
-def _write_bronze(
-    source_id: str, payload: bytes, ext: str, sha256_hex: str, now: datetime, count: int = 1
-) -> Path:
-    d = Path("data/bronze") / source_id / now.strftime("%Y/%m/%d")
+def _write_bronze(source_id: str, payload: bytes, sha256_hex: str, now: datetime) -> Path:
+    d = BRONZE / source_id / now.strftime("%Y/%m/%d")
     d.mkdir(parents=True, exist_ok=True)
-    archive = d / f"{source_id}_{now.strftime('%Y%m%dT%H%M%SZ')}_{sha256_hex[:8]}.{ext}.gz"
-    compressed = gzip.compress(payload)
-    archive.write_bytes(compressed)
-    # POURQUOI : On n'écrase jamais latest avec 0 ligne pour ne pas corrompre les Data Marts
-    if count > 0:
-        (Path("data/bronze") / source_id / f"latest.{ext}.gz").write_bytes(compressed)
+    archive = d / f"{source_id}_{now.strftime('%Y%m%dT%H%M%SZ')}_{sha256_hex[:8]}.json.gz"
+    archive.write_bytes(gzip.compress(payload))
     return archive
 
 
@@ -141,55 +123,32 @@ def collect_source(
     last_changed_utc: str | None = None,
 ) -> CollectorResult:
     now = datetime.now(UTC)
-    now_iso, http_client, raw, source_used, err_msg = (
-        now.isoformat(),
-        client or httpx.Client(follow_redirects=True),
-        None,
-        "primary",
-        None,
-    )
+    now_iso, http, errors = now.isoformat(), client or httpx.Client(follow_redirects=True), []
     for ep, label in [(source.primary, "primary"), (source.backup, "backup")]:
         if not ep:
             continue
         try:
-            raw = _fetch_endpoint(ep, http_client)
-            processed, count, ext = _process_payload(source, raw)
-            source_used, err_msg = label, None
+            payload, count = parse_payload(source, _fetch_endpoint(ep, http), ep.parser)
             break
-        except PermissionError as p_err:
+        except PermissionError as exc:
+            errors.append(f"{label}: {exc}")
             if label == "primary" and not source.backup:
                 return CollectorResult(
-                    source.id, "NOT_TESTED", "none", "", 0, b"", None, now_iso, now_iso, str(p_err)
+                    source.id, "NOT_TESTED", "none", "", 0, b"", None, now_iso, now_iso, str(exc)
                 )
-        except Exception as exc:
-            err_msg = (
-                f"{label.capitalize()}: {exc}"
-                if not err_msg
-                else f"{err_msg} | {label.capitalize()}: {exc}"
-            )
-            raw = None
+        except Exception as exc:  # noqa: BLE001 — toute erreur bascule sur le backup
+            errors.append(f"{label}: {type(exc).__name__}: {exc}"[:300])
+    else:
+        msg = " | ".join(errors) or "aucun endpoint"
+        return CollectorResult(source.id, "ERROR", "none", "", 0, b"", None, now_iso, now_iso, msg)
 
-    if raw is None:
-        return CollectorResult(
-            source.id, "ERROR", "none", "", 0, b"", None, now_iso, now_iso, err_msg
-        )
-
-    sha = hashlib.sha256(processed).hexdigest()
+    sha = hashlib.sha256(payload).hexdigest()
     if last_sha256 and sha == last_sha256:
+        changed = last_changed_utc or now_iso
         return CollectorResult(
-            source.id,
-            "UNCHANGED",
-            source_used,
-            sha,
-            count,
-            processed,
-            None,
-            now_iso,
-            last_changed_utc or now_iso,
+            source.id, "UNCHANGED", label, sha, count, payload, None, now_iso, changed
         )
-
-    fpath = _write_bronze(source.id, processed, ext, sha, now, count=count)
-    st = "ATTENTION" if (source_used == "backup" or count == 0) else "SUCCESS"
-    return CollectorResult(
-        source.id, st, source_used, sha, count, processed, fpath, now_iso, now_iso
-    )
+    fpath = _write_bronze(source.id, payload, sha, now)
+    # POURQUOI : une liste vide peut être légitime (aucun bouchon) ; seul min_rows décide
+    st = "ATTENTION" if label == "backup" or count < source.quality.min_rows else "SUCCESS"
+    return CollectorResult(source.id, st, label, sha, count, payload, fpath, now_iso, now_iso)

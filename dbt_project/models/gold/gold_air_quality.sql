@@ -1,15 +1,3 @@
--- Gold: Data Mart final des mesures de la qualité de l'air au Luxembourg
-SELECT
-    station_id,
-    station_name,
-    observed_at_utc,
-    pollutant,
-    pollutant_value,
-    unit,
-    aqi_index,
-    lat,
-    lon,
-    commune_lau,
-    canton,
-    source_id
-FROM {{ ref('silver_air_quality') }}
+-- Gold qualité de l'air & pollens (modèle CAMS) : 1 ligne par point, heure et polluant
+{{ with_commune("SELECT * EXCLUDE (observed_at), " ~ utc('observed_at') ~ " AS observed_at_utc FROM " ~ ref('stg_air_quality')) }}
+QUALIFY ROW_NUMBER() OVER (PARTITION BY station_id, observed_at_utc, pollutant ORDER BY collected_at_utc DESC) = 1

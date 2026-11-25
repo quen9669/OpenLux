@@ -1,0 +1,100 @@
+{
+ "objectIdFieldName": "OBJECTID",
+ "globalIdFieldName": "",
+ "geometryType": "esriGeometryPoint",
+ "spatialReference": {
+  "wkid": 4326,
+  "latestWkid": 4326
+ },
+ "fields": [
+  {
+   "name": "OBJECTID",
+   "alias": "OBJECTID",
+   "type": "esriFieldTypeOID"
+  },
+  {
+   "name": "ID",
+   "alias": "ID",
+   "type": "esriFieldTypeString",
+   "length": 2048
+  },
+  {
+   "name": "DESCRIPTION",
+   "alias": "DESCRIPTION",
+   "type": "esriFieldTypeString",
+   "length": 2048
+  },
+  {
+   "name": "DATE_START",
+   "alias": "DATE_START",
+   "type": "esriFieldTypeDateOnly",
+   "length": 8
+  },
+  {
+   "name": "DATE_END",
+   "alias": "DATE_END",
+   "type": "esriFieldTypeDateOnly",
+   "length": 8
+  },
+  {
+   "name": "ADDRESS",
+   "alias": "ADDRESS",
+   "type": "esriFieldTypeString",
+   "length": 2048
+  },
+  {
+   "name": "REQUESTER",
+   "alias": "REQUESTER",
+   "type": "esriFieldTypeString",
+   "length": 2048
+  },
+  {
+   "name": "CONTRACTOR",
+   "alias": "CONTRACTOR",
+   "type": "esriFieldTypeString",
+   "length": 2048
+  },
+  {
+   "name": "FK_QUART_NAME",
+   "alias": "FK_QUART_NAME",
+   "type": "esriFieldTypeString",
+   "length": 60
+  }
+ ],
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 38709,
+    "ID": "9073-1MUM",
+    "DESCRIPTION": "Uschloss get am Trottoir gesicht",
+    "DATE_START": "2026-09-28",
+    "DATE_END": "2026-11-30",
+    "ADDRESS": "139-139A, Route d'Esch\nL-1470 Luxembourg",
+    "REQUESTER": "VILLE DE LUXEMBOURG CANAL",
+    "CONTRACTOR": "MAI BAUMEESCHTER Sàrl",
+    "FK_QUART_NAME": "Gasperich"
+   },
+   "geometry": {
+    "x": 6.117508780319656,
+    "y": 49.59549303514602
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 38712,
+    "ID": "1432-3NID",
+    "DESCRIPTION": "Fontaine",
+    "DATE_START": "2026-09-30",
+    "DATE_END": "2026-11-24",
+    "ADDRESS": "31-33, Rue Ste. Zithe\nL-2763 Luxembourg",
+    "REQUESTER": "VILLE DE LUXEMBOURG EAUX",
+    "CONTRACTOR": "LAZZARA T. CONSTRUCTIONS S.A.",
+    "FK_QUART_NAME": "Gare"
+   },
+   "geometry": {
+    "x": 6.129124454020213,
+    "y": 49.60437625544878
+   }
+  }
+ ]
+}

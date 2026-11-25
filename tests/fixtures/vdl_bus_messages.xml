@@ -1,0 +1,2024 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Messages>
+  <Message>
+    <MessageID>5334</MessageID>
+    <DateDebut>2026-05-03 04:00</DateDebut>
+    <DateFin>2027-02-01 05:00</DateFin>
+    <Urgent>true</Urgent>
+    <Categorie>Travaux</Categorie>
+    <Titre>L6,16,18,21,25,81,82,86 et 88: Travaux au boulevard Konrad Adenauer </Titre>
+    <TitreDE>L6,16,18,21,25,81,82,86 und 88: Bauarbeiten am Boulevard Konrad Adenauer </TitreDE>
+    <TitreEN>L6,16,18,21,25,81,82,86 and 88: Work on boulevard Konrad Adenauer </TitreEN>
+    <Texte>Travaux au boulevard Konrad Adenauer du dim. 03 mai 2026 (4h) au lundi 01 février 2027 (05h). En direction du centre-ville, les lignes 6, 16, 18, 21, 86 et 88 sont déviées via la rue du Fort Niedergrünewald. Les arrêts Jean Monnet Quai 2 et B.E.I. Quai 2 sont supprimés et remplacés par les arrêts Léon Hengen Quai 2, Niedergrünewald Quai 2 et Philharmonie/MUDAM Quai 2. En direction de Weimerskirch, les lignes 25, 81 et 82 sont déviées via les rues Erasme, Alcide de Gasperi et Charles-Léon Hammes. L'arrêt Jean Monnet Quai 2 est supprimé et remplacé par un arrêt prov. Jean Monnet sis au 4, rue Charles Hammes
+</Texte>
+    <TexteDE>Arbeiten am Boulevard Konrad Adenauer von So. 03. Mai 2026 (4 Uhr) bis Mo. 01. Februar 2027 (05 Uhr). In Richtung Stadtzentrum werden die Linien 6, 16, 18, 21, 86 und 88 über die Rue du Fort Niedergrünewald umgeleitet. Die Haltestellen Jean Monnet Quai 2 und B.E.I. Quai 2 werden abgeschafft und durch die Haltestellen Léon Hengen Quai 2, Niedergrünewald Quai 2 und Philharmonie/MUDAM Quai 2 ersetzt. In Richtung Weimerskirch werden die Linien 25, 81 und 82 über die Rue Erasme, Rue Alcide de Gasperi und Rue Charles-Léon Hammes umgeleitet. Die Haltestelle Jean Monnet Quai 2 wird aufgehoben und durch eine Haltestelle prov. Jean Monnet ersetzt, die sich in 4, rue Charles Hammes befindet
+</TexteDE>
+    <TexteEN>Work on boulevard Konrad Adenauer from Sun. 03 May 2026 (4am) to Mon. 01 February 2027 (5am). To the city center, lines 6, 16, 18, 21, 86 and 88 are diverted via rue du Fort Niedergrünewald. The Jean Monnet Quai 2 and B.E.I. Quai 2 stops have been removed and replaced by the Léon Hengen Quai 2, Niedergrünewald Quai 2 and Philharmonie/MUDAM Quai 2 stops. In the direction of Weimerskirch, lines 25, 81 and 82 are diverted via rue Erasme, rue Alcide de Gasperi and rue Charles-Léon Hammes. The Jean Monnet Quai 2 stop is removed and replaced by a prov. Jean Monnet stop at 4, rue Charles Hammes
+</TexteEN>
+    <TexteCourt>Travaux au bvd Konrad Adenauer du 03/05/26 (4h) au 01/02/27 (05h) | Lignes 6/16/18/21/25 déviées en dir. centre-ville/W'kirch</TexteCourt>
+    <TexteCourtDE>Bauarbeiten am bvd Konrad Adenauer vom 03/05/26 (4 Uhr) bis 01/02/27 (05 Uhr) | Linien 6/16/18/21/25 umgeleitet in Richtung Stadtzentrum/W'kirch</TexteCourtDE>
+    <TexteCourtEN>Work on bvd Konrad Adenauer from 03/05/26 (4h) to 01/02/27 (05h) | Lines 6/16/18/21/25 diverted to centre-ville/W'kirch</TexteCourtEN>
+    <IDTopographie />
+    <Concerne>Lignes</Concerne>
+    <Displays_TemplateMode>1</Displays_TemplateMode>
+    <TVTools_TemplateID>1</TVTools_TemplateID>
+    <TVTools_TemplatePriority />
+    <ElementsConcernes>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>16</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>18</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>21</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>25</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>6</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>81</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>82</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>86</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>88</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1110901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115016</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115019</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115025</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115026</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115051</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115070</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-03T04:00:00</DateBegin>
+            <DateEnd>2027-02-01T05:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115090</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115098</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-03T04:00:00</DateBegin>
+            <DateEnd>2027-02-01T05:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115099</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115912</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115913</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115998</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1115999</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1122018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1122023</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1127902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1140034</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1140060</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1140073</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1140197</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1150106</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1150247</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1161009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1220002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1220050</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1220052</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1220088</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1246005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1246006</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1250032</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1250068</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1250082</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1273012</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1273013</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319029</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319054</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319067</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319070</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319911</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319912</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319921</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319922</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319933</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1319934</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1329027</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1329903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1329904</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1331021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1331083</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1347013</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1347018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1347904</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1347905</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1359005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1359006</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1413901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1413902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1413903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415011</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415030</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415042</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1426047</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-08-28T08:00:00</DateBegin>
+            <DateEnd>2026-11-27T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1460066</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1466002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1466003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1466004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471193</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471242</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471267</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471316</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471401</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471402</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471408</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471409</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471420</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471421</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1479901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1479902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1510021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1510056</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1510065</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1510088</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543022</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543045</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2025-06-24T00:00:00</DateBegin>
+            <DateEnd>2026-12-31T00:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543046</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543090</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543091</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1543901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1611027</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1611902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1615903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1616912</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1616933</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1650010</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1650901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1650902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1651013</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1652005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1721002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1721003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1724005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1734901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1734902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1736001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1736002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1750041</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1750059</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1750901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1750902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1750905</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1855006</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1855009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857014</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857048</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857059</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857092</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857095</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857108</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1857109</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858022</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858031</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858059</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1858076</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1899020</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1899021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1899901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1922003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1940234</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1940310</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1940382</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1940444</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941193</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941265</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941337</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941411</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941483</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1941486</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2132011</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2134033</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2146063</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2146072</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2146141</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2146150</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2152901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2152902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163038</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163045</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2168044</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2168045</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2168084</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2168107</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2168118</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2180003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2180004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2220443</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2220598</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2220617</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2221273</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2221319</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2221393</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2222270</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2222310</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2222392</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2222458</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2226001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2226007</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2227901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2227902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2228901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2228902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2328018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2328021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2343206</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2343207</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440041</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440054</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440112</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440119</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440169</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2440174</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441204</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441213</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441276</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441289</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441328</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441330</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441359</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441379</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2441399</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2442378</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2450901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2450902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2540009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2540012</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2540023</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2540028</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542043</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542079</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542086</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2542156</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2550038</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2550096</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2550134</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2550170</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2551023</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2551067</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2551117</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2551151</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2552004</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-10-12T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T19:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2552999</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2630913</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2630914</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2633007</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2633009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2716001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2716002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2716045</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2721005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2721006</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2721011</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2721012</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8008020</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8008048</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8008102</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8008128</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8009023</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8009061</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8009119</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8009155</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8010168</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8010194</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8010224</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8010258</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8011203</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8011261</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8011305</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8011345</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8077902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8079096</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8079117</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8079901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080010</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080054</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080075</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080080</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080099</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080300</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8080902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8081405</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>8268005</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+    </ElementsConcernes>
+  </Message>
+  <Message>
+    <MessageID>5365</MessageID>
+    <DateDebut>2026-05-26 06:00</DateDebut>
+    <DateFin>2026-12-18 17:00</DateFin>
+    <Urgent>true</Urgent>
+    <Categorie>Travaux</Categorie>
+    <Titre>Chantier rue de Gasperich</Titre>
+    <Texte>Du mardi 26/05 (6h00) au vendredi 18/12 (17h00), dans le cadre de travaux, les modifications suivantes s'appliquent aux lignes de bus 13, 23 et CN2:
+En direction du quartier de la Gare, les arrêts Klensch Quai 1, Al Gaasperich et Bei der Auer seront supprimés. Arrêts de remplacement : arrêt prov. au 8-12, rue J.-P. Kemmer et arrêt prov. au 13-15, rue J. Gutenberg.
+En direction de Cessange / Bonnevoie, les arrêts Bei der Auer Quai 2, Al Gasperech Quai 2 et Klensch Quai 2 seront supprimés. Arrêt de substitution : Arrêt prov. au 15, rue J.-P. Kemmer</Texte>
+    <TexteCourt>L.13,23,CN2 Chantier rue de Gasperich | Arrêts Klensch/Al Gaasperich/Bei der Auer supprimés du 26/05 (6h00) au 18/12 (17h00)</TexteCourt>
+    <IDTopographie />
+    <Concerne>Lignes</Concerne>
+    <Displays_TemplateMode>1</Displays_TemplateMode>
+    <TVTools_TemplateID>1</TVTools_TemplateID>
+    <TVTools_TemplatePriority />
+    <ElementsConcernes>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>13</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>23</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Ligne</ElementType>
+        <ElementValue>CN2</ElementValue>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1122018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1122023</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1145110</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1145125</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1145160</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1145183</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1161012</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1210008</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1214009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1224002</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1224032</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1224035</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1281026</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1320089</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1329903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1329904</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1338050</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1338905</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1338906</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1343901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1353050</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1353069</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1413901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1413903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415057</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1415058</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420052</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420063</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420176</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420179</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420266</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420275</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1420902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1433003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1433004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1470069</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1471902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1512004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1512007</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1540036</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1611027</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1611902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1616912</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1616933</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1617013</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1617024</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1617053</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1617060</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1617081</ElementValue>
+        <ElementStatus>
+          <Image>
+            <Status>Supprimé</Status>
+            <DateBegin>2026-05-26T06:00:00</DateBegin>
+            <DateEnd>2026-12-18T17:00:00</DateEnd>
+            <ImagePath_Epaper>https://web.vdl.lu/autobus/data/images/affiches/Epaper_ArretSupprime_2200x1650.png</ImagePath_Epaper>
+            <Priority>1</Priority>
+          </Image>
+        </ElementStatus>
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1721002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1721003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1821021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1821022</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1831085</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1831122</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1831159</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1831168</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870006</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870007</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870022</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870049</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870064</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870097</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870122</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870169</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1870903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1922003</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1934001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>1934902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2118045</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2118046</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2132011</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2138004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2138014</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2138020</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2138047</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2138065</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2143100</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2143107</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2155129</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2155144</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2160004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163038</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163045</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2163902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2165903</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2223901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2223902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2339011</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2339018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2423033</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2432001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2449901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2449902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2450901</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2450902</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2521021</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2548001</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2651004</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2663002</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2663018</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2663061</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+      <ElementConcerne>
+        <ElementType>Arrêt</ElementType>
+        <ElementValue>2711009</ElementValue>
+        <ElementStatus />
+      </ElementConcerne>
+    </ElementsConcernes>
+  </Message>
+  </Messages>

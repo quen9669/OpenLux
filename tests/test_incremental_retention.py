@@ -1,10 +1,9 @@
-"""Test de validation stricte de l'ingestion incrémentale sans suppression (Zero Deletion)
-et de l'accroissement continu des lignes à chaque rechargement (hourly increment) 100 % isolé.
+"""Rétention incrémentale Gold : aucune clé passée n'est supprimée, chaque clé garde sa dernière
+version (collected_at_utc), les nouvelles observations s'accumulent.
 """
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import duckdb
@@ -12,113 +11,45 @@ import duckdb
 from openlux.core.gold import export_gold_parquets
 
 
-def test_incremental_zero_deletion_and_new_rows_accumulation(tmp_path: Path) -> None:
-    # 1. Création d'une base de test DuckDB totalement isolée dans tmp_path
-    tmp_db = tmp_path / "test.duckdb"
-    gold_dir = tmp_path / "gold"
-    gold_dir.mkdir(parents=True, exist_ok=True)
-
-    t0 = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
-    with duckdb.connect(str(tmp_db)) as con:
-        con.execute("""
-            CREATE TABLE gold_mobility_veloh (
-                station_id VARCHAR, station_number INTEGER,
-                station_name VARCHAR, address VARCHAR, observed_at_utc TIMESTAMP,
-                available_bikes INTEGER, available_electrical_bikes INTEGER,
-                available_mechanical_bikes INTEGER, available_stands INTEGER,
-                broken_or_disabled_stands INTEGER, total_capacity INTEGER,
-                occupancy_rate DOUBLE, status VARCHAR, is_renting BOOLEAN,
-                is_connected BOOLEAN, is_installed BOOLEAN, has_banking BOOLEAN,
-                is_bonus BOOLEAN, hourly_rate_eur DECIMAL(10,2),
-                tariff_details VARCHAR, opening_hours VARCHAR,
-                lat DOUBLE, lon DOUBLE, commune_lau VARCHAR,
-                canton VARCHAR, source_id VARCHAR
-            );
-            CREATE TABLE gold_mobility_parkings (
-                parking_id VARCHAR, parking_name VARCHAR, observed_at_utc TIMESTAMP,
-                available_spaces INTEGER, total_capacity INTEGER,
-                occupied_spaces INTEGER, occupancy_rate DOUBLE, trend INTEGER,
-                is_open BOOLEAN, is_full BOOLEAN, is_out_of_order BOOLEAN,
-                is_free_pr BOOLEAN, hourly_rate_eur DECIMAL(10,2),
-                tariff_details VARCHAR, opening_hours VARCHAR, lat DOUBLE,
-                lon DOUBLE, commune_lau VARCHAR, canton VARCHAR, source_id VARCHAR
-            );
-        """)
-        # Injection du lot initial T0
-        con.execute(f"""
-            INSERT INTO gold_mobility_veloh VALUES
-            ('VELOH_01', 1, 'Hamilius', 'Avenue Monterey', '{t0}', 10, 10, 0, 5, 1, 16, 62.5,
-             'OPEN', true, true, true, false, false, 0.00,
-             'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'veloh_stations'),
-            ('VELOH_02', 2, 'Glacis', 'Place du Glacis', '{t0}', 8, 8, 0, 8, 2, 18, 44.4,
-             'OPEN', true, true, true, false, false, 0.00,
-             'VDL', '24/7', 49.62, 6.12, 'LU0704', 'Luxembourg', 'veloh_stations');
-
-            INSERT INTO gold_mobility_parkings VALUES
-            ('PARK_01', 'Knuedler', '{t0}', 50, 200, 150, 75.0, 1, true, false, false,
-             false, 2.80, 'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'parkings_vdl'),
-            ('PARK_02', 'Glacis', '{t0}', 200, 500, 300, 60.0, 0, true, false, false,
-             false, 2.00, 'VDL', '24/7', 49.62, 6.12, 'LU0704', 'Luxembourg', 'parkings_vdl');
-        """)
-
-    # 2. Run 1: Export initial vers le répertoire Gold de test
-    exported = export_gold_parquets(duckdb_path=tmp_db, gold_dir=gold_dir)
-    assert set(exported) == {"gold_mobility_veloh", "gold_mobility_parkings"}
-
-    # 3. Vérification des volumes initiaux au Run 1
+def _count(p: Path, where: str = "TRUE") -> int:
     with duckdb.connect() as con:
-        v_p = (gold_dir / "gold_mobility_veloh.parquet").as_posix()
-        p_p = (gold_dir / "gold_mobility_parkings.parquet").as_posix()
-        v_cnt_run1 = con.execute(f"SELECT count(*) FROM read_parquet('{v_p}')").fetchone()[0]
-        p_cnt_run1 = con.execute(f"SELECT count(*) FROM read_parquet('{p_p}')").fetchone()[0]
-        assert v_cnt_run1 == 2
-        assert p_cnt_run1 == 2
+        q = f"SELECT count(*) FROM read_parquet('{p.as_posix()}') WHERE {where}"
+        return con.execute(q).fetchone()[0]
 
-    # 4. Run 2: Ré-exécution sans nouvelles données
-    export_gold_parquets(duckdb_path=tmp_db, gold_dir=gold_dir)
 
-    # 5. Vérification Zero Deletion stricte (aucune ligne perdue, volume identique)
-    with duckdb.connect() as con:
-        v_cnt_run2 = con.execute(f"SELECT count(*) FROM read_parquet('{v_p}')").fetchone()[0]
-        p_cnt_run2 = con.execute(f"SELECT count(*) FROM read_parquet('{p_p}')").fetchone()[0]
-        assert v_cnt_run2 == v_cnt_run1 == 2
-        assert p_cnt_run2 == p_cnt_run1 == 2
-
-    # 6. Simulation du rechargement après 1 heure (H+1) avec de nouvelles observations horaires
-    t1 = (datetime.now(UTC) + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
-    with duckdb.connect(str(tmp_db)) as con:
-        con.execute(f"""
-            INSERT INTO gold_mobility_veloh VALUES
-            ('VELOH_01', 1, 'Hamilius', 'Avenue Monterey', '{t1}', 12, 12, 0, 3, 1, 16, 75.0,
-             'OPEN', true, true, true, false, false, 0.00,
-             'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'veloh_stations');
-
-            INSERT INTO gold_mobility_parkings VALUES
-            ('PARK_01', 'Knuedler', '{t1}', 40, 200, 160, 80.0, 1, true, false, false,
-             false, 2.80, 'VDL', '24/7', 49.61, 6.13, 'LU0704', 'Luxembourg', 'parkings_vdl');
-        """)
-
-    # 7. Run 3: Export incrémental Gold
-    export_gold_parquets(duckdb_path=tmp_db, gold_dir=gold_dir)
-
-    # 8. Vérification de l'accumulation continue : new_cnt == initial_cnt + 1 et zéro suppression
-    with duckdb.connect() as con:
-        v_cnt_run3 = con.execute(f"SELECT count(*) FROM read_parquet('{v_p}')").fetchone()[0]
-        p_cnt_run3 = con.execute(f"SELECT count(*) FROM read_parquet('{p_p}')").fetchone()[0]
-        assert v_cnt_run3 == 3, f"Veloh: attendu 3, obtenu {v_cnt_run3}"
-        assert p_cnt_run3 == 3, f"Parkings: attendu 3, obtenu {p_cnt_run3}"
-
-        # Vérification que l'historique T0 et le nouveau relevé T1 coexistent
-        q_h1 = (
-            f"SELECT available_bikes, broken_or_disabled_stands "
-            f"FROM read_parquet('{v_p}') WHERE observed_at_utc = '{t1}'"
+def test_zero_deletion_and_latest_version_per_key(tmp_path: Path) -> None:
+    db, gold = tmp_path / "t.duckdb", tmp_path / "gold"
+    gold.mkdir()
+    pq = gold / "gold_mobility_parkings.parquet"
+    ddl = (
+        "CREATE OR REPLACE TABLE gold_mobility_parkings (parking_id VARCHAR, "
+        "observed_at_utc TIMESTAMP, available_spaces INTEGER, collected_at_utc TIMESTAMP)"
+    )
+    with duckdb.connect(str(db)) as con:
+        con.execute(ddl)
+        con.execute(
+            "INSERT INTO gold_mobility_parkings VALUES "
+            "('20', '2026-11-24 10:00', 50, '2026-11-24 10:01'),"
+            "('14', '2026-11-24 10:00', 0, '2026-11-24 10:01')"
         )
-        h1_v = con.execute(q_h1).fetchone()
-        assert h1_v == (12, 1)
+    export_gold_parquets(db, gold)
+    assert _count(pq) == 2
 
-        # Invariant physique garanti sur toutes les lignes : bikes + stands + broken == capacity
-        invariants = con.execute(f"""
-            SELECT count(*) FROM read_parquet('{v_p}')
-            WHERE (available_bikes + available_stands + broken_or_disabled_stands) != total_capacity
-        """).fetchone()[0]
-        assert invariants == 0, "Invariant de capacité violé !"
+    # Run suivant : la table DuckDB ne contient plus que le nouveau relevé + une correction
+    with duckdb.connect(str(db)) as con:
+        con.execute(ddl)
+        con.execute(
+            "INSERT INTO gold_mobility_parkings VALUES "
+            "('20', '2026-11-24 11:00', 42, '2026-11-24 11:01'),"
+            "('14', '2026-11-24 10:00', 7, '2026-11-24 11:02')"
+        )
+    export_gold_parquets(db, gold)
+    assert _count(pq) == 3  # 2 anciennes clés conservées + 1 nouvelle
+    assert _count(pq, "parking_id = '14' AND available_spaces = 7") == 1  # dernière version
+    assert _count(pq, "parking_id = '14' AND available_spaces = 0") == 0  # pas de doublon
+
+    # Run à vide : rien n'est perdu
+    with duckdb.connect(str(db)) as con:
+        con.execute(ddl)
+    export_gold_parquets(db, gold)
+    assert _count(pq) == 3

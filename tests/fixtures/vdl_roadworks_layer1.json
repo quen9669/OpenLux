@@ -1,0 +1,286 @@
+{
+ "objectIdFieldName": "OBJECTID",
+ "globalIdFieldName": "",
+ "geometryType": "esriGeometryPolygon",
+ "spatialReference": {
+  "wkid": 4326,
+  "latestWkid": 4326
+ },
+ "fields": [
+  {
+   "name": "OBJECTID",
+   "alias": "OBJECTID",
+   "type": "esriFieldTypeOID"
+  },
+  {
+   "name": "ROAD_WORK_ID",
+   "alias": "ROAD_WORK_ID",
+   "type": "esriFieldTypeString",
+   "length": 50
+  },
+  {
+   "name": "OBJECTIVE",
+   "alias": "OBJECTIVE",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "ENTREPRISE_TRAVAUX",
+   "alias": "ENTREPRISE_TRAVAUX",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "FK_QUART_NAME",
+   "alias": "FK_QUART_NAME",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "STREET_TYPICAL_NAME_LIST",
+   "alias": "STREET_TYPICAL_NAME_LIST",
+   "type": "esriFieldTypeString",
+   "length": 255
+  },
+  {
+   "name": "PUBLICATION_DATE",
+   "alias": "PUBLICATION_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "START_DATE",
+   "alias": "START_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "END_DATE",
+   "alias": "END_DATE",
+   "type": "esriFieldTypeDate",
+   "length": 8
+  },
+  {
+   "name": "URL",
+   "alias": "URL",
+   "type": "esriFieldTypeString",
+   "length": 2000
+  },
+  {
+   "name": "Shape__Area",
+   "alias": "SHAPE.STArea()",
+   "type": "esriFieldTypeDouble"
+  },
+  {
+   "name": "Shape__Length",
+   "alias": "SHAPE.STLength()",
+   "type": "esriFieldTypeDouble"
+  },
+  {
+   "name": "URL_TEXT",
+   "alias": "URL_TEXT",
+   "type": "esriFieldTypeString",
+   "length": 255
+  }
+ ],
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 31925,
+    "ROAD_WORK_ID": "9cc44598-ff9d-4629-8014-bc39c394453d",
+    "OBJECTIVE": "Travaux d'infrastructures",
+    "ENTREPRISE_TRAVAUX": "Perrard/Lux-TP",
+    "FK_QUART_NAME": "Beggen",
+    "STREET_TYPICAL_NAME_LIST": "Rue Cyprien Merjai; Rue de Beggen; Rue de Neuerburg",
+    "PUBLICATION_DATE": 1750024800000,
+    "START_DATE": 1750024800000,
+    "END_DATE": 1828998000000,
+    "URL": null,
+    "Shape__Area": 14136.4409145,
+    "Shape__Length": 2142.9959515091273,
+    "URL_TEXT": null
+   },
+   "geometry": {
+    "rings": [
+     [
+      [
+       6.12759853267965,
+       49.6499251688252
+      ],
+      [
+       6.127772557658091,
+       49.649937114254975
+      ],
+      [
+       6.128003827104831,
+       49.64708851202562
+      ],
+      [
+       6.12805908965567,
+       49.64670791711163
+      ],
+      [
+       6.128196736282181,
+       49.64638087302882
+      ],
+      [
+       6.129361851586825,
+       49.64387156298347
+      ],
+      [
+       6.130829566087876,
+       49.640696249875724
+      ],
+      [
+       6.130646416939688,
+       49.64067240211512
+      ],
+      [
+       6.130105218903516,
+       49.641843822945994
+      ],
+      [
+       6.128233825441347,
+       49.64579806550332
+      ],
+      [
+       6.12786674280112,
+       49.646713794921794
+      ],
+      [
+       6.127857307378184,
+       49.647064672279996
+      ],
+      [
+       6.1276538160781495,
+       49.64952672728387
+      ],
+      [
+       6.12759853267965,
+       49.6499251688252
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 31928,
+    "ROAD_WORK_ID": "5913999b-4210-48a3-8af1-7c6c7b7377e4",
+    "OBJECTIVE": "Construction du tram",
+    "ENTREPRISE_TRAVAUX": "LUXTRAM",
+    "FK_QUART_NAME": "Kirchberg",
+    "STREET_TYPICAL_NAME_LIST": "Rue Erasme; Rue Léon Hengen; Rue Richard Coudenhove-Kalergi",
+    "PUBLICATION_DATE": 1748210400000,
+    "START_DATE": 1748210400000,
+    "END_DATE": 1806444000000,
+    "URL": null,
+    "Shape__Area": 46202.338311,
+    "Shape__Length": 3870.7464341625346,
+    "URL_TEXT": null
+   },
+   "geometry": {
+    "rings": [
+     [
+      [
+       6.138224684139982,
+       49.61883667668529
+      ],
+      [
+       6.138394012445452,
+       49.61916714672538
+      ],
+      [
+       6.139290411981092,
+       49.62111105557194
+      ],
+      [
+       6.139559451664033,
+       49.621519301804916
+      ],
+      [
+       6.139868428429121,
+       49.6218433203087
+      ],
+      [
+       6.141274114061064,
+       49.62276366399721
+      ],
+      [
+       6.143038850447207,
+       49.623735890006444
+      ],
+      [
+       6.145511752901216,
+       49.62477302184059
+      ],
+      [
+       6.152951032229289,
+       49.62794239927656
+      ],
+      [
+       6.157638495882675,
+       49.62984770006827
+      ],
+      [
+       6.157788148835065,
+       49.629653345558204
+      ],
+      [
+       6.154237650553507,
+       49.62811747899902
+      ],
+      [
+       6.1523029038865635,
+       49.627307375074004
+      ],
+      [
+       6.151854115524356,
+       49.62719717697152
+      ],
+      [
+       6.148872378772309,
+       49.62593981366159
+      ],
+      [
+       6.146877977929592,
+       49.6251231357966
+      ],
+      [
+       6.143816714153186,
+       49.623852671817666
+      ],
+      [
+       6.142390871203079,
+       49.62319800237231
+      ],
+      [
+       6.140516546018267,
+       49.622044321137
+      ],
+      [
+       6.140087904807285,
+       49.621700837893506
+      ],
+      [
+       6.139689266919342,
+       49.62122129962735
+      ],
+      [
+       6.139111510158787,
+       49.620054940232116
+      ],
+      [
+       6.138693346774682,
+       49.618901582145874
+      ],
+      [
+       6.138224684139982,
+       49.61883667668529
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

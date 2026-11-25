@@ -4,497 +4,35 @@
  * Anonymat garanti à 100% : aucune donnée personnelle.
  */
 
-// Données enrichies des 22 Data Marts Gold
-const DATASETS_V2 = [
-  {
-    dataset: "gold_luxembourg_daily_context",
-    domain: "Territoire & Citoyenneté",
-    source_org: "Consolidation Multi-Sources Gouvernementale",
-    source_url: "https://data.public.lu",
-    cadence: "Quotidien (06:00 UTC)",
-    sla: "SLA légal 120 min",
-    last_refresh: "2026-11-21 06:00:00 UTC",
-    row_count: 365,
-    sparkline: [358, 359, 360, 362, 363, 364, 365],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Synthèse quotidienne unifiée du Luxembourg : météo, alertes, jours fériés et chantiers sur les 100 communes.",
-    columns: [
-      { name: "date", type: "DATE", desc: "Date calendaire du relevé" },
-      { name: "is_holiday", type: "BOOLEAN", desc: "Indicateur de jour férié légal" },
-      { name: "holiday_name", type: "VARCHAR", desc: "Nom officiel du jour férié" },
-      { name: "temp_mean_c", type: "DOUBLE", desc: "Température moyenne nationale" },
-      { name: "active_traffic_events", type: "BIGINT", desc: "Nombre de perturbations routières" },
-      { name: "active_health_alerts", type: "BIGINT", desc: "Alertes sanitaires actives" }
-    ]
-  },
-  {
-    dataset: "gold_weather_observations",
-    domain: "Santé & Environnement",
-    source_org: "MeteoLux (Administration de la Navigation Aérienne)",
-    source_url: "https://metapi.ana.lu/api/v1/metdata/weather",
-    cadence: "Toutes les 30 min",
-    sla: "SLA 90 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 14200,
-    sparkline: [13800, 13900, 14000, 14080, 14120, 14160, 14200],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Observations météorologiques horaires géoréférencées (température, humidité, vent, pluie) sur les 12 cantons.",
-    columns: [
-      { name: "station_id", type: "VARCHAR", desc: "Identifiant station MeteoLux" },
-      { name: "timestamp_utc", type: "TIMESTAMP_TZ", desc: "Horodatage UTC exact" },
-      { name: "temperature_c", type: "DOUBLE", desc: "Température en °C" },
-      { name: "humidity_pct", type: "DOUBLE", desc: "Humidité relative en %" },
-      { name: "wind_speed_kmh", type: "DOUBLE", desc: "Vitesse du vent en km/h" },
-      { name: "lat", type: "DOUBLE", desc: "Latitude WGS84 (EPSG:4326)" },
-      { name: "lon", type: "DOUBLE", desc: "Longitude WGS84 (EPSG:4326)" }
-    ]
-  },
-  {
-    dataset: "gold_air_quality",
-    domain: "Santé & Environnement",
-    source_org: "Administration de l'Environnement (AE)",
-    source_url: "https://data.public.lu/fr/datasets/qualite-de-lair-au-luxembourg",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 180 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 5280,
-    sparkline: [5150, 5180, 5200, 5230, 5250, 5270, 5280],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Indices et concentrations de polluants atmosphériques en direct (PM2.5, PM10, NO2, O3).",
-    columns: [
-      { name: "station_code", type: "VARCHAR", desc: "Code de la station de mesure" },
-      { name: "timestamp_utc", type: "TIMESTAMP_TZ", desc: "Date et heure de mesure" },
-      { name: "pm25_ugm3", type: "DOUBLE", desc: "Particules fines PM2.5 (µg/m³)" },
-      { name: "pm10_ugm3", type: "DOUBLE", desc: "Particules PM10 (µg/m³)" },
-      { name: "no2_ugm3", type: "DOUBLE", desc: "Dioxyde d'azote (µg/m³)" },
-      { name: "index_atmo", type: "VARCHAR", desc: "Indice global officiel" }
-    ]
-  },
-  {
-    dataset: "gold_traffic_events",
-    domain: "Mobilité & Transports",
-    source_org: "CITA (Administration des Ponts et Chaussées)",
-    source_url: "https://www.cita.lu/datex2/datex2.xml",
-    cadence: "Toutes les 15 min",
-    sla: "SLA 30 min",
-    last_refresh: "2026-11-21 11:15:00 UTC",
-    row_count: 840,
-    sparkline: [780, 800, 815, 825, 830, 835, 840],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Événements de trafic autoroutier DATEX II en temps réel (bouchons, incidents, voies neutralisées).",
-    columns: [
-      { name: "event_id", type: "VARCHAR", desc: "Identifiant officiel CITA" },
-      { name: "road_axis", type: "VARCHAR", desc: "Axe routier (A1, A3, A4...)" },
-      { name: "direction", type: "VARCHAR", desc: "Direction de circulation" },
-      { name: "event_type", type: "VARCHAR", desc: "Nature de l'incident" },
-      { name: "delay_minutes", type: "INTEGER", desc: "Retard estimé en minutes" }
-    ]
-  },
-  {
-    dataset: "gold_crossborder_traffic",
-    domain: "Mobilité & Transports",
-    source_org: "Consolidation Quadripartite (Bison Futé / Autobahn / Trafiroutes / CFL)",
-    source_url: "https://data.public.lu",
-    cadence: "Toutes les 15 min",
-    sla: "SLA 45 min",
-    last_refresh: "2026-11-21 11:15:00 UTC",
-    row_count: 2400,
-    sparkline: [2250, 2290, 2320, 2350, 2370, 2390, 2400],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Temps de parcours et retards aux 5 frontières (France A3/A31, Belgique A6/E25, Allemagne A1/A64).",
-    columns: [
-      { name: "border_corridor", type: "VARCHAR", desc: "Corridor frontalier" },
-      { name: "origin_country", type: "VARCHAR", desc: "Pays d'origine (FR, BE, DE)" },
-      { name: "current_travel_time_min", type: "DOUBLE", desc: "Temps de trajet constaté" },
-      { name: "congestion_delay_min", type: "DOUBLE", desc: "Retard par rapport au fluide" }
-    ]
-  },
-  {
-    dataset: "gold_public_transit",
-    domain: "Mobilité & Transports",
-    source_org: "Mobilitéit.lu & CFL (Transports Publics Gratuits)",
-    source_url: "https://data.public.lu/fr/datasets/gtfs-mobiliteit-lu",
-    cadence: "Toutes les 15 min",
-    sla: "SLA 30 min",
-    last_refresh: "2026-11-21 11:15:00 UTC",
-    row_count: 920,
-    sparkline: [880, 890, 900, 905, 910, 915, 920],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "État de fonctionnement et perturbations du réseau de transports en commun (CFL, Luxtram, RGTR).",
-    columns: [
-      { name: "line_id", type: "VARCHAR", desc: "Numéro de ligne ou train" },
-      { name: "mode", type: "VARCHAR", desc: "Train, Tramway ou Bus" },
-      { name: "status", type: "VARCHAR", desc: "Nominal ou Perturbé" },
-      { name: "cause", type: "VARCHAR", desc: "Motif factuel de perturbation" }
-    ]
-  },
-  {
-    dataset: "gold_mobility_parkings",
-    domain: "Mobilité & Transports",
-    source_org: "Ville de Luxembourg (VDL) & Chargy",
-    source_url: "https://data.public.lu/fr/datasets/parkings-vdl",
-    cadence: "Toutes les 15 min",
-    sla: "SLA 30 min",
-    last_refresh: "2026-11-21 11:15:00 UTC",
-    row_count: 1850,
-    sparkline: [1780, 1800, 1815, 1830, 1840, 1845, 1850],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Disponibilité, bornes Chargy et taux d'occupation en temps réel des parkings P+R et urbains.",
-    columns: [
-      { name: "parking_id", type: "VARCHAR", desc: "Identifiant parking ou station" },
-      { name: "name", type: "VARCHAR", desc: "Nom officiel du parc" },
-      { name: "city", type: "VARCHAR", desc: "Commune d'implantation" },
-      { name: "total_capacity", type: "INTEGER", desc: "Nombre total d'emplacements" },
-      { name: "free_spaces", type: "INTEGER", desc: "Places vacantes actuelles" }
-    ]
-  },
-  {
-    dataset: "gold_roadworks",
-    domain: "Mobilité & Transports",
-    source_org: "Ponts et Chaussées & Ville de Luxembourg",
-    source_url: "https://data.public.lu/fr/datasets/chantiers-routiers",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 180 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 310,
-    sparkline: [290, 295, 300, 305, 308, 309, 310],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Chantiers et travaux routiers planifiés avec restriction de circulation (titres factuels $\\le$ 140 car.).",
-    columns: [
-      { name: "work_id", type: "VARCHAR", desc: "Numéro d'autorisation officiel" },
-      { name: "commune", type: "VARCHAR", desc: "Commune impactée" },
-      { name: "location_description", type: "VARCHAR", desc: "Localisation exacte" },
-      { name: "traffic_restriction", type: "VARCHAR", desc: "Déviation ou alternat" }
-    ]
-  },
-  {
-    dataset: "gold_fuel_prices",
-    domain: "Énergie & Climat",
-    source_org: "Ministère de l'Économie (Réglementation Officielle)",
-    source_url: "https://gouvernement.lu/fr/actualites/toutes_actualites/communiques/prix-carburants.html",
-    cadence: "Toutes les 12 heures",
-    sla: "SLA légal 720 min",
-    last_refresh: "2026-11-21 00:00:00 UTC",
-    row_count: 450,
-    sparkline: [440, 442, 444, 446, 448, 449, 450],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Prix maximaux officiels des carburants au Luxembourg fixés par arrêté ministériel.",
-    columns: [
-      { name: "fuel_type", type: "VARCHAR", desc: "Type de carburant (Diesel, 95, 98)" },
-      { name: "price_eur_per_litre", type: "DOUBLE", desc: "Prix officiel TTC en €/Litre" },
-      { name: "effective_from", type: "TIMESTAMP_TZ", desc: "Date et heure d'entrée en vigueur" }
-    ]
-  },
-  {
-    dataset: "gold_electricity_spot",
-    domain: "Énergie & Climat",
-    source_org: "Creos & EPEX SPOT / ENTSO-E",
-    source_url: "https://transparency.entsoe.eu",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 120 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 8760,
-    sparkline: [8500, 8560, 8620, 8680, 8720, 8740, 8760],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Prix de gros de l'électricité sur le marché Day-Ahead (zone d'échange DE-LU).",
-    columns: [
-      { name: "hour_utc", type: "TIMESTAMP_TZ", desc: "Créneau horaire" },
-      { name: "price_eur_mwh", type: "DOUBLE", desc: "Prix spot en €/MWh" },
-      { name: "data_origin", type: "VARCHAR", desc: "REEL ou IMPUTE (traçabilité)" }
-    ]
-  },
-  {
-    dataset: "gold_statec_inflation",
-    domain: "Économie & Inflation",
-    source_org: "STATEC (Institut National de la Statistique)",
-    source_url: "https://statistiques.public.lu",
-    cadence: "Mensuel (Mis à jour dès publication)",
-    sla: "SLA légal 1440 min",
-    last_refresh: "2026-11-01 10:00:00 UTC",
-    row_count: 240,
-    sparkline: [234, 235, 236, 237, 238, 239, 240],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Indice des Prix à la Consommation National (IPCN) et suivi de la prochaine tranche indiciaire.",
-    columns: [
-      { name: "month_period", type: "VARCHAR", desc: "Mois et année de référence" },
-      { name: "ipcn_index_value", type: "DOUBLE", desc: "Valeur de l'indice IPCN" },
-      { name: "annual_inflation_rate_pct", type: "DOUBLE", desc: "Taux d'inflation annuel %" },
-      { name: "next_index_quota_reached", type: "BOOLEAN", desc: "Déclenchement tranche indiciaire" }
-    ]
-  },
-  {
-    dataset: "gold_housing_listings",
-    domain: "Immobilier & Marché",
-    source_org: "Marché immobilier (atHome & partenaires)",
-    source_url: "https://www.athome.lu/",
-    cadence: "Temps réel / 60 min",
-    sla: "SLA 120 min",
-    last_refresh: "2026-11-22 15:00:00 UTC",
-    row_count: 120,
-    sparkline: [110, 115, 118, 120, 120, 120, 120],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Annonces immobilières actives avec 29 attributs factuels (prix, surface, DPE, extérieurs).",
-    columns: [
-      { name: "record_id", type: "VARCHAR", desc: "Identifiant unique de l'offre" },
-      { name: "property_type", type: "VARCHAR", desc: "Type de bien (Appartement, Maison, Studio...)" },
-      { name: "price_eur", type: "DOUBLE", desc: "Prix demandé en Euros" },
-      { name: "surface_m2", type: "DOUBLE", desc: "Surface habitable en m²" },
-      { name: "price_eur_m2", type: "DOUBLE", desc: "Prix au m²" },
-      { name: "energy_class", type: "VARCHAR", desc: "Classe de performance énergétique" },
-      { name: "commune_name", type: "VARCHAR", desc: "Commune luxembourgeoise" },
-      { name: "canton", type: "VARCHAR", desc: "Canton géographique" }
-    ]
-  },
-  {
-    dataset: "gold_housing_stats",
-    domain: "Immobilier & Marché",
-    source_org: "Observatoire de l'Habitat & STATEC",
-    source_url: "https://logement.public.lu/fr/observatoire-habitat.html",
-    cadence: "Trimestriel / Mensuel",
-    sla: "SLA 10080 min",
-    last_refresh: "2026-11-22 15:00:00 UTC",
-    row_count: 8,
-    sparkline: [8, 8, 8, 8, 8, 8, 8],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Statistiques officielles : prix médians observatoire et autorisations de bâtir STATEC.",
-    columns: [
-      { name: "record_id", type: "VARCHAR", desc: "Clé unique de la série statistique" },
-      { name: "record_type", type: "VARCHAR", desc: "Origine statistique (STATEC ou Observatoire)" },
-      { name: "property_type", type: "VARCHAR", desc: "Typologie de bien" },
-      { name: "reference_period", type: "VARCHAR", desc: "Trimestre ou année de référence" },
-      { name: "price_eur_m2", type: "DOUBLE", desc: "Prix médian observé au m²" },
-      { name: "units_count", type: "INTEGER", desc: "Nombre de transactions ou logements autorisés" },
-      { name: "permits_count", type: "INTEGER", desc: "Nombre de permis délivrés" },
-      { name: "commune_name", type: "VARCHAR", desc: "Commune" }
-    ]
-  },
-  {
-    dataset: "gold_housing",
-    domain: "Immobilier & Marché",
-    source_org: "Observatoire de l'Habitat, STATEC & Marché",
-    source_url: "https://logement.public.lu/fr/observatoire-habitat.html",
-    cadence: "Trimestriel / Quotidien",
-    sla: "SLA 10080 min",
-    last_refresh: "2026-11-22 15:00:00 UTC",
-    row_count: 128,
-    sparkline: [120, 122, 125, 128, 128, 128, 128],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Modèle unifié : consolidation des offres de marché et des séries macroéconomiques.",
-    columns: [
-      { name: "record_id", type: "VARCHAR", desc: "Identifiant unique" },
-      { name: "record_type", type: "VARCHAR", desc: "Type d'enregistrement (LISTING ou STATISTIC)" },
-      { name: "property_type", type: "VARCHAR", desc: "Type de bien" },
-      { name: "price_eur", type: "DOUBLE", desc: "Prix en Euros" },
-      { name: "surface_m2", type: "DOUBLE", desc: "Surface en m²" },
-      { name: "commune_name", type: "VARCHAR", desc: "Nom de la commune" }
-    ]
-  },
-  {
-    dataset: "gold_culture_events",
-    domain: "Culture & Sorties",
-    source_org: "Echo.lu, VisitLuxembourg & VDL",
-    source_url: "https://api.echo.lu",
-    cadence: "Toutes les 6 heures",
-    sla: "SLA 360 min",
-    last_refresh: "2026-11-21 06:00:00 UTC",
-    row_count: 1680,
-    sparkline: [1590, 1610, 1630, 1650, 1665, 1675, 1680],
-    trust_score: 100.0,
-    license_spdx: "FACTUAL-ONLY",
-    description: "Agenda culturel et associatif officiel épuré Factual-Only (titres $\\le$ 140 car., dates, lieux).",
-    columns: [
-      { name: "event_id", type: "VARCHAR", desc: "Identifiant unique dédoublonné" },
-      { name: "factual_title", type: "VARCHAR", desc: "Titre factuel court" },
-      { name: "commune", type: "VARCHAR", desc: "Commune de l'événement" },
-      { name: "is_free", type: "BOOLEAN", desc: "Entrée libre et gratuite" }
-    ]
-  },
-  {
-    dataset: "gold_civic_life",
-    domain: "Territoire & Citoyenneté",
-    source_org: "Chambre des Députés & Registre National des Communes",
-    source_url: "https://chd.lu",
-    cadence: "Quotidien",
-    sla: "SLA 1440 min",
-    last_refresh: "2026-11-21 00:00:00 UTC",
-    row_count: 100,
-    sparkline: [100, 100, 100, 100, 100, 100, 100],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Données administratives des 100 communes luxembourgeoises et pétitions publiques régulées.",
-    columns: [
-      { name: "commune_name", type: "VARCHAR", desc: "Nom officiel légal" },
-      { name: "canton", type: "VARCHAR", desc: "Canton administratif" },
-      { name: "population", type: "INTEGER", desc: "Population officielle au 1er janvier" }
-    ]
-  },
-  {
-    dataset: "gold_holidays",
-    domain: "Territoire & Citoyenneté",
-    source_org: "Journal Officiel du Grand-Duché (Legilux)",
-    source_url: "https://legilux.public.lu",
-    cadence: "Hebdomadaire",
-    sla: "SLA légal 10080 min",
-    last_refresh: "2026-11-20 00:00:00 UTC",
-    row_count: 65,
-    sparkline: [65, 65, 65, 65, 65, 65, 65],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Calendrier légal des jours fériés et des congés scolaires du Luxembourg et des zones frontalières.",
-    columns: [
-      { name: "date", type: "DATE", desc: "Date légale" },
-      { name: "holiday_name_fr", type: "VARCHAR", desc: "Libellé officiel en français" },
-      { name: "holiday_name_lu", type: "VARCHAR", desc: "Libellé officiel en luxembourgeois" }
-    ]
-  },
-  {
-    dataset: "gold_health_alerts",
-    domain: "Santé & Environnement",
-    source_org: "Direction de la Santé & LU-Alert",
-    source_url: "https://sante.public.lu",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 120 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 75,
-    sparkline: [70, 71, 72, 73, 74, 75, 75],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Alertes sanitaires, vigilance météo extrême et avis de santé publique.",
-    columns: [
-      { name: "alert_id", type: "VARCHAR", desc: "Identifiant officiel de l'alerte" },
-      { name: "severity", type: "VARCHAR", desc: "Gravité (Modérée, Forte, Critique)" },
-      { name: "headline", type: "VARCHAR", desc: "Titre factuel de l'avis" }
-    ]
-  },
-  {
-    dataset: "gold_water_levels",
-    domain: "Santé & Environnement",
-    source_org: "Administration de la Gestion de l'Eau (AGE)",
-    source_url: "https://inondations.lu",
-    cadence: "Toutes les 30 min",
-    sla: "SLA 60 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 1850,
-    sparkline: [1800, 1810, 1820, 1835, 1840, 1845, 1850],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Débits et niveaux des cours d'eau en continu (Alzette, Moselle, Sûre, Our).",
-    columns: [
-      { name: "station_name", type: "VARCHAR", desc: "Nom de la station hydrologique" },
-      { name: "water_level_cm", type: "DOUBLE", desc: "Niveau d'eau mesuré en cm" },
-      { name: "flood_alert_level", type: "VARCHAR", desc: "Vigilance crue officielle" }
-    ]
-  },
-  {
-    dataset: "gold_bathing_water",
-    domain: "Santé & Environnement",
-    source_org: "Administration de la Gestion de l'Eau",
-    source_url: "https://eau.public.lu",
-    cadence: "Bimensuel (Saison balnéaire)",
-    sla: "SLA 2880 min",
-    last_refresh: "2026-11-15 00:00:00 UTC",
-    row_count: 64,
-    sparkline: [64, 64, 64, 64, 64, 64, 64],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Qualité bactériologique des zones de baignade officielles (Haute-Sûre, Remerschen, Weiswampach).",
-    columns: [
-      { name: "spot_name", type: "VARCHAR", desc: "Site officiel de baignade" },
-      { name: "status_rating", type: "VARCHAR", desc: "Excellente / Bonne / Interdite" }
-    ]
-  },
-  {
-    dataset: "gold_radioactivity",
-    domain: "Santé & Environnement",
-    source_org: "Division de la Radioprotection",
-    source_url: "https://sante.public.lu/fr/espace-professionnel/expositions-rayonnements/radioprotection.html",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 120 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 720,
-    sparkline: [700, 705, 710, 712, 715, 718, 720],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Surveillance radiologique continue de l'air ambiant et du débit de dose gamma national.",
-    columns: [
-      { name: "station_code", type: "VARCHAR", desc: "Code de la sonde de mesure" },
-      { name: "dose_rate_nsv_h", type: "DOUBLE", desc: "Débit de dose en nSv/h" },
-      { name: "status_nominal", type: "BOOLEAN", desc: "Conformité aux seuils légaux" }
-    ]
-  },
-  {
-    dataset: "gold_aviation_noise",
-    domain: "Santé & Environnement",
-    source_org: "Administration de l'Environnement & Findel Airport",
-    source_url: "https://environnement.public.lu",
-    cadence: "Toutes les 60 min",
-    sla: "SLA 180 min",
-    last_refresh: "2026-11-21 11:00:00 UTC",
-    row_count: 1440,
-    sparkline: [1410, 1415, 1420, 1428, 1432, 1436, 1440],
-    trust_score: 100.0,
-    license_spdx: "CC-BY-4.0",
-    description: "Monitoring acoustique et décibels des survols autour de l'Aéroport de Luxembourg-Findel.",
-    columns: [
-      { name: "station_id", type: "VARCHAR", desc: "Capteur sonométrique" },
-      { name: "avg_db_a", type: "DOUBLE", desc: "Bruit moyen pondéré dB(A)" }
-    ]
-  },
-  {
-    dataset: "gold_strikes_disruptions",
-    domain: "Culture & Sorties",
-    source_org: "Services Publics & Avis Syndicaux Officiels",
-    source_url: "https://data.public.lu",
-    cadence: "Toutes les 12 heures",
-    sla: "SLA 720 min",
-    last_refresh: "2026-11-21 00:00:00 UTC",
-    row_count: 18,
-    sparkline: [16, 16, 17, 17, 17, 18, 18],
-    trust_score: 100.0,
-    license_spdx: "FACTUAL-ONLY",
-    description: "Préavis de grèves et mouvements sociaux affectant les services publics et transports.",
-    columns: [
-      { name: "sector", type: "VARCHAR", desc: "Secteur d'activité concerné" },
-      { name: "start_date", type: "DATE", desc: "Date de début constatée" }
-    ]
-  },
-  {
-    dataset: "gold_daily_life",
-    domain: "Culture & Sorties",
-    source_org: "Administration Communale & Chambres Professionnelles",
-    source_url: "https://vdl.lu",
-    cadence: "Quotidien",
-    sla: "SLA 1440 min",
-    last_refresh: "2026-11-21 06:00:00 UTC",
-    row_count: 120,
-    sparkline: [118, 118, 119, 119, 120, 120, 120],
-    trust_score: 100.0,
-    license_spdx: "CC0-1.0",
-    description: "Pharmacies de garde, ouvertures dominicales et équipements de proximité.",
-    columns: [
-      { name: "entity_name", type: "VARCHAR", desc: "Nom de l'établissement" },
-      { name: "commune", type: "VARCHAR", desc: "Commune" }
-    ]
+// Catalogue : aucune donnée codée en dur. Source = API /v1/datasets, sinon instantané
+// data/catalog.json généré par le pipeline (mêmes chiffres mesurés).
+async function loadCatalogV2() {
+  for (const url of ["/v1/datasets", "data/catalog.json"]) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+      if (!res.ok) continue;
+      const json = await res.json();
+      const list = Array.isArray(json) ? json : json.datasets;
+      if (list && list.length) return { list, live: url.startsWith("/v1") };
+    } catch {
+      // essai suivant
+    }
   }
-];
+  return { list: [], live: false };
+}
+
+function escapeHtmlV2(v) {
+  const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  return String(v ?? "").replace(/[&<>"']/g, c => map[c]);
+}
+
+function sourceLabelV2(d) {
+  return (d.sources || []).map(s => s.source_id).join(", ") || "—";
+}
 
 // État Global V2
 const stateV2 = {
-  datasets: DATASETS_V2,
+  datasets: [],
   selectedDomain: "all",
   searchQuery: "",
   monitoring: {
@@ -513,6 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupDevSnippetsV2();
   await refreshFromApiV2();
   await refreshMonitoringV2();
+  renderDomainFiltersV2();
   renderCatalogV2();
 });
 
@@ -544,33 +83,30 @@ function setupTabsV2() {
   });
 }
 
-// Appel direct FastAPI
+// Chargement du catalogue réel et chiffres clés
 async function refreshFromApiV2() {
-  try {
-    const res = await fetch("/v1/datasets", { signal: AbortSignal.timeout(1500) });
-    if (res.ok) {
-      const json = await res.json();
-      if (json.datasets && json.datasets.length > 0) {
-        stateV2.datasets = stateV2.datasets.map(dm => {
-          const live = json.datasets.find(j => j.dataset === dm.dataset);
-          if (live) {
-            return {
-              ...dm,
-              row_count: live.row_count,
-              columns: live.columns.map(c => ({ name: c.name, type: c.type, desc: "Type DuckDB certifié" }))
-            };
-          }
-          return dm;
-        });
-        document.getElementById("headerStatusBadgeV2").innerHTML = `
-          <span style="width:8px;height:8px;border-radius:50%;background:var(--gov-green);box-shadow:0 0 8px var(--gov-green);display:inline-block;"></span>
-          <span style="color:var(--gov-green);font-weight:700;">API LIVE CONNECTÉE</span>
-        `;
-      }
-    }
-  } catch {
-    // Mode offline autonome nominal
+  const { list, live } = await loadCatalogV2();
+  stateV2.datasets = list;
+  const rows = list.reduce((acc, d) => acc + (d.row_count || 0), 0);
+  const srcs = new Set(list.flatMap(d => (d.sources || []).map(s => s.source_id)));
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setText("statTablesV2", list.length || "–");
+  setText("statRowsV2", list.length ? `${rows.toLocaleString("fr-FR")} lignes en Parquet ZSTD` : "Catalogue indisponible");
+  setText("statSourcesV2", srcs.size || "–");
+  const badge = document.getElementById("headerStatusBadgeV2");
+  if (badge) {
+    const color = live ? "var(--gov-green)" : "var(--text-muted)";
+    const label = live ? "API CONNECTÉE" : (list.length ? "INSTANTANÉ HORS LIGNE" : "AUCUNE DONNÉE");
+    badge.innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;"></span><span style="color:${color};font-weight:700;">${label}</span>`;
   }
+}
+
+function renderDomainFiltersV2() {
+  const box = document.getElementById("domainFiltersV2");
+  if (!box) return;
+  const domains = [...new Set(stateV2.datasets.map(d => d.domain))];
+  box.innerHTML = `<button class="filter-btn-pill active" onclick="setDomainFilterV2('all', this)">Tous les domaines</button>` +
+    domains.map(dm => `<button class="filter-btn-pill" onclick="setDomainFilterV2('${escapeHtmlV2(dm)}', this)">${escapeHtmlV2(dm)}</button>`).join("");
 }
 
 // Formatage du temps relatif
@@ -781,45 +317,55 @@ function renderMonitoringV2() {
 }
 
 // Rendu du Catalogue
+function healthOfV2(d) {
+  const ids = (d.sources || []).map(s => s.source_id);
+  const st = stateV2.monitoring.sources.filter(s => ids.includes(s.source_id)).map(s => s.status);
+  if (!st.length) return null;
+  if (st.includes("ERROR")) return ["ERROR", "var(--gov-danger)"];
+  if (st.includes("ATTENTION")) return ["ATTENTION", "var(--gov-warning)"];
+  return ["GOOD", "var(--gov-green)"];
+}
+
+function coverageV2(d) {
+  return d.coverage ? `${String(d.coverage.from).slice(0, 10)} → ${String(d.coverage.to).slice(0, 10)}` : "—";
+}
+
 function renderCatalogV2() {
   const container = document.getElementById("datamartsGridV2");
   const countEl = document.getElementById("catalogCountV2");
   if (!container) return;
-
-  const filtered = stateV2.datasets.filter(item => {
-    const matchDomain = stateV2.selectedDomain === "all" || item.domain === stateV2.selectedDomain;
-    const q = stateV2.searchQuery.toLowerCase();
-    const matchSearch = !q || item.dataset.toLowerCase().includes(q) || item.description.toLowerCase().includes(q) || item.source_org.toLowerCase().includes(q);
-    return matchDomain && matchSearch;
+  const q = stateV2.searchQuery.toLowerCase();
+  const filtered = stateV2.datasets.filter(d => {
+    const matchDomain = stateV2.selectedDomain === "all" || d.domain === stateV2.selectedDomain;
+    const hay = `${d.dataset} ${d.title} ${sourceLabelV2(d)}`.toLowerCase();
+    return matchDomain && (!q || hay.includes(q));
   });
-
-  if (countEl) countEl.textContent = `${filtered.length} table${filtered.length > 1 ? "s" : ""} Gold certifiée${filtered.length > 1 ? "s" : ""}`;
-
-  container.innerHTML = filtered.map(d => `
-    <div class="datamart-card-v2" onclick="openDrawerV2('${d.dataset}')">
+  if (countEl) countEl.textContent = `${filtered.length} table${filtered.length > 1 ? "s" : ""} Gold`;
+  if (!filtered.length) {
+    container.innerHTML = `<p style="color:var(--text-muted);">Aucune table disponible : lancez <code>uv run openlux run</code>.</p>`;
+    return;
+  }
+  container.innerHTML = filtered.map(d => {
+    const h = healthOfV2(d);
+    const origins = [...new Set((d.sources || []).map(s => s.data_origin))].join(" / ");
+    const lic = [...new Set((d.sources || []).map(s => s.license_spdx))].join(", ");
+    return `
+    <div class="datamart-card-v2" onclick="openDrawerV2('${escapeHtmlV2(d.dataset)}')">
       <div>
         <div class="dm-card-top">
-          <span class="dm-domain-tag">${d.domain}</span>
-          <span class="dm-trust-verified-badge">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            <span>100% Validé</span>
-          </span>
+          <span class="dm-domain-tag">${escapeHtmlV2(d.domain)}</span>
+          ${h ? `<span class="mono" style="font-size:0.7rem;font-weight:700;color:${h[1]};">${h[0]}</span>` : ""}
         </div>
-        <h3 class="dm-title">${d.dataset}</h3>
-        <div class="dm-source-origin">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          <span>${d.source_org}</span>
-        </div>
-        <p class="dm-desc">${d.description}</p>
+        <h3 class="dm-title">${escapeHtmlV2(d.title)}</h3>
+        <div class="dm-source-origin"><span class="mono">${escapeHtmlV2(d.dataset)}</span></div>
+        <p class="dm-desc">Sources : ${escapeHtmlV2(sourceLabelV2(d))}<br>Nature : ${escapeHtmlV2(origins || "—")}<br>Couverture : ${escapeHtmlV2(coverageV2(d))}</p>
       </div>
-
       <div class="dm-bottom-meta">
-        <span class="mono" style="color:var(--text-primary);font-weight:600;">${d.row_count.toLocaleString()} lignes</span>
-        <span>${d.cadence}</span>
-        <span class="mono" style="color:var(--lux-blue);font-weight:600;">${d.license_spdx}</span>
+        <span class="mono" style="color:var(--text-primary);font-weight:600;">${(d.row_count || 0).toLocaleString("fr-FR")} lignes</span>
+        <span class="mono" style="color:var(--lux-blue);font-weight:600;">${escapeHtmlV2(lic)}</span>
       </div>
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 }
 
 // Filtres du Catalogue
@@ -839,71 +385,47 @@ function handleSearchV2(val) {
 function openDrawerV2(datasetName) {
   const d = stateV2.datasets.find(item => item.dataset === datasetName);
   if (!d) return;
-
-  document.getElementById("drawerTitleV2").textContent = d.dataset;
-  document.getElementById("drawerDomainV2").textContent = d.domain;
-  document.getElementById("drawerDescV2").textContent = d.description;
-  document.getElementById("drawerSourceOrgV2").textContent = d.source_org;
-  
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const first = (d.sources || [])[0] || {};
+  setText("drawerTitleV2", d.title);
+  setText("drawerDomainV2", d.domain);
+  setText("drawerDescV2", (d.sources || []).map(s => s.description).join(" • "));
+  setText("drawerSourceOrgV2", sourceLabelV2(d));
   const linkEl = document.getElementById("drawerSourceUrlV2");
-  linkEl.href = d.source_url;
-  linkEl.textContent = d.source_url;
-
-  document.getElementById("drawerCadenceV2").textContent = d.cadence;
-  document.getElementById("drawerSlaV2").textContent = d.sla;
-  document.getElementById("drawerLastRefreshV2").textContent = d.last_refresh;
-  document.getElementById("drawerRowsV2").textContent = d.row_count.toLocaleString();
-  document.getElementById("drawerLicenseV2").textContent = d.license_spdx;
-
-  // Rendu de la Sparkline SVG
-  renderSparklineV2(d.sparkline);
-
-  // Colonnes
+  linkEl.href = first.url || "#";
+  linkEl.textContent = first.url || "—";
+  setText("drawerCadenceV2", coverageV2(d));
+  setText("drawerSlaV2", d.time_column ? `colonne ${d.time_column}` : "");
+  setText("drawerLastRefreshV2", d.last_collected_utc || "—");
+  const h = healthOfV2(d);
+  setText("drawerStatusV2", h ? `Statut des sources : ${h[0]}` : "Statut : API de supervision non joignable");
+  const ids = (d.sources || []).map(s => s.source_id);
+  const scores = stateV2.monitoring.sources.filter(s => ids.includes(s.source_id)).map(s => s.trust_score);
+  setText("drawerTrustV2", scores.length ? `${Math.min(...scores).toFixed(1)} (min)` : "–");
+  setText("drawerRowsV2", (d.row_count || 0).toLocaleString("fr-FR"));
+  setText("drawerLicenseV2", [...new Set((d.sources || []).map(s => s.license_spdx))].join(", "));
+  const srcBox = document.getElementById("drawerSourcesV2");
+  if (srcBox) {
+    srcBox.innerHTML = (d.sources || []).map(s => `
+      <div style="margin-bottom:0.5rem;">
+        <strong class="mono">${escapeHtmlV2(s.source_id)}</strong> — ${escapeHtmlV2(s.license_spdx)} — ${escapeHtmlV2(s.data_origin)}${s.commercial_use_safe ? "" : " — usage commercial non garanti"}<br>
+        <a href="${escapeHtmlV2(s.url)}" target="_blank" rel="noopener" class="mono" style="word-break:break-all;">${escapeHtmlV2(s.url)}</a><br>
+        <span style="color:var(--text-muted);">Limites : ${escapeHtmlV2(s.known_limitations)}</span>
+      </div>`).join("");
+  }
   const tbody = document.getElementById("drawerSchemaBodyV2");
   tbody.innerHTML = (d.columns || []).map(c => `
     <tr>
-      <td class="mono font-heading" style="color:var(--text-primary)">${c.name}</td>
-      <td class="mono" style="color:var(--lux-blue)">${c.type}</td>
-      <td>${c.desc || "Factuel"}</td>
-    </tr>
-  `).join("");
-
-  // Code Snippets
-  document.getElementById("drawerSqlCodeV2").textContent = `SELECT * FROM read_parquet('data/gold/${d.dataset}.parquet') LIMIT 50;`;
-  document.getElementById("drawerMcpCodeV2").textContent = `call_mcp_tool(server='openlux', tool='query_dataset', arguments={'dataset': '${d.dataset}', 'limit': 20})`;
-
-  // Téléchargements
+      <td class="mono font-heading" style="color:var(--text-primary)">${escapeHtmlV2(c.name)}</td>
+      <td class="mono" style="color:var(--lux-blue)">${escapeHtmlV2(c.type)}</td>
+      <td>${c.name === d.time_column ? "Colonne temporelle" : ""}</td>
+    </tr>`).join("");
+  setText("drawerSqlCodeV2", `SELECT * FROM read_parquet('data/gold/${d.dataset}.parquet') LIMIT 50;`);
+  setText("drawerMcpCodeV2", `call_mcp_tool(server='openlux', tool='query_dataset', arguments={'dataset': '${d.dataset}', 'limit': 20})`);
   document.getElementById("btnDlParquetV2").href = `/v1/exports/${d.dataset}.parquet`;
   document.getElementById("btnDlCsvV2").href = `/v1/exports/${d.dataset}.csv`;
-
   document.getElementById("drawerBackdropV2").classList.add("open");
   document.getElementById("drawerPanelV2").classList.add("open");
-}
-
-function renderSparklineV2(points) {
-  const svg = document.getElementById("sparklineSvgV2");
-  if (!svg || !points || points.length < 2) return;
-
-  const min = Math.min(...points) * 0.98;
-  const max = Math.max(...points) * 1.02;
-  const range = max - min || 1;
-  const width = 600;
-  const height = 60;
-
-  const coords = points.map((val, idx) => {
-    const x = (idx / (points.length - 1)) * (width - 20) + 10;
-    const y = height - 10 - ((val - min) / range) * (height - 20);
-    return `${x},${y}`;
-  });
-
-  const pathD = `M ${coords.join(" L ")}`;
-  svg.innerHTML = `
-    <polyline fill="none" stroke="var(--gov-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${coords.join(" ")}" />
-    ${points.map((val, idx) => {
-      const [x, y] = coords[idx].split(",");
-      return `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--bg-surface)" stroke="var(--gov-green)" stroke-width="2"/>`;
-    }).join("")}
-  `;
 }
 
 function closeDrawerV2() {

@@ -1,2328 +1,1805 @@
 {
   "profile": "tabular-data-package",
   "name": "openlux-hub-gold",
-  "title": "OpenLux Hub — Données Ouvertes Consolidées du Luxembourg",
+  "title": "OpenLux Hub — Données ouvertes consolidées du Luxembourg",
   "homepage": "https://github.com/quen9669/OpenLux",
-  "created": "2026-11-24T15:28:18.209066+00:00",
-  "license": "CC0-1.0",
-  "publisher": {
-    "name": "OpenLux Initiative",
-    "email": "contact@openlux.lu"
-  },
   "spatial": {
-    "country": "LU",
-    "region": "Grande Région"
+    "country": "LU"
   },
   "resources": [
     {
-      "name": "gold_air_quality",
-      "path": "gold_air_quality.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_weather_observations",
+      "title": "Météo horaire (station Findel + 12 cantons)",
+      "path": "gold_weather_observations.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 124388,
-      "sha256": "522e38d6ccc5c4e57bddb8299f074cd249c47670f7838843ce406d58852fde52",
-      "standards_applied": [
-        "Air Quality Directive 2008/50/EC",
-        "GeoJSON (EPSG:4326)"
+      "row_count": 22179,
+      "sha256": "95e9143902ca5583f7211fe9f266b0178c9281e3913e8a83cc5b15086bf6cd3c",
+      "licenses": [
+        "CC-BY-4.0",
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "meteo_cantons_openmeteo",
+          "path": "https://api.open-meteo.com/v1/forecast"
+        },
+        {
+          "title": "meteo_findel_meteolux",
+          "path": "https://metapi.ana.lu/api/v1/hvd/observations"
+        }
       ],
       "schema": {
         "fields": [
           {
             "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "data_origin",
+            "type": "string"
+          },
+          {
+            "name": "location_index",
+            "type": "integer"
+          },
+          {
+            "name": "temperature_c",
+            "type": "number"
+          },
+          {
+            "name": "humidity_pct",
+            "type": "number"
+          },
+          {
+            "name": "pressure_hpa",
+            "type": "number"
+          },
+          {
+            "name": "wind_speed_kmh",
+            "type": "number"
+          },
+          {
+            "name": "precipitation_mm",
+            "type": "number"
+          },
+          {
+            "name": "weather_code",
+            "type": "integer"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "grid_lat",
+            "type": "number"
+          },
+          {
+            "name": "grid_lon",
+            "type": "number"
           },
           {
             "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "pollutant",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "pollutant_value",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "unit",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "aqi_index",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "number"
           },
           {
             "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "station_id"
-      }
-    },
-    {
-      "name": "gold_aviation_noise",
-      "path": "gold_aviation_noise.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 146,
-      "sha256": "ea478cd394ff74143c3fa9d4788657a8d2aafa46d240de62e23afa60e606f8e2",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "callsign_or_zone",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "number"
           },
           {
             "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "altitude_m_or_dba",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "datetime"
           },
           {
             "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
           },
           {
             "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           }
-        ],
-        "primaryKey": "record_id"
+        ]
       }
     },
     {
-      "name": "gold_bathing_water",
-      "path": "gold_bathing_water.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_air_quality",
+      "title": "Qualité de l'air et pollens (modèle CAMS)",
+      "path": "gold_air_quality.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 12,
-      "sha256": "363974aedad05c00aba0998969919bd450976df48d0e3b300a5ab39298862146",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "site_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "site_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "water_body",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "quality_class",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "cyanobacteria_bloom",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "site_id"
-      }
-    },
-    {
-      "name": "gold_chargy_stations",
-      "path": "gold_chargy_stations.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 27,
-      "sha256": "cbc12db1439438b97db2e0e01d98da10c7ccc9cc39181790776dd47dcee0a8bd",
-      "standards_applied": [],
+      "row_count": 267840,
+      "sha256": "d8b2f577af52ff93f1c09b11f0f8dfbe307a5d1e24a0c08ef025797c96dd85b0",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "sources": [
+        {
+          "title": "air_quality_openmeteo",
+          "path": "https://air-quality-api.open-meteo.com/v1/air-quality"
+        },
+        {
+          "title": "pollen_openmeteo",
+          "path": "https://air-quality-api.open-meteo.com/v1/air-quality"
+        }
+      ],
       "schema": {
         "fields": [
           {
             "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "location_index",
+            "type": "integer"
           },
           {
-            "name": "network_operator",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "pollutant",
+            "type": "string"
           },
           {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
+            "name": "value",
+            "type": "number"
           },
           {
-            "name": "available_charging_points",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
+            "name": "unit",
+            "type": "string"
           },
           {
-            "name": "total_charging_points",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "occupied_charging_points",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "occupancy_rate",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "power_kw",
-            "type": "number",
-            "duckdb_type": "DECIMAL(3,1)"
-          },
-          {
-            "name": "connector_types",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "tariff_details",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "opening_hours",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
           },
           {
             "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "grid_lat",
+            "type": "number"
+          },
+          {
+            "name": "grid_lon",
+            "type": "number"
+          },
+          {
+            "name": "point_name",
+            "type": "string"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
           }
-        ],
-        "primaryKey": "station_id"
+        ]
       }
     },
     {
-      "name": "gold_civic_life",
-      "path": "gold_civic_life.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_water_levels",
+      "title": "Niveaux d'eau des rivières (15 min)",
+      "path": "gold_water_levels.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 46,
-      "sha256": "558cc517748f841fa14511e255dc924e3640b9138b11eabe8d42415fcfb1debe",
-      "standards_applied": [],
+      "row_count": 28289,
+      "sha256": "f0631af23205a4d378830849850bee46187701f86aa32e4df0b4bb78bfb4fb69",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "water_levels_age",
+          "path": "https://inondations.public.lu/dam-assets/ctie/datas/Water-Levels-LocalTime.csv"
+        }
+      ],
       "schema": {
         "fields": [
           {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "station_name",
+            "type": "string"
           },
           {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "water_level",
+            "type": "number"
           },
           {
-            "name": "title_or_indicator",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "unit",
+            "type": "string"
           },
           {
-            "name": "signatures_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "rate_value",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
           },
           {
             "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
           }
-        ],
-        "primaryKey": "record_id"
+        ]
       }
     },
     {
-      "name": "gold_crossborder_traffic",
-      "path": "gold_crossborder_traffic.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_bathing_water",
+      "title": "Eaux de baignade",
+      "path": "gold_bathing_water.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 18,
-      "sha256": "38146996822e314bf0289a0a25179d71a2e39fe2c6c43f298a8e2749bded2950",
-      "standards_applied": [
-        "DATEX II (CEN/TS 16157)",
-        "Bison Futé / DIR Est"
+      "row_count": 15,
+      "sha256": "f373e8421145be6e3a432b3a6d6272c320b01095f9d60530c6c868d4a0bc3d89",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "bathing_status_age",
+          "path": "https://features.geoportail.lu/collections/656/items"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "site_id",
+            "type": "string"
+          },
+          {
+            "name": "site_name",
+            "type": "string"
+          },
+          {
+            "name": "bathing_status",
+            "type": "string"
+          },
+          {
+            "name": "quality_class",
+            "type": "string"
+          },
+          {
+            "name": "profile_url",
+            "type": "string"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_weather_warnings",
+      "title": "Vigilances météo MeteoLux",
+      "path": "gold_weather_warnings.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 6,
+      "sha256": "64283ccc0cca942dede9ca57772876bc23cb618bbb2824fa3008cdf9a9c04343",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "sources": [
+        {
+          "title": "weather_warnings_meteoalarm",
+          "path": "https://feeds.meteoalarm.org/api/v1/warnings/feeds-luxembourg"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "alert_id",
+            "type": "string"
+          },
+          {
+            "name": "event",
+            "type": "string"
+          },
+          {
+            "name": "severity",
+            "type": "string"
+          },
+          {
+            "name": "awareness_level",
+            "type": "string"
+          },
+          {
+            "name": "area",
+            "type": "string"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "onset_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "expires_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "sent_utc",
+            "type": "datetime"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_traffic_events",
+      "title": "Événements trafic LU et frontaliers",
+      "path": "gold_traffic_events.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 63,
+      "sha256": "cad38e6287420c14aa21b033858319f7bc61191af2489f4343308463d0bda865",
+      "licenses": [
+        "CC0-1.0",
+        "etalab-2.0"
+      ],
+      "sources": [
+        {
+          "title": "traffic_cita_datex2",
+          "path": "https://www.cita.lu/info_trafic/datex/situationrecord"
+        },
+        {
+          "title": "traffic_fr_dir_est",
+          "path": "http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml"
+        },
+        {
+          "title": "traffic_vdl_info",
+          "path": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query"
+        }
       ],
       "schema": {
         "fields": [
           {
             "name": "event_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "corridor",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "transport_mode",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "delay_minutes",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "comment",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "event_id"
-      }
-    },
-    {
-      "name": "gold_culture_events",
-      "path": "gold_culture_events.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 98,
-      "sha256": "59c3d7e73a6cff36a0c83c99a34d7f8d91e203a8ad4620654b6a3df0e27807f0",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "title",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "start_date",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "end_date",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "start_time",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "venue",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "address",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "category",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "price_eur",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "price_text",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_free",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "source_url",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "ticket_url",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "title"
-      }
-    },
-    {
-      "name": "gold_daily_life",
-      "path": "gold_daily_life.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 45,
-      "sha256": "8abcc2b72bd75e0171fead1f30cb613a546e221e4c8913a0252c2819de1dfe2e",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "item_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "category",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "status_or_schedule",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "details",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "item_id"
-      }
-    },
-    {
-      "name": "gold_electricity_spot",
-      "path": "gold_electricity_spot.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 292,
-      "sha256": "2517630513f9b3634e6fc16aa698147aeea5e811b4f173cb10f28de1e3ea2d0f",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "price_eur_per_mwh",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "bidding_zone",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "data_origin",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_imputed",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "observed_at_utc"
-      }
-    },
-    {
-      "name": "gold_fuel_prices",
-      "path": "gold_fuel_prices.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 152,
-      "sha256": "989304548f03ea453fdef6112db9c31f95937a99342ea43a2f8c8c1db863f961",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "fuel_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "price_eur_per_litre",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "price_change_eur",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "fuel_type"
-      }
-    },
-    {
-      "name": "gold_health_alerts",
-      "path": "gold_health_alerts.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 57,
-      "sha256": "2919df7316346c52f10e04654baeafdb29661653b2ec8ecffaf5d08934fbeb96",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "headline_or_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "status_or_severity",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "metric_value",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "record_id"
-      }
-    },
-    {
-      "name": "gold_holidays",
-      "path": "gold_holidays.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 144,
-      "sha256": "50acd0c1721deaf4e008183305fb5ac7075ee6b494e71a8690635352265872eb",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "holiday_date",
-            "type": "date",
-            "duckdb_type": "DATE"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
+            "type": "string"
           },
           {
             "name": "country_code",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "country_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "road_name",
+            "type": "string"
           },
           {
-            "name": "region_code",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "situation_type",
+            "type": "string"
           },
           {
-            "name": "holiday_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "situation_subtype",
+            "type": "string"
           },
           {
-            "name": "holiday_name_fr",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "holiday_name_de",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "holiday_name_lb",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_legal_holiday",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_customary_tradition",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_school_vacation",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "holiday_date"
-      }
-    },
-    {
-      "name": "gold_housing",
-      "path": "gold_housing.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 1513,
-      "sha256": "e101215d5498ce120ec1755e4b584270ff81ece5f428be591b2ffdf3df75df4e",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "property_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "market_segment",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "reference_period",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "price_eur",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "surface_m2",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "price_eur_m2",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "bedrooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "bathrooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "rooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "has_balcony",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_terrace",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_garden",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_parking_or_garage",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_elevator",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "floor_number",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "construction_year",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "energy_class",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "thermal_insulation_class",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "validity_status",
+            "type": "string"
           },
           {
             "name": "description",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "street_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "lat",
+            "type": "number"
           },
           {
-            "name": "postal_code",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "lon",
+            "type": "number"
           },
           {
-            "name": "neighborhood_or_quartier",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "start_time_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "end_time_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "record_version_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "first_seen_utc",
+            "type": "datetime"
           },
           {
             "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "commune_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "listing_url",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "units_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           }
-        ],
-        "primaryKey": "record_id"
-      }
-    },
-    {
-      "name": "gold_housing_listings",
-      "path": "gold_housing_listings.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 423,
-      "sha256": "7fa7d3f82792d4a4e6d421cf09068a7419347eb03b129cf37f78065cd6736bd4",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "property_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "market_segment",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "price_eur",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "surface_m2",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "price_eur_m2",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "bedrooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "bathrooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "rooms_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "has_balcony",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_terrace",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_garden",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_parking_or_garage",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_elevator",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "floor_number",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "construction_year",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "energy_class",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "thermal_insulation_class",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "street_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "postal_code",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "neighborhood_or_quartier",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "listing_url",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "units_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "record_id"
-      }
-    },
-    {
-      "name": "gold_housing_stats",
-      "path": "gold_housing_stats.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 1090,
-      "sha256": "c451811cf8045f560681168e4d596c80819b53ba9a33a305279508185da2b72d",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "record_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "record_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "property_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "market_segment",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "reference_period",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "price_eur_m2",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "units_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "permits_count",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "record_id"
-      }
-    },
-    {
-      "name": "gold_luxembourg_daily_context",
-      "path": "gold_luxembourg_daily_context.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 11536,
-      "sha256": "06d4f74afaa0c65996f37a5e0d5762067d1b2dde8407daa9424106050529991c",
-      "standards_applied": [
-        "Frictionless Data Package",
-        "DCAT-AP-LU 2.0"
-      ],
-      "schema": {
-        "fields": [
-          {
-            "name": "context_date",
-            "type": "date",
-            "duckdb_type": "DATE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "commune_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "avg_temperature_c",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "total_precipitation_mm",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "max_wind_speed_kmh",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "max_aqi_index",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_legal_holiday",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_school_vacation",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "holiday_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "traffic_events_count",
-            "type": "integer",
-            "duckdb_type": "BIGINT"
-          },
-          {
-            "name": "active_roadworks_count",
-            "type": "integer",
-            "duckdb_type": "BIGINT"
-          },
-          {
-            "name": "strikes_count",
-            "type": "integer",
-            "duckdb_type": "BIGINT"
-          },
-          {
-            "name": "max_water_alert_status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "major_events_count",
-            "type": "integer",
-            "duckdb_type": "BIGINT"
-          },
-          {
-            "name": "data_completeness_pct",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "data_quality_grade",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_interpolated",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "context_date"
-      }
-    },
-    {
-      "name": "gold_mobility_parkings",
-      "path": "gold_mobility_parkings.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 728,
-      "sha256": "83b9948c76b5aa2f454c87bfdf92752d7402510e1aa634e44017289cc7437ad3",
-      "standards_applied": [
-        "DATEX II Parking Publication",
-        "GeoJSON (EPSG:4326)"
-      ],
-      "schema": {
-        "fields": [
-          {
-            "name": "parking_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "parking_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "available_spaces",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "total_capacity",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "occupied_spaces",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "occupancy_rate",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "trend",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "is_open",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_full",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_out_of_order",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_free_pr",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "hourly_rate_eur",
-            "type": "number",
-            "duckdb_type": "DECIMAL(3,2)"
-          },
-          {
-            "name": "tariff_details",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "opening_hours",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "parking_id"
-      }
-    },
-    {
-      "name": "gold_mobility_veloh",
-      "path": "gold_mobility_veloh.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 5632,
-      "sha256": "ec2e27c6168f423288e5df1495f60b1b8f6228f1d30f16861efcc9915ff4464f",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "station_number",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "address",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "available_bikes",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "available_electrical_bikes",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "available_mechanical_bikes",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "available_stands",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "broken_or_disabled_stands",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "total_capacity",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "occupancy_rate",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "is_renting",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_connected",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_installed",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "has_banking",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "is_bonus",
-            "type": "boolean",
-            "duckdb_type": "BOOLEAN"
-          },
-          {
-            "name": "hourly_rate_eur",
-            "type": "number",
-            "duckdb_type": "DECIMAL(3,2)"
-          },
-          {
-            "name": "tariff_details",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "opening_hours",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "station_id"
-      }
-    },
-    {
-      "name": "gold_public_transit",
-      "path": "gold_public_transit.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 42,
-      "sha256": "9116c3ce82621bfef05c73a78871ce3f64806b1a52e0717cdf2fab78c780536b",
-      "standards_applied": [
-        "NeTEx (CEN/TS 16614)",
-        "SIRI (CEN/TS 15531)",
-        "GTFS-RT"
-      ],
-      "schema": {
-        "fields": [
-          {
-            "name": "line_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "network",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "delay_seconds",
-            "type": "integer",
-            "duckdb_type": "INTEGER"
-          },
-          {
-            "name": "disruption_level",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "message",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "line_id"
-      }
-    },
-    {
-      "name": "gold_radioactivity",
-      "path": "gold_radioactivity.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 36,
-      "sha256": "76bab03d9dd1cb5807f90e75655d6940f95cec8c4730f16a4990ca1fe6bd77ef",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "dose_rate_nsvh",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "radiological_status",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "station_id"
+        ]
       }
     },
     {
       "name": "gold_roadworks",
+      "title": "Chantiers routiers",
       "path": "gold_roadworks.parquet",
-      "profile": "tabular-data-resource",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 831,
-      "sha256": "bbd5ddaa32c89c4536fe4daf1086cbad641dd0d75360e1cfb2bca8c8b35ef858",
-      "standards_applied": [
-        "DATEX II Roadworks",
-        "GeoJSON (EPSG:4326)"
+      "row_count": 333,
+      "sha256": "0490b69791ec72a699951f9296cb23fe21a664253d95c1ce0ec9fb97a8240162",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "roadworks_cita_current",
+          "path": "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml"
+        },
+        {
+          "title": "roadworks_cita_planned",
+          "path": "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml"
+        },
+        {
+          "title": "roadworks_vdl",
+          "path": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query"
+        },
+        {
+          "title": "roadworks_vdl_permits",
+          "path": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query"
+        }
       ],
       "schema": {
         "fields": [
           {
             "name": "work_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "authority",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "road_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "start_date",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "end_date",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
-          },
-          {
-            "name": "impact_level",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
             "name": "title",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
+            "name": "work_type",
+            "type": "string"
+          },
+          {
+            "name": "contractor",
+            "type": "string"
           },
           {
             "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "number"
           },
           {
             "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "start_time_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "end_time_utc",
+            "type": "datetime"
           },
           {
             "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
           },
           {
             "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           }
-        ],
-        "primaryKey": "work_id"
+        ]
       }
     },
     {
-      "name": "gold_statec_inflation",
-      "path": "gold_statec_inflation.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_transit_disruptions",
+      "title": "Perturbations bus et trains",
+      "path": "gold_transit_disruptions.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 9,
-      "sha256": "89ccbeb6510d0a6d1814b6e333def3d4a8491713308d501342494dae45bc0229",
-      "standards_applied": [],
-      "schema": {
-        "fields": [
-          {
-            "name": "reference_month",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "ipcn_index",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "inflation_annual_rate",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "wage_index_quote",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          }
-        ],
-        "primaryKey": "reference_month"
-      }
-    },
-    {
-      "name": "gold_strikes_disruptions",
-      "path": "gold_strikes_disruptions.parquet",
-      "profile": "tabular-data-resource",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "compression": "zstd",
-      "row_count": 128,
-      "sha256": "001b16b343a096d77bb0fd3219421c330b0a3f1965514449693c6240b5ecd8a7",
-      "standards_applied": [
-        "RSS 2.0 / Dublin Core",
-        "ISO 3166-1 alpha-2"
+      "row_count": 12,
+      "sha256": "ba7a5ccf318b61bc0a30e659b897a09ecdd3b5b39e2903f62bc1a5fa2e7bd9f7",
+      "licenses": [
+        "CC0-1.0",
+        "ODbL-1.0",
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "bus_vdl_messages",
+          "path": "https://web.vdl.lu/autobus/data/messages/messages.xml"
+        },
+        {
+          "title": "rail_sncb_irail",
+          "path": "https://api.irail.be/disturbances/"
+        },
+        {
+          "title": "rail_sncf_siri",
+          "path": "https://proxy.transport.data.gouv.fr/resource/sncf-siri-lite-situation-exchange"
+        }
       ],
       "schema": {
         "fields": [
           {
-            "name": "strike_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "disruption_id",
+            "type": "string"
+          },
+          {
+            "name": "operator",
+            "type": "string"
+          },
+          {
+            "name": "mode",
+            "type": "string"
           },
           {
             "name": "title",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "published_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
+            "name": "severity",
+            "type": "string"
           },
           {
-            "name": "sector",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "category",
+            "type": "string"
           },
           {
-            "name": "country_code",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "detail",
+            "type": "string"
           },
           {
-            "name": "country_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "source_url",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
           },
           {
             "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "start_time_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "end_time_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "published_at_utc",
+            "type": "datetime"
           }
-        ],
-        "primaryKey": "strike_id"
+        ]
       }
     },
     {
-      "name": "gold_traffic_events",
-      "path": "gold_traffic_events.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_mobility_veloh",
+      "title": "Disponibilités Vel'oh",
+      "path": "gold_mobility_veloh.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 96,
-      "sha256": "3d15a666eb243a4e73d5edd341d98f231e85f08785d348a9cf5fa28a292e6c62",
-      "standards_applied": [
-        "DATEX II (CEN/TS 16157)",
-        "GeoJSON (EPSG:4326)"
+      "row_count": 160,
+      "sha256": "3b9b48c521e21c307e72012c5c9e974844f14ccfa40f01f3651f0b3f4e826e6d",
+      "licenses": [
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "veloh_stations",
+          "path": "https://api.jcdecaux.com/vls/v3/stations"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "station_number",
+            "type": "integer"
+          },
+          {
+            "name": "available_bikes",
+            "type": "integer"
+          },
+          {
+            "name": "available_electrical_bikes",
+            "type": "integer"
+          },
+          {
+            "name": "available_mechanical_bikes",
+            "type": "integer"
+          },
+          {
+            "name": "available_stands",
+            "type": "integer"
+          },
+          {
+            "name": "disabled_bikes",
+            "type": "integer"
+          },
+          {
+            "name": "disabled_stands",
+            "type": "integer"
+          },
+          {
+            "name": "is_renting",
+            "type": "boolean"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "station_name",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "type": "string"
+          },
+          {
+            "name": "capacity",
+            "type": "integer"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_mobility_parkings",
+      "title": "Occupation des parkings (Ville)",
+      "path": "gold_mobility_parkings.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 87,
+      "sha256": "790a96185e54572aa0f7962d9ce9bee8dcdeee07f6e4f9197e197bf77da090fc",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "parkings_vdl",
+          "path": "https://feed.vdl.lu/circulation/parking/feed.json"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "parking_id",
+            "type": "string"
+          },
+          {
+            "name": "parking_name",
+            "type": "string"
+          },
+          {
+            "name": "available_spaces",
+            "type": "integer"
+          },
+          {
+            "name": "total_capacity",
+            "type": "integer"
+          },
+          {
+            "name": "trend",
+            "type": "integer"
+          },
+          {
+            "name": "is_open",
+            "type": "boolean"
+          },
+          {
+            "name": "is_full",
+            "type": "boolean"
+          },
+          {
+            "name": "is_out_of_order",
+            "type": "boolean"
+          },
+          {
+            "name": "pricing_policy",
+            "type": "string"
+          },
+          {
+            "name": "district",
+            "type": "string"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "occupancy_pct",
+            "type": "number"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_chargy_stations",
+      "title": "Bornes de recharge Chargy",
+      "path": "gold_chargy_stations.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 1572,
+      "sha256": "8ac6384839cd1a602abb56138bec0c6024c24a5e75d9572064baf8f7fae39fe5",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "chargy_stations",
+          "path": "https://my.chargy.lu/b2bev-external-services/resources/kml"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "site_name",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "type": "string"
+          },
+          {
+            "name": "connectors_total",
+            "type": "integer"
+          },
+          {
+            "name": "connectors_available",
+            "type": "integer"
+          },
+          {
+            "name": "connectors_charging",
+            "type": "integer"
+          },
+          {
+            "name": "connectors_out_of_service",
+            "type": "integer"
+          },
+          {
+            "name": "max_power_kw",
+            "type": "number"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_aviation",
+      "title": "Aéronefs au-dessus du Luxembourg",
+      "path": "gold_aviation.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 21,
+      "sha256": "990b7c83da12893f64ba59de3bcb1c1f0791229ea82c84c179d6e59cd8fb22f4",
+      "licenses": [
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "aviation_opensky",
+          "path": "https://opensky-network.org/api/states/all"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "icao24",
+            "type": "string"
+          },
+          {
+            "name": "callsign",
+            "type": "string"
+          },
+          {
+            "name": "origin_country",
+            "type": "string"
+          },
+          {
+            "name": "baro_altitude_m",
+            "type": "number"
+          },
+          {
+            "name": "on_ground",
+            "type": "boolean"
+          },
+          {
+            "name": "velocity_ms",
+            "type": "number"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_fuel_prices",
+      "title": "Prix mensuels des carburants",
+      "path": "gold_fuel_prices.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 70,
+      "sha256": "5d79231feb18619a2fbb47ee094d606dde684d8a39eae9a851ecfd87a63a7da7",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "fuel_prices_lu",
+          "path": "https://data.public.lu/fr/datasets/r/d3a17cf8-5afc-4bf5-8222-9519e343d29d"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "reference_month",
+            "type": "string"
+          },
+          {
+            "name": "energy_type",
+            "type": "string"
+          },
+          {
+            "name": "price_eur",
+            "type": "number"
+          },
+          {
+            "name": "unit",
+            "type": "string"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_inflation",
+      "title": "Indice des prix IPCN (STATEC)",
+      "path": "gold_inflation.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 946,
+      "sha256": "022362a9817d1e1da235d397e88db86304df082f8ed42598d2d9238c2d9cf87b",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "sources": [
+        {
+          "title": "inflation_ipcn_statec",
+          "path": "https://lustat.statec.lu/rest/data/LU1,DSD_PRIX_CONSO@DF_E5100,1.0/all"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "reference_month",
+            "type": "string"
+          },
+          {
+            "name": "ipcn_index",
+            "type": "number"
+          },
+          {
+            "name": "base_period_label",
+            "type": "string"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "annual_change_pct",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_electricity_spot",
+      "title": "Prix spot électricité DE-LU",
+      "path": "gold_electricity_spot.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 46971,
+      "sha256": "a076fe7e4b222458e09bebc7345db90a612b4eaeef82f910d3202e9846a6589a",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "sources": [
+        {
+          "title": "electricity_spot_delu",
+          "path": "https://api.energy-charts.info/price"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "price_eur_per_mwh",
+            "type": "number"
+          },
+          {
+            "name": "bidding_zone",
+            "type": "string"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "observed_at_utc",
+            "type": "datetime"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_unemployment",
+      "title": "Demandeurs d'emploi par commune (ADEM)",
+      "path": "gold_unemployment.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 36186,
+      "sha256": "675f6029dcc165a86bd4dd6c5e1e0044e1d49fecf5cdc4e76c97b841e349fc40",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "unemployment_adem",
+          "path": "https://data.public.lu/fr/datasets/r/7bc964ea-7744-4860-ae84-24cc0ef3777d"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "reference_month",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          },
+          {
+            "name": "sex",
+            "type": "string"
+          },
+          {
+            "name": "job_seekers",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_building_permits",
+      "title": "Logements autorisés par canton (STATEC)",
+      "path": "gold_building_permits.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 1040,
+      "sha256": "c490e6048f30d8adf0b40872eb535c963e93fdcc50ac1107033b1dbf196f7e9e",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "sources": [
+        {
+          "title": "building_permits_statec",
+          "path": "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "canton_code",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          },
+          {
+            "name": "building_type_code",
+            "type": "string"
+          },
+          {
+            "name": "building_type",
+            "type": "string"
+          },
+          {
+            "name": "indicator",
+            "type": "string"
+          },
+          {
+            "name": "reference_year",
+            "type": "integer"
+          },
+          {
+            "name": "dwellings",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_housing_prices",
+      "title": "Prix annoncés par commune (Observatoire)",
+      "path": "gold_housing_prices.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 3382,
+      "sha256": "ea3078d9f2e2bdaa806448172379267215ea00eb39654ab5c5eb549523deec3e",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "housing_prices_apartments",
+          "path": "https://data.public.lu/fr/datasets/r/1d20f982-57e1-4ae2-a278-dc78c88c21dc"
+        },
+        {
+          "title": "housing_prices_houses",
+          "path": "https://data.public.lu/fr/datasets/r/14b0156e-ff87-4a36-a867-933fc9a6f903"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "reference_year",
+            "type": "integer"
+          },
+          {
+            "name": "property_type",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "offers_count",
+            "type": "number"
+          },
+          {
+            "name": "avg_price_eur",
+            "type": "number"
+          },
+          {
+            "name": "avg_price_eur_m2",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_holidays",
+      "title": "Jours fériés LU/FR/BE/DE et vacances",
+      "path": "gold_holidays.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 435,
+      "sha256": "5bef9fd06d9580965f2c496afc325ed9c1692e62fe446e8c3f04661fd310e37b",
+      "licenses": [
+        "CC0-1.0",
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "holidays_be",
+          "path": "https://openholidaysapi.org/PublicHolidays"
+        },
+        {
+          "title": "holidays_de",
+          "path": "https://openholidaysapi.org/PublicHolidays"
+        },
+        {
+          "title": "holidays_fr",
+          "path": "https://openholidaysapi.org/PublicHolidays"
+        },
+        {
+          "title": "holidays_lu",
+          "path": "https://data.public.lu/fr/datasets/r/9dd69c71-f55e-4124-87b8-4a54ba528335"
+        },
+        {
+          "title": "school_holidays_lu",
+          "path": "https://openholidaysapi.org/SchoolHolidays"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "country_code",
+            "type": "string"
+          },
+          {
+            "name": "region_code",
+            "type": "string"
+          },
+          {
+            "name": "holiday_type",
+            "type": "string"
+          },
+          {
+            "name": "name_fr",
+            "type": "string"
+          },
+          {
+            "name": "name_de",
+            "type": "string"
+          },
+          {
+            "name": "name_lb",
+            "type": "string"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "holiday_date",
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "type": "date"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_equipment",
+      "title": "Équipements : recyclage, DAE, vélo",
+      "path": "gold_equipment.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 1021,
+      "sha256": "692426f7cb53d4df7b70390361c350f9f7bc359f52198b9c482ec412a1f9ed63",
+      "licenses": [
+        "CC0-1.0",
+        "ODbL-1.0"
+      ],
+      "sources": [
+        {
+          "title": "aed_osm",
+          "path": "https://overpass.kumi.systems/api/interpreter"
+        },
+        {
+          "title": "bike_routes_regional",
+          "path": "https://data.geoportail.lu/mymaps"
+        },
+        {
+          "title": "recycling_centers",
+          "path": "https://data.public.lu/fr/datasets/r/be8c3b2e-88d3-4ddb-955c-40b354123d29"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "item_id",
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "details",
+            "type": "string"
+          },
+          {
+            "name": "lat",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "length_km",
+            "type": "number"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_petitions",
+      "title": "Pétitions à la Chambre des Députés",
+      "path": "gold_petitions.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 3146,
+      "sha256": "5d658ddbc7c5269b61c439964d2d71f738191a9421f17392aa6febd11d91f63a",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "sources": [
+        {
+          "title": "petitions_chd",
+          "path": "https://data.public.lu/fr/datasets/r/6c43ab5c-8fc2-493b-822a-35793ac1c840"
+        }
+      ],
+      "schema": {
+        "fields": [
+          {
+            "name": "petition_id",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "petition_type",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "signatures",
+            "type": "number"
+          },
+          {
+            "name": "collected_at_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "source_id",
+            "type": "string"
+          },
+          {
+            "name": "filing_date",
+            "type": "date"
+          }
+        ]
+      }
+    },
+    {
+      "name": "gold_culture_events",
+      "title": "Agenda culturel",
+      "path": "gold_culture_events.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "compression": "zstd",
+      "row_count": 1118,
+      "sha256": "c6a0191c72b50f2db8d85f4ddb2ed5013f73fb4f5b63e87a83828b0fc48db2f2",
+      "licenses": [
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "culture_echo_lu",
+          "path": "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact"
+        },
+        {
+          "title": "events_rockhal",
+          "path": "https://rockhal.lu/wp-json/rockhal/shows"
+        },
+        {
+          "title": "events_vdl_agenda",
+          "path": "https://www.vdl.lu/fr/agenda/rss.xml"
+        }
       ],
       "schema": {
         "fields": [
           {
             "name": "event_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "road_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "title",
+            "type": "string"
           },
           {
-            "name": "situation_type",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "venue",
+            "type": "string"
           },
           {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "name": "is_free",
+            "type": "boolean"
+          },
+          {
+            "name": "price_min_eur",
+            "type": "number"
+          },
+          {
+            "name": "commune_slug",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": "string"
           },
           {
             "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "number"
           },
           {
             "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "type": "number"
           },
           {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "traffic_comment",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
           },
           {
             "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "start_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "end_utc",
+            "type": "datetime"
+          },
+          {
+            "name": "commune_lau",
+            "type": "string"
+          },
+          {
+            "name": "commune_name",
+            "type": "string"
+          },
+          {
+            "name": "canton",
+            "type": "string"
           }
-        ],
-        "primaryKey": "event_id"
+        ]
       }
     },
     {
-      "name": "gold_water_levels",
-      "path": "gold_water_levels.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_strikes_news",
+      "title": "Articles de presse sur les grèves",
+      "path": "gold_strikes_news.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 36,
-      "sha256": "14fcfc8717d66395b56807bb31df7282564f238b3727283de3838fd9a6e64975",
-      "standards_applied": [
-        "WISE (Water Information System for Europe)"
+      "row_count": 44,
+      "sha256": "ebf1be13858a01617f62703af65b0fc9bbfcec75fa96f89d6e8e6efb6646ffc6",
+      "licenses": [
+        "unspecified"
+      ],
+      "sources": [
+        {
+          "title": "strikes_news",
+          "path": "https://news.google.com/rss/search"
+        }
       ],
       "schema": {
         "fields": [
           {
-            "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "article_id",
+            "type": "string"
           },
           {
-            "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "title",
+            "type": "string"
           },
           {
-            "name": "river_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "country_code",
+            "type": "string"
           },
           {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP WITH TIME ZONE"
+            "name": "publisher",
+            "type": "string"
           },
           {
-            "name": "water_level_cm",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
+            "name": "url",
+            "type": "string"
           },
           {
-            "name": "discharge_m3s",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "alert_level",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "collected_at_utc",
+            "type": "datetime"
           },
           {
             "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
+          },
+          {
+            "name": "published_at_utc",
+            "type": "datetime"
           }
-        ],
-        "primaryKey": "station_id"
+        ]
       }
     },
     {
-      "name": "gold_weather_observations",
-      "path": "gold_weather_observations.parquet",
-      "profile": "tabular-data-resource",
+      "name": "gold_luxembourg_daily_context",
+      "title": "Contexte quotidien par canton",
+      "path": "gold_luxembourg_daily_context.parquet",
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 38492,
-      "sha256": "a369a5a8294c6afef4e29190e952e70412326ac0d8b61ce7029181f9af0d5612",
-      "standards_applied": [
-        "WMO Core Profile",
-        "GeoJSON (EPSG:4326)"
-      ],
+      "row_count": 924,
+      "sha256": "90b356c74d4cc309d3e724768ec452f1611222ba34d76090e828842e3668d33a",
+      "licenses": [],
+      "sources": [],
       "schema": {
         "fields": [
           {
-            "name": "station_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "station_name",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "observed_at_utc",
-            "type": "datetime",
-            "duckdb_type": "TIMESTAMP"
-          },
-          {
-            "name": "temperature",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "humidity",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "pressure_hpa",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "wind_speed_kmh",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "precipitation_mm",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "weather_condition",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
-          },
-          {
-            "name": "lat",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "lon",
-            "type": "number",
-            "duckdb_type": "DOUBLE"
-          },
-          {
-            "name": "commune_lau",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "context_date",
+            "type": "date"
           },
           {
             "name": "canton",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "type": "string"
           },
           {
-            "name": "source_id",
-            "type": "string",
-            "duckdb_type": "VARCHAR"
+            "name": "avg_temperature_c",
+            "type": "number"
+          },
+          {
+            "name": "min_temperature_c",
+            "type": "number"
+          },
+          {
+            "name": "max_temperature_c",
+            "type": "number"
+          },
+          {
+            "name": "total_precipitation_mm",
+            "type": "number"
+          },
+          {
+            "name": "max_wind_speed_kmh",
+            "type": "number"
+          },
+          {
+            "name": "max_european_aqi",
+            "type": "number"
+          },
+          {
+            "name": "is_public_holiday",
+            "type": "boolean"
+          },
+          {
+            "name": "holiday_name",
+            "type": "string"
+          },
+          {
+            "name": "is_school_holiday",
+            "type": "boolean"
+          },
+          {
+            "name": "new_traffic_events",
+            "type": "integer"
+          },
+          {
+            "name": "active_roadworks",
+            "type": "integer"
+          },
+          {
+            "name": "computed_at_utc",
+            "type": "datetime"
           }
-        ],
-        "primaryKey": "station_id"
+        ]
       }
     }
   ]

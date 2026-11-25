@@ -11,7 +11,7 @@
 
 ## 🎯 Mission
 
-Fédérer les données publiques du Luxembourg (20 domaines : météo, mobilité, qualité de l'air, chantiers, eau, culture, calendrier républicain, énergie...) au sein d'une chaîne épurée :
+Fédérer les données publiques **réelles et vérifiées** du Luxembourg (45 flux, 24 tables Gold : météo, air, eau, trafic LU et frontalier, transports, mobilité, économie, logement, calendrier, culture). Aucune donnée n'est inventée : une source en échec produit 0 ligne et un statut `ERROR`. Catalogue : [docs/DATA_CATALOG.md](docs/DATA_CATALOG.md) ; vérification des sources : [docs/sources/](docs/sources/).
 - **Priorité Absolue — Rétention Incrémentale Stricte (Zéro Suppression)** : Chaque rechargement accumule les données au fur et à mesure sans jamais supprimer l'historique importé (`UNION ALL BY NAME` + `SELECT DISTINCT` sur l'ensemble des tables).
 - **Priorité Absolue — Couverture des 12 Cantons & Historique Maximum** : Couverture géographique exhaustive sur l'ensemble des 12 cantons du Grand-Duché et récupération du maximum d'historique glissant possible (météo, air, crues, etc.).
 - **Bronze** : Données brutes immuables compressées (`.json.gz`, `.csv.gz`), rejouables hors-ligne.
@@ -29,7 +29,7 @@ git clone https://github.com/quen9669/OpenLux.git
 cd OpenLux
 uv sync
 
-# 2. Exécuter la suite de tests 100 % hors-ligne (33 tests)
+# 2. Exécuter la suite de tests 100 % hors ligne (sur de vraies réponses réduites)
 uv run pytest
 
 # 3. Lancer la CLI unifiée
@@ -69,7 +69,8 @@ Retrouvez des guides interactifs prêts à l'emploi dans [`notebooks/`](notebook
 ## 🌐 Exposition Multi-Canaux
 
 ### API REST FastAPI (`openlux serve`)
-- `GET /v1/status` : Santé globale, Trust Scores (0-100) et horodatages SLA.
+- `GET /v1/status` : santé de chaque source, Trust Scores (0-100) et horodatages SLA.
+- `GET /v2/` : site public (catalogue mesuré, supervision) ; `/` y redirige.
 - `GET /v1/datasets` : Catalogue dynamique des Data Marts Gold (descriptions, licences, schémas).
 - `GET /v1/data/{dataset}` : Requête sécurisée avec paramètres liés `?` (commune, date_from, date_to, lat, lon, radius_km, limit, offset) et enveloppe standard `_meta`.
 - `GET /v1/exports/{dataset}.parquet` : Téléchargement direct du fichier Parquet ZSTD officiel.
@@ -80,7 +81,7 @@ Retrouvez des guides interactifs prêts à l'emploi dans [`notebooks/`](notebook
 ### Serveur FastMCP (`openlux mcp`)
 Connectez vos agents IA directement au serveur MCP standardisé :
 1. `get_platform_health(domain)` : Observabilité, fraîcheur et Trust Scores des flux.
-2. `get_luxembourg_day_context(date, commune)` : Contexte journalier croisé (météo, jours fériés, trafic autoroutier).
+2. `get_luxembourg_day_context(date, canton)` : contexte quotidien d'un canton (météo, air, fériés, trafic, chantiers).
 3. `search_luxembourg_events_and_works(...)` : Recherche croisée textuelle et géospatiale sur les chantiers et perturbations autoroutières.
 4. `query_dataset(dataset, commune, limit)` : Requête directe et sécurisée sur n'importe quel Data Mart Gold.
 

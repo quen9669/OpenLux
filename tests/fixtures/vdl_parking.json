@@ -1,0 +1,211 @@
+{
+ "last_build_date": "Tue, 24 Nov 2026 21:55:00 +0100",
+ "parking": {
+  "20": {
+   "id": 20,
+   "titre": "Adenauer",
+   "total": 406,
+   "actuel": 406,
+   "tendance": 0,
+   "ouvert": true,
+   "complet": false,
+   "panne": false,
+   "localisation": {
+    "quartier": {
+     "fr": "Kirchberg",
+     "de": "Kirchberg",
+     "en": "Kirchberg"
+    },
+    "latitude": 49.630363,
+    "longitude": 6.157175,
+    "mobilite": {
+     "fr": "Arrêt Konrad Adenauer : Lignes 7, 18, 25.",
+     "de": "Haltestelle Konrad Adenauer: Linien 7, 18, 25.",
+     "en": "Konrad Adenauer stop: Lines 7, 18, 25."
+    },
+    "entree": [
+     {
+      "adresse": "Boulevard Konrad Adenauer",
+      "latitude": 49.630087,
+      "longitude": 6.157185
+     }
+    ],
+    "sortie": [
+     {
+      "adresse": "Boulevard Konrad Adenauer",
+      "latitude": 49.630072,
+      "longitude": 6.157079,
+      "direction": ""
+     }
+    ]
+   },
+   "service": {
+    "ascenseur": false,
+    "wc": false,
+    "wc_handicapes": false
+   },
+   "nominal": {
+    "handicapes": 10,
+    "femmes": 0,
+    "e-cars": 0,
+    "car_sharing": 0,
+    "velos": 0,
+    "motos": 0,
+    "autocars": 0
+   },
+   "paiement": {
+    "politique_tarifaire": "payant",
+    "tarif": {
+     "fr": "Lundi à vendredi de 8h00 à 18h00 : 0,50 euro par heure.\r\nDe 18h00 à 8h00 ainsi que les samedis et dimanches : gratuit.",
+     "de": "Montag bis Freitag von 8:00 bis 18:00 Uhr: 0,50 Euro pro Stunde.\r\nVon 18:00 bis 8:00 Uhr, sowie Samstag und Sonntag: kostenlos.",
+     "en": "Monday to Friday from 8:00 to 18:00: 0.50 euro per hour.\r\nFrom 18:00 to 08:00 and on Saturdays and Sundays: free."
+    },
+    "especes": true,
+    "debit": true,
+    "visa": true,
+    "mastercard": true,
+    "payconiq": false,
+    "american_express": false,
+    "indigo_neo": true
+   },
+   "restrictions": {
+    "gpl": false,
+    "gnc": false,
+    "clous": false,
+    "moto": false,
+    "remorque": false,
+    "max_poids": "3,5t",
+    "max_hauteur": ""
+   },
+   "message": {
+    "fr": "",
+    "de": "",
+    "en": ""
+   },
+   "ouverture": {
+    "fr": "7/7j et 24/24h.",
+    "de": "7T/7 und 24St/24.",
+    "en": "7/7d and 24/24h."
+   },
+   "divers": {
+    "park_and_ride": false,
+    "telephone": "4796-4499",
+    "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_20.jpg"
+   }
+  },
+  "14": {
+   "id": 14,
+   "titre": "Auchan",
+   "total": 0,
+   "actuel": 0,
+   "tendance": 0,
+   "ouvert": true,
+   "complet": true,
+   "panne": true,
+   "localisation": {
+    "quartier": {
+     "fr": "Kirchberg",
+     "de": "Kirchberg",
+     "en": "Kirchberg"
+    },
+    "latitude": 49.633296,
+    "longitude": 6.159885,
+    "mobilite": {
+     "fr": "Arrêt John F. Kennedy : Lignes 1, 16, 18.",
+     "de": "Haltestelle John F. Kennedy: Linien 1, 16, 18.",
+     "en": "John F. Kennedy stop: Lines 1, 16, 18."
+    },
+    "entree": [
+     {
+      "adresse": "Avenue John F. Kennedy",
+      "latitude": 49.632573,
+      "longitude": 6.170984
+     },
+     {
+      "adresse": "Circuit de la Foire Internationale",
+      "latitude": 49.634963,
+      "longitude": 6.168637
+     },
+     {
+      "adresse": "Rue Carlo Hemmer",
+      "latitude": 49.634468,
+      "longitude": 6.168631
+     }
+    ],
+    "sortie": [
+     {
+      "adresse": "Avenue John F. Kennedy",
+      "latitude": 49.631358,
+      "longitude": 6.169714,
+      "direction": ""
+     },
+     {
+      "adresse": "rue Alphonse Weicker",
+      "latitude": 49.634144,
+      "longitude": 6.167401,
+      "direction": ""
+     },
+     {
+      "adresse": "Circuit de la Foire Internationale",
+      "latitude": 49.634184,
+      "longitude": 6.16745,
+      "direction": ""
+     }
+    ]
+   },
+   "service": {
+    "ascenseur": true,
+    "wc": false,
+    "wc_handicapes": false
+   },
+   "nominal": {
+    "handicapes": 70,
+    "femmes": 10,
+    "e-cars": 91,
+    "car_sharing": 0,
+    "velos": 0,
+    "motos": 10,
+    "autocars": 0
+   },
+   "paiement": {
+    "politique_tarifaire": "payant",
+    "tarif": {
+     "fr": "Pendant les horaires d'ouverture du centre commercial: \r\nDu lundi au vendredi de 7h00 à 21h00: \r\n1h00 : gratuit, \r\n2h00 : gratuit,\r\n2h30 : gratuit,\r\n2h45 : 1,00 euro,\r\n3h00 : 2,00 euro \r\n3h15 : 3,00 euro,\r\n3h30 : 4,00 euro,\r\n3h45 : 5,00 euro,\r\n4h00 : 6,00 euro,\r\n4h15 : 7,00 euro,\r\n4h30 : 8,00 euro,\r\n4h45 : 9,00 euro,\r\n5h00 : 10,00 euro,\r\n5h15 : 11,00 euro,\r\n5h30 : 12,00 euro,\r\n5h45 : 13,00 euro,\r\n6h00 : 14,00 euro,\r\n7h00 : 18,00 euro,\r\n8h00 : 22,00 euro,\r\n9h00 : 26,00 euro,\r\n10h00 : 30,00 euro,\r\n11h00 : 34,00 euro,\r\n12h00 : 38,00 euro,\r\n13h00 : 42,00 euro,\r\n14h00 : 46,00 euro,\r\nSamedi et Dimanche :\r\n1h00 : gratuit, \r\n2h00 : gratuit,\r\n3h00 : gratuit,\r\n4h00 : gratuit,\r\n4h15 : 1,00 euro,\r\n4h30 : 2,00 euro,\r\n4h45 : 3,00 euro,\r\n5h00 : 4,00 euro,\r\n5h15 : 5,00 euro,\r\n5h30 : 6,00 euro,\r\n5h45 : 7,00 euro,\r\n6h00 : 8,00 euro,\r\n7h00 : 12,00 euro,\r\n8h00 : 16,00 euro,\r\n9h00 : 20,00 euro,\r\n10h00 : 24,00 euro,\r\n11h00 : 28,00 euro,\r\n12h00 : 32,00 euro,\r\n13h00 : 36,00 euro,\r\n14h00 : 40,00 euro,\r\nEn dehors des horaires d'ouverture du centre commercial:\r\nDu lundi au dimanche de 21h00 à  7h00 :\r\n0h30 : 0,50 euro, \r\nmaximum de 10 euro.",
+     "de": "Während der Öffnungszeiten des Einkaufszentrums: \r\nMontag bis Freitag von 7:00 bis 21:00 Uhr:\r\n1St00 : gratis, \r\n2St00 : gratis,\r\n2St30 : gratis,\r\n2St45 : 1,00 euro, \r\n3St00 : 2,00 euro, \r\n3St15 : 3,00 euro, \r\n3St30 : 4,00 euro, \r\n3St45 : 5,00 euro, \r\n4St00 : 6,00 euro, \r\n4St15 : 7,00 euro, \r\n4St30 : 8,00 euro, \r\n4St45 : 9,00 euro, \r\n5St00 : 10,00 euro, \r\n5St15 : 11,00 euro,\r\n5St30 : 12,00 euro,\r\n5St45 : 13,00 euro,\r\n6St00 : 14,00 euro,\r\n7St00 : 18,00 euro,\r\n8St00 : 22,00 euro,\r\n9St00 : 26,00 euro,\r\n10St00 : 30,00 euro,\r\n11St00 : 34,00 euro,\r\n12St00 : 38,00 euro,\r\n13St00 : 42,00 euro,\r\n14St00 : 46,00 euro,\r\nSamstag und Sonntag :\r\n1St00 : gratis, \r\n2St00 : gratis,\r\n3St00 : gratis, \r\n4St00 : gratis, \r\n4St15 : 1,00 euro, \r\n4St30 : 2,00 euro, \r\n4St45 : 3,00 euro, \r\n5St00 : 4,00 euro, \r\n5St15 : 5,00 euro,\r\n5St30 : 6,00 euro,\r\n5St45 : 7,00 euro,\r\n6St00 : 8,00 euro,\r\n7St00 : 12,00 euro,\r\n8St00 : 16,00 euro,\r\n9St00 : 20,00 euro,\r\n10St00 : 24,00 euro,\r\n11St00 : 28,00 euro,\r\n12St00 : 32,00 euro,\r\n13St00 : 36,00 euro,\r\n14St00 : 40,00 euro,\r\nAußerhalb der Öffnungszeiten des Einkaufszentrums: \r\nMontag bis Sonntag von 21:00 Uhr bis 7:00 Uhr :\r\n0St30 : 0,50 Euro, \r\nmaximal 10 Euro.",
+     "en": "During the shopping center's opening hours:\r\nMonday to Friday from 7 a.m. to 9 p.m .:\r\n1h00 : free, \r\n2h00 : free,\r\n2h30 : free,\r\n2h45 : 1,00 euro,\r\n3h00 : 2,00 euro \r\n3h15 : 3,00 euro,\r\n3h30 : 4,00 euro,\r\n3h45 : 5,00 euro,\r\n4h00 : 6,00 euro,\r\n4h15 : 7,00 euro,\r\n4h30 : 8,00 euro,\r\n4h45 : 9,00 euro,\r\n5h00 : 10,00 euro,\r\n5h15 : 11,00 euro,\r\n5h30 : 12,00 euro,\r\n5h45 : 13,00 euro,\r\n6h00 : 14,00 euro,\r\n7h00 : 18,00 euro,\r\n8h00 : 22,00 euro,\r\n9h00 : 26,00 euro,\r\n10h00 : 30,00 euro,\r\n11h00 : 34,00 euro,\r\n12h00 : 38,00 euro,\r\n13h00 : 42,00 euro,\r\n14h00 : 46,00 euro,\r\nSaturday and Sunday :\r\n1h00 : free, \r\n2h00 : free,\r\n3h00 : free,\r\n4h00 : free,\r\n4h15 : 1,00 euro,\r\n4h30 : 2,00 euro,\r\n4h45 : 3,00 euro,\r\n5h00 : 4,00 euro,\r\n5h15 : 5,00 euro,\r\n5h30 : 6,00 euro,\r\n5h45 : 7,00 euro,\r\n6h00 : 8,00 euro,\r\n7h00 : 12,00 euro,\r\n8h00 : 16,00 euro,\r\n9h00 : 20,00 euro,\r\n10h00 : 24,00 euro,\r\n11h00 : 28,00 euro,\r\n12h00 : 32,00 euro,\r\n13h00 : 36,00 euro,\r\n14h00 : 40,00 euro,\r\nOutside the opening hours of the shopping center:\r\nMonday to Sunday from 9.00 pm to 7.00 am:\r\n0h30 : 0,50 euro, \r\nmaximum 10 euros."
+    },
+    "especes": true,
+    "debit": false,
+    "visa": true,
+    "mastercard": true,
+    "payconiq": false,
+    "american_express": true,
+    "indigo_neo": false
+   },
+   "restrictions": {
+    "gpl": true,
+    "gnc": true,
+    "clous": true,
+    "moto": false,
+    "remorque": false,
+    "max_poids": "3,5t",
+    "max_hauteur": "2,00 m"
+   },
+   "message": {
+    "fr": "",
+    "de": "",
+    "en": ""
+   },
+   "ouverture": {
+    "fr": "7/7j et 24/24h.",
+    "de": "7T/7 und 24St/24.",
+    "en": "7/7d and 24/24h."
+   },
+   "divers": {
+    "park_and_ride": false,
+    "telephone": "43 77 431",
+    "photo_url": "https://feed.vdl.lu/circulation/parking/photo/photo_14.jpg"
+   }
+  }
+ }
+}

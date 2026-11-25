@@ -16,7 +16,7 @@ class EndpointConfig(BaseModel):
     url: str
     headers: dict[str, str] = Field(default_factory=dict)
     auth_env_var: str | None = None
-    adapter: str | None = None
+    parser: str | None = None  # POURQUOI : un backup peut avoir un format différent du primaire
 
 
 class QualityConfig(BaseModel):
@@ -30,14 +30,14 @@ class SourceConfig(BaseModel):
     description: str
     semantic_summary: str = ""
     known_limitations: str = ""
-    adapter: str
-    parser: str | None = None
+    parser: str
     cadence_minutes: int
     sla_minutes: int
     retention_days: int = 90
     license_spdx: str = "CC0-1.0"
     commercial_use_safe: bool = True
     publish_opendata_lu: bool = True
+    data_origin: str = "official"  # official | model | community | press
     factual_only: bool = False
     primary: EndpointConfig
     backup: EndpointConfig | None = None

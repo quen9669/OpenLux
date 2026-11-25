@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenLux Hub V2 — Référentiel Souverain de Données du Luxembourg</title>
-  <meta name="description" content="Plateforme institutionnelle souveraine de données ouvertes pour le Grand-Duché de Luxembourg. 22 Data Marts Gold, Zero-PII, Factual-Only.">
+  <meta name="description" content="Données ouvertes du Grand-Duché de Luxembourg issues de sources publiques vérifiées : tables Gold Parquet, Zero-PII, Factual-Only.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,12 +74,9 @@
 
       <!-- Actions Header -->
       <div class="header-actions">
-        <a href="/" class="btn-version-switcher" title="Comparer avec la version V1">
-          <span>&larr; Voir V1</span>
-        </a>
         <div id="headerStatusBadgeV2" style="font-size:0.75rem;display:flex;align-items:center;gap:0.4rem;padding:0.3rem 0.75rem;background:var(--gov-green-bg);border:1px solid var(--gov-green-border);border-radius:var(--radius-full);">
           <span style="width:8px;height:8px;border-radius:50%;background:var(--gov-green);display:inline-block;"></span>
-          <span style="color:var(--gov-green);font-weight:700;">100% NOMINAL</span>
+          <span style="color:var(--text-muted);font-weight:700;">Statut en cours de chargement…</span>
         </div>
         <button class="btn btn-icon" id="themeToggleBtnV2" title="Basculer le thème">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -130,7 +127,7 @@
         </p>
         <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="document.querySelector('.nav-tab[data-view=donnees]').click()">
-            <span>Consulter les 22 Data Marts</span>
+            <span>Consulter le catalogue</span>
             <span>&rarr;</span>
           </button>
           <button class="btn btn-gov" onclick="document.querySelector('.nav-tab[data-view=monitoring]').click()">
@@ -147,24 +144,24 @@
       <!-- Chiffres Clés Institutionnels -->
       <div class="stats-grid-v2">
         <div class="stat-card-v2">
-          <div class="stat-num-v2" style="color:var(--lux-blue)">22</div>
-          <div class="stat-lbl-v2">Data Marts Gold</div>
-          <div class="stat-detail-v2">Couverture territoriale complète en Parquet ZSTD</div>
+          <div class="stat-num-v2" id="statTablesV2" style="color:var(--lux-blue)">–</div>
+          <div class="stat-lbl-v2">Tables Gold</div>
+          <div class="stat-detail-v2" id="statRowsV2">Parquet ZSTD</div>
         </div>
         <div class="stat-card-v2 gov">
-          <div class="stat-num-v2" style="color:var(--gov-green)">40</div>
-          <div class="stat-lbl-v2">Flux Atomiques Ingestion</div>
-          <div class="stat-detail-v2">100% automatisés avec validation SHA-256</div>
+          <div class="stat-num-v2" id="statSourcesV2" style="color:var(--gov-green)">–</div>
+          <div class="stat-lbl-v2">Sources publiques</div>
+          <div class="stat-detail-v2">URLs vérifiées, empreinte SHA-256 à chaque collecte</div>
         </div>
         <div class="stat-card-v2">
           <div class="stat-num-v2">100</div>
           <div class="stat-lbl-v2">Communes Officielles</div>
-          <div class="stat-detail-v2">Référentiel légal LAU (fusions 2023 incluses)</div>
+          <div class="stat-detail-v2">Référentiel LAU officiel (limites administratives, CC0)</div>
         </div>
         <div class="stat-card-v2 red">
           <div class="stat-num-v2" style="color:var(--lux-red)">0</div>
           <div class="stat-lbl-v2">Données Personnelles (PII)</div>
-          <div class="stat-detail-v2">Sanitizer amont certifié par 34 tests pytest</div>
+          <div class="stat-detail-v2">Sanitizer amont + test dbt anti-PII sur les tables Gold</div>
         </div>
       </div>
 
@@ -298,9 +295,9 @@
       <!-- KPI Grid Observabilité -->
       <div class="stats-grid-v2" style="margin-bottom:2rem;">
         <div class="stat-card-v2 gov">
-          <div class="stat-num-v2" id="monKpiGlobalStatus" style="color:var(--gov-green);">100% NOMINAL</div>
+          <div class="stat-num-v2" id="monKpiGlobalStatus">–</div>
           <div class="stat-lbl-v2">Santé Globale des Flux</div>
-          <div class="stat-detail-v2" id="monKpiGlobalDetail">31 flux sous contrôle SLA</div>
+          <div class="stat-detail-v2" id="monKpiGlobalDetail">API de supervision non joignable</div>
         </div>
         <div class="stat-card-v2">
           <div class="stat-num-v2 mono" id="monKpiTotalRows">-</div>
@@ -308,14 +305,14 @@
           <div class="stat-detail-v2">Volume consolidé certifié</div>
         </div>
         <div class="stat-card-v2">
-          <div class="stat-num-v2 mono" id="monKpiAvgScore">100.0%</div>
+          <div class="stat-num-v2 mono" id="monKpiAvgScore">–</div>
           <div class="stat-lbl-v2">Trust Score Moyen</div>
           <div class="stat-detail-v2">Fraîcheur, complétude & validité dbt</div>
         </div>
         <div class="stat-card-v2">
-          <div class="stat-num-v2 mono" id="monKpiActiveFlows">31 / 31</div>
+          <div class="stat-num-v2 mono" id="monKpiActiveFlows">–</div>
           <div class="stat-lbl-v2">Flux Sans Anomalie</div>
-          <div class="stat-detail-v2" id="monKpiAttentionErrors">0 en dégradation • 0 en erreur</div>
+          <div class="stat-detail-v2" id="monKpiAttentionErrors">–</div>
         </div>
       </div>
 
@@ -323,7 +320,7 @@
       <div class="catalog-header-bar" style="margin-bottom:1.25rem;">
         <div class="catalog-search-box">
           <input type="text" class="catalog-search-input" id="monSearchInput" placeholder="Filtrer par flux, domaine, adaptateur (ex: meteo, datex2, cita, http_json)..." oninput="handleMonitoringSearchV2(this.value)">
-          <span class="search-badge" id="monFilterCount">31 flux</span>
+          <span class="search-badge" id="monFilterCount">–</span>
         </div>
         <div class="filter-pills-bar" id="monStatusFilters">
           <button class="filter-btn-pill active" data-status="all" onclick="handleMonitoringStatusFilter('all')">Tous les flux</button>
@@ -358,9 +355,9 @@
     <section class="view-panel" id="view-donnees">
       <div style="margin-bottom:1.5rem;">
         <span style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;letter-spacing:0.06em;">DATA MARTs GOLD CERTIFIÉS</span>
-        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Catalogue des 22 Tables Officielles</h2>
+        <h2 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-top:0.25rem;">Catalogue des tables Gold</h2>
         <p style="font-size:0.95rem;color:var(--text-secondary);max-width:750px;margin-top:0.35rem;">
-          Chaque dataset est enrichi de son organisme d'origine, de sa cadence de rafraîchissement, de son Trust Score validé et de son schéma SQL complet.
+          Chaque table indique ses sources réelles (URL, licence, nature officielle ou modélisée), sa couverture temporelle mesurée, sa dernière collecte et son schéma.
         </p>
       </div>
 
@@ -371,16 +368,9 @@
 
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
           <div class="filter-pills-row">
-            <button class="filter-btn-pill active" onclick="setDomainFilterV2('all', this)">Tous les domaines</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Territoire & Citoyenneté', this)">Territoire & Citoyenneté</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Mobilité & Transports', this)">Mobilité & Transports</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Santé & Environnement', this)">Santé & Environnement</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Énergie & Climat', this)">Énergie & Climat</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Économie & Inflation', this)">Économie & Inflation</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Immobilier & Marché', this)">Immobilier & Marché</button>
-            <button class="filter-btn-pill" onclick="setDomainFilterV2('Culture & Sorties', this)">Culture & Sorties</button>
+            <span id="domainFiltersV2" style="display:contents;"><button class="filter-btn-pill active" onclick="setDomainFilterV2('all', this)">Tous les domaines</button></span>
           </div>
-          <span class="mono" id="catalogCountV2" style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">22 tables Gold certifiées</span>
+          <span class="mono" id="catalogCountV2" style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">Chargement…</span>
         </div>
       </div>
 
@@ -414,26 +404,26 @@
         </p>
 
         <div style="background:var(--bg-code);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:1.25rem;font-family:var(--font-mono);font-size:0.95rem;color:var(--gov-green);margin-bottom:1.25rem;">
-          Trust Score = (0.40 &times; S_fraîcheur) + (0.35 &times; S_qualité) + (0.25 &times; S_intégrité)
+          Trust Score = 0,35 &times; fraîcheur + 0,25 &times; complétude + 0,20 &times; validité dbt + 0,20 &times; source (primaire 100, backup 80) — échec de collecte &rArr; ERROR
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1rem;">
           <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">1. Score de Fraîcheur (40%)</div>
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">1. Fraîcheur (35 %)</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
               Calculé sur <code>last_checked_utc</code> par rapport au SLA configuré. <strong>Principe clé :</strong> Si la source n'a pas muté (hash SHA-256 stable <code>UNCHANGED</code>), elle conserve son score nominal de 100 sans fausse alerte.
             </div>
           </div>
           <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">2. Score de Qualité (35%)</div>
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">2. Complétude (25 %)</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
-              Vérification des volumes (seuil <code>min_rows</code>), complétude des champs obligatoires et taux d'imputation dans les tables composites.
+              Volume collecté rapporté au seuil <code>min_rows</code> déclaré dans <code>config/sources.toml</code>. Aucune valeur n'est imputée.
             </div>
           </div>
           <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">3. Score d'Intégrité (25%)</div>
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:0.25rem;">3. Validité dbt (20 %) &amp; source (20 %)</div>
             <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;">
-              Résultats des tests <code>dbt test</code> (unicité des clés primaires, contraintes de non-nullité et cohérence des projections WGS84).
+              Résultats des tests <code>dbt test</code> (unicité des clés, non-nullité, bornes géographiques) et pénalité si le backup a été utilisé.
             </div>
           </div>
         </div>
@@ -478,7 +468,7 @@ print(df)</pre>
             Testez les filtres spatiaux, temporels et le streaming CSV directement sur l'instance locale.
           </p>
         </div>
-        <iframe src="http://127.0.0.1:8000/docs" style="width:100%;height:700px;border:none;" title="Swagger UI"></iframe>
+        <iframe src="/docs" style="width:100%;height:700px;border:none;" title="Swagger UI"></iframe>
       </div>
     </section>
 
@@ -513,7 +503,7 @@ print(df)</pre>
           <span class="decision-badge-cat">Stockage & Performance</span>
         </div>
         <div class="decision-content">
-          Toutes les 22 tables Gold sont stockées sous forme de fichiers Parquet compressés en ZSTD dans <code>data/gold/*.parquet</code>. Chaque génération est d'abord écrite dans <code>data/gold/.tmp/</code> puis basculée instantanément via <code>os.replace()</code>.
+          Toutes les tables Gold sont stockées sous forme de fichiers Parquet compressés en ZSTD dans <code>data/gold/*.parquet</code>. Chaque génération est d'abord écrite dans <code>data/gold/.tmp/</code> puis basculée instantanément via <code>os.replace()</code>.
         </div>
         <div class="decision-why">
           <strong>Pourquoi :</strong> Garantie d'atomicité absolue au niveau de l'OS. Aucun lecteur (FastAPI ou FastMCP) ne peut jamais lire un fichier partiellement écrit ou corrompu.
@@ -660,7 +650,7 @@ print(df)</pre>
     <div class="drawer-body-v2">
       <!-- Organisme & Source Primaire -->
       <div style="background:var(--bg-surface-elevated);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
-        <div style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;">Source Officielle d'Origine</div>
+        <div style="font-size:0.75rem;font-weight:700;color:var(--lux-blue);text-transform:uppercase;">Source(s) d'origine</div>
         <div id="drawerSourceOrgV2" style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-top:0.25rem;">-</div>
         <a id="drawerSourceUrlV2" href="#" target="_blank" rel="noopener" class="mono" style="font-size:0.775rem;color:var(--text-muted);word-break:break-all;margin-top:0.25rem;display:inline-block;">-</a>
       </div>
@@ -674,24 +664,23 @@ print(df)</pre>
       <!-- Cadence & SLA -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
         <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Fréquence de Recharge</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Couverture temporelle</div>
           <div id="drawerCadenceV2" style="font-weight:700;margin-top:0.2rem;">-</div>
           <div id="drawerSlaV2" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.15rem;">-</div>
         </div>
         <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Dernier Refresh Réel</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Dernière collecte (UTC)</div>
           <div id="drawerLastRefreshV2" class="mono" style="font-weight:700;margin-top:0.2rem;">-</div>
-          <div style="font-size:0.75rem;color:var(--gov-green);font-weight:600;margin-top:0.15rem;">Statut Nominal Vérifié</div>
+          <div id="drawerStatusV2" style="font-size:0.75rem;color:var(--text-muted);font-weight:600;margin-top:0.15rem;">-</div>
         </div>
       </div>
 
       <!-- Graphique Sparkline SVG : Volume des 7 Derniers Refresh -->
       <div class="sparkline-box">
         <div class="sparkline-header">
-          <span>Historique du Volume de Lignes (7 Dernières Exécutions)</span>
-          <span style="color:var(--gov-green);font-weight:700;">Intégrité SHA-256 100%</span>
+          <span>Sources, licences et limites connues</span>
         </div>
-        <svg class="sparkline-svg" id="sparklineSvgV2" viewBox="0 0 600 60"></svg>
+        <div id="drawerSourcesV2" style="font-size:0.8rem;line-height:1.5;"></div>
       </div>
 
       <!-- Métriques de Volume & Licence -->
@@ -702,7 +691,7 @@ print(df)</pre>
         </div>
         <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
           <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Trust Score</div>
-          <div class="mono" style="font-size:1.1rem;font-weight:700;color:var(--gov-green);margin-top:0.2rem;">100.0%</div>
+          <div class="mono" id="drawerTrustV2" style="font-size:1.1rem;font-weight:700;margin-top:0.2rem;">–</div>
         </div>
         <div style="background:var(--bg-surface-elevated);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
           <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;">Licence SPDX</div>

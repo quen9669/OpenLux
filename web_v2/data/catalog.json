@@ -1,0 +1,1988 @@
+[
+ {
+  "dataset": "gold_weather_observations",
+  "title": "Météo horaire (station Findel + 12 cantons)",
+  "domain": "Environnement",
+  "row_count": 22179,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2026-09-10 00:00:00",
+   "to": "2026-11-25 23:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:34:26",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "station_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "data_origin",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "location_index",
+    "type": "INTEGER"
+   },
+   {
+    "name": "temperature_c",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "humidity_pct",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "pressure_hpa",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "wind_speed_kmh",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "precipitation_mm",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "weather_code",
+    "type": "INTEGER"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "grid_lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "grid_lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "station_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "meteo_cantons_openmeteo",
+    "description": "Météo horaire modélisée sur les 12 chefs-lieux de canton (Open-Meteo)",
+    "url": "https://api.open-meteo.com/v1/forecast",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "model",
+    "commercial_use_safe": true,
+    "known_limitations": "Données de modèle (point de grille), pas des mesures de station ; heures sans valeur ignorées."
+   },
+   {
+    "source_id": "meteo_findel_meteolux",
+    "description": "Observation officielle MeteoLux à la station Luxembourg-Findel (ELLX)",
+    "url": "https://metapi.ana.lu/api/v1/hvd/observations",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Une seule station (Findel) ; instantané sans archive : l'historique est construit par accumulation."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_air_quality",
+  "title": "Qualité de l'air et pollens (modèle CAMS)",
+  "domain": "Environnement",
+  "row_count": 267840,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2026-08-25 00:00:00",
+   "to": "2026-11-25 23:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:04:24",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "station_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "location_index",
+    "type": "INTEGER"
+   },
+   {
+    "name": "pollutant",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "value",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "unit",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "grid_lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "grid_lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "point_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "air_quality_openmeteo",
+    "description": "Qualité de l'air horaire modélisée (CAMS) sur les 12 chefs-lieux de canton",
+    "url": "https://air-quality-api.open-meteo.com/v1/air-quality",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "model",
+    "commercial_use_safe": true,
+    "known_limitations": "Modèle CAMS Europe, pas des mesures : le réseau télémétrique AEV est figé depuis le 13/12/2025."
+   },
+   {
+    "source_id": "pollen_openmeteo",
+    "description": "Concentrations polliniques horaires modélisées (CAMS) sur les 12 chefs-lieux de canton",
+    "url": "https://air-quality-api.open-meteo.com/v1/air-quality",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "model",
+    "commercial_use_safe": true,
+    "known_limitations": "Modèle CAMS ; hors saison pollinique les valeurs sont nulles ou absentes."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_water_levels",
+  "title": "Niveaux d'eau des rivières (15 min)",
+  "domain": "Environnement",
+  "row_count": 28289,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2026-11-18 17:45:00",
+   "to": "2026-11-25 18:30:00"
+  },
+  "last_collected_utc": "2026-11-25 18:34:40",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "station_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "water_level",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "unit",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "water_levels_age",
+    "description": "Niveaux d'eau des 42 stations hydrométriques (Administration de la gestion de l'eau)",
+    "url": "https://inondations.public.lu/dam-assets/ctie/datas/Water-Levels-LocalTime.csv",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Fenêtre glissante de 7 jours ; Esch-Sûre est exprimé en m (barrage), les autres en cm ; pas de débit."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_bathing_water",
+  "title": "Eaux de baignade",
+  "domain": "Environnement",
+  "row_count": 15,
+  "time_column": "collected_at_utc",
+  "coverage": {
+   "from": "2026-11-25 18:04:29",
+   "to": "2026-11-25 18:04:29"
+  },
+  "last_collected_utc": "2026-11-25 18:04:29",
+  "standards": [
+   "Directive 2006/7/CE",
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "site_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "site_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "bathing_status",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "quality_class",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "profile_url",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "bathing_status_age",
+    "description": "Sites de baignade officiels et statut de baignade en cours",
+    "url": "https://features.geoportail.lu/collections/656/items",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Statut 'hors saison' hors période estivale."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_weather_warnings",
+  "title": "Vigilances météo MeteoLux",
+  "domain": "Environnement",
+  "row_count": 6,
+  "time_column": "collected_at_utc",
+  "coverage": {
+   "from": "2026-11-25 18:06:46",
+   "to": "2026-11-25 18:06:46"
+  },
+  "last_collected_utc": "2026-11-25 18:06:46",
+  "standards": [
+   "CAP 1.2"
+  ],
+  "columns": [
+   {
+    "name": "alert_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "event",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "severity",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "awareness_level",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "area",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "onset_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "expires_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "sent_utc",
+    "type": "TIMESTAMP"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "weather_warnings_meteoalarm",
+    "description": "Vigilances météorologiques MeteoLux pour le Luxembourg (flux MeteoAlarm)",
+    "url": "https://feeds.meteoalarm.org/api/v1/warnings/feeds-luxembourg",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Inclut les messages d'annulation ; LU-Alert (CAP) non intégré car sans URL 'dernière alerte' stable."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_traffic_events",
+  "title": "Événements trafic LU et frontaliers",
+  "domain": "Mobilité",
+  "row_count": 63,
+  "time_column": "start_time_utc",
+  "coverage": {
+   "from": "2023-03-24 17:30:00",
+   "to": "2026-11-29 07:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:04:33",
+  "standards": [
+   "DATEX II (CEN/TS 16157)",
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "event_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "country_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "road_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "situation_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "situation_subtype",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "validity_status",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "description",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "start_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "end_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "record_version_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "first_seen_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "traffic_cita_datex2",
+    "description": "Événements de trafic sur le réseau autoroutier luxembourgeois (CITA, DATEX II)",
+    "url": "https://www.cita.lu/info_trafic/datex/situationrecord",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Autoroutes et voies express uniquement."
+   },
+   {
+    "source_id": "traffic_fr_dir_est",
+    "description": "Événements routiers en Lorraine nord (A31/A30, Bison Futé / DIR Est, DATEX II)",
+    "url": "http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml",
+    "license_spdx": "etalab-2.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Réseau non concédé ; filtré sur la boîte Lorraine nord (lat 48,85–49,6)."
+   },
+   {
+    "source_id": "traffic_vdl_info",
+    "description": "Informations trafic de la Ville de Luxembourg (chantiers, déviations, manifestations)",
+    "url": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Territoire de la Ville de Luxembourg uniquement."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_roadworks",
+  "title": "Chantiers routiers",
+  "domain": "Mobilité",
+  "row_count": 333,
+  "time_column": "start_time_utc",
+  "coverage": {
+   "from": "2020-05-28 22:00:00",
+   "to": "2027-03-01 06:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:35:06",
+  "standards": [
+   "DATEX II (CEN/TS 16157)",
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "work_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "authority",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "road_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "title",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "work_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "contractor",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "start_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "end_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "roadworks_cita_current",
+    "description": "Chantiers en cours sur le réseau routier national (Ponts et Chaussées, DATEX II)",
+    "url": "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Commentaires bruts du producteur (certains accents perdus à la source)."
+   },
+   {
+    "source_id": "roadworks_cita_planned",
+    "description": "Chantiers planifiés sur le réseau routier national (Ponts et Chaussées, DATEX II)",
+    "url": "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Dates prévisionnelles susceptibles d'évoluer."
+   },
+   {
+    "source_id": "roadworks_vdl",
+    "description": "Grands chantiers de voirie de la Ville de Luxembourg",
+    "url": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Territoire de la Ville uniquement ; position = centroïde de l'emprise."
+   },
+   {
+    "source_id": "roadworks_vdl_permits",
+    "description": "Autorisations de petits chantiers sur la voie publique (Ville de Luxembourg)",
+    "url": "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Territoire de la Ville uniquement."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_transit_disruptions",
+  "title": "Perturbations bus et trains",
+  "domain": "Mobilité",
+  "row_count": 12,
+  "time_column": "start_time_utc",
+  "coverage": {
+   "from": "2026-05-03 02:00:00",
+   "to": "2026-11-24 20:20:00"
+  },
+  "last_collected_utc": "2026-11-25 18:04:40",
+  "standards": [
+   "SIRI SX"
+  ],
+  "columns": [
+   {
+    "name": "disruption_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "operator",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "mode",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "title",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "severity",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "category",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "detail",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "start_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "end_time_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "published_at_utc",
+    "type": "TIMESTAMP"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "bus_vdl_messages",
+    "description": "Messages de perturbation des autobus de la Ville de Luxembourg (AVL)",
+    "url": "https://web.vdl.lu/autobus/data/messages/messages.xml",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Réseau AVL uniquement ; pas de temps réel RGTR/CFL/TICE sans clé API."
+   },
+   {
+    "source_id": "rail_sncb_irail",
+    "description": "Perturbations ferroviaires SNCB concernant Arlon / Luxembourg (iRail)",
+    "url": "https://api.irail.be/disturbances/",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": false,
+    "known_limitations": "API communautaire iRail (non officielle) ; licence non précisée."
+   },
+   {
+    "source_id": "rail_sncf_siri",
+    "description": "Perturbations ferroviaires SNCF sur l'axe Metz–Thionville–Luxembourg (SIRI Lite SX)",
+    "url": "https://proxy.transport.data.gouv.fr/resource/sncf-siri-lite-situation-exchange",
+    "license_spdx": "ODbL-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Filtré par mots-clés (Luxembourg, Thionville, Metz, Bettembourg…)."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_mobility_veloh",
+  "title": "Disponibilités Vel'oh",
+  "domain": "Mobilité",
+  "row_count": 160,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2025-05-28 01:38:59",
+   "to": "2026-11-25 18:23:52"
+  },
+  "last_collected_utc": "2026-11-25 18:34:57",
+  "standards": [
+   "GBFS 2.3",
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "station_number",
+    "type": "INTEGER"
+   },
+   {
+    "name": "available_bikes",
+    "type": "INTEGER"
+   },
+   {
+    "name": "available_electrical_bikes",
+    "type": "INTEGER"
+   },
+   {
+    "name": "available_mechanical_bikes",
+    "type": "INTEGER"
+   },
+   {
+    "name": "available_stands",
+    "type": "INTEGER"
+   },
+   {
+    "name": "disabled_bikes",
+    "type": "INTEGER"
+   },
+   {
+    "name": "disabled_stands",
+    "type": "INTEGER"
+   },
+   {
+    "name": "is_renting",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "station_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "address",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "capacity",
+    "type": "INTEGER"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "veloh_stations",
+    "description": "Disponibilités en temps réel des stations Vel'oh (JCDecaux)",
+    "url": "https://api.jcdecaux.com/vls/v3/stations",
+    "license_spdx": "unspecified",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Primaire JCDecaux v3 avec clé (JCDECAUX_API_KEY) ; backup GBFS sans clé, positions via le seed GBFS."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_mobility_parkings",
+  "title": "Occupation des parkings (Ville)",
+  "domain": "Mobilité",
+  "row_count": 87,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2026-11-25 17:47:00",
+   "to": "2026-11-25 18:34:00"
+  },
+  "last_collected_utc": "2026-11-25 18:34:59",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "parking_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "parking_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "available_spaces",
+    "type": "INTEGER"
+   },
+   {
+    "name": "total_capacity",
+    "type": "INTEGER"
+   },
+   {
+    "name": "trend",
+    "type": "INTEGER"
+   },
+   {
+    "name": "is_open",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "is_full",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "is_out_of_order",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "pricing_policy",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "district",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "occupancy_pct",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "parkings_vdl",
+    "description": "Occupation en temps réel des parkings de la Ville de Luxembourg",
+    "url": "https://feed.vdl.lu/circulation/parking/feed.json",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Parkings gérés/relayés par la Ville uniquement."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_chargy_stations",
+  "title": "Bornes de recharge Chargy",
+  "domain": "Mobilité",
+  "row_count": 1572,
+  "time_column": "collected_at_utc",
+  "coverage": {
+   "from": "2026-11-25 17:47:54",
+   "to": "2026-11-25 18:35:00"
+  },
+  "last_collected_utc": "2026-11-25 18:35:00",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "site_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "address",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "connectors_total",
+    "type": "INTEGER"
+   },
+   {
+    "name": "connectors_available",
+    "type": "INTEGER"
+   },
+   {
+    "name": "connectors_charging",
+    "type": "INTEGER"
+   },
+   {
+    "name": "connectors_out_of_service",
+    "type": "INTEGER"
+   },
+   {
+    "name": "max_power_kw",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "chargy_stations",
+    "description": "Bornes de recharge publiques Chargy : état en direct de chaque connecteur",
+    "url": "https://my.chargy.lu/b2bev-external-services/resources/kml",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Réseau Chargy uniquement. POURQUOI clé en clair : elle est publiée dans le catalogue CC0 data.public.lu."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_aviation",
+  "title": "Aéronefs au-dessus du Luxembourg",
+  "domain": "Mobilité",
+  "row_count": 21,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2026-11-25 17:47:39",
+   "to": "2026-11-25 18:34:51"
+  },
+  "last_collected_utc": "2026-11-25 18:35:01",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "icao24",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "callsign",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "origin_country",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "baro_altitude_m",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "on_ground",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "velocity_ms",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "aviation_opensky",
+    "description": "Aéronefs au-dessus du Luxembourg (OpenSky Network)",
+    "url": "https://opensky-network.org/api/states/all",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": false,
+    "known_limitations": "Instantané ; couverture ADS-B communautaire ; quota d'appels anonymes limité."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_fuel_prices",
+  "title": "Prix mensuels des carburants",
+  "domain": "Économie",
+  "row_count": 70,
+  "time_column": "reference_month",
+  "coverage": {
+   "from": "2026-01",
+   "to": "2026-10"
+  },
+  "last_collected_utc": "2026-11-25 18:05:52",
+  "standards": [],
+  "columns": [
+   {
+    "name": "reference_month",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "energy_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "price_eur",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "unit",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "fuel_prices_lu",
+    "description": "Prix moyens mensuels des carburants et de la recharge électrique (Direction générale Énergie)",
+    "url": "https://data.public.lu/fr/datasets/r/d3a17cf8-5afc-4bf5-8222-9519e343d29d",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Moyennes mensuelles de l'année en cours ; unités différentes selon l'énergie (l, kg, kWh)."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_inflation",
+  "title": "Indice des prix IPCN (STATEC)",
+  "domain": "Économie",
+  "row_count": 946,
+  "time_column": "reference_month",
+  "coverage": {
+   "from": "1948-01",
+   "to": "2026-10"
+  },
+  "last_collected_utc": "2026-11-25 18:05:53",
+  "standards": [
+   "SDMX"
+  ],
+  "columns": [
+   {
+    "name": "reference_month",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "ipcn_index",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "base_period_label",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "annual_change_pct",
+    "type": "DOUBLE"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "inflation_ipcn_statec",
+    "description": "Indice des prix à la consommation national (IPCN, STATEC, base 1948=100)",
+    "url": "https://lustat.statec.lu/rest/data/LU1,DSD_PRIX_CONSO@DF_E5100,1.0/all",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Publication mensuelle avec ~1 mois de décalage."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_electricity_spot",
+  "title": "Prix spot électricité DE-LU",
+  "domain": "Économie",
+  "row_count": 46971,
+  "time_column": "observed_at_utc",
+  "coverage": {
+   "from": "2024-12-31 23:00:00",
+   "to": "2026-11-25 22:45:00"
+  },
+  "last_collected_utc": "2026-11-25 18:05:56",
+  "standards": [],
+  "columns": [
+   {
+    "name": "price_eur_per_mwh",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "bidding_zone",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "observed_at_utc",
+    "type": "TIMESTAMP"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "electricity_spot_delu",
+    "description": "Prix spot day-ahead de l'électricité, zone DE-LU (energy-charts / SMARD)",
+    "url": "https://api.energy-charts.info/price",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Zone de marché commune Allemagne-Luxembourg."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_unemployment",
+  "title": "Demandeurs d'emploi par commune (ADEM)",
+  "domain": "Économie",
+  "row_count": 36186,
+  "time_column": "reference_month",
+  "coverage": {
+   "from": "2012-01",
+   "to": "2026-10"
+  },
+  "last_collected_utc": "2026-11-25 18:06:25",
+  "standards": [],
+  "columns": [
+   {
+    "name": "reference_month",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "sex",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "job_seekers",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "unemployment_adem",
+    "description": "Demandeurs d'emploi résidents par commune et par sexe (ADEM)",
+    "url": "https://data.public.lu/fr/datasets/r/7bc964ea-7744-4860-ae84-24cc0ef3777d",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Noms de communes d'avant fusion sur les périodes anciennes."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_building_permits",
+  "title": "Logements autorisés par canton (STATEC)",
+  "domain": "Logement",
+  "row_count": 1040,
+  "time_column": "reference_year",
+  "coverage": {
+   "from": "2010",
+   "to": "2025"
+  },
+  "last_collected_utc": "2026-11-25 18:06:03",
+  "standards": [
+   "SDMX"
+  ],
+  "columns": [
+   {
+    "name": "canton_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "building_type_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "building_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "indicator",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "reference_year",
+    "type": "INTEGER"
+   },
+   {
+    "name": "dwellings",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "building_permits_statec",
+    "description": "Autorisations de bâtir : nombre de logements autorisés par canton (STATEC)",
+    "url": "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all",
+    "license_spdx": "CC-BY-4.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Granularité cantonale et annuelle."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_housing_prices",
+  "title": "Prix annoncés par commune (Observatoire)",
+  "domain": "Logement",
+  "row_count": 3382,
+  "time_column": "reference_year",
+  "coverage": {
+   "from": "2010",
+   "to": "2025"
+  },
+  "last_collected_utc": "2026-11-25 18:35:20",
+  "standards": [],
+  "columns": [
+   {
+    "name": "reference_year",
+    "type": "INTEGER"
+   },
+   {
+    "name": "property_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "offers_count",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "avg_price_eur",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "avg_price_eur_m2",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "housing_prices_apartments",
+    "description": "Prix annoncés de vente des appartements par commune (Observatoire de l'Habitat)",
+    "url": "https://data.public.lu/fr/datasets/r/1d20f982-57e1-4ae2-a278-dc78c88c21dc",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions."
+   },
+   {
+    "source_id": "housing_prices_houses",
+    "description": "Prix annoncés de vente des maisons par commune (Observatoire de l'Habitat)",
+    "url": "https://data.public.lu/fr/datasets/r/14b0156e-ff87-4a36-a867-933fc9a6f903",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Prix annoncés (pas de transaction) ; masqués sous 30 annonces ; noms de communes historiques avant fusions."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_holidays",
+  "title": "Jours fériés LU/FR/BE/DE et vacances",
+  "domain": "Calendrier",
+  "row_count": 435,
+  "time_column": "holiday_date",
+  "coverage": {
+   "from": "2020-01-01",
+   "to": "2036-12-26"
+  },
+  "last_collected_utc": "2026-11-25 18:06:36",
+  "standards": [],
+  "columns": [
+   {
+    "name": "country_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "region_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "holiday_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "name_fr",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "name_de",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "name_lb",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "holiday_date",
+    "type": "DATE"
+   },
+   {
+    "name": "end_date",
+    "type": "DATE"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "holidays_be",
+    "description": "Jours fériés en Belgique (frontaliers, OpenHolidays)",
+    "url": "https://openholidaysapi.org/PublicHolidays",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": true,
+    "known_limitations": "Source communautaire."
+   },
+   {
+    "source_id": "holidays_de",
+    "description": "Jours fériés en Allemagne (frontaliers, OpenHolidays)",
+    "url": "https://openholidaysapi.org/PublicHolidays",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": true,
+    "known_limitations": "Source communautaire ; libellés en allemand."
+   },
+   {
+    "source_id": "holidays_fr",
+    "description": "Jours fériés en France (frontaliers, OpenHolidays)",
+    "url": "https://openholidaysapi.org/PublicHolidays",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": true,
+    "known_limitations": "Source communautaire."
+   },
+   {
+    "source_id": "holidays_lu",
+    "description": "Jours fériés légaux du Luxembourg (fr/de/lb)",
+    "url": "https://data.public.lu/fr/datasets/r/9dd69c71-f55e-4124-87b8-4a54ba528335",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Les jours de congé d'usage (non légaux) ne sont pas inclus."
+   },
+   {
+    "source_id": "school_holidays_lu",
+    "description": "Vacances scolaires luxembourgeoises (OpenHolidays)",
+    "url": "https://openholidaysapi.org/SchoolHolidays",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": true,
+    "known_limitations": "Source communautaire alimentée depuis les calendriers officiels."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_equipment",
+  "title": "Équipements : recyclage, DAE, vélo",
+  "domain": "Territoire",
+  "row_count": 1021,
+  "time_column": "collected_at_utc",
+  "coverage": {
+   "from": "2026-11-25 18:08:21",
+   "to": "2026-11-25 18:35:37"
+  },
+  "last_collected_utc": "2026-11-25 18:35:37",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "item_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "category",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "details",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "length_km",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "aed_osm",
+    "description": "Défibrillateurs automatisés externes (OpenStreetMap)",
+    "url": "https://overpass.kumi.systems/api/interpreter",
+    "license_spdx": "ODbL-1.0",
+    "data_origin": "community",
+    "commercial_use_safe": true,
+    "known_limitations": "Aucun jeu officiel : données OSM (ODbL), complétude non garantie ; serveurs Overpass parfois saturés."
+   },
+   {
+    "source_id": "bike_routes_regional",
+    "description": "Itinéraires cyclables régionaux (Géoportail mymaps, Direction du tourisme)",
+    "url": "https://data.geoportail.lu/mymaps",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Réseau régional ; pas de couche nationale unique en GeoJSON."
+   },
+   {
+    "source_id": "recycling_centers",
+    "description": "Centres de recyclage (INSPIRE, Administration de l'environnement / Géoportail)",
+    "url": "https://data.public.lu/fr/datasets/r/be8c3b2e-88d3-4ddb-955c-40b354123d29",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Pas d'horaires ; coordonnées reprojetées depuis EPSG:3035."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_petitions",
+  "title": "Pétitions à la Chambre des Députés",
+  "domain": "Vie civique",
+  "row_count": 3146,
+  "time_column": "filing_date",
+  "coverage": {
+   "from": "2006-07-17",
+   "to": "2025-03-11"
+  },
+  "last_collected_utc": "2026-11-25 18:08:33",
+  "standards": [],
+  "columns": [
+   {
+    "name": "petition_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "title",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "petition_type",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "status",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "signatures",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "filing_date",
+    "type": "DATE"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "petitions_chd",
+    "description": "Pétitions publiques et ordinaires déposées à la Chambre des Députés",
+    "url": "https://data.public.lu/fr/datasets/r/6c43ab5c-8fc2-493b-822a-35793ac1c840",
+    "license_spdx": "CC0-1.0",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Jeu non mis à jour depuis le 28/03/2025 (dernier dépôt 12/03/2025) ; motivations exclues."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_culture_events",
+  "title": "Agenda culturel",
+  "domain": "Culture",
+  "row_count": 1118,
+  "time_column": "start_utc",
+  "coverage": {
+   "from": "2026-01-07 18:00:00",
+   "to": "2028-04-15 22:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:40:10",
+  "standards": [
+   "GeoJSON (EPSG:4326)"
+  ],
+  "columns": [
+   {
+    "name": "event_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "title",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "venue",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "category",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "is_free",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "price_min_eur",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "commune_slug",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "url",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "lat",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "lon",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "start_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "end_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "commune_lau",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "commune_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "culture_echo_lu",
+    "description": "Agenda culturel national echo.lu (événements à venir)",
+    "url": "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact",
+    "license_spdx": "unspecified",
+    "data_origin": "community",
+    "commercial_use_safe": false,
+    "known_limitations": "Index de recherche public limité à 1000 résultats par requête ; conditions de réutilisation non publiées."
+   },
+   {
+    "source_id": "events_rockhal",
+    "description": "Concerts à venir à la Rockhal (Esch-Belval)",
+    "url": "https://rockhal.lu/wp-json/rockhal/shows",
+    "license_spdx": "unspecified",
+    "data_origin": "official",
+    "commercial_use_safe": false,
+    "known_limitations": "API WordPress non documentée."
+   },
+   {
+    "source_id": "events_vdl_agenda",
+    "description": "Agenda des événements de la Ville de Luxembourg (RSS)",
+    "url": "https://www.vdl.lu/fr/agenda/rss.xml",
+    "license_spdx": "unspecified",
+    "data_origin": "official",
+    "commercial_use_safe": true,
+    "known_limitations": "Pas de lieu structuré ; pubDate utilisée comme date de l'événement."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_strikes_news",
+  "title": "Articles de presse sur les grèves",
+  "domain": "Actualité",
+  "row_count": 44,
+  "time_column": "published_at_utc",
+  "coverage": {
+   "from": "2013-11-05 08:00:00",
+   "to": "2026-10-11 07:00:00"
+  },
+  "last_collected_utc": "2026-11-25 18:09:22",
+  "standards": [
+   "RSS 2.0"
+  ],
+  "columns": [
+   {
+    "name": "article_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "title",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "country_code",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "publisher",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "url",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "collected_at_utc",
+    "type": "TIMESTAMP"
+   },
+   {
+    "name": "source_id",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "published_at_utc",
+    "type": "TIMESTAMP"
+   }
+  ],
+  "sources": [
+   {
+    "source_id": "strikes_news",
+    "description": "Articles de presse sur les grèves au Luxembourg et chez les voisins (Google News)",
+    "url": "https://news.google.com/rss/search",
+    "license_spdx": "unspecified",
+    "data_origin": "press",
+    "commercial_use_safe": false,
+    "known_limitations": "Agrégateur de presse : titre et lien uniquement (factual-only) ; pays déduit par mots-clés."
+   }
+  ]
+ },
+ {
+  "dataset": "gold_luxembourg_daily_context",
+  "title": "Contexte quotidien par canton",
+  "domain": "Synthèse",
+  "row_count": 924,
+  "time_column": "context_date",
+  "coverage": {
+   "from": "2026-09-10",
+   "to": "2026-11-25"
+  },
+  "last_collected_utc": null,
+  "standards": [],
+  "columns": [
+   {
+    "name": "context_date",
+    "type": "DATE"
+   },
+   {
+    "name": "canton",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "avg_temperature_c",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "min_temperature_c",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "max_temperature_c",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "total_precipitation_mm",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "max_wind_speed_kmh",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "max_european_aqi",
+    "type": "DOUBLE"
+   },
+   {
+    "name": "is_public_holiday",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "holiday_name",
+    "type": "VARCHAR"
+   },
+   {
+    "name": "is_school_holiday",
+    "type": "BOOLEAN"
+   },
+   {
+    "name": "new_traffic_events",
+    "type": "BIGINT"
+   },
+   {
+    "name": "active_roadworks",
+    "type": "BIGINT"
+   },
+   {
+    "name": "computed_at_utc",
+    "type": "TIMESTAMP"
+   }
+  ],
+  "sources": []
+ }
+]

@@ -1,17 +1,9 @@
--- Gold: Data Mart final des jours fériés légaux et traditions de la Grande Région (LU, FR, BE, DE, Lorraine)
+-- Gold jours fériés LU/FR/BE/DE et vacances scolaires LU
 SELECT
-    holiday_date,
-    TRY_CAST(holiday_date AS TIMESTAMP) AS observed_at_utc,
-    country_code,
-    country_name,
-    region_code,
-    holiday_name_fr AS holiday_name,
-    holiday_name_fr,
-    holiday_name_de,
-    holiday_name_lb,
-    is_legal_holiday,
-    is_customary_tradition,
-    is_school_vacation,
-    source_id
-FROM {{ ref('silver_holidays') }}
-WHERE holiday_date IS NOT NULL
+    * EXCLUDE (holiday_date, end_date),
+    CAST(holiday_date AS DATE) AS holiday_date,
+    CAST(end_date AS DATE) AS end_date
+FROM {{ ref('stg_holidays') }}
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY holiday_date, country_code, region_code, holiday_type ORDER BY collected_at_utc DESC
+) = 1
