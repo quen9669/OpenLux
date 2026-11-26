@@ -61,6 +61,7 @@ est régénéré par `scripts/build_reference_seeds.py` depuis les limites admin
 | `core/parsers_culture.py` | echo.lu, agenda VdL, Rockhal, RSS grèves. |
 | `core/gold.py` | Export Parquet par clé (`GOLD_KEYS`), registre des tables. |
 | `core/gold_query.py` | Lecture paramétrée (`?`), filtre rayon (haversine SQL), streaming CSV et GeoJSON, métadonnées mesurées. |
+| `core/checks.py` | Contrôles après dbt : validité par source (`run_results.json` + `manifest.json` → tables `gold_*` → `source_id`), chute de volume (< 50 % de la médiane des 5 derniers runs, sources avec `min_rows` > 0 seulement), `required_fields` vides. |
 | `core/quality.py` / `core/monitoring.py` | Trust Score (un échec de collecte vaut toujours `ERROR`), `obs_runs`, `STATUS.md`, `/v1/status`. |
 | `publish/opendata_lu.py`, `publish/tables.py` | Catalogue mesuré (volumes, couverture, sources, licences) → API, site, Data Package, DCAT-AP-LU. |
 | `api/main.py`, `mcp/server.py` | REST (`/v1/datasets`, `/v1/data`, `/v1/exports`, `/v1/status`) et 4 outils MCP. |
@@ -86,9 +87,10 @@ aspirées sur athome.lu (instantané figé d'un site commercial).
 
 ## 6. Qualité
 
-- `pytest` (73 tests, 100 % hors ligne) sur de **vraies réponses réduites** (`tests/fixtures/`, capturées le 24/11/2026).
-- `dbt test` : unicité des clés Gold, absence d'e-mail ou de téléphone dans les textes, points rattachés à un canton situés dans l'emprise du Luxembourg.
-- Trust Score = 0,35 × fraîcheur + 0,25 × complétude (`min_rows`) + 0,20 × validité + 0,20 × source (backup 80) ; échec de collecte ⇒ `ERROR` (< 60). La validité vaut 100 si la collecte a réussi : un `dbt seed/run/test` en échec arrête le pipeline avant l'export (rien n'est publié).
+- `pytest` (83 tests, 100 % hors ligne) sur de **vraies réponses réduites** (`tests/fixtures/`, capturées le 24/11/2026).
+- `dbt test` : unicité des clés Gold, absence d'e-mail ou de téléphone dans les textes, points rattachés à un canton situés dans l'emprise du Luxembourg (bloquants) ; `not_in_future` sur `observed_at_utc` des 6 tables d'observation (`models/gold/_gold_quality.yml`, `severity: warn`, non bloquant).
+- Trust Score = 0,35 × fraîcheur + 0,25 × complétude (`min_rows`) + 0,20 × validité + 0,20 × source (backup 80) ; échec de collecte ⇒ `ERROR` (< 60). Le pipeline collecte, lance dbt, **puis** note : la validité = % de nœuds dbt réussis touchant les tables Gold de la source. Validité < 100, champ requis vide ou chute de volume ⇒ `ATTENTION` (score ≤ 84), avec le constat dans `error_message` (« Anomalie » du site). Un `dbt seed/run/test` en erreur arrête l'export, mais `STATUS.md` est d'abord régénéré.
+- Fraîcheur de la donnée : le drawer du site affiche le max de la colonne temporelle (`coverage.to`) et son âge, distinct de la date de collecte.
 - `gold_luxembourg_daily_context` ne recalcule que la veille et le jour courant ; les jours antérieurs restent figés dans le Parquet.
 
 ## 7. Exposition

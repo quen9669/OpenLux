@@ -76,7 +76,8 @@ def build_monitoring_payload(
                 is_due = rem_sec <= 0
             except Exception:
                 pass
-        used = "backup" if (h.get("score_source") == 80.0 or st == "ATTENTION") else "primary"
+        # POURQUOI : ATTENTION peut venir d'un test dbt ou d'un volume, pas seulement du backup
+        used = "backup" if h.get("score_source") == 80.0 else "primary"
         url = src.backup.url if (used == "backup" and src.backup) else src.primary.url
         rows, min_r, score = (
             int(h.get("row_count", 0)),

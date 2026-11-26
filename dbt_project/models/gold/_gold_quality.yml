@@ -1,0 +1,40 @@
+version: 2
+# POURQUOI : une observation datée dans le futur est une prévision ou un fuseau mal lu.
+# severity warn : la source passe en ATTENTION (core/checks.py) sans bloquer l'export Gold.
+models:
+  - name: gold_weather_observations
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}
+  - name: gold_air_quality
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}
+  - name: gold_water_levels
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}
+  - name: gold_mobility_veloh
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}
+  - name: gold_mobility_parkings
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}
+  - name: gold_aviation
+    columns:
+      - name: observed_at_utc
+        data_tests:
+          - not_in_future:
+              config: {severity: warn}

@@ -6,6 +6,12 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+### Added
+- Validité dbt réelle par source (`core/checks.py`) : un test en échec ou en warn fait passer les sources concernées en ATTENTION, avec le nom du test dans `STATUS.md`, `/v1/status` et la page Supervision.
+- Détection de chute de volume (< 50 % de la médiane des 5 derniers runs) sur les sources à volume stable (`min_rows` > 0) ; les listes d'événements (alertes, bouchons, chantiers) en sont exclues.
+- `required_fields` déclarés pour les 45 sources et vérifiés à chaque collecte ; la page Supervision affiche « ✗ champs requis vides » au lieu d'un ✓ systématique.
+- Test dbt générique `not_in_future` (warn) sur les 6 tables d'observation ; fraîcheur de la donnée affichée dans le drawer du site.
+
 ### Fixed
 - Contexte quotidien : seuls hier et aujourd'hui sont recalculés ; en CI, les jours passés voyaient leurs compteurs trafic et chantiers écrasés par 0.
 - Un `dbt seed`, `run` ou `test` en échec arrête désormais le pipeline avant l'export Gold (code de sortie 1).
@@ -14,6 +20,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 - Clients HTTP jamais fermés (collecte, alertes) : `httpx.get`/`httpx.post` quand aucun client n'est fourni.
 
 ### Changed
+- `STATUS.md` est régénéré même quand dbt échoue ; la source « backup » n'est plus déduite du seul statut ATTENTION dans `/v1/status`.
 - GitHub Actions : `data/openlux.duckdb` restauré d'un run à l'autre (`actions/cache`) au lieu d'un artefact jamais relu ; les runs planifiés passent en `--due`.
 - Open-Meteo (météo, air, pollen) : fenêtre `past_days` 92 → 7 ; l'historique antérieur est déjà conservé dans le Parquet.
 

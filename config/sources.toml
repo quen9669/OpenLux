@@ -22,6 +22,7 @@ url = "https://metapi.ana.lu/api/v1/hvd/observations"
 [sources.backup]
 url = "https://data.public.lu/fr/datasets/r/0e03052d-0506-481d-8fd8-98d670103204"
 [sources.quality]
+required_fields = ["station_id", "observed_at", "temperature_c"]
 min_rows = 1
 
 [[sources]]
@@ -38,6 +39,7 @@ data_origin = "model"
 [sources.primary]
 url = "https://api.open-meteo.com/v1/forecast?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m,precipitation,weather_code&past_days=7&forecast_days=1"
 [sources.quality]
+required_fields = ["station_id", "observed_at", "temperature_c"]
 min_rows = 1000
 
 [[sources]]
@@ -54,6 +56,7 @@ data_origin = "model"
 [sources.primary]
 url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=pm10,pm2_5,nitrogen_dioxide,ozone,european_aqi&past_days=7&forecast_days=1"
 [sources.quality]
+required_fields = ["station_id", "observed_at", "pollutant", "value"]
 min_rows = 1000
 
 [[sources]]
@@ -69,6 +72,9 @@ license_spdx = "CC-BY-4.0"
 data_origin = "model"
 [sources.primary]
 url = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.61358,49.49309,49.63016,49.74921,50.06544,49.87246,49.77627,49.93862,49.98085,49.80034,49.67539,49.54787&longitude=6.12644,5.97888,6.00558,6.09748,6.05412,6.14802,5.88557,6.19842,5.9372,6.41226,6.41364,6.36027&hourly=birch_pollen,grass_pollen,alder_pollen,mugwort_pollen,ragweed_pollen&past_days=7&forecast_days=1"
+[sources.quality]
+min_rows = 1000
+required_fields = ["station_id", "observed_at", "pollutant", "value"]
 
 [[sources]]
 id = "water_levels_age"
@@ -86,6 +92,7 @@ url = "https://inondations.public.lu/dam-assets/ctie/datas/Water-Levels-LocalTim
 [sources.backup]
 url = "https://data.public.lu/fr/datasets/r/94fecbb1-4fce-4bee-8f2d-fc03b9fa314f"
 [sources.quality]
+required_fields = ["station_name", "observed_at", "water_level"]
 min_rows = 1000
 
 [[sources]]
@@ -102,6 +109,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://features.geoportail.lu/collections/656/items?f=json&limit=100"
 [sources.quality]
+required_fields = ["site_id", "bathing_status"]
 min_rows = 1
 
 [[sources]]
@@ -118,6 +126,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://features.geoportail.lu/collections/581/items?f=json&limit=100"
 [sources.quality]
+required_fields = ["site_id", "quality_class"]
 min_rows = 1
 
 # ───────────────────────────── TRAFIC & TRANSPORTS ─────────────────────────────
@@ -137,6 +146,8 @@ data_origin = "official"
 url = "https://www.cita.lu/info_trafic/datex/situationrecord"
 [sources.backup]
 url = "https://cita.lu/info_trafic/datex/situationrecord36"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "traffic_vdl_info"
@@ -151,6 +162,8 @@ license_spdx = "CC0-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/0/query?where=1%3D1&outFields=*&f=json&outSR=4326"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "traffic_fr_dir_est"
@@ -165,6 +178,8 @@ license_spdx = "etalab-2.0"
 data_origin = "official"
 [sources.primary]
 url = "http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "traffic_de_a1"
@@ -182,6 +197,8 @@ commercial_use_safe = false
 url = "https://verkehr.autobahn.de/o/autobahn/A1/services/warning"
 [sources.backup]
 url = "https://verkehr.autobahn.de/o/autobahn/A1/services/closure"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "traffic_de_a8"
@@ -199,6 +216,8 @@ commercial_use_safe = false
 url = "https://verkehr.autobahn.de/o/autobahn/A8/services/warning"
 [sources.backup]
 url = "https://verkehr.autobahn.de/o/autobahn/A8/services/closure"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "traffic_de_a64"
@@ -216,6 +235,8 @@ commercial_use_safe = false
 url = "https://verkehr.autobahn.de/o/autobahn/A64/services/warning"
 [sources.backup]
 url = "https://verkehr.autobahn.de/o/autobahn/A64/services/closure"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "rail_sncf_siri"
@@ -230,6 +251,8 @@ license_spdx = "ODbL-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://proxy.transport.data.gouv.fr/resource/sncf-siri-lite-situation-exchange"
+[sources.quality]
+required_fields = ["disruption_id", "title"]
 
 [[sources]]
 id = "rail_sncb_irail"
@@ -245,6 +268,8 @@ data_origin = "community"
 commercial_use_safe = false
 [sources.primary]
 url = "https://api.irail.be/disturbances/?format=json&lang=fr"
+[sources.quality]
+required_fields = ["disruption_id", "title"]
 
 [[sources]]
 id = "bus_vdl_messages"
@@ -259,6 +284,8 @@ license_spdx = "CC0-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://web.vdl.lu/autobus/data/messages/messages.xml"
+[sources.quality]
+required_fields = ["disruption_id"]
 
 [[sources]]
 id = "veloh_stations"
@@ -278,6 +305,7 @@ auth_env_var = "JCDECAUX_API_KEY"
 url = "https://api.cyclocity.fr/contracts/luxembourg/gbfs/v2/station_status.json"
 parser = "veloh_gbfs_status"
 [sources.quality]
+required_fields = ["station_number", "available_bikes"]
 min_rows = 50
 
 [[sources]]
@@ -294,6 +322,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://feed.vdl.lu/circulation/parking/feed.json"
 [sources.quality]
+required_fields = ["parking_id", "observed_at", "available_spaces"]
 min_rows = 10
 
 [[sources]]
@@ -310,6 +339,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://my.chargy.lu/b2bev-external-services/resources/kml?API-KEY=486ac6e4-93b8-4369-9c6a-28f7c4e1a81f"
 [sources.quality]
+required_fields = ["site_name", "lat", "lon"]
 min_rows = 100
 
 [[sources]]
@@ -328,6 +358,8 @@ commercial_use_safe = false
 url = "https://opensky-network.org/api/states/all?lamin=49.4&lomin=5.7&lamax=50.2&lomax=6.6"
 
 # ───────────────────────────── CHANTIERS ─────────────────────────────
+[sources.quality]
+required_fields = ["icao24", "observed_at", "lat", "lon"]
 
 [[sources]]
 id = "roadworks_cita_current"
@@ -342,6 +374,8 @@ license_spdx = "CC0-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://www.cita.lu/info_trafic/datex/chantierActuelDatex.xml"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "roadworks_cita_planned"
@@ -356,6 +390,8 @@ license_spdx = "CC0-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://www.cita.lu/info_trafic/datex/chantierFuturDatex.xml"
+[sources.quality]
+required_fields = ["event_id", "start_time_utc"]
 
 [[sources]]
 id = "roadworks_vdl"
@@ -370,6 +406,8 @@ license_spdx = "CC0-1.0"
 data_origin = "official"
 [sources.primary]
 url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/1/query?where=1%3D1&outFields=*&f=json&outSR=4326"
+[sources.quality]
+required_fields = ["work_id", "start_time_utc"]
 
 [[sources]]
 id = "roadworks_vdl_permits"
@@ -386,6 +424,8 @@ data_origin = "official"
 url = "https://maps.vdl.lu/arcgis/rest/services/DYNDATA/TRAFIC_INFO/FeatureServer/5/query?where=1%3D1&outFields=*&f=json&outSR=4326"
 
 # ───────────────────────────── ÉCONOMIE & LOGEMENT ─────────────────────────────
+[sources.quality]
+required_fields = ["work_id", "start_time_utc"]
 
 [[sources]]
 id = "fuel_prices_lu"
@@ -401,6 +441,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/d3a17cf8-5afc-4bf5-8222-9519e343d29d"
 [sources.quality]
+required_fields = ["energy_type", "reference_month", "price_eur"]
 min_rows = 7
 
 [[sources]]
@@ -418,6 +459,7 @@ data_origin = "official"
 url = "https://lustat.statec.lu/rest/data/LU1,DSD_PRIX_CONSO@DF_E5100,1.0/all?dimensionAtObservation=AllDimensions"
 headers = { Accept = "application/vnd.sdmx.data+csv;version=2.0.0;labels=name" }
 [sources.quality]
+required_fields = ["time_period", "obs_value"]
 min_rows = 100
 
 [[sources]]
@@ -434,6 +476,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://api.energy-charts.info/price?bzn=DE-LU&start={last_year}-01-01&end={today}"
 [sources.quality]
+required_fields = ["observed_at", "price_eur_per_mwh"]
 min_rows = 96
 
 [[sources]]
@@ -451,6 +494,7 @@ data_origin = "official"
 url = "https://lustat.statec.lu/rest/data/LU1,DF_D4113/all?dimensionAtObservation=AllDimensions"
 headers = { Accept = "application/vnd.sdmx.data+csv;version=2.0.0;labels=name" }
 [sources.quality]
+required_fields = ["canton", "time_period", "obs_value"]
 min_rows = 100
 
 [[sources]]
@@ -467,6 +511,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/1d20f982-57e1-4ae2-a278-dc78c88c21dc"
 [sources.quality]
+required_fields = ["commune_name", "reference_year"]
 min_rows = 100
 
 [[sources]]
@@ -483,6 +528,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/14b0156e-ff87-4a36-a867-933fc9a6f903"
 [sources.quality]
+required_fields = ["commune_name", "reference_year"]
 min_rows = 100
 
 [[sources]]
@@ -499,6 +545,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/7bc964ea-7744-4860-ae84-24cc0ef3777d"
 [sources.quality]
+required_fields = ["commune_name", "reference_month", "sex", "job_seekers"]
 min_rows = 1000
 
 # ───────────────────────────── CALENDRIER ─────────────────────────────
@@ -520,6 +567,7 @@ url = "https://data.public.lu/fr/datasets/r/9dd69c71-f55e-4124-87b8-4a54ba528335
 url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=LU&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
 parser = "openholidays_lu"
 [sources.quality]
+required_fields = ["holiday_date", "holiday_type"]
 min_rows = 10
 
 [[sources]]
@@ -536,6 +584,7 @@ data_origin = "community"
 [sources.primary]
 url = "https://openholidaysapi.org/SchoolHolidays?countryIsoCode=LU&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
 [sources.quality]
+required_fields = ["holiday_date", "holiday_type"]
 min_rows = 5
 
 [[sources]]
@@ -551,6 +600,8 @@ license_spdx = "unspecified"
 data_origin = "community"
 [sources.primary]
 url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=FR&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+[sources.quality]
+required_fields = ["holiday_date", "holiday_type"]
 
 [[sources]]
 id = "holidays_be"
@@ -565,6 +616,8 @@ license_spdx = "unspecified"
 data_origin = "community"
 [sources.primary]
 url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=BE&languageIsoCode=FR&validFrom={last_year}-01-01&validTo={next_year}-12-31"
+[sources.quality]
+required_fields = ["holiday_date", "holiday_type"]
 
 [[sources]]
 id = "holidays_de"
@@ -581,6 +634,8 @@ data_origin = "community"
 url = "https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom={last_year}-01-01&validTo={next_year}-12-31"
 
 # ───────────────────────────── SANTÉ, ALERTES, ÉQUIPEMENTS ─────────────────────────────
+[sources.quality]
+required_fields = ["holiday_date", "holiday_type"]
 
 [[sources]]
 id = "weather_warnings_meteoalarm"
@@ -595,6 +650,8 @@ license_spdx = "CC-BY-4.0"
 data_origin = "official"
 [sources.primary]
 url = "https://feeds.meteoalarm.org/api/v1/warnings/feeds-luxembourg"
+[sources.quality]
+required_fields = ["alert_id", "area", "onset_utc"]
 
 [[sources]]
 id = "aed_osm"
@@ -611,6 +668,9 @@ data_origin = "community"
 url = "https://overpass.kumi.systems/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3Bnode%5B%22emergency%22%3D%22defibrillator%22%5D%2849.44%2C5.73%2C50.19%2C6.53%29%3Bout%3B"
 [sources.backup]
 url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3Bnode%5B%22emergency%22%3D%22defibrillator%22%5D%2849.44%2C5.73%2C50.19%2C6.53%29%3Bout%3B"
+[sources.quality]
+min_rows = 100
+required_fields = ["item_id", "lat", "lon"]
 
 [[sources]]
 id = "recycling_centers"
@@ -626,6 +686,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/be8c3b2e-88d3-4ddb-955c-40b354123d29"
 [sources.quality]
+required_fields = ["item_id", "lat", "lon"]
 min_rows = 10
 
 [[sources]]
@@ -642,6 +703,7 @@ data_origin = "official"
 [sources.primary]
 url = "https://data.geoportail.lu/mymaps?category=106&format=geojson"
 [sources.quality]
+required_fields = ["route_id"]
 min_rows = 100
 
 # ───────────────────────────── VIE CIVIQUE ─────────────────────────────
@@ -661,6 +723,7 @@ factual_only = true
 [sources.primary]
 url = "https://data.public.lu/fr/datasets/r/6c43ab5c-8fc2-493b-822a-35793ac1c840"
 [sources.quality]
+required_fields = ["petition_id", "filing_date"]
 min_rows = 1000
 
 # ───────────────────────────── CULTURE & ACTUALITÉ ─────────────────────────────
@@ -681,6 +744,7 @@ factual_only = true
 [sources.primary]
 url = "https://py7g9mvxe2-dsn.algolia.net/1/indexes/prod_experiences.compact?x-algolia-application-id=PY7G9MVXE2&x-algolia-api-key=55301c0ef2e535ae29e6b6d697f4882d&query=&hitsPerPage=1000&attributesToRetrieve=objectID,experienceId,from,to,isFree,communes,_geoloc,rawExperience.title,rawExperience.categories,rawExperience.tickets,rawVenues.title&attributesToHighlight=&numericFilters=to_timestamp%3E%3D{now_ms}"
 [sources.quality]
+required_fields = ["event_id", "start_utc", "title"]
 min_rows = 100
 
 [[sources]]
@@ -697,6 +761,8 @@ data_origin = "official"
 factual_only = true
 [sources.primary]
 url = "https://www.vdl.lu/fr/agenda/rss.xml"
+[sources.quality]
+required_fields = ["event_id", "start_utc", "title"]
 
 [[sources]]
 id = "events_rockhal"
@@ -713,6 +779,8 @@ commercial_use_safe = false
 factual_only = true
 [sources.primary]
 url = "https://rockhal.lu/wp-json/rockhal/shows"
+[sources.quality]
+required_fields = ["event_id", "start_utc", "title"]
 
 [[sources]]
 id = "strikes_news"
@@ -731,3 +799,5 @@ factual_only = true
 url = "https://news.google.com/rss/search?q=gr%C3%A8ve+Luxembourg&hl=fr&gl=LU&ceid=LU:fr"
 [sources.backup]
 url = "https://www.rtl.lu/rss/national"
+[sources.quality]
+required_fields = ["article_id", "published_at_utc"]

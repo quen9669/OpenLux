@@ -20,6 +20,7 @@ from typing import Any
 import duckdb
 
 from openlux.config import SourceConfig, load_sources_config
+from openlux.core.checks import dbt_validity_by_source, run_checks
 from openlux.core.collector import CollectorResult, collect_source
 from openlux.core.gold import export_gold_parquets
 from openlux.core.monitoring import generate_status_markdown, send_alert_if_needed
@@ -65,25 +66,30 @@ def _is_due(source: SourceConfig, last_iso: str | None) -> bool:
     return True
 
 
-def _collect_and_record(
-    con: duckdb.DuckDBPyConnection,
-    sid: str,
-    src: SourceConfig,
-    r_id: str,
-    prev: dict[str, Any],
-    past: list[str],
-) -> None:
+def _collect(sid: str, src: SourceConfig, prev: dict[str, Any]) -> CollectorResult:
     try:
-        res = collect_source(
-            src, last_sha256=prev.get("sha256"), last_changed_utc=prev.get("last_changed_utc")
-        )
+        sha, changed = prev.get("sha256"), prev.get("last_changed_utc")
+        return collect_source(src, last_sha256=sha, last_changed_utc=changed)
     except Exception as exc:
         n = datetime.now(UTC).isoformat()
-        res = CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
-    m = calculate_trust_score(src, res.status, res.source_used, res.row_count, res.checked_at_utc)
-    meta = (res.checked_at_utc, res.changed_at_utc, res.sha256, res.error_message)
-    record_run(con, r_id, sid, "git_v1", m, res.row_count, *meta)
-    send_alert_if_needed(sid, m.status, past)
+        return CollectorResult(sid, "ERROR", "none", "", 0, b"", None, n, n, str(exc))
+
+
+def _score_and_record(
+    con: duckdb.DuckDBPyConnection,
+    src: SourceConfig,
+    res: CollectorResult,
+    r_id: str,
+    past: list[dict[str, Any]],
+    validity: dict[str, tuple[float, list[str]]],
+) -> None:
+    rows = [h["row_count"] for h in past]
+    v_score, req_ok, notes = run_checks(res, src.quality, rows, validity)
+    args = (res.status, res.source_used, res.row_count, res.checked_at_utc, v_score, req_ok)
+    m = calculate_trust_score(src, *args)
+    meta = (res.checked_at_utc, res.changed_at_utc, res.sha256, " | ".join(notes) or None)
+    record_run(con, r_id, res.source_id, "git_v1", m, res.row_count, *meta)
+    send_alert_if_needed(res.source_id, m.status, [h["status"] for h in past])
 
 
 def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False) -> int:
@@ -91,30 +97,31 @@ def run_pipeline(sources_filter: list[str] | None = None, due_only: bool = False
     db_p.parent.mkdir(parents=True, exist_ok=True)
     with _connect_db(str(db_p)) as con:
         init_obs_runs_table(con)
-        health, r_id = get_latest_source_health(con), str(uuid.uuid4())
-        history = get_source_run_history(con)
-        selected = {
-            s: c
-            for s, c in sources.items()
-            if (sources_filter is None or s in sources_filter)
-            and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
-        }
-        for sid, src in selected.items():
-            past = [h["status"] for h in history.get(sid, [])]
-            _collect_and_record(con, sid, src, r_id, health.get(sid, {}), past)
+        health, history = get_latest_source_health(con), get_source_run_history(con)
+    selected = {
+        s: c
+        for s, c in sources.items()
+        if (sources_filter is None or s in sources_filter)
+        and (not due_only or _is_due(c, health.get(s, {}).get("last_checked_utc")))
+    }
+    # POURQUOI : la note de validité vient des tests dbt -> collecter, lancer dbt, puis noter
+    results = {sid: _collect(sid, src, health.get(sid, {})) for sid, src in selected.items()}
     ensure_bronze_placeholders(sources)
-    for c in [("seed", "--full-refresh"), ("run",), ("test",)]:
-        if not _run_dbt_command(*c):
-            # POURQUOI : un modèle ou un test dbt en échec ne doit jamais être publié comme sain
-            print(f"dbt {c[0]} en échec : export Gold annulé.", file=sys.stderr)
-            return 1
+    dbt_ok = all(_run_dbt_command(*c) for c in [("seed", "--full-refresh"), ("run",), ("test",)])
+    with _connect_db(str(db_p)) as con:
+        validity, r_id = (dbt_validity_by_source(con) if results else {}), str(uuid.uuid4())
+        for sid, res in results.items():
+            _score_and_record(con, sources[sid], res, r_id, history.get(sid, []), validity)
+        generate_status_markdown(sources, get_latest_source_health(con))
+    if not dbt_ok:
+        # POURQUOI : un modèle ou un test dbt en échec ne doit jamais être publié comme sain
+        print("dbt en échec : export Gold annulé (voir STATUS.md).", file=sys.stderr)
+        return 1
     export_gold_parquets()
     from openlux.publish.opendata_lu import publish_to_data_public_lu, write_site_catalog
 
     publish_to_data_public_lu(dry_run=True)
     write_site_catalog()
-    with _connect_db(str(db_p), read_only=True) as con_r:
-        generate_status_markdown(sources, get_latest_source_health(con_r))
     return 0
 
 

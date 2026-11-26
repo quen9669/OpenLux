@@ -72,15 +72,18 @@ def calculate_trust_score(
     s_val = 0.0 if collector_status == "ERROR" else dbt_validity
     s_src = 100.0 if source_used == "primary" else (80.0 if source_used == "backup" else 0.0)
     score = round(0.35 * s_fresh + 0.25 * s_comp + 0.20 * s_val + 0.20 * s_src, 1)
+    # POURQUOI : un test dbt en échec ou un champ requis vide suffit à refuser le statut GOOD
+    warn = source_used == "backup" or collector_status == "ATTENTION" or s_val < 100.0
+    warn = warn or not has_required_fields
     # POURQUOI : une collecte en échec (primaire et backup) ne peut jamais être affichée saine
     status = (
         "ERROR"
         if collector_status == "ERROR"
         else "ATTENTION"
-        if (source_used == "backup" or collector_status == "ATTENTION")
+        if warn
         else ("GOOD" if score >= 85.0 else ("ATTENTION" if score >= 60.0 else "ERROR"))
     )
-    if source_used == "backup" or collector_status == "ATTENTION":
+    if warn:
         score = min(score, 84.0)
     score = min(score, 59.0) if collector_status == "ERROR" else score
     return QualityMetrics(score, status, s_fresh, s_comp, s_val, s_src)

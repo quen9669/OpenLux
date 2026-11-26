@@ -279,7 +279,7 @@ function renderMonitoringV2() {
             ${rowsStatus}
           </div>
           <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.15rem;">
-            ✓ ${(s.required_fields || []).length} champs requis certifiés
+            ${(s.error_message || "").includes("Champs requis vides") ? "✗ champs requis vides" : `✓ ${(s.required_fields || []).length} champs requis remplis`}
           </div>
         </td>
         <td>
@@ -324,6 +324,16 @@ function healthOfV2(d) {
   if (st.includes("ERROR")) return ["ERROR", "var(--gov-danger)"];
   if (st.includes("ATTENTION")) return ["ATTENTION", "var(--gov-warning)"];
   return ["GOOD", "var(--gov-green)"];
+}
+
+// Fraîcheur de la DONNÉE (max de la colonne temporelle), distincte de la date de collecte
+function freshnessV2(d) {
+  const to = d.coverage && d.coverage.to ? String(d.coverage.to) : "";
+  const t = Date.parse(to.length > 10 ? to.replace(" ", "T").slice(0, 19) + "Z" : to);
+  if (isNaN(t)) return d.time_column ? `colonne ${d.time_column}` : "";
+  const h = (Date.now() - t) / 36e5;
+  const age = h < 0 ? "dans le futur" : h < 48 ? `il y a ${Math.round(h)} h` : `il y a ${Math.round(h / 24)} j`;
+  return `Donnée la plus récente : ${to.slice(0, 16)} UTC (${age}) — colonne ${d.time_column}`;
 }
 
 function coverageV2(d) {
@@ -395,7 +405,7 @@ function openDrawerV2(datasetName) {
   linkEl.href = first.url || "#";
   linkEl.textContent = first.url || "—";
   setText("drawerCadenceV2", coverageV2(d));
-  setText("drawerSlaV2", d.time_column ? `colonne ${d.time_column}` : "");
+  setText("drawerSlaV2", freshnessV2(d));
   setText("drawerLastRefreshV2", d.last_collected_utc || "—");
   const h = healthOfV2(d);
   setText("drawerStatusV2", h ? `Statut des sources : ${h[0]}` : "Statut : API de supervision non joignable");
