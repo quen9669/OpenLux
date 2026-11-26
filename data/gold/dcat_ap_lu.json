@@ -14,7 +14,7 @@
       "title": "Météo horaire (station Findel + 12 cantons)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 169911,
+      "byteSize": 172225,
       "license": [
         "CC-BY-4.0",
         "CC0-1.0"
@@ -25,7 +25,7 @@
       "title": "Qualité de l'air et pollens (modèle CAMS)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 493026,
+      "byteSize": 423970,
       "license": [
         "CC-BY-4.0"
       ]
@@ -35,7 +35,7 @@
       "title": "Niveaux d'eau des rivières (15 min)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_water_levels.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 52225,
+      "byteSize": 52881,
       "license": [
         "CC0-1.0"
       ]
@@ -55,7 +55,7 @@
       "title": "Vigilances météo MeteoLux",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_warnings.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 2088,
+      "byteSize": 2095,
       "license": [
         "CC-BY-4.0"
       ]
@@ -65,7 +65,7 @@
       "title": "Événements trafic LU et frontaliers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 8146,
+      "byteSize": 8723,
       "license": [
         "CC0-1.0",
         "etalab-2.0"
@@ -76,7 +76,7 @@
       "title": "Chantiers routiers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_roadworks.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 20413,
+      "byteSize": 20585,
       "license": [
         "CC0-1.0"
       ]
@@ -86,7 +86,7 @@
       "title": "Perturbations bus et trains",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_transit_disruptions.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 5027,
+      "byteSize": 5218,
       "license": [
         "CC0-1.0",
         "ODbL-1.0",
@@ -98,7 +98,7 @@
       "title": "Disponibilités Vel'oh",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 13057,
+      "byteSize": 14210,
       "license": [
         "unspecified"
       ]
@@ -108,7 +108,7 @@
       "title": "Occupation des parkings (Ville)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 4844,
+      "byteSize": 4949,
       "license": [
         "CC0-1.0"
       ]
@@ -118,7 +118,7 @@
       "title": "Bornes de recharge Chargy",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_chargy_stations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 31917,
+      "byteSize": 32505,
       "license": [
         "CC0-1.0"
       ]
@@ -158,7 +158,7 @@
       "title": "Prix spot électricité DE-LU",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_electricity_spot.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 308004,
+      "byteSize": 308650,
       "license": [
         "CC-BY-4.0"
       ]
@@ -188,7 +188,7 @@
       "title": "Prix annoncés par commune (Observatoire)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_housing_prices.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 42315,
+      "byteSize": 42188,
       "license": [
         "CC0-1.0"
       ]
@@ -198,7 +198,7 @@
       "title": "Jours fériés LU/FR/BE/DE et vacances",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_holidays.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 5223,
+      "byteSize": 5183,
       "license": [
         "CC0-1.0",
         "unspecified"
@@ -209,7 +209,7 @@
       "title": "Équipements : recyclage, DAE, vélo",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_equipment.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 32909,
+      "byteSize": 32907,
       "license": [
         "CC0-1.0",
         "ODbL-1.0"
@@ -220,7 +220,7 @@
       "title": "Pétitions à la Chambre des Députés",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_petitions.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 124901,
+      "byteSize": 124904,
       "license": [
         "CC0-1.0"
       ]
@@ -230,7 +230,7 @@
       "title": "Agenda culturel",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_culture_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 83768,
+      "byteSize": 86022,
       "license": [
         "unspecified"
       ]
@@ -240,7 +240,7 @@
       "title": "Articles de presse sur les grèves",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_news.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 42145,
+      "byteSize": 42501,
       "license": [
         "unspecified"
       ]
@@ -250,7 +250,7 @@
       "title": "Contexte quotidien par canton",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 11962,
+      "byteSize": 12098,
       "license": []
     }
   ]
