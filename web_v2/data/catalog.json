@@ -3,7 +3,7 @@
   "dataset": "gold_weather_observations",
   "title": "Météo horaire (station Findel + 12 cantons)",
   "domain": "Environnement",
-  "row_count": 22470,
+  "row_count": 22471,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-09-10 00:00:00",
@@ -126,7 +126,7 @@
    "from": "2026-08-25 00:00:00",
    "to": "2026-11-26 23:00:00"
   },
-  "last_collected_utc": "2026-11-26 01:53:06",
+  "last_collected_utc": "2026-11-26 08:33:30",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -374,9 +374,9 @@
   "time_column": "collected_at_utc",
   "coverage": {
    "from": "2026-11-25 18:06:46",
-   "to": "2026-11-26 01:53:32"
+   "to": "2026-11-26 08:34:08"
   },
-  "last_collected_utc": "2026-11-26 01:53:32",
+  "last_collected_utc": "2026-11-26 08:34:08",
   "standards": [
    "CAP 1.2"
   ],
@@ -438,7 +438,7 @@
   "dataset": "gold_traffic_events",
   "title": "Événements trafic LU et frontaliers",
   "domain": "Mobilité",
-  "row_count": 85,
+  "row_count": 90,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2023-03-24 17:30:00",
@@ -534,6 +534,15 @@
     "known_limitations": "Autoroutes et voies express uniquement."
    },
    {
+    "source_id": "traffic_de_a1",
+    "description": "Alertes trafic A1 autour de Trèves / Sarre (API Autobahn GmbH)",
+    "url": "https://verkehr.autobahn.de/o/autobahn/A1/services/warning",
+    "license_spdx": "unspecified",
+    "data_origin": "official",
+    "commercial_use_safe": false,
+    "known_limitations": "Filtré sur la zone lat 49,3–50,1 / lon 6,0–7,2 ; licence non précisée par l'API."
+   },
+   {
     "source_id": "traffic_fr_dir_est",
     "description": "Événements routiers en Lorraine nord (A31/A30, Bison Futé / DIR Est, DATEX II)",
     "url": "http://tipi.bison-fute.gouv.fr/bison-fute-ouvert/publicationsDIR/Evenementiel-DIR/grt/RRN/content.xml",
@@ -557,7 +566,7 @@
   "dataset": "gold_roadworks",
   "title": "Chantiers routiers",
   "domain": "Mobilité",
-  "row_count": 347,
+  "row_count": 350,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2020-05-28 22:00:00",
@@ -673,7 +682,7 @@
   "dataset": "gold_transit_disruptions",
   "title": "Perturbations bus et trains",
   "domain": "Mobilité",
-  "row_count": 29,
+  "row_count": 34,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2026-05-03 02:00:00",
@@ -767,7 +776,7 @@
   "dataset": "gold_mobility_veloh",
   "title": "Disponibilités Vel'oh",
   "domain": "Mobilité",
-  "row_count": 447,
+  "row_count": 586,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2025-05-28 01:38:59",
@@ -872,7 +881,7 @@
   "dataset": "gold_mobility_parkings",
   "title": "Occupation des parkings (Ville)",
   "domain": "Mobilité",
-  "row_count": 174,
+  "row_count": 232,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:00",
@@ -976,7 +985,7 @@
   "dataset": "gold_chargy_stations",
   "title": "Bornes de recharge Chargy",
   "domain": "Mobilité",
-  "row_count": 3144,
+  "row_count": 3668,
   "time_column": "collected_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:54",
@@ -1060,7 +1069,7 @@
   "dataset": "gold_aviation",
   "title": "Aéronefs au-dessus du Luxembourg",
   "domain": "Mobilité",
-  "row_count": 38,
+  "row_count": 44,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:39",
@@ -1252,7 +1261,7 @@
    "from": "2024-12-31 23:00:00",
    "to": "2026-11-26 22:45:00"
   },
-  "last_collected_utc": "2026-11-26 01:53:22",
+  "last_collected_utc": "2026-11-26 08:33:56",
   "standards": [],
   "columns": [
    {
@@ -1594,10 +1603,10 @@
   "row_count": 1021,
   "time_column": "collected_at_utc",
   "coverage": {
-   "from": "2026-11-26 01:53:33",
-   "to": "2026-11-26 01:57:13"
+   "from": "2026-11-26 01:57:12",
+   "to": "2026-11-26 08:34:09"
   },
-  "last_collected_utc": "2026-11-26 01:57:13",
+  "last_collected_utc": "2026-11-26 08:34:09",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],

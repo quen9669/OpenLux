@@ -14,8 +14,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 22470,
-      "sha256": "0766ec6a45589c1a2b5f77e0427f839c193de772a699b75c03b258554d22442d",
+      "row_count": 22471,
+      "sha256": "3c62709b320ae7781ca29f5b5c56ea41490e45766b9dec78e532347566f5f5c3",
       "licenses": [
         "CC-BY-4.0",
         "CC0-1.0"
@@ -123,7 +123,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 270720,
-      "sha256": "cda2eb43a563b40982bca7eb61d799511fce6ab49e2e3c90caa1bbe18981df0c",
+      "sha256": "85dde83acf1f2a8c62139e0f803832a5629336d3a0713cda2918dc4cb8b634ea",
       "licenses": [
         "CC-BY-4.0"
       ],
@@ -352,7 +352,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 6,
-      "sha256": "96ba629976a69f4356dda6e081ce4d8a23bcf1616d133a8fba0eec9de1ce86ba",
+      "sha256": "600b985ea8ac7b65d8056da71818461d750006c086d846e3cbf57d6071cfa122",
       "licenses": [
         "CC-BY-4.0"
       ],
@@ -414,16 +414,21 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 85,
-      "sha256": "585d121e2517ab796570d40287096bc5bcb4e06658ff10e34e7ae1c1c0feff49",
+      "row_count": 90,
+      "sha256": "1f18c246165b9a3d778b6eb352fa7a78e2c6a69b3674bd0a25639eded244e518",
       "licenses": [
         "CC0-1.0",
-        "etalab-2.0"
+        "etalab-2.0",
+        "unspecified"
       ],
       "sources": [
         {
           "title": "traffic_cita_datex2",
           "path": "https://www.cita.lu/info_trafic/datex/situationrecord"
+        },
+        {
+          "title": "traffic_de_a1",
+          "path": "https://verkehr.autobahn.de/o/autobahn/A1/services/warning"
         },
         {
           "title": "traffic_fr_dir_est",
@@ -518,8 +523,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 347,
-      "sha256": "83286a018d3fae1e6d83d60d1ab26597486fc3d61f2906a5e96e4b3acaa540ed",
+      "row_count": 350,
+      "sha256": "daad9e21cdd281bdda0d1357072e52b6cdebaabd5585371dba38ef27620b7bae",
       "licenses": [
         "CC0-1.0"
       ],
@@ -613,8 +618,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 29,
-      "sha256": "a7a423c2fc21db7165f95baa292b625f13ea05025837d1782c168ad35fff927d",
+      "row_count": 34,
+      "sha256": "96e13d7ddd985da6b208c13c3ccff96215d96ffd0d1b8bdf2ef010f6786c2e6b",
       "licenses": [
         "CC0-1.0",
         "ODbL-1.0",
@@ -694,8 +699,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 447,
-      "sha256": "965f574f6532cd76e5d1361f8c68a599e70e99ddba4a097d2d27bf2a5473c0f7",
+      "row_count": 586,
+      "sha256": "5525d10d9029bc7a55eb41c090ce9327da75e7d5d40486509810cdc439445ea7",
       "licenses": [
         "unspecified"
       ],
@@ -793,8 +798,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 174,
-      "sha256": "50fa477bce780888159848e88b3732f41e1f06f01927169864ca7f92b8c0f94b",
+      "row_count": 232,
+      "sha256": "b602f4137c39798caaa80c1530017087914ff43f6641e02c73b35807b6ebcc58",
       "licenses": [
         "CC0-1.0"
       ],
@@ -892,8 +897,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 3144,
-      "sha256": "afd0f8ed6d19e757ec04a4c0020827f71cb930d7c98633dc0ee04fc0415641cb",
+      "row_count": 3668,
+      "sha256": "437c13302e6620d30ccd6303fa3e4596dd4c5ec9879a9e8674e1f721609bc85e",
       "licenses": [
         "CC0-1.0"
       ],
@@ -971,8 +976,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 38,
-      "sha256": "693529f2767165a55fee92b27eab4aa706e497aaf5e8575e88356e78ed32edaf",
+      "row_count": 44,
+      "sha256": "c0940957d6aea64926d3fa0e684419591487d1da21b4f4609b56fd4e6177fde3",
       "licenses": [
         "unspecified"
       ],
@@ -1145,7 +1150,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 47067,
-      "sha256": "b8d40e06fcc0b8738a9385fe407b18f24c05a33e4a8b23f0446c7a88869d2116",
+      "sha256": "d65997be19abdc7180fe933c20b8e45792334a308d32b2565af398f1cbf39eb8",
       "licenses": [
         "CC-BY-4.0"
       ],
@@ -1449,7 +1454,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 1021,
-      "sha256": "e8650a1cf9b27510f77f1d9508ac654f2fe5e581f1c392f26a46da6fb0852857",
+      "sha256": "b1bc1c16f107bed154f34cfc0c474ea0151877a53bc9a54c819945cd6cdd34c5",
       "licenses": [
         "CC0-1.0",
         "ODbL-1.0"
@@ -1584,7 +1589,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 1177,
-      "sha256": "0ba6227baf75eb38b1b03255386b55c09aa9c416260a65d7716dbcce2b6120c9",
+      "sha256": "c7b5920e20800853c4b88c3a4ad562f20f0ec898cef99a8e07c77a3813a18670",
       "licenses": [
         "unspecified"
       ],
@@ -1683,7 +1688,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 110,
-      "sha256": "365283adb322efc46c5d2747ef30ec078f7f281ebdbd506f00164752e9df97a4",
+      "sha256": "296b65a8d2f9c104bc7956f64fcbfb273254ece13e4c3e72705161ac77781847",
       "licenses": [
         "unspecified"
       ],
