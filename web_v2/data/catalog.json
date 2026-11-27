@@ -3,13 +3,13 @@
   "dataset": "gold_weather_observations",
   "title": "Météo horaire (station Findel + 12 cantons)",
   "domain": "Environnement",
-  "row_count": 22472,
+  "row_count": 22761,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-09-10 00:00:00",
-   "to": "2026-11-26 23:00:00"
+   "to": "2026-11-27 23:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:45",
+  "last_collected_utc": "2026-11-27 02:33:50",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -120,13 +120,13 @@
   "dataset": "gold_air_quality",
   "title": "Qualité de l'air et pollens (modèle CAMS)",
   "domain": "Environnement",
-  "row_count": 270720,
+  "row_count": 273600,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-08-25 00:00:00",
-   "to": "2026-11-26 23:00:00"
+   "to": "2026-11-27 23:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:46",
+  "last_collected_utc": "2026-11-27 02:33:51",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -221,13 +221,13 @@
   "dataset": "gold_water_levels",
   "title": "Niveaux d'eau des rivières (15 min)",
   "domain": "Environnement",
-  "row_count": 32503,
+  "row_count": 33040,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-18 17:45:00",
-   "to": "2026-11-26 19:30:00"
+   "to": "2026-11-26 22:45:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:47",
+  "last_collected_utc": "2026-11-27 02:33:51",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -438,13 +438,13 @@
   "dataset": "gold_traffic_events",
   "title": "Événements trafic LU et frontaliers",
   "domain": "Mobilité",
-  "row_count": 96,
+  "row_count": 102,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2023-03-24 17:30:00",
-   "to": "2026-11-30 05:30:00"
+   "to": "2026-11-30 06:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:51",
+  "last_collected_utc": "2026-11-27 02:33:54",
   "standards": [
    "DATEX II (CEN/TS 16157)",
    "GeoJSON (EPSG:4326)"
@@ -566,13 +566,13 @@
   "dataset": "gold_roadworks",
   "title": "Chantiers routiers",
   "domain": "Mobilité",
-  "row_count": 353,
+  "row_count": 356,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2020-05-28 22:00:00",
    "to": "2027-03-01 06:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:44:00",
+  "last_collected_utc": "2026-11-27 02:34:02",
   "standards": [
    "DATEX II (CEN/TS 16157)",
    "GeoJSON (EPSG:4326)"
@@ -682,13 +682,13 @@
   "dataset": "gold_transit_disruptions",
   "title": "Perturbations bus et trains",
   "domain": "Mobilité",
-  "row_count": 35,
+  "row_count": 37,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2026-05-03 02:00:00",
    "to": "2026-11-27 19:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:56",
+  "last_collected_utc": "2026-11-27 02:33:58",
   "standards": [
    "SIRI SX"
   ],
@@ -776,13 +776,13 @@
   "dataset": "gold_mobility_veloh",
   "title": "Disponibilités Vel'oh",
   "domain": "Mobilité",
-  "row_count": 725,
+  "row_count": 864,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2025-05-28 01:38:59",
-   "to": "2026-11-26 19:43:52"
+   "to": "2026-11-27 02:33:52"
   },
-  "last_collected_utc": "2026-11-26 19:43:57",
+  "last_collected_utc": "2026-11-27 02:33:59",
   "standards": [
    "GBFS 2.3",
    "GeoJSON (EPSG:4326)"
@@ -881,13 +881,13 @@
   "dataset": "gold_mobility_parkings",
   "title": "Occupation des parkings (Ville)",
   "domain": "Mobilité",
-  "row_count": 261,
+  "row_count": 290,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:00",
-   "to": "2026-11-26 19:42:00"
+   "to": "2026-11-27 02:33:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:57",
+  "last_collected_utc": "2026-11-27 02:34:00",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -985,13 +985,13 @@
   "dataset": "gold_chargy_stations",
   "title": "Bornes de recharge Chargy",
   "domain": "Mobilité",
-  "row_count": 4192,
+  "row_count": 4716,
   "time_column": "collected_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:54",
-   "to": "2026-11-26 19:43:58"
+   "to": "2026-11-27 02:34:00"
   },
-  "last_collected_utc": "2026-11-26 19:43:58",
+  "last_collected_utc": "2026-11-27 02:34:00",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1069,13 +1069,13 @@
   "dataset": "gold_aviation",
   "title": "Aéronefs au-dessus du Luxembourg",
   "domain": "Mobilité",
-  "row_count": 50,
+  "row_count": 51,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:39",
-   "to": "2026-11-26 19:43:49"
+   "to": "2026-11-27 02:33:49"
   },
-  "last_collected_utc": "2026-11-26 19:43:59",
+  "last_collected_utc": "2026-11-27 02:34:01",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1255,13 +1255,13 @@
   "dataset": "gold_electricity_spot",
   "title": "Prix spot électricité DE-LU",
   "domain": "Économie",
-  "row_count": 47067,
+  "row_count": 47163,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2024-12-31 23:00:00",
-   "to": "2026-11-26 22:45:00"
+   "to": "2026-11-27 22:45:00"
   },
-  "last_collected_utc": "2026-11-26 08:33:56",
+  "last_collected_utc": "2026-11-27 02:34:06",
   "standards": [],
   "columns": [
    {
@@ -1752,13 +1752,13 @@
   "dataset": "gold_culture_events",
   "title": "Agenda culturel",
   "domain": "Culture",
-  "row_count": 1225,
+  "row_count": 1267,
   "time_column": "start_utc",
   "coverage": {
    "from": "2026-01-07 18:00:00",
    "to": "2028-04-16 00:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:44:09",
+  "last_collected_utc": "2026-11-27 02:34:13",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1866,13 +1866,13 @@
   "dataset": "gold_strikes_news",
   "title": "Articles de presse sur les grèves",
   "domain": "Actualité",
-  "row_count": 111,
+  "row_count": 121,
   "time_column": "published_at_utc",
   "coverage": {
    "from": "2013-11-05 08:00:00",
    "to": "2026-11-10 08:00:00"
   },
-  "last_collected_utc": "2026-11-26 19:44:18",
+  "last_collected_utc": "2026-11-27 02:34:14",
   "standards": [
    "RSS 2.0"
   ],
@@ -1926,11 +1926,11 @@
   "dataset": "gold_luxembourg_daily_context",
   "title": "Contexte quotidien par canton",
   "domain": "Synthèse",
-  "row_count": 936,
+  "row_count": 948,
   "time_column": "context_date",
   "coverage": {
    "from": "2026-09-10",
-   "to": "2026-11-26"
+   "to": "2026-11-27"
   },
   "last_collected_utc": null,
   "standards": [],
