@@ -14,7 +14,7 @@
       "title": "Météo horaire (station Findel + 12 cantons)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_weather_observations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 176075,
+      "byteSize": 176386,
       "license": [
         "CC-BY-4.0",
         "CC0-1.0"
@@ -25,7 +25,7 @@
       "title": "Qualité de l'air et pollens (modèle CAMS)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_air_quality.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 431320,
+      "byteSize": 417195,
       "license": [
         "CC-BY-4.0"
       ]
@@ -35,7 +35,7 @@
       "title": "Niveaux d'eau des rivières (15 min)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_water_levels.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 62632,
+      "byteSize": 64938,
       "license": [
         "CC0-1.0"
       ]
@@ -65,7 +65,7 @@
       "title": "Événements trafic LU et frontaliers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_traffic_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 11223,
+      "byteSize": 11599,
       "license": [
         "CC0-1.0",
         "etalab-2.0",
@@ -77,7 +77,7 @@
       "title": "Chantiers routiers",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_roadworks.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 21706,
+      "byteSize": 21828,
       "license": [
         "CC0-1.0"
       ]
@@ -99,7 +99,7 @@
       "title": "Disponibilités Vel'oh",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_veloh.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 20655,
+      "byteSize": 21479,
       "license": [
         "unspecified"
       ]
@@ -109,7 +109,7 @@
       "title": "Occupation des parkings (Ville)",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_mobility_parkings.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 5934,
+      "byteSize": 6004,
       "license": [
         "CC0-1.0"
       ]
@@ -119,7 +119,7 @@
       "title": "Bornes de recharge Chargy",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_chargy_stations.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 36753,
+      "byteSize": 37499,
       "license": [
         "CC0-1.0"
       ]
@@ -129,7 +129,7 @@
       "title": "Aéronefs au-dessus du Luxembourg",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_aviation.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 5583,
+      "byteSize": 6084,
       "license": [
         "unspecified"
       ]
@@ -231,7 +231,7 @@
       "title": "Agenda culturel",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_culture_events.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 96015,
+      "byteSize": 97193,
       "license": [
         "unspecified"
       ]
@@ -241,7 +241,7 @@
       "title": "Articles de presse sur les grèves",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_strikes_news.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 47961,
+      "byteSize": 48500,
       "license": [
         "unspecified"
       ]
@@ -251,7 +251,7 @@
       "title": "Contexte quotidien par canton",
       "downloadURL": "https://raw.githubusercontent.com/quen9669/OpenLux/main/data/gold/gold_luxembourg_daily_context.parquet",
       "mediaType": "application/vnd.apache.parquet",
-      "byteSize": 12310,
+      "byteSize": 12285,
       "license": []
     }
   ]

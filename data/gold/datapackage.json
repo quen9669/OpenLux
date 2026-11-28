@@ -14,8 +14,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 23052,
-      "sha256": "958fdb6bb5ce62ca9a5781b08553745bccea09e73053740e62d1e06519242c87",
+      "row_count": 23053,
+      "sha256": "6a2820a77085d525e2a943e208695611216ff002ef4ffc3d36a05901b64f3530",
       "licenses": [
         "CC-BY-4.0",
         "CC0-1.0"
@@ -123,7 +123,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 276480,
-      "sha256": "d1d928d433db41de58ec986224804dc9a1970556f69affc336964c1f511811f8",
+      "sha256": "7a38563b9a6be0c52a6c229c79d03ef5670912d76d5ad534c81098e2fb618964",
       "licenses": [
         "CC-BY-4.0"
       ],
@@ -213,8 +213,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 37070,
-      "sha256": "9fe43c81f03b3ced87f674aa22e8faadb80790cae1d7fe7a950a8d1dc181dae3",
+      "row_count": 39124,
+      "sha256": "0c86e98691a6ae4798f7ba5af08876521000bdba8b413b2e0a9951e7937436d0",
       "licenses": [
         "CC0-1.0"
       ],
@@ -414,8 +414,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 122,
-      "sha256": "d4f8efd21a2ec42cc8f6f9ed51447809c1f399f22343d238493006091df75559",
+      "row_count": 129,
+      "sha256": "3427ec7252cd7cb9c52a4a26587597911ee1238d1a47f9cde86b09795c021938",
       "licenses": [
         "CC0-1.0",
         "etalab-2.0",
@@ -523,8 +523,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 373,
-      "sha256": "f8f27ea8b4e5acc667ae014ceda1191ed91cbc846e3740ecc55540cc1be43204",
+      "row_count": 374,
+      "sha256": "31751983e819ef25406dbb86a15c094255200330b28f1bc983c541c01d5d4897",
       "licenses": [
         "CC0-1.0"
       ],
@@ -699,8 +699,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1281,
-      "sha256": "ca308fce591cdf2bc3453379999d5ab391b729728fec140cea928975b47ce329",
+      "row_count": 1420,
+      "sha256": "b060550c8e063ef2a2610751d61615f6d95dbaeccbc47f1c94b3d854960a4784",
       "licenses": [
         "unspecified"
       ],
@@ -798,8 +798,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 377,
-      "sha256": "9d50c5fb1894c7465bba3c20f7e303fd9d88e3eb251061be21978c48725fcf17",
+      "row_count": 406,
+      "sha256": "5c29e427861398d9a0213c60dd976cdbd6f0596e558790c44fcb42b3ebaf5ddb",
       "licenses": [
         "CC0-1.0"
       ],
@@ -897,8 +897,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 6288,
-      "sha256": "1aa826d1f16f196cb8664bde48472bdd0ff8588c04c1e762e59fa8c9aa169ac8",
+      "row_count": 6812,
+      "sha256": "181b0eafccb557569e94711d1504099896e762b289e2022c1e4affa17686f1fd",
       "licenses": [
         "CC0-1.0"
       ],
@@ -976,8 +976,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 60,
-      "sha256": "f7b1961a4eabdba36aaba32fea611ae346908a9ceac0cd8fee1336e7450ec220",
+      "row_count": 71,
+      "sha256": "7a24675c4860859004473a63c859e69eafe8de9d4e9e7cac4e6d5f905ba03ac6",
       "licenses": [
         "unspecified"
       ],
@@ -1588,8 +1588,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 1358,
-      "sha256": "edab163a6c803dd371179e02a6aff3aa474e446857d1cc28c72a4ca3959ed570",
+      "row_count": 1375,
+      "sha256": "8dc2368d35d65d869e6262b076feb2afd21d86486947fb4201ffa49adaeee95a",
       "licenses": [
         "unspecified"
       ],
@@ -1687,8 +1687,8 @@
       "format": "parquet",
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
-      "row_count": 125,
-      "sha256": "6f81aebb1e75290c4714089ca88eafa07ed3642c116260c7f4881a6a2d0f7862",
+      "row_count": 127,
+      "sha256": "6e24c1ddb68b0b4caab57d910193b7970e1376a68fff5e10fbd92a4fa485b108",
       "licenses": [
         "unspecified"
       ],
@@ -1743,7 +1743,7 @@
       "mediatype": "application/vnd.apache.parquet",
       "compression": "zstd",
       "row_count": 960,
-      "sha256": "45d3945aad5aee96d8a56a37f40ac63a3ff366e6e8b39b01a8301a0afcbb5cf9",
+      "sha256": "d7039e7e07c22b898b73c949458597d402e2f469644261c43709f685699b4a94",
       "licenses": [],
       "sources": [],
       "schema": {

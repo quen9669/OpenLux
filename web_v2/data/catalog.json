@@ -3,13 +3,13 @@
   "dataset": "gold_weather_observations",
   "title": "Météo horaire (station Findel + 12 cantons)",
   "domain": "Environnement",
-  "row_count": 23052,
+  "row_count": 23053,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-09-10 00:00:00",
    "to": "2026-11-28 23:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:53:55",
+  "last_collected_utc": "2026-11-28 11:11:51",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -221,13 +221,13 @@
   "dataset": "gold_water_levels",
   "title": "Niveaux d'eau des rivières (15 min)",
   "domain": "Environnement",
-  "row_count": 37070,
+  "row_count": 39124,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-18 17:45:00",
-   "to": "2026-11-27 22:45:00"
+   "to": "2026-11-28 11:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:53:59",
+  "last_collected_utc": "2026-11-28 11:11:52",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -438,13 +438,13 @@
   "dataset": "gold_traffic_events",
   "title": "Événements trafic LU et frontaliers",
   "domain": "Mobilité",
-  "row_count": 122,
+  "row_count": 129,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2023-03-24 17:30:00",
    "to": "2026-11-30 06:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:02",
+  "last_collected_utc": "2026-11-28 11:11:54",
   "standards": [
    "DATEX II (CEN/TS 16157)",
    "GeoJSON (EPSG:4326)"
@@ -566,13 +566,13 @@
   "dataset": "gold_roadworks",
   "title": "Chantiers routiers",
   "domain": "Mobilité",
-  "row_count": 373,
+  "row_count": 374,
   "time_column": "start_time_utc",
   "coverage": {
    "from": "2020-05-28 22:00:00",
    "to": "2027-03-01 06:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:10",
+  "last_collected_utc": "2026-11-28 11:12:03",
   "standards": [
    "DATEX II (CEN/TS 16157)",
    "GeoJSON (EPSG:4326)"
@@ -776,13 +776,13 @@
   "dataset": "gold_mobility_veloh",
   "title": "Disponibilités Vel'oh",
   "domain": "Mobilité",
-  "row_count": 1281,
+  "row_count": 1420,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2025-05-28 01:38:59",
-   "to": "2026-11-28 02:53:51"
+   "to": "2026-11-28 11:11:52"
   },
-  "last_collected_utc": "2026-11-28 02:54:07",
+  "last_collected_utc": "2026-11-28 11:11:59",
   "standards": [
    "GBFS 2.3",
    "GeoJSON (EPSG:4326)"
@@ -881,13 +881,13 @@
   "dataset": "gold_mobility_parkings",
   "title": "Occupation des parkings (Ville)",
   "domain": "Mobilité",
-  "row_count": 377,
+  "row_count": 406,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:00",
-   "to": "2026-11-28 02:53:00"
+   "to": "2026-11-28 11:11:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:07",
+  "last_collected_utc": "2026-11-28 11:11:59",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -985,13 +985,13 @@
   "dataset": "gold_chargy_stations",
   "title": "Bornes de recharge Chargy",
   "domain": "Mobilité",
-  "row_count": 6288,
+  "row_count": 6812,
   "time_column": "collected_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:54",
-   "to": "2026-11-28 02:54:08"
+   "to": "2026-11-28 11:12:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:08",
+  "last_collected_utc": "2026-11-28 11:12:00",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1069,13 +1069,13 @@
   "dataset": "gold_aviation",
   "title": "Aéronefs au-dessus du Luxembourg",
   "domain": "Mobilité",
-  "row_count": 60,
+  "row_count": 71,
   "time_column": "observed_at_utc",
   "coverage": {
    "from": "2026-11-25 17:47:39",
-   "to": "2026-11-27 20:30:21"
+   "to": "2026-11-28 11:11:51"
   },
-  "last_collected_utc": "2026-11-27 20:30:24",
+  "last_collected_utc": "2026-11-28 11:12:01",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1752,13 +1752,13 @@
   "dataset": "gold_culture_events",
   "title": "Agenda culturel",
   "domain": "Culture",
-  "row_count": 1358,
+  "row_count": 1375,
   "time_column": "start_utc",
   "coverage": {
    "from": "2026-01-07 18:00:00",
    "to": "2028-04-16 00:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:21",
+  "last_collected_utc": "2026-11-28 11:12:07",
   "standards": [
    "GeoJSON (EPSG:4326)"
   ],
@@ -1866,13 +1866,13 @@
   "dataset": "gold_strikes_news",
   "title": "Articles de presse sur les grèves",
   "domain": "Actualité",
-  "row_count": 125,
+  "row_count": 127,
   "time_column": "published_at_utc",
   "coverage": {
    "from": "2013-11-05 08:00:00",
    "to": "2026-11-10 08:00:00"
   },
-  "last_collected_utc": "2026-11-28 02:54:30",
+  "last_collected_utc": "2026-11-28 11:12:09",
   "standards": [
    "RSS 2.0"
   ],
